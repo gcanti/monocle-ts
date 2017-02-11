@@ -16,7 +16,7 @@ const jStr = new Prism<Json, string>(
 // console.log(jStr.getOption(new JStr('hello')))
 // console.log(jStr.getOption(new JNum(1)))
 
-// la funzione è applicata solo se c'è un match
+// a function is applied only if there is a match
 const reverse = (s: string): string => s.split('').reverse().join('')
 // console.log(jStr.modify(reverse, new JStr('hello')))
 // console.log(jStr.modify(reverse, new JNum(1)))
@@ -35,5 +35,5 @@ const numberToInt = new Prism<number, number>(
 
 const jInt = jNum.compose(numberToInt)
 
-console.log(jInt.getOption(new JNum(5.0)))
-console.log(jInt.getOption(new JNum(5.2)))
+// console.log(jInt.getOption(new JNum(5.0)))
+// console.log(jInt.getOption(new JNum(5.2)))

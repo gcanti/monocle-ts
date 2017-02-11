@@ -61,6 +61,14 @@ export class Lens<S, A> {
     public set: (a: A, s: S) => S
   ) { }
 
+  /** generate a lens from a type and a prop */
+  static fromProp<T, P extends keyof T>(prop: P): Lens<T, T[P]> {
+    return new Lens<T, T[P]>(
+      s => s[prop],
+      (a, s) => Object.assign({}, s, { [prop as any]: a })
+    )
+  }
+
   modify(f: (a: A) => A, s: S): S {
     return this.set(f(this.get(s)), s)
   }

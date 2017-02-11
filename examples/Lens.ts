@@ -49,51 +49,13 @@ const numLens = streetLens.compose(new Lens<Street, number>(
 // console.log(JSON.stringify(numLens.set(42, employee), null, 2))
 
 // generation
-
-import * as t from 'io-ts'
-// import { Lens } from 'fp-ts/lib/monocle'
-
-const Person = t.object({
-  name: t.string,
-  age: t.number
-})
-
-type PersonType = t.TypeOf<typeof Person>;
+type PersonType = {
+  name: string,
+  age: number
+};
 
 const person: PersonType = { name: 'Giulio', age: 42 }
 
-// generate a lens from a type and a prop
-function createLens<T, P extends keyof T>(prop: P): Lens<T, T[P]> {
-  return new Lens<T, T[P]>(
-    s => s[prop],
-    (a, s) => Object.assign({}, s, { [prop as string]: a })
-  )
-}
-
-const age = createLens<PersonType, 'age'>('age')
+const age = Lens.fromProp<PersonType, 'age'>('age')
 
 // console.log(age.set(43, person)) // => { name: 'Giulio', age: 43 }
-
-function createLens2<T extends t.ObjectType<any>, K extends keyof T['props']>(type: T, prop: K): Lens<t.TypeOf<T>, t.TypeOf<T['props'][K]>> {
-  if (type.props[prop] instanceof t.MaybeType) {
-    throw new Error('cannot create a lens for an optional type')
-  }
-  return createLens<t.TypeOf<T>, typeof prop>(prop)
-}
-
-const age2 = createLens2(Person, 'age')
-
-// generate all lenses from runtime type props
-function createAllLenses<P extends t.Props, T extends t.ObjectType<P>>(type: T): { [K in keyof T['props']]: Lens<t.TypeOf<T>, t.TypeOf<T['props'][K]>> } {
-  const r: any = {}
-  for (const k in type.props) {
-    r[k] = createLens<t.TypeOf<T>, typeof k>(k)
-  }
-  return r
-}
-
-const lenses = createAllLenses(Person)
-
-// console.log(lenses.name.set('Guido', person)) // => { name: 'Guido', age: 42 }
-// console.log(lenses.age.set(43, person)) // => { name: 'Giulio', age: 43 }
-
