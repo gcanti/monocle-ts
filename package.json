@@ -1,0 +1,47 @@
+{
+  "name": "monocle-ts",
+  "version": "0.0.1",
+  "description": "A porting of scala monocle library to TypeScript",
+  "files": [
+    "lib",
+    "lib-jsnext"
+  ],
+  "main": "lib/index.js",
+  "jsnext:main": "lib-jsnext/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "test": "mocha -r ts-node/register test/*.ts",
+    "build": "rm -rf lib/* && tsc && tsc -m es6 --outDir lib-jsnext"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gcanti/monocle-ts.git"
+  },
+  "author": "Giulio Canti <giulio.canti@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gcanti/monocle-ts/issues"
+  },
+  "homepage": "https://github.com/gcanti/monocle-ts",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/mocha": "^2.2.38",
+    "@types/node": "^7.0.4",
+    "fp-ts": "^0.0.1",
+    "mocha": "^3.2.0",
+    "ts-node": "^2.0.0",
+    "typescript": "^2.2.0"
+  },
+  "tags": [
+    "typescript",
+    "functional programming",
+    "optics",
+    "lens"
+  ],
+  "keywords": [
+    "typescript",
+    "functional programming",
+    "optics",
+    "lens"
+  ]
+}

@@ -1,2 +1,1 @@
-# monocle-ts
-A porting of scala monocle library to TypeScript
+A (partial) porting of scala [monocle](https://github.com/julien-truffaut/Monocle) library to TypeScript
