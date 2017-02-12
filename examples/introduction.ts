@@ -32,3 +32,4 @@ const employee2 = {
 }
 
 console.log(JSON.stringify(employee2, null, 2))
+

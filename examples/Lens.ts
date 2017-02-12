@@ -35,7 +35,7 @@ export const nameLens = streetLens.compose(name)
 
 const employee2 = nameLens.modify(a => a.toUpperCase(), employee)
 
-console.log(JSON.stringify(employee2, null, 2))
+// console.log(JSON.stringify(employee2, null, 2))
 
 const employee3 = nameLens.set('low street', employee)
 

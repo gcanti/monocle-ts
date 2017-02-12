@@ -140,6 +140,14 @@ export class Optional<S, A> {
     public set: (a: A, s: S) => S
   ){}
 
+  /** generate an optional from a type and a prop */
+  static fromProp<T, P extends keyof T, V extends T[P]>(prop: P): Optional<T, V> {
+    return new Optional<T, V>(
+      s => s[prop] != null ? option.some(s[prop]) : option.none,
+      (a, s) => Object.assign({}, s, { [prop as any]: a })
+    )
+  }
+
   modify(f: (a: A) => A, s: S): S {
     return this.modifyOption(f, s)
       .fold(constant(s), identity)
