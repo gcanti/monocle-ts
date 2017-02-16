@@ -1,5 +1,5 @@
 import { Lens, Optional } from '../src'
-import { Option, some, none } from 'fp-ts/lib/Option'
+import { some, none } from 'fp-ts/lib/Option'
 import { nameLens, employee } from './Lens'
 
 const head = new Optional<string, string>(

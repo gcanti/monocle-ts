@@ -17,6 +17,10 @@ const employee: Employee = {
   }
 }
 
+function capitalize(s: string): string {
+  return s.substring(0, 1).toUpperCase() + s.substring(1)
+}
+
 const employee2 = {
   ...employee,
   company: {
@@ -25,7 +29,7 @@ const employee2 = {
       ...employee.company.address,
       street: {
         ...employee.company.address.street,
-        name: employee.company.address.street.name.toUpperCase()
+        name: capitalize(employee.company.address.street.name)
       }
     }
   }
@@ -33,3 +37,18 @@ const employee2 = {
 
 console.log(JSON.stringify(employee2, null, 2))
 
+import { Lens, Optional } from '../src'
+
+const company = Lens.fromProp<Employee, 'company'>('company')
+const address = Lens.fromProp<Company, 'address'>('address')
+const street = Lens.fromProp<Address, 'street'>('street')
+const name = Lens.fromProp<Street, 'name'>('name')
+
+import { some, none } from 'fp-ts/lib/Option'
+
+const firstLetter = new Optional<string, string>(
+  s => s.length > 0 ? some(s[0]) : none,
+  (a, s) => a + s.substring(1)
+)
+
+console.log(JSON.stringify(company.compose(address).compose(street).compose(name).asOptional().compose(firstLetter).modify(s => s.toUpperCase(), employee), null, 2))
