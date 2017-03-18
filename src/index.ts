@@ -1,8 +1,8 @@
 import { HKT } from 'fp-ts/lib/HKT'
-import { Monoid, monoidArray, monoidAll, monoidAny } from 'fp-ts/lib/Monoid'
-import { Applicative } from 'fp-ts/lib/Applicative'
-import { Foldable, foldMap } from 'fp-ts/lib/Foldable'
-import { Traversable } from 'fp-ts/lib/Traversable'
+import { StaticMonoid, monoidArray, monoidAll, monoidAny } from 'fp-ts/lib/Monoid'
+import { StaticApplicative } from 'fp-ts/lib/Applicative'
+import { StaticFoldable, ops } from 'fp-ts/lib/Foldable'
+import { StaticTraversable } from 'fp-ts/lib/Traversable'
 import * as option from 'fp-ts/lib/Option'
 import { Some, Option } from 'fp-ts/lib/Option'
 import { identity, constant, Predicate } from 'fp-ts/lib/function'
@@ -169,7 +169,7 @@ export class Optional<S, A> {
   /** view a Options as a Traversal */
   asTraversal(): Traversal<S, A> {
     return new Traversal<S, A>(
-      <F>(applicative: Applicative<F>, f: (a: A) => HKT<F, A>, s: S): HKT<F, S> =>
+      <F>(applicative: StaticApplicative<F>, f: (a: A) => HKT<F, A>, s: S): HKT<F, S> =>
         this.getOption(s).fold(
           () => applicative.of(s),
           a => applicative.map(a => this.set(a, s), f(a))
@@ -181,7 +181,7 @@ export class Optional<S, A> {
 export class Traversal<S, A> {
   constructor(
     // Van Laarhoven representation
-    public modifyF: <F>(applicative: Applicative<F>, f: (a: A) => HKT<F, A>, s: S) => HKT<F, S>
+    public modifyF: <F>(applicative: StaticApplicative<F>, f: (a: A) => HKT<F, A>, s: S) => HKT<F, S>
   ){}
 
   modify(f: (a: A) => A, s: S): S {
@@ -195,7 +195,7 @@ export class Traversal<S, A> {
   /** compose a Traversal with a Traversal */
   compose<B>(ab: Traversal<A, B>): Traversal<S, B> {
     return new Traversal<S, B>(
-      <F>(applicative: Applicative<F>, f: (a: B) => HKT<F, B>, s: S): HKT<F, S> =>
+      <F>(applicative: StaticApplicative<F>, f: (a: B) => HKT<F, B>, s: S): HKT<F, S> =>
         this.modifyF(applicative, a => ab.modifyF(applicative, f, a), s)
     )
   }
@@ -203,29 +203,29 @@ export class Traversal<S, A> {
   /** view a Traversal as a Fold */
   asFold(): Fold<S, A> {
     return new Fold(
-      <M>(monoid: Monoid<M>, f: (a: A) => M, s: S): M =>
+      <M>(monoid: StaticMonoid<M>, f: (a: A) => M, s: S): M =>
         (this.modifyF(con.getApplicative(monoid), a => new con.Const<M, A>(f(a)), s) as con.Const<M, S>).fold(identity)
     )
   }
 }
 
 /** create a Traversal from a Traversable */
-export function fromTraversable<T, A>(traversable: Traversable<T>): Traversal<HKT<T, A>, A> {
+export function fromTraversable<T, A>(traversable: StaticTraversable<T>): Traversal<HKT<T, A>, A> {
   return new Traversal<HKT<T, A>, A>(
-      <F>(applicative: Applicative<F>, f: (a: A) => HKT<F, A>, s: HKT<T, A>): HKT<F, HKT<T, A>> =>
+      <F>(applicative: StaticApplicative<F>, f: (a: A) => HKT<F, A>, s: HKT<T, A>): HKT<F, HKT<T, A>> =>
         traversable.traverse(applicative, f, s)
   )
 }
 
 export class Fold<S, A> {
   constructor(
-    public foldMap: <M>(monoid: Monoid<M>, f: (a: A) => M, s: S) => M
+    public foldMap: <M>(monoid: StaticMonoid<M>, f: (a: A) => M, s: S) => M
   ){}
 
   /** compose a Fold with a Fold */
   compose<B>(ab: Fold<A, B>): Fold<S, B> {
     return new Fold<S, B>(
-      <M>(monoid: Monoid<M>, f: (b: B) => M, s: S): M =>
+      <M>(monoid: StaticMonoid<M>, f: (b: B) => M, s: S): M =>
         this.foldMap(monoid, a => ab.foldMap(monoid, f, a), s)
     )
   }
@@ -237,7 +237,7 @@ export class Fold<S, A> {
 
   /** find the first target of a Fold matching the predicate */
   find(p: Predicate<A>, s: S): Option<A> {
-    return this.foldMap(option.monoidFirst, a => p(a) ? option.of(a) : option.none, s)
+    return this.foldMap(option.getFirstStaticMonoid(), a => p(a) ? option.of(a) : option.none, s)
   }
 
   /** get the first target of a Fold */
@@ -258,9 +258,9 @@ export class Fold<S, A> {
 }
 
 /** create a Fold from a Foldable */
-export function fromFoldable<F, A>(fold: Foldable<F>): Fold<HKT<F, A>, A> {
+export function fromFoldable<F, A>(fold: StaticFoldable<F>): Fold<HKT<F, A>, A> {
   return new Fold(
-      <M>(monoid: Monoid<M>, f: (a: A) => M, s: HKT<F, A>): M =>
-        foldMap(fold, monoid, f, s)
+      <M>(monoid: StaticMonoid<M>, f: (a: A) => M, s: HKT<F, A>): M =>
+        ops.foldMapS(fold, monoid, f, s)
   )
 }
