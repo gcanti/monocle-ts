@@ -1,9 +1,9 @@
 import { Fold, fromFoldable } from '../src'
-import * as arr from 'fp-ts/lib/Arr'
+import * as arr from 'fp-ts/lib/Array'
 import { monoidProduct, monoidSum } from 'fp-ts/lib/Monoid'
 import { identity } from 'fp-ts/lib/function'
 
-const xs = arr.to(['a', 'bb'])
+const xs = ['a', 'bb']
 const fold = fromFoldable<arr.URI, string>(arr)
 
 console.log(fold.foldMap(monoidSum, s => s.length, xs))

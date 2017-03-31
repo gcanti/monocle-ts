@@ -5,8 +5,8 @@ const mTokm = new Iso<number, number>(
   km => km * 1000
 )
 
-// console.log(mTokm.get(100)) // => 0.1
-// console.log(mTokm.reverseGet(1.2)) // => 1200
+console.log(mTokm.get(100)) // => 0.1
+console.log(mTokm.reverseGet(1.2)) // => 1200
 
 const kmToMile = new Iso<number, number>(
   km => km / 1.60934,
@@ -16,4 +16,4 @@ const kmToMile = new Iso<number, number>(
 // composition
 const mToMile = mTokm.compose(kmToMile)
 
-// console.log(mToMile.get(100)) // => 0.06213727366498068
+console.log(mToMile.get(100)) // => 0.06213727366498068
