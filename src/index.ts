@@ -1,7 +1,7 @@
-import { HKT } from 'fp-ts/lib/HKT'
+import { HKT, HKTS } from 'fp-ts/lib/HKT'
 import { StaticMonoid, monoidArray, monoidAll, monoidAny } from 'fp-ts/lib/Monoid'
 import { StaticApplicative } from 'fp-ts/lib/Applicative'
-import { StaticFoldable, ops } from 'fp-ts/lib/Foldable'
+import { StaticFoldable, foldMap } from 'fp-ts/lib/Foldable'
 import { StaticTraversable } from 'fp-ts/lib/Traversable'
 import * as option from 'fp-ts/lib/Option'
 import { Some, Option } from 'fp-ts/lib/Option'
@@ -49,6 +49,21 @@ export class Iso<S, A> {
   }
 }
 
+export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4], K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6], K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7], K9 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8], K10 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8][K9]>(path: [K1, K2, K3, K4, K5, K6, K7, K8, K9, K10]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8][K9][K10]>
+export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4], K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6], K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7], K9 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8]>(path: [K1, K2, K3, K4, K5, K6, K7, K8, K9]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8][K9]>
+export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4], K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6], K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7]>(path: [K1, K2, K3, K4, K5, K6, K7, K8]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8]>
+export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4], K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6]>(path: [K1, K2, K3, K4, K5, K6, K7]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7]>
+export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4], K6 extends keyof T[K1][K2][K3][K4][K5]>(path: [K1, K2, K3, K4, K5, K6]): Lens<T, T[K1][K2][K3][K4][K5][K6]>
+export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4]>(path: [K1, K2, K3, K4, K5]): Lens<T, T[K1][K2][K3][K4][K5]>
+export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3]>(path: [K1, K2, K3, K4]): Lens<T, T[K1][K2][K3][K4]>
+export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(path: [K1, K2, K3]): Lens<T, T[K1][K2][K3]>
+export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1]>(path: [K1, K2]): Lens<T, T[K1][K2]>
+export function lensFromPath<T, K1 extends keyof T>(path: [K1]): Lens<T, T[K1]>
+export function lensFromPath(path: Array<any>) {
+  const lens = Lens.fromProp<any, any>(path[0])
+  return path.slice(1).reduce((acc, prop) => acc.compose(Lens.fromProp<any, any>(prop)), lens)
+}
+
 /*
   Laws:
   1. get(set(a, s)) = a
@@ -68,6 +83,8 @@ export class Lens<S, A> {
       (a, s) => Object.assign({}, s, { [prop as any]: a })
     )
   }
+
+  static fromPath = lensFromPath
 
   modify(f: (a: A) => A, s: S): S {
     return this.set(f(this.get(s)), s)
@@ -169,10 +186,10 @@ export class Optional<S, A> {
   /** view a Options as a Traversal */
   asTraversal(): Traversal<S, A> {
     return new Traversal<S, A>(
-      <F>(applicative: StaticApplicative<F>, f: (a: A) => HKT<F, A>, s: S): HKT<F, S> =>
+      <F extends HKTS>(applicative: StaticApplicative<F>, f: (a: A) => HKT<A>[F], s: S): HKT<S>[F] =>
         this.getOption(s).fold(
           () => applicative.of(s),
-          a => applicative.map(a => this.set(a, s), f(a))
+          a => applicative.map((a: A) => this.set(a, s), f(a))
         )
     )
   }
@@ -181,7 +198,7 @@ export class Optional<S, A> {
 export class Traversal<S, A> {
   constructor(
     // Van Laarhoven representation
-    public modifyF: <F>(applicative: StaticApplicative<F>, f: (a: A) => HKT<F, A>, s: S) => HKT<F, S>
+    public modifyF: <F extends HKTS>(applicative: StaticApplicative<F>, f: (a: A) => HKT<A>[F], s: S) => HKT<S>[F]
   ){}
 
   modify(f: (a: A) => A, s: S): S {
@@ -195,7 +212,7 @@ export class Traversal<S, A> {
   /** compose a Traversal with a Traversal */
   compose<B>(ab: Traversal<A, B>): Traversal<S, B> {
     return new Traversal<S, B>(
-      <F>(applicative: StaticApplicative<F>, f: (a: B) => HKT<F, B>, s: S): HKT<F, S> =>
+      <F extends HKTS>(applicative: StaticApplicative<F>, f: (a: B) => HKT<B>[F], s: S): HKT<S>[F] =>
         this.modifyF(applicative, a => ab.modifyF(applicative, f, a), s)
     )
   }
@@ -210,10 +227,10 @@ export class Traversal<S, A> {
 }
 
 /** create a Traversal from a Traversable */
-export function fromTraversable<T, A>(traversable: StaticTraversable<T>): Traversal<HKT<T, A>, A> {
-  return new Traversal<HKT<T, A>, A>(
-      <F>(applicative: StaticApplicative<F>, f: (a: A) => HKT<F, A>, s: HKT<T, A>): HKT<F, HKT<T, A>> =>
-        traversable.traverse(applicative, f, s)
+export function fromTraversable<T extends HKTS, A>(traversable: StaticTraversable<T>): Traversal<HKT<A>[T], A> {
+  return new Traversal<HKT<A>[T], A>(
+      <F extends HKTS>(applicative: StaticApplicative<F>, f: (a: A) => HKT<A>[F], s: HKT<A>[T]): HKT<HKT<A>[T]>[F] =>
+        traversable.traverse<F>(applicative)<A, A>(f, s)
   )
 }
 
@@ -258,9 +275,9 @@ export class Fold<S, A> {
 }
 
 /** create a Fold from a Foldable */
-export function fromFoldable<F, A>(fold: StaticFoldable<F>): Fold<HKT<F, A>, A> {
+export function fromFoldable<F extends HKTS, A>(fold: StaticFoldable<F>): Fold<HKT<A>[F], A> {
   return new Fold(
-      <M>(monoid: StaticMonoid<M>, f: (a: A) => M, s: HKT<F, A>): M =>
-        ops.foldMapS(fold, monoid, f, s)
+      <M>(monoid: StaticMonoid<M>, f: (a: A) => M, s: HKT<A>[F]): M =>
+        foldMap(fold, monoid, f, s)
   )
 }
