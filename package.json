@@ -1,6 +1,6 @@
 {
   "name": "monocle-ts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A porting of scala monocle library to TypeScript",
   "files": [
     "lib",
@@ -10,7 +10,8 @@
   "jsnext:main": "lib-jsnext/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "test": "mocha -r ts-node/register test/*.ts",
+    "mocha": "mocha -r ts-node/register test/*.ts",
+    "test": "npm run mocha",
     "clean": "rm -rf lib/* && rm -rf lib-jsnext/*",
     "build": "npm run clean && tsc && tsc -m es6 --outDir lib-jsnext"
   },
@@ -25,7 +26,7 @@
   },
   "homepage": "https://github.com/gcanti/monocle-ts",
   "dependencies": {
-    "fp-ts": "^0.2.0"
+    "fp-ts": "^0.2.1"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.38",

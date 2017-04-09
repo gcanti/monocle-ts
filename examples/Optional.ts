@@ -26,4 +26,4 @@ const surname = Optional.fromProp<Person, 'surname'>('surname')
 const p: Person = { name: 'Giulio', surname: none }
 
 console.log(surname.getOption(p))
-console.log(surname.set(some('Canti'), p))
+console.log(surname.set('Canti', p))
