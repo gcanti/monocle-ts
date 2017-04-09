@@ -12,11 +12,11 @@ describe('Optional', () => {
 
   it('getOption', () => {
     eq(optional.getOption({ a: none }), none)
+    eq(optional.getOption({ a: some(1) }), some(1))
   })
 
   it('set', () => {
-    eq(optional.set(none, { a: some(1) }).a, none)
-    eq(optional.set(some(2), { a: some(1) }).a, some(2))
+    eq(optional.set(2, { a: some(1) }).a, some(2))
   })
 
 })

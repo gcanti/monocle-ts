@@ -4,7 +4,7 @@ import { StaticApplicative } from 'fp-ts/lib/Applicative'
 import { StaticFoldable, foldMap } from 'fp-ts/lib/Foldable'
 import { StaticTraversable } from 'fp-ts/lib/Traversable'
 import * as option from 'fp-ts/lib/Option'
-import { Some, Option } from 'fp-ts/lib/Option'
+import { Option, none, some } from 'fp-ts/lib/Option'
 import { identity, constant, Predicate } from 'fp-ts/lib/function'
 import * as id from 'fp-ts/lib/Identity'
 import * as con from 'fp-ts/lib/Const'
@@ -43,7 +43,7 @@ export class Iso<S, A> {
   /** view a ISO as a Prism */
   asPrism(): Prism<S, A> {
     return new Prism(
-      s => new Some(this.get(s)),
+      s => some(this.get(s)),
       this.reverseGet
     )
   }
@@ -101,7 +101,7 @@ export class Lens<S, A> {
   /** view a Lens as a Option */
   asOptional(): Optional<S, A> {
     return new Optional(
-      s => new Some(this.get(s)),
+      s => some(this.get(s)),
       this.set
     )
   }
@@ -117,6 +117,13 @@ export class Prism<S, A> {
     public getOption: (s: S) => Option<A>,
     public reverseGet: (a: A) => S
   ) { }
+
+  static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
+    return new Prism<A, A>(
+      s => predicate(s) ? some(s) : none,
+      a => a
+    )
+  }
 
   modify(f: (a: A) => A, s: S): S {
     return this.modifyOption(f, s)
@@ -157,11 +164,11 @@ export class Optional<S, A> {
     public set: (a: A, s: S) => S
   ){}
 
-  /** generate an optional from a type and a prop */
-  static fromProp<T extends { [K in P]: Option<any> }, P extends keyof T>(prop: P): Optional<T, T[P]> {
+  /** generate an optional from a type and a prop which is a `Option` */
+  static fromProp<T extends { [K in P]: Option<any> }, P extends keyof T>(prop: P): Optional<T, T[P]['_A']> {
     return new Optional<T, T[P]>(
       s => s[prop],
-      (a, s) => Object.assign({}, s, { [prop as any]: a })
+      (a, s) => Object.assign({}, s, { [prop as any]: some(a) })
     )
   }
 
