@@ -16,6 +16,7 @@
     "target": "es5",
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
+    "suppressImplicitAnyIndexErrors": true,
     "lib": [
       "es6"
     ]

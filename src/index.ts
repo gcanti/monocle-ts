@@ -166,7 +166,7 @@ export class Optional<S, A> {
 
   /** generate an optional from a type and a prop which is a `Option` */
   static fromProp<T extends { [K in P]: Option<any> }, P extends keyof T>(prop: P): Optional<T, T[P]['_A']> {
-    return new Optional<T, T[P]>(
+    return new Optional<T, T[P]['_A']>(
       s => s[prop],
       (a, s) => Object.assign({}, s, { [prop as any]: some(a) })
     )
