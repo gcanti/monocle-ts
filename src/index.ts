@@ -125,6 +125,10 @@ export class Prism<S, A> {
     )
   }
 
+  static some<A>(): Prism<Option<A>, A> {
+    return somePrism
+  }
+
   modify(f: (a: A) => A, s: S): S {
     return this.modifyOption(f, s)
       .fold(constant(s), identity)
@@ -151,6 +155,11 @@ export class Prism<S, A> {
     )
   }
 }
+
+const somePrism = new Prism<Option<any>, any>(
+  s => s,
+  a => some(a)
+)
 
 /*
   Laws:
