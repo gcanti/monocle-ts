@@ -105,6 +105,14 @@ export class Lens<S, A> {
       this.set
     )
   }
+
+  composePrism<B>(prism: Prism<A, B>): Optional<S, B> {
+    return this.asOptional().compose(prism.asOptional())
+  }
+
+  composeOptional<B>(optional: Optional<A, B>): Optional<S, B> {
+    return this.asOptional().compose(optional)
+  }
 }
 
 /*
@@ -154,6 +162,14 @@ export class Prism<S, A> {
       this.reverseGet
     )
   }
+
+  composeLens<B>(lens: Lens<A, B>): Optional<S, B> {
+    return this.asOptional().compose(lens.asOptional())
+  }
+
+  composeOptional<B>(optional: Optional<A, B>): Optional<S, B> {
+    return this.asOptional().compose(optional)
+  }
 }
 
 const somePrism = new Prism<Option<any>, any>(
@@ -200,6 +216,14 @@ export class Optional<S, A> {
           a => applicative.map((a: A) => this.set(a, s), f(a))
         )
     )
+  }
+
+  composeLens<B>(lens: Lens<A, B>): Optional<S, B> {
+    return this.compose(lens.asOptional())
+  }
+
+  composePrism<B>(prism: Prism<A, B>): Optional<S, B> {
+    return this.compose(prism.asOptional())
   }
 }
 

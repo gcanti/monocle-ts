@@ -37,10 +37,10 @@ describe('Prism', () => {
     const barLens = Lens.fromProp<Foo, 'bar'>('bar')
     const sLens = Lens.fromProp<Bar, 's'>('s')
 
-    const sOptional = barLens.asOptional()
-      .compose(Prism.some<Bar>().asOptional())
-      .compose(sLens.asOptional())
-      .compose(Prism.some<string>().asOptional())
+    const sOptional = barLens
+      .composePrism(Prism.some<Bar>())
+      .composeLens(sLens)
+      .composePrism(Prism.some<string>())
 
     assert.deepEqual(sOptional.set('b', foo1), {
       bar: some({
