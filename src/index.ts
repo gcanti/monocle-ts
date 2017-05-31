@@ -4,7 +4,7 @@ import { Applicative } from 'fp-ts/lib/Applicative'
 import { Foldable, foldMap } from 'fp-ts/lib/Foldable'
 import { Traversable } from 'fp-ts/lib/Traversable'
 import * as option from 'fp-ts/lib/Option'
-import { Option, none, some } from 'fp-ts/lib/Option'
+import { fromNullable, Option, none, some } from 'fp-ts/lib/Option'
 import { identity, constant, Predicate } from 'fp-ts/lib/function'
 import * as id from 'fp-ts/lib/Identity'
 import * as con from 'fp-ts/lib/Const'
@@ -168,7 +168,7 @@ export class Optional<S, A> {
   static fromProp<T extends { [K in P]: Option<any> }, P extends keyof T>(prop: P): Optional<T, T[P]['_A']> {
     return new Optional<T, T[P]['_A']>(
       s => s[prop],
-      (a, s) => Object.assign({}, s, { [prop as any]: some(a) })
+      (a, s) => Object.assign({}, s, { [prop as any]: fromNullable(a) })
     )
   }
 
