@@ -6,7 +6,10 @@ type A = {
   a: Option<number>
 }
 
-const optional = Optional.fromProp<A, 'a'>('a')
+const optional = new Optional<A, number>(
+  s => s.a,
+  (a, s) => s.a.fold<A>(() => s, () => ({ ...s, a: some(a) }))
+)
 
 describe('Optional', () => {
 

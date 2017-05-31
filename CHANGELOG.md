@@ -17,6 +17,7 @@
 - **Breaking Change**
   - upgrade to latest `fp-ts` (`monocle-ts` APIs are not changed though) (@gcanti)
   - drop `lib-jsnext` folder
+  - remove `Optional.fromProp`, closes #9 (@gcanti)
 
 # 0.1.1
 
