@@ -6,7 +6,6 @@
     "lib"
   ],
   "main": "lib/index.js",
-  "jsnext:main": "lib-jsnext/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "mocha": "mocha -r ts-node/register test/*.ts",
@@ -38,12 +37,14 @@
     "typescript",
     "functional-programming",
     "optics",
-    "lens"
+    "lens",
+    "fp-ts"
   ],
   "keywords": [
     "typescript",
     "functional-programming",
     "optics",
-    "lens"
+    "lens",
+    "fp-ts"
   ]
 }

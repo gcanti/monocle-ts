@@ -14,6 +14,9 @@
 
 # 0.2.0
 
+- **New Feature**
+  - add `Prism.some`, closes #10 (@gcanti)
+  - add `composeX`, closes #11 (@gcanti)
 - **Breaking Change**
   - upgrade to latest `fp-ts` (`monocle-ts` APIs are not changed though) (@gcanti)
   - drop `lib-jsnext` folder
