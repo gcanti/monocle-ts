@@ -1,20 +1,32 @@
 import { Lens } from '../src'
 import * as assert from 'assert'
 
-interface Street { num: number, name: string }
-interface Address { city: string, street: Street }
-interface Company { name: string, address: Address }
-interface Employee { name: string, company: Company }
+interface Street {
+  num: number
+  name: string
+}
+interface Address {
+  city: string
+  street: Street
+}
+interface Company {
+  name: string
+  address: Address
+}
+interface Employee {
+  name: string
+  company: Company
+}
 
 const employee: Employee = {
-  name: "john",
+  name: 'john',
   company: {
-    name: "awesome inc",
+    name: 'awesome inc',
     address: {
-      city: "london",
+      city: 'london',
       street: {
         num: 23,
-        name: "high street"
+        name: 'high street'
       }
     }
   }
@@ -25,10 +37,13 @@ function capitalize(s: string): string {
 }
 
 describe('Lens', () => {
-
   it('fromPath', () => {
-    const lens = Lens.fromPath<Employee, 'company', 'address', 'street', 'name'>(['company', 'address', 'street', 'name'])
+    const lens = Lens.fromPath<Employee, 'company', 'address', 'street', 'name'>([
+      'company',
+      'address',
+      'street',
+      'name'
+    ])
     assert.strictEqual(lens.modify(capitalize, employee).company.address.street.name, 'High street')
   })
-
 })

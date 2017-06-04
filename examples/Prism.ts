@@ -11,12 +11,9 @@ class JObj {
   constructor(public readonly value: { [key: string]: Json }) {}
 }
 
-type Json = null | JStr | JNum | JObj;
+type Json = null | JStr | JNum | JObj
 
-const jStr = new Prism<Json, string>(
-  s => s instanceof JStr ? some(s.value) : none,
-  a => new JStr(a)
-)
+const jStr = new Prism<Json, string>(s => (s instanceof JStr ? some(s.value) : none), a => new JStr(a))
 
 console.log(jStr.getOption(new JStr('hello')))
 console.log(jStr.getOption(new JNum(1)))
@@ -29,14 +26,8 @@ console.log(jStr.modifyOption(reverse, new JStr('hello')))
 console.log(jStr.modifyOption(reverse, new JNum(1)))
 
 // composizione
-const jNum = new Prism<Json, number>(
-  s => s instanceof JNum ? some(s.value) : none,
-  a => new JNum(a)
-)
-const numberToInt = new Prism<number, number>(
-  s => s % 1 === 0 ? some(s) : none,
-  a => a
-)
+const jNum = new Prism<Json, number>(s => (s instanceof JNum ? some(s.value) : none), a => new JNum(a))
+const numberToInt = new Prism<number, number>(s => (s % 1 === 0 ? some(s) : none), a => a)
 
 const jInt = jNum.compose(numberToInt)
 

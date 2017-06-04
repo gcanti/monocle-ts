@@ -15,17 +15,11 @@ import * as con from 'fp-ts/lib/Const'
   2. reversetGet . get = identity
 */
 export class Iso<S, A> {
-  constructor(
-    public get: (s: S) => A,
-    public reverseGet: (a: A) => S
-  ) { }
+  constructor(public get: (s: S) => A, public reverseGet: (a: A) => S) {}
 
   /** compose a Iso with a Iso */
   compose<B>(ab: Iso<A, B>): Iso<S, B> {
-    return new Iso<S, B>(
-      s => ab.get(this.get(s)),
-      b => this.reverseGet(ab.reverseGet(b))
-    )
+    return new Iso<S, B>(s => ab.get(this.get(s)), b => this.reverseGet(ab.reverseGet(b)))
   }
 
   modify(f: (a: A) => A, s: S): S {
@@ -34,29 +28,88 @@ export class Iso<S, A> {
 
   /** view a ISO as a Lens */
   asLens(): Lens<S, A> {
-    return new Lens(
-      this.get,
-      this.reverseGet
-    )
+    return new Lens(this.get, this.reverseGet)
   }
 
   /** view a ISO as a Prism */
   asPrism(): Prism<S, A> {
-    return new Prism(
-      s => some(this.get(s)),
-      this.reverseGet
-    )
+    return new Prism(s => some(this.get(s)), this.reverseGet)
   }
 }
 
-export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4], K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6], K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7], K9 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8], K10 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8][K9]>(path: [K1, K2, K3, K4, K5, K6, K7, K8, K9, K10]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8][K9][K10]>
-export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4], K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6], K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7], K9 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8]>(path: [K1, K2, K3, K4, K5, K6, K7, K8, K9]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8][K9]>
-export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4], K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6], K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7]>(path: [K1, K2, K3, K4, K5, K6, K7, K8]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8]>
-export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4], K6 extends keyof T[K1][K2][K3][K4][K5], K7 extends keyof T[K1][K2][K3][K4][K5][K6]>(path: [K1, K2, K3, K4, K5, K6, K7]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7]>
-export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4], K6 extends keyof T[K1][K2][K3][K4][K5]>(path: [K1, K2, K3, K4, K5, K6]): Lens<T, T[K1][K2][K3][K4][K5][K6]>
-export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3], K5 extends keyof T[K1][K2][K3][K4]>(path: [K1, K2, K3, K4, K5]): Lens<T, T[K1][K2][K3][K4][K5]>
-export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2], K4 extends keyof T[K1][K2][K3]>(path: [K1, K2, K3, K4]): Lens<T, T[K1][K2][K3][K4]>
-export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(path: [K1, K2, K3]): Lens<T, T[K1][K2][K3]>
+export function lensFromPath<
+  T,
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2],
+  K4 extends keyof T[K1][K2][K3],
+  K5 extends keyof T[K1][K2][K3][K4],
+  K6 extends keyof T[K1][K2][K3][K4][K5],
+  K7 extends keyof T[K1][K2][K3][K4][K5][K6],
+  K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7],
+  K9 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8],
+  K10 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8][K9]
+>(path: [K1, K2, K3, K4, K5, K6, K7, K8, K9, K10]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8][K9][K10]>
+export function lensFromPath<
+  T,
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2],
+  K4 extends keyof T[K1][K2][K3],
+  K5 extends keyof T[K1][K2][K3][K4],
+  K6 extends keyof T[K1][K2][K3][K4][K5],
+  K7 extends keyof T[K1][K2][K3][K4][K5][K6],
+  K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7],
+  K9 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8]
+>(path: [K1, K2, K3, K4, K5, K6, K7, K8, K9]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8][K9]>
+export function lensFromPath<
+  T,
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2],
+  K4 extends keyof T[K1][K2][K3],
+  K5 extends keyof T[K1][K2][K3][K4],
+  K6 extends keyof T[K1][K2][K3][K4][K5],
+  K7 extends keyof T[K1][K2][K3][K4][K5][K6],
+  K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7]
+>(path: [K1, K2, K3, K4, K5, K6, K7, K8]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8]>
+export function lensFromPath<
+  T,
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2],
+  K4 extends keyof T[K1][K2][K3],
+  K5 extends keyof T[K1][K2][K3][K4],
+  K6 extends keyof T[K1][K2][K3][K4][K5],
+  K7 extends keyof T[K1][K2][K3][K4][K5][K6]
+>(path: [K1, K2, K3, K4, K5, K6, K7]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7]>
+export function lensFromPath<
+  T,
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2],
+  K4 extends keyof T[K1][K2][K3],
+  K5 extends keyof T[K1][K2][K3][K4],
+  K6 extends keyof T[K1][K2][K3][K4][K5]
+>(path: [K1, K2, K3, K4, K5, K6]): Lens<T, T[K1][K2][K3][K4][K5][K6]>
+export function lensFromPath<
+  T,
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2],
+  K4 extends keyof T[K1][K2][K3],
+  K5 extends keyof T[K1][K2][K3][K4]
+>(path: [K1, K2, K3, K4, K5]): Lens<T, T[K1][K2][K3][K4][K5]>
+export function lensFromPath<
+  T,
+  K1 extends keyof T,
+  K2 extends keyof T[K1],
+  K3 extends keyof T[K1][K2],
+  K4 extends keyof T[K1][K2][K3]
+>(path: [K1, K2, K3, K4]): Lens<T, T[K1][K2][K3][K4]>
+export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(
+  path: [K1, K2, K3]
+): Lens<T, T[K1][K2][K3]>
 export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1]>(path: [K1, K2]): Lens<T, T[K1][K2]>
 export function lensFromPath<T, K1 extends keyof T>(path: [K1]): Lens<T, T[K1]>
 export function lensFromPath(path: Array<any>) {
@@ -71,20 +124,14 @@ export function lensFromPath(path: Array<any>) {
   3. set(a, set(a, s)) = set(a, s)
 */
 export class Lens<S, A> {
-  constructor(
-    public get: (s: S) => A,
-    public set: (a: A, s: S) => S
-  ) { }
+  static fromPath = lensFromPath
+
+  constructor(public get: (s: S) => A, public set: (a: A, s: S) => S) {}
 
   /** generate a lens from a type and a prop */
-   static fromProp<T, P extends keyof T>(prop: P): Lens<T, T[P]> {
-    return new Lens<T, T[P]>(
-      s => s[prop],
-      (a, s) => Object.assign({}, s, { [prop as any]: a })
-    )
+  static fromProp<T, P extends keyof T>(prop: P): Lens<T, T[P]> {
+    return new Lens<T, T[P]>(s => s[prop], (a, s) => Object.assign({}, s, { [prop as any]: a }))
   }
-
-  static fromPath = lensFromPath
 
   modify(f: (a: A) => A, s: S): S {
     return this.set(f(this.get(s)), s)
@@ -92,18 +139,12 @@ export class Lens<S, A> {
 
   /** compose a Lens with a Lens */
   compose<B>(ab: Lens<A, B>): Lens<S, B> {
-    return new Lens<S, B>(
-      s => ab.get(this.get(s)),
-      (b, s) => this.set(ab.set(b, this.get(s)), s)
-    )
+    return new Lens<S, B>(s => ab.get(this.get(s)), (b, s) => this.set(ab.set(b, this.get(s)), s))
   }
 
   /** view a Lens as a Option */
   asOptional(): Optional<S, A> {
-    return new Optional(
-      s => some(this.get(s)),
-      this.set
-    )
+    return new Optional(s => some(this.get(s)), this.set)
   }
 
   composePrism<B>(prism: Prism<A, B>): Optional<S, B> {
@@ -121,16 +162,10 @@ export class Lens<S, A> {
   2. getOption(reverseGet(a)) = Some(a)
 */
 export class Prism<S, A> {
-  constructor(
-    public getOption: (s: S) => Option<A>,
-    public reverseGet: (a: A) => S
-  ) { }
+  constructor(public getOption: (s: S) => Option<A>, public reverseGet: (a: A) => S) {}
 
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
-    return new Prism<A, A>(
-      s => predicate(s) ? some(s) : none,
-      a => a
-    )
+    return new Prism<A, A>(s => (predicate(s) ? some(s) : none), a => a)
   }
 
   static some<A>(): Prism<Option<A>, A> {
@@ -138,29 +173,21 @@ export class Prism<S, A> {
   }
 
   modify(f: (a: A) => A, s: S): S {
-    return this.modifyOption(f, s)
-      .fold(constant(s), identity)
+    return this.modifyOption(f, s).fold(constant(s), identity)
   }
 
   modifyOption(f: (a: A) => A, s: S): Option<S> {
-    return this.getOption(s)
-      .map(a => this.reverseGet(f(a)))
+    return this.getOption(s).map(a => this.reverseGet(f(a)))
   }
 
   /** compose a Prism with a Prism */
   compose<B>(ab: Prism<A, B>): Prism<S, B> {
-    return new Prism<S, B>(
-      s => this.getOption(s).chain(a => ab.getOption(a)),
-      b => this.reverseGet(ab.reverseGet(b))
-    )
+    return new Prism<S, B>(s => this.getOption(s).chain(a => ab.getOption(a)), b => this.reverseGet(ab.reverseGet(b)))
   }
 
   /** view a Prism as a Optional */
   asOptional(): Optional<S, A> {
-    return new Optional(
-      this.getOption,
-      this.reverseGet
-    )
+    return new Optional(this.getOption, this.reverseGet)
   }
 
   composeLens<B>(lens: Lens<A, B>): Optional<S, B> {
@@ -172,31 +199,23 @@ export class Prism<S, A> {
   }
 }
 
-const somePrism = new Prism<Option<any>, any>(
-  s => s,
-  a => some(a)
-)
+const somePrism = new Prism<Option<any>, any>(s => s, a => some(a))
 
 /*
   Laws:
-  1. getOption(s).fold(identity, set(_, s)) = s
+  1. getOption(s).fold(identity, a => set(a, s)) = s
   2. getOption(set(a, s)) = getOption(s).map(_ => a)
   3. set(a, set(a, s)) = set(a, s)
 */
 export class Optional<S, A> {
-  constructor(
-    public getOption: (s: S) => Option<A>,
-    public set: (a: A, s: S) => S
-  ){}
+  constructor(public getOption: (s: S) => Option<A>, public set: (a: A, s: S) => S) {}
 
   modify(f: (a: A) => A, s: S): S {
-    return this.modifyOption(f, s)
-      .fold(constant(s), identity)
+    return this.modifyOption(f, s).fold(constant(s), identity)
   }
 
   modifyOption(f: (a: A) => A, s: S): Option<S> {
-    return this.getOption(s)
-      .map(a => this.set(f(a), s))
+    return this.getOption(s).map(a => this.set(f(a), s))
   }
 
   /** compose a Optional with a Optional */
@@ -209,12 +228,8 @@ export class Optional<S, A> {
 
   /** view a Options as a Traversal */
   asTraversal(): Traversal<S, A> {
-    return new Traversal<S, A>(
-      <F extends HKTS>(applicative: Applicative<F>, f: (a: A) => HKT<A>[F], s: S): HKT<S>[F] =>
-        this.getOption(s).fold(
-          () => applicative.of(s),
-          a => applicative.map((a: A) => this.set(a, s), f(a))
-        )
+    return new Traversal<S, A>(<F extends HKTS>(applicative: Applicative<F>, f: (a: A) => HKT<A>[F], s: S): HKT<S>[F] =>
+      this.getOption(s).fold(() => applicative.of(s), a => applicative.map((a: A) => this.set(a, s), f(a)))
     )
   }
 
@@ -231,7 +246,7 @@ export class Traversal<S, A> {
   constructor(
     // Van Laarhoven representation
     public modifyF: <F extends HKTS>(applicative: Applicative<F>, f: (a: A) => HKT<A>[F], s: S) => HKT<S>[F]
-  ){}
+  ) {}
 
   modify(f: (a: A) => A, s: S): S {
     return (this.modifyF(id, a => id.of(f(a)), s) as id.Identity<S>).extract()
@@ -243,39 +258,36 @@ export class Traversal<S, A> {
 
   /** compose a Traversal with a Traversal */
   compose<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return new Traversal<S, B>(
-      <F extends HKTS>(applicative: Applicative<F>, f: (a: B) => HKT<B>[F], s: S): HKT<S>[F] =>
-        this.modifyF(applicative, a => ab.modifyF(applicative, f, a), s)
+    return new Traversal<S, B>(<F extends HKTS>(applicative: Applicative<F>, f: (a: B) => HKT<B>[F], s: S): HKT<S>[F] =>
+      this.modifyF(applicative, a => ab.modifyF(applicative, f, a), s)
     )
   }
 
   /** view a Traversal as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(
-      <M>(monoid: Monoid<M>, f: (a: A) => M, s: S): M =>
-        (this.modifyF(con.getApplicative(monoid), a => new con.Const<M, A>(f(a)), s) as con.Const<M, S>).fold(identity)
+    return new Fold(<M>(monoid: Monoid<M>, f: (a: A) => M, s: S): M =>
+      (this.modifyF(con.getApplicative(monoid), a => new con.Const<M, A>(f(a)), s) as con.Const<M, S>).fold(identity)
     )
   }
 }
 
 /** create a Traversal from a Traversable */
 export function fromTraversable<T extends HKTS, A>(traversable: Traversable<T>): Traversal<HKT<A>[T], A> {
-  return new Traversal<HKT<A>[T], A>(
-      <F extends HKTS>(applicative: Applicative<F>, f: (a: A) => HKT<A>[F], s: HKT<A>[T]): HKT<HKT<A>[T]>[F] =>
-        traversable.traverse<F>(applicative)<A, A>(f, s)
+  return new Traversal<
+    HKT<A>[T],
+    A
+  >(<F extends HKTS>(applicative: Applicative<F>, f: (a: A) => HKT<A>[F], s: HKT<A>[T]): HKT<HKT<A>[T]>[F] =>
+    traversable.traverse<F>(applicative)<A, A>(f, s)
   )
 }
 
 export class Fold<S, A> {
-  constructor(
-    public foldMap: <M>(monoid: Monoid<M>, f: (a: A) => M, s: S) => M
-  ){}
+  constructor(public foldMap: <M>(monoid: Monoid<M>, f: (a: A) => M, s: S) => M) {}
 
   /** compose a Fold with a Fold */
   compose<B>(ab: Fold<A, B>): Fold<S, B> {
-    return new Fold<S, B>(
-      <M>(monoid: Monoid<M>, f: (b: B) => M, s: S): M =>
-        this.foldMap(monoid, a => ab.foldMap(monoid, f, a), s)
+    return new Fold<S, B>(<M>(monoid: Monoid<M>, f: (b: B) => M, s: S): M =>
+      this.foldMap(monoid, a => ab.foldMap(monoid, f, a), s)
     )
   }
 
@@ -286,7 +298,7 @@ export class Fold<S, A> {
 
   /** find the first target of a Fold matching the predicate */
   find(p: Predicate<A>, s: S): Option<A> {
-    return this.foldMap(option.getFirstMonoid(), a => p(a) ? option.of(a) : option.none, s)
+    return this.foldMap(option.getFirstMonoid(), a => (p(a) ? option.of(a) : option.none), s)
   }
 
   /** get the first target of a Fold */
@@ -303,13 +315,9 @@ export class Fold<S, A> {
   all(p: Predicate<A>, s: S): boolean {
     return this.foldMap(monoidAll, p, s)
   }
-
 }
 
 /** create a Fold from a Foldable */
 export function fromFoldable<F extends HKTS, A>(fold: Foldable<F>): Fold<HKT<A>[F], A> {
-  return new Fold(
-      <M>(monoid: Monoid<M>, f: (a: A) => M, s: HKT<A>[F]): M =>
-        foldMap(fold, monoid)(f, s)
-  )
+  return new Fold(<M>(monoid: Monoid<M>, f: (a: A) => M, s: HKT<A>[F]): M => foldMap(fold, monoid)(f, s))
 }
