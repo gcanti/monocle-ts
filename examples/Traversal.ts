@@ -1,7 +1,7 @@
-import { Traversal, fromTraversable, Fold } from '../src'
-import * as arr from 'fp-ts/lib/Array'
+import { fromTraversable } from '../src'
+import { array } from 'fp-ts/lib/Array'
 
-const eachL = fromTraversable<arr.URI, number>(arr)
+const eachL = fromTraversable<number>(array)
 
 const xs = [1, 2, 3, 4]
 
@@ -14,4 +14,4 @@ const fold = eachL.asFold()
 console.log(fold.getAll(xs))
 console.log(fold.headOption(xs))
 console.log(fold.find(n => n > 2, xs))
-console.log(fold.all((n: number) => n % 2 == 0, xs))
+console.log(fold.all((n: number) => n % 2 === 0, xs))

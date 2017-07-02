@@ -1,4 +1,4 @@
-import { HKT, HKTS } from 'fp-ts/lib/HKT'
+import { HKT } from 'fp-ts/lib/HKT'
 import { Monoid, monoidArray, monoidAll, monoidAny } from 'fp-ts/lib/Monoid'
 import { Applicative } from 'fp-ts/lib/Applicative'
 import { Foldable, foldMap } from 'fp-ts/lib/Foldable'
@@ -19,7 +19,7 @@ export class Iso<S, A> {
 
   /** compose a Iso with a Iso */
   compose<B>(ab: Iso<A, B>): Iso<S, B> {
-    return new Iso<S, B>(s => ab.get(this.get(s)), b => this.reverseGet(ab.reverseGet(b)))
+    return new Iso(s => ab.get(this.get(s)), b => this.reverseGet(ab.reverseGet(b)))
   }
 
   modify(f: (a: A) => A, s: S): S {
@@ -130,7 +130,7 @@ export class Lens<S, A> {
 
   /** generate a lens from a type and a prop */
   static fromProp<T, P extends keyof T>(prop: P): Lens<T, T[P]> {
-    return new Lens<T, T[P]>(s => s[prop], (a, s) => Object.assign({}, s, { [prop as any]: a }))
+    return new Lens(s => s[prop], (a, s) => Object.assign({}, s, { [prop as any]: a }))
   }
 
   modify(f: (a: A) => A, s: S): S {
@@ -139,7 +139,7 @@ export class Lens<S, A> {
 
   /** compose a Lens with a Lens */
   compose<B>(ab: Lens<A, B>): Lens<S, B> {
-    return new Lens<S, B>(s => ab.get(this.get(s)), (b, s) => this.set(ab.set(b, this.get(s)), s))
+    return new Lens(s => ab.get(this.get(s)), (b, s) => this.set(ab.set(b, this.get(s)), s))
   }
 
   /** view a Lens as a Option */
@@ -147,12 +147,12 @@ export class Lens<S, A> {
     return new Optional(s => some(this.get(s)), this.set)
   }
 
-  composePrism<B>(prism: Prism<A, B>): Optional<S, B> {
-    return this.asOptional().compose(prism.asOptional())
+  composePrism<B>(ab: Prism<A, B>): Optional<S, B> {
+    return this.asOptional().compose(ab.asOptional())
   }
 
-  composeOptional<B>(optional: Optional<A, B>): Optional<S, B> {
-    return this.asOptional().compose(optional)
+  composeOptional<B>(ab: Optional<A, B>): Optional<S, B> {
+    return this.asOptional().compose(ab)
   }
 }
 
@@ -165,7 +165,7 @@ export class Prism<S, A> {
   constructor(public getOption: (s: S) => Option<A>, public reverseGet: (a: A) => S) {}
 
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
-    return new Prism<A, A>(s => (predicate(s) ? some(s) : none), a => a)
+    return new Prism(s => (predicate(s) ? some(s) : none), a => a)
   }
 
   static some<A>(): Prism<Option<A>, A> {
@@ -182,7 +182,7 @@ export class Prism<S, A> {
 
   /** compose a Prism with a Prism */
   compose<B>(ab: Prism<A, B>): Prism<S, B> {
-    return new Prism<S, B>(s => this.getOption(s).chain(a => ab.getOption(a)), b => this.reverseGet(ab.reverseGet(b)))
+    return new Prism(s => this.getOption(s).chain(a => ab.getOption(a)), b => this.reverseGet(ab.reverseGet(b)))
   }
 
   /** view a Prism as a Optional */
@@ -190,12 +190,12 @@ export class Prism<S, A> {
     return new Optional(this.getOption, this.reverseGet)
   }
 
-  composeLens<B>(lens: Lens<A, B>): Optional<S, B> {
-    return this.asOptional().compose(lens.asOptional())
+  composeLens<B>(ab: Lens<A, B>): Optional<S, B> {
+    return this.asOptional().compose(ab.asOptional())
   }
 
-  composeOptional<B>(optional: Optional<A, B>): Optional<S, B> {
-    return this.asOptional().compose(optional)
+  composeOptional<B>(ab: Optional<A, B>): Optional<S, B> {
+    return this.asOptional().compose(ab)
   }
 }
 
@@ -228,24 +228,24 @@ export class Optional<S, A> {
 
   /** view a Options as a Traversal */
   asTraversal(): Traversal<S, A> {
-    return new Traversal<S, A>(<F extends HKTS>(applicative: Applicative<F>, f: (a: A) => HKT<A>[F], s: S): HKT<S>[F] =>
-      this.getOption(s).fold(() => applicative.of(s), a => applicative.map((a: A) => this.set(a, s), f(a)))
+    return new Traversal(<F>(F: Applicative<F>, f: (a: A) => HKT<F, A>, s: S): HKT<F, S> =>
+      this.getOption(s).fold(() => F.of(s), a => F.map((a: A) => this.set(a, s), f(a)))
     )
   }
 
-  composeLens<B>(lens: Lens<A, B>): Optional<S, B> {
-    return this.compose(lens.asOptional())
+  composeLens<B>(ab: Lens<A, B>): Optional<S, B> {
+    return this.compose(ab.asOptional())
   }
 
-  composePrism<B>(prism: Prism<A, B>): Optional<S, B> {
-    return this.compose(prism.asOptional())
+  composePrism<B>(ab: Prism<A, B>): Optional<S, B> {
+    return this.compose(ab.asOptional())
   }
 }
 
 export class Traversal<S, A> {
   constructor(
     // Van Laarhoven representation
-    public modifyF: <F extends HKTS>(applicative: Applicative<F>, f: (a: A) => HKT<A>[F], s: S) => HKT<S>[F]
+    public modifyF: <F>(F: Applicative<F>, f: (a: A) => HKT<F, A>, s: S) => HKT<F, S>
   ) {}
 
   modify(f: (a: A) => A, s: S): S {
@@ -258,37 +258,25 @@ export class Traversal<S, A> {
 
   /** compose a Traversal with a Traversal */
   compose<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return new Traversal<S, B>(<F extends HKTS>(applicative: Applicative<F>, f: (a: B) => HKT<B>[F], s: S): HKT<S>[F] =>
-      this.modifyF(applicative, a => ab.modifyF(applicative, f, a), s)
+    return new Traversal<S, B>(<F>(F: Applicative<F>, f: (a: B) => HKT<F, B>, s: S): HKT<F, S> =>
+      this.modifyF(F, a => ab.modifyF(F, f, a), s)
     )
   }
 
   /** view a Traversal as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(monoid: Monoid<M>, f: (a: A) => M, s: S): M =>
-      (this.modifyF(con.getApplicative(monoid), a => new con.Const<M, A>(f(a)), s) as con.Const<M, S>).fold(identity)
+    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M =>
+      (this.modifyF(con.getApplicative(M), a => new con.Const(f(a)), s) as con.Const<M, S>).fold(identity)
     )
   }
 }
 
-/** create a Traversal from a Traversable */
-export function fromTraversable<T extends HKTS, A>(traversable: Traversable<T>): Traversal<HKT<A>[T], A> {
-  return new Traversal<
-    HKT<A>[T],
-    A
-  >(<F extends HKTS>(applicative: Applicative<F>, f: (a: A) => HKT<A>[F], s: HKT<A>[T]): HKT<HKT<A>[T]>[F] =>
-    traversable.traverse<F>(applicative)<A, A>(f, s)
-  )
-}
-
 export class Fold<S, A> {
-  constructor(public foldMap: <M>(monoid: Monoid<M>, f: (a: A) => M, s: S) => M) {}
+  constructor(public foldMap: <M>(M: Monoid<M>, f: (a: A) => M, s: S) => M) {}
 
   /** compose a Fold with a Fold */
   compose<B>(ab: Fold<A, B>): Fold<S, B> {
-    return new Fold<S, B>(<M>(monoid: Monoid<M>, f: (b: B) => M, s: S): M =>
-      this.foldMap(monoid, a => ab.foldMap(monoid, f, a), s)
-    )
+    return new Fold<S, B>(<M>(M: Monoid<M>, f: (b: B) => M, s: S): M => this.foldMap(M, a => ab.foldMap(M, f, a), s))
   }
 
   /** get all the targets of a Fold */
@@ -317,7 +305,34 @@ export class Fold<S, A> {
   }
 }
 
-/** create a Fold from a Foldable */
-export function fromFoldable<F extends HKTS, A>(fold: Foldable<F>): Fold<HKT<A>[F], A> {
-  return new Fold(<M>(monoid: Monoid<M>, f: (a: A) => M, s: HKT<A>[F]): M => foldMap(fold, monoid)(f, s))
+export class Ops {
+  /** create a Traversal from a Traversable */
+  fromTraversable<T, A>(T: Traversable<T>): Traversal<HKT<T, A>, A>
+  fromTraversable<T, A>(T: Traversable<T>): Traversal<HKT<T, A>, A> {
+    return new Traversal(<F>(F: Applicative<F>, f: (a: A) => HKT<F, A>, s: HKT<T, A>): HKT<F, HKT<T, A>> =>
+      T.traverse(F)(f, s)
+    )
+  }
+
+  /** create a Fold from a Foldable */
+  fromFoldable<F, A>(F: Foldable<F>): Fold<HKT<F, A>, A>
+  fromFoldable<F, A>(F: Foldable<F>): Fold<HKT<F, A>, A> {
+    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: HKT<F, A>): M => foldMap(F, M)(f, s))
+  }
+}
+
+const ops = new Ops()
+export const fromTraversable: Ops['fromTraversable'] = ops.fromTraversable
+export const fromFoldable: Ops['fromFoldable'] = ops.fromFoldable
+
+//
+// overloadings
+//
+
+import { ArrayURI } from 'fp-ts/lib/overloadings'
+
+export interface Ops {
+  fromTraversable<A>(T: Traversable<ArrayURI>): Traversal<Array<A>, A>
+
+  fromFoldable<A>(F: Foldable<ArrayURI>): Fold<Array<A>, A>
 }
