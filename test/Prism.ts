@@ -4,7 +4,6 @@ import { Prism, Lens } from '../src'
 import { eqOptions as eq } from './helpers'
 
 describe('Prism', () => {
-
   it('fromPredicate', () => {
     const prism = Prism.fromPredicate<number>(n => n % 1 === 0)
     eq(prism.getOption(1), some(1))
@@ -37,10 +36,7 @@ describe('Prism', () => {
     const barLens = Lens.fromProp<Foo, 'bar'>('bar')
     const sLens = Lens.fromProp<Bar, 's'>('s')
 
-    const sOptional = barLens
-      .composePrism(Prism.some<Bar>())
-      .composeLens(sLens)
-      .composePrism(Prism.some<string>())
+    const sOptional = barLens.composePrism(Prism.some<Bar>()).composeLens(sLens).composePrism(Prism.some<string>())
 
     assert.deepEqual(sOptional.set('b', foo1), {
       bar: some({
@@ -56,5 +52,4 @@ describe('Prism', () => {
       bar: none
     })
   })
-
 })

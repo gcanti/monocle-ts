@@ -1,17 +1,29 @@
-interface Street { num: number, name: string }
-interface Address { city: string, street: Street }
-interface Company { name: string, address: Address }
-interface Employee { name: string, company: Company }
+interface Street {
+  num: number
+  name: string
+}
+interface Address {
+  city: string
+  street: Street
+}
+interface Company {
+  name: string
+  address: Address
+}
+interface Employee {
+  name: string
+  company: Company
+}
 
 const employee: Employee = {
-  name: "john",
+  name: 'john',
   company: {
-    name: "awesome inc",
+    name: 'awesome inc',
     address: {
-      city: "london",
+      city: 'london',
       street: {
         num: 23,
-        name: "high street"
+        name: 'high street'
       }
     }
   }
@@ -46,9 +58,18 @@ const name = Lens.fromProp<Street, 'name'>('name')
 
 import { some, none } from 'fp-ts/lib/Option'
 
-const firstLetter = new Optional<string, string>(
-  s => s.length > 0 ? some(s[0]) : none,
-  (a, s) => a + s.substring(1)
-)
+const firstLetter = new Optional<string, string>(s => (s.length > 0 ? some(s[0]) : none), (a, s) => a + s.substring(1))
 
-console.log(JSON.stringify(company.compose(address).compose(street).compose(name).asOptional().compose(firstLetter).modify(s => s.toUpperCase(), employee), null, 2))
+console.log(
+  JSON.stringify(
+    company
+      .compose(address)
+      .compose(street)
+      .compose(name)
+      .asOptional()
+      .compose(firstLetter)
+      .modify(s => s.toUpperCase(), employee),
+    null,
+    2
+  )
+)

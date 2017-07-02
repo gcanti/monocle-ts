@@ -1,19 +1,31 @@
 import { Lens } from '../src'
 
-export interface Street { num: number, name: string }
-export interface Address { city: string, street: Street }
-export interface Company { name: string, address: Address }
-export interface Employee { name: string, company: Company }
+export interface Street {
+  num: number
+  name: string
+}
+export interface Address {
+  city: string
+  street: Street
+}
+export interface Company {
+  name: string
+  address: Address
+}
+export interface Employee {
+  name: string
+  company: Company
+}
 
 export const employee: Employee = {
-  name: "john",
+  name: 'john',
   company: {
-    name: "awesome inc",
+    name: 'awesome inc',
     address: {
-      city: "london",
+      city: 'london',
       street: {
         num: 23,
-        name: "high street"
+        name: 'high street'
       }
     }
   }
@@ -41,18 +53,15 @@ const employee3 = nameLens.set('low street', employee)
 
 console.log(JSON.stringify(employee3, null, 2))
 
-const numLens = streetLens.compose(new Lens<Street, number>(
-  s => s.num,
-  (a, s) => ({ ...s, num: a })
-))
+const numLens = streetLens.compose(new Lens<Street, number>(s => s.num, (a, s) => ({ ...s, num: a })))
 
 console.log(JSON.stringify(numLens.set(42, employee), null, 2))
 
 // generation
 type PersonType = {
-  name: string,
+  name: string
   age: number
-};
+}
 
 const person: PersonType = { name: 'Giulio', age: 42 }
 
