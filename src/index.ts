@@ -33,10 +33,7 @@ export class Iso<S, A> {
 
   /** view an Iso as a Optional */
   asOptional(): Optional<S, A> {
-    return new Optional(
-      s => some(this.get(s)),
-      (a, s) => this.reverseGet(a)
-    )
+    return new Optional(s => some(this.get(s)), (a, s) => this.reverseGet(a))
   }
 
   /** view an Iso as a Traversal */
@@ -48,9 +45,7 @@ export class Iso<S, A> {
 
   /** view an Iso as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M =>
-      f(this.get(s))
-    )
+    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M => f(this.get(s)))
   }
 
   /** view an Iso as a Getter */
@@ -228,9 +223,7 @@ export class Lens<S, A> {
 
   /** view a Lens as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold<S, A>(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M =>
-      f(this.get(s))
-    )
+    return new Fold<S, A>(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M => f(this.get(s)))
   }
 
   /** compose a Lens with a Lens */
@@ -317,9 +310,7 @@ export class Prism<S, A> {
 
   /** view a Prism as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M =>
-      this.getOption(s).fold(() => M.empty(), f)
-    )
+    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M => this.getOption(s).fold(() => M.empty(), f))
   }
 
   /** compose a Prism with a Prism */
@@ -391,9 +382,7 @@ export class Optional<S, A> {
 
   /** view an Optional as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M =>
-      this.getOption(s).fold(() => M.empty(), f)
-    )
+    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M => this.getOption(s).fold(() => M.empty(), f))
   }
 
   /** view an Optional as a Setter */
@@ -519,9 +508,7 @@ export class Getter<S, A> {
 
   /** view a Getter as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold<S, A>(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M =>
-      f(this.get(s))
-    )
+    return new Fold<S, A>(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M => f(this.get(s)))
   }
 
   /** compose a Getter with a Getter */
