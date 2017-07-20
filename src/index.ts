@@ -614,6 +614,10 @@ export class Fold<S, A> {
 export class Setter<S, A> {
   constructor(public modify: (f: (a: A) => A, s: S) => S) {}
 
+  set(a: A, s: S): S {
+    return this.modify(constant(a), s)
+  }
+
   /** compose a Setter with a Setter */
   compose<B>(ab: Setter<A, B>): Setter<S, B> {
     return new Setter<S, B>((f: (b: B) => B, s: S) => this.modify((a: A) => ab.modify(f, a), s))
