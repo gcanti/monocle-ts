@@ -15,6 +15,7 @@ import * as con from 'fp-ts/lib/Const'
   2. reversetGet . get = identity
 */
 export class Iso<S, A> {
+  readonly _tag: 'Iso' = 'Iso'
   constructor(public get: (s: S) => A, public reverseGet: (a: A) => S) {}
 
   modify(f: (a: A) => A, s: S): S {
@@ -187,7 +188,7 @@ export function lensFromPath(path: Array<any>) {
 */
 export class Lens<S, A> {
   static fromPath = lensFromPath
-
+  readonly _tag: 'Lens' = 'Lens'
   constructor(public get: (s: S) => A, public set: (a: A, s: S) => S) {}
 
   /** generate a lens from a type and a prop */
@@ -273,6 +274,7 @@ export class Lens<S, A> {
   2. getOption(reverseGet(a)) = Some(a)
 */
 export class Prism<S, A> {
+  readonly _tag: 'Prism' = 'Prism'
   constructor(public getOption: (s: S) => Option<A>, public reverseGet: (a: A) => S) {}
 
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
@@ -363,6 +365,7 @@ const somePrism = new Prism<Option<any>, any>(s => s, a => some(a))
   3. set(a, set(a, s)) = set(a, s)
 */
 export class Optional<S, A> {
+  readonly _tag: 'Optional' = 'Optional'
   constructor(public getOption: (s: S) => Option<A>, public set: (a: A, s: S) => S) {}
 
   modify(f: (a: A) => A, s: S): S {
@@ -435,6 +438,7 @@ export class Optional<S, A> {
 }
 
 export class Traversal<S, A> {
+  readonly _tag: 'Traversal' = 'Traversal'
   constructor(
     // Van Laarhoven representation
     public modifyF: <F>(F: Applicative<F>, f: (a: A) => HKT<F, A>, s: S) => HKT<F, S>
@@ -504,6 +508,7 @@ export class Traversal<S, A> {
 }
 
 export class Getter<S, A> {
+  readonly _tag: 'Getter' = 'Getter'
   constructor(public get: (s: S) => A) {}
 
   /** view a Getter as a Fold */
@@ -548,6 +553,7 @@ export class Getter<S, A> {
 }
 
 export class Fold<S, A> {
+  readonly _tag: 'Fold' = 'Fold'
   constructor(public foldMap: <M>(M: Monoid<M>, f: (a: A) => M, s: S) => M) {}
 
   /** compose a Fold with a Fold */
@@ -612,6 +618,7 @@ export class Fold<S, A> {
 }
 
 export class Setter<S, A> {
+  readonly _tag: 'Setter' = 'Setter'
   constructor(public modify: (f: (a: A) => A, s: S) => S) {}
 
   set(a: A, s: S): S {
