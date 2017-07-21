@@ -12,6 +12,18 @@
 **Note**: Gaps between patch versions are faulty/broken releases.
 **Note**: A feature tagged as Experimental is in a high state of flux, you're at risk of it changing without notice.
 
+# 0.3.1
+
+- **New Feature**
+  - Added Setter (@LiamGoodacre)
+  - Added Getter (@LiamGoodacre)
+  - Added all possible conversions (e.g asGetter, asFold, etc) (@LiamGoodacre)
+  - Added all possible compositions (@LiamGoodacre)
+  - add _tag fields (allows for tagged unions) (@gcanti)
+- **Polish**
+  - Fixed some typos (Options/Option -> Optional) (@LiamGoodacre)
+  - Minor rearrangement so conversions and compositions are grouped (@LiamGoodacre)
+
 # 0.3.0
 
 - **Breaking Change**
