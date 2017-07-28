@@ -675,15 +675,3 @@ export class Ops {
 const ops = new Ops()
 export const fromTraversable: Ops['fromTraversable'] = ops.fromTraversable
 export const fromFoldable: Ops['fromFoldable'] = ops.fromFoldable
-
-//
-// overloadings
-//
-
-import { ArrayURI } from 'fp-ts/lib/overloadings'
-
-export interface Ops {
-  fromTraversable<A>(T: Traversable<ArrayURI>): Traversal<Array<A>, A>
-
-  fromFoldable<A>(F: Foldable<ArrayURI>): Fold<Array<A>, A>
-}
