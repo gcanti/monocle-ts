@@ -8,7 +8,7 @@ type U1 = false
 
 const anIso = new Iso<U0, U1>(() => false, () => true)
 
-const hasType = <T>(t: T): void => assert(true)
+const hasType = <T>(_: T): void => assert(true)
 
 describe('Conversions', () => {
   it('type check', () => {

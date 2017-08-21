@@ -38,17 +38,17 @@ describe('Prism', () => {
 
     const sOptional = barLens.composePrism(Prism.some<Bar>()).composeLens(sLens).composePrism(Prism.some<string>())
 
-    assert.deepEqual(sOptional.set('b', foo1), {
+    assert.deepEqual(sOptional.set('b')(foo1), {
       bar: some({
         s: some('b')
       })
     })
-    assert.deepEqual(sOptional.set('c', foo2), {
+    assert.deepEqual(sOptional.set('c')(foo2), {
       bar: some({
         s: some('c')
       })
     })
-    assert.deepEqual(sOptional.set('d', foo3), {
+    assert.deepEqual(sOptional.set('d')(foo3), {
       bar: none
     })
   })

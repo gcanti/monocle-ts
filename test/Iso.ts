@@ -15,7 +15,7 @@ describe('Iso', () => {
 
   it('modify', () => {
     const double = (x: number) => x * 2
-    assert.strictEqual(mTokm.modify(double, 1000), 2000)
+    assert.strictEqual(mTokm.modify(double)(1000), 2000)
   })
 
   it('compose', () => {
