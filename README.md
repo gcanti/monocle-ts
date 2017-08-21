@@ -32,9 +32,7 @@ const employee: Employee = {
   }
 }
 
-function capitalize(s: string): string {
-  return s.substring(0, 1).toUpperCase() + s.substring(1)
-}
+const capitalize = (s: string): string => s.substring(0, 1).toUpperCase() + s.substring(1)
 
 const employee2 = {
   ...employee,
@@ -73,7 +71,7 @@ company
   .compose(address)
   .compose(street)
   .compose(name)
-  .modify(capitalize, employee)
+  .modify(capitalize)(employee)
 ```
 
 Here `modify` lift a function `string => string` to a function `Employee => Employee`. It works but it would be clearer if we could zoom
@@ -86,7 +84,7 @@ import { some, none } from 'fp-ts/lib/Option'
 
 const firstLetter = new Optional<string, string>(
   s => s.length > 0 ? some(s[0]) : none,
-  (a, s) => a + s.substring(1)
+  a => s => a + s.substring(1)
 )
 
 company
@@ -95,7 +93,7 @@ company
   .compose(name)
   .asOptional()
   .compose(firstLetter)
-  .modify(s => s.toUpperCase(), employee)
+  .modify(s => s.toUpperCase())(employee)
 ```
 
 Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`, one from `A` to `B` and another from `B` to `C` and creates a third `Optional` from `A` to `C`.

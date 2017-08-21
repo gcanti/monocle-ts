@@ -1,13 +1,13 @@
-import { HKT } from 'fp-ts/lib/HKT'
+import { HKT, HKTS, HKTAs, HKT2S, HKT2As } from 'fp-ts/lib/HKT'
 import { Monoid, monoidArray, monoidAll, monoidAny } from 'fp-ts/lib/Monoid'
 import { Applicative } from 'fp-ts/lib/Applicative'
 import { Foldable, foldMap } from 'fp-ts/lib/Foldable'
 import { Traversable } from 'fp-ts/lib/Traversable'
 import * as option from 'fp-ts/lib/Option'
 import { Option, none, some } from 'fp-ts/lib/Option'
-import { identity, constant, Predicate } from 'fp-ts/lib/function'
+import { identity, constant, Predicate, Endomorphism } from 'fp-ts/lib/function'
 import * as id from 'fp-ts/lib/Identity'
-import * as con from 'fp-ts/lib/Const'
+import * as const_ from 'fp-ts/lib/Const'
 
 /*
   Laws:
@@ -16,15 +16,15 @@ import * as con from 'fp-ts/lib/Const'
 */
 export class Iso<S, A> {
   readonly _tag: 'Iso' = 'Iso'
-  constructor(public get: (s: S) => A, public reverseGet: (a: A) => S) {}
+  constructor(readonly get: (s: S) => A, readonly reverseGet: (a: A) => S) {}
 
-  modify(f: (a: A) => A, s: S): S {
-    return this.reverseGet(f(this.get(s)))
+  modify(f: Endomorphism<A>): Endomorphism<S> {
+    return s => this.reverseGet(f(this.get(s)))
   }
 
   /** view an Iso as a Lens */
   asLens(): Lens<S, A> {
-    return new Lens(this.get, this.reverseGet)
+    return new Lens(this.get, a => s => this.reverseGet(a))
   }
 
   /** view an Iso as a Prism */
@@ -34,29 +34,29 @@ export class Iso<S, A> {
 
   /** view an Iso as a Optional */
   asOptional(): Optional<S, A> {
-    return new Optional(s => some(this.get(s)), (a, s) => this.reverseGet(a))
+    return new Optional(s => some(this.get(s)), a => s => this.reverseGet(a))
   }
 
   /** view an Iso as a Traversal */
   asTraversal(): Traversal<S, A> {
-    return new Traversal(<F>(F: Applicative<F>, f: (a: A) => HKT<F, A>, s: S): HKT<F, S> =>
-      F.map((a: A) => this.reverseGet(a), f(this.get(s)))
+    return new Traversal(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => s =>
+      F.map(a => this.reverseGet(a), f(this.get(s)))
     )
   }
 
   /** view an Iso as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M => f(this.get(s)))
+    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
   }
 
   /** view an Iso as a Getter */
   asGetter(): Getter<S, A> {
-    return new Getter((s: S) => this.get(s))
+    return new Getter(s => this.get(s))
   }
 
   /** view an Iso as a Setter */
   asSetter(): Setter<S, A> {
-    return new Setter((f: (a: A) => A, s: S) => this.modify(f, s))
+    return new Setter(f => s => this.modify(f)(s))
   }
 
   /** compose an Iso with an Iso */
@@ -189,15 +189,15 @@ export function lensFromPath(path: Array<any>) {
 export class Lens<S, A> {
   static fromPath = lensFromPath
   readonly _tag: 'Lens' = 'Lens'
-  constructor(public get: (s: S) => A, public set: (a: A, s: S) => S) {}
+  constructor(readonly get: (s: S) => A, readonly set: (a: A) => Endomorphism<S>) {}
 
   /** generate a lens from a type and a prop */
   static fromProp<T, P extends keyof T>(prop: P): Lens<T, T[P]> {
-    return new Lens(s => s[prop], (a, s) => Object.assign({}, s, { [prop as any]: a }))
+    return new Lens(s => s[prop], a => s => Object.assign({}, s, { [prop as any]: a }))
   }
 
-  modify(f: (a: A) => A, s: S): S {
-    return this.set(f(this.get(s)), s)
+  modify(f: Endomorphism<A>): Endomorphism<S> {
+    return s => this.set(f(this.get(s)))(s)
   }
 
   /** view a Lens as a Optional */
@@ -207,29 +207,29 @@ export class Lens<S, A> {
 
   /** view a Lens as a Traversal */
   asTraversal(): Traversal<S, A> {
-    return new Traversal(<F>(F: Applicative<F>, f: (a: A) => HKT<F, A>, s: S): HKT<F, S> =>
-      F.map(a => this.set(a, s), f(this.get(s)))
+    return new Traversal(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => s =>
+      F.map(a => this.set(a)(s), f(this.get(s)))
     )
   }
 
   /** view a Lens as a Setter */
   asSetter(): Setter<S, A> {
-    return new Setter((f, s) => this.modify(f, s))
+    return new Setter(f => s => this.modify(f)(s))
   }
 
   /** view a Lens as a Getter */
   asGetter(): Getter<S, A> {
-    return new Getter<S, A>(s => this.get(s))
+    return new Getter(s => this.get(s))
   }
 
   /** view a Lens as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold<S, A>(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M => f(this.get(s)))
+    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
   }
 
   /** compose a Lens with a Lens */
   compose<B>(ab: Lens<A, B>): Lens<S, B> {
-    return new Lens(s => ab.get(this.get(s)), (b, s) => this.set(ab.set(b, this.get(s)), s))
+    return new Lens(s => ab.get(this.get(s)), b => s => this.set(ab.set(b)(this.get(s)))(s))
   }
 
   /** compose a Lens with a Getter */
@@ -275,7 +275,7 @@ export class Lens<S, A> {
 */
 export class Prism<S, A> {
   readonly _tag: 'Prism' = 'Prism'
-  constructor(public getOption: (s: S) => Option<A>, public reverseGet: (a: A) => S) {}
+  constructor(readonly getOption: (s: S) => Option<A>, readonly reverseGet: (a: A) => S) {}
 
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
     return new Prism(s => (predicate(s) ? some(s) : none), a => a)
@@ -285,34 +285,34 @@ export class Prism<S, A> {
     return somePrism
   }
 
-  modify(f: (a: A) => A, s: S): S {
-    return this.modifyOption(f, s).fold(constant(s), identity)
+  modify(f: Endomorphism<A>): Endomorphism<S> {
+    return s => this.modifyOption(f)(s).fold(constant(s), identity)
   }
 
-  modifyOption(f: (a: A) => A, s: S): Option<S> {
-    return this.getOption(s).map(a => this.reverseGet(f(a)))
+  modifyOption(f: Endomorphism<A>): (s: S) => Option<S> {
+    return s => this.getOption(s).map(a => this.reverseGet(f(a)))
   }
 
   /** view a Prism as a Optional */
   asOptional(): Optional<S, A> {
-    return new Optional(this.getOption, this.reverseGet)
+    return new Optional(this.getOption, a => s => this.reverseGet(a))
   }
 
   /** view a Prism as a Traversal */
   asTraversal(): Traversal<S, A> {
-    return new Traversal(<F>(F: Applicative<F>, f: (a: A) => HKT<F, A>, s: S): HKT<F, S> =>
+    return new Traversal(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => s =>
       this.getOption(s).fold(() => F.of(s), a => F.map(fa => this.reverseGet(a), f(a)))
     )
   }
 
   /** view a Prism as a Setter */
   asSetter(): Setter<S, A> {
-    return new Setter((f, s) => this.modify(f, s))
+    return new Setter(f => s => this.modify(f)(s))
   }
 
   /** view a Prism as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M => this.getOption(s).fold(() => M.empty(), f))
+    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => this.getOption(s).fold(() => M.empty(), f))
   }
 
   /** compose a Prism with a Prism */
@@ -356,7 +356,7 @@ export class Prism<S, A> {
   }
 }
 
-const somePrism = new Prism<Option<any>, any>(s => s, a => some(a))
+const somePrism = new Prism<Option<never>, never>(s => s, a => some(a))
 
 /*
   Laws:
@@ -366,38 +366,38 @@ const somePrism = new Prism<Option<any>, any>(s => s, a => some(a))
 */
 export class Optional<S, A> {
   readonly _tag: 'Optional' = 'Optional'
-  constructor(public getOption: (s: S) => Option<A>, public set: (a: A, s: S) => S) {}
+  constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => Endomorphism<S>) {}
 
-  modify(f: (a: A) => A, s: S): S {
-    return this.modifyOption(f, s).fold(constant(s), identity)
+  modify(f: Endomorphism<A>): Endomorphism<S> {
+    return s => this.modifyOption(f)(s).fold(constant(s), identity)
   }
 
-  modifyOption(f: (a: A) => A, s: S): Option<S> {
-    return this.getOption(s).map(a => this.set(f(a), s))
+  modifyOption(f: Endomorphism<A>): (s: S) => Option<S> {
+    return s => this.getOption(s).map(a => this.set(f(a))(s))
   }
 
   /** view a Optional as a Traversal */
   asTraversal(): Traversal<S, A> {
-    return new Traversal(<F>(F: Applicative<F>, f: (a: A) => HKT<F, A>, s: S): HKT<F, S> =>
-      this.getOption(s).fold(() => F.of(s), a => F.map((a: A) => this.set(a, s), f(a)))
+    return new Traversal(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => s =>
+      this.getOption(s).fold(() => F.of(s), a => F.map((a: A) => this.set(a)(s), f(a)))
     )
   }
 
   /** view an Optional as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M => this.getOption(s).fold(() => M.empty(), f))
+    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => this.getOption(s).fold(() => M.empty(), f))
   }
 
   /** view an Optional as a Setter */
   asSetter(): Setter<S, A> {
-    return new Setter((f, s) => this.modify(f, s))
+    return new Setter(f => s => this.modify(f)(s))
   }
 
   /** compose a Optional with a Optional */
   compose<B>(ab: Optional<A, B>): Optional<S, B> {
     return new Optional<S, B>(
       s => this.getOption(s).chain(a => ab.getOption(a)),
-      (b, s) => this.modify(a => ab.set(b, a), s)
+      b => s => this.modify(a => ab.set(b)(a))(s)
     )
   }
 
@@ -441,33 +441,33 @@ export class Traversal<S, A> {
   readonly _tag: 'Traversal' = 'Traversal'
   constructor(
     // Van Laarhoven representation
-    public modifyF: <F>(F: Applicative<F>, f: (a: A) => HKT<F, A>, s: S) => HKT<F, S>
+    readonly modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>
   ) {}
 
-  modify(f: (a: A) => A, s: S): S {
-    return (this.modifyF(id, a => id.of(f(a)), s) as id.Identity<S>).extract()
+  modify(f: Endomorphism<A>): Endomorphism<S> {
+    return s => (this.modifyF(id)(a => id.of(f(a)))(s) as id.Identity<S>).extract()
   }
 
-  set(a: A, s: S): S {
-    return this.modify(constant(a), s)
+  set(a: A): Endomorphism<S> {
+    return s => this.modify(constant(a))(s)
   }
 
   /** view a Traversal as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M =>
-      (this.modifyF(con.getApplicative(M), a => new con.Const(f(a)), s) as con.Const<M, S>).fold(identity)
+    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s =>
+      (this.modifyF(const_.getApplicative(M))(a => new const_.Const(f(a)))(s) as const_.Const<M, S>).fold(identity)
     )
   }
 
   /** view a Traversal as a Setter */
   asSetter(): Setter<S, A> {
-    return new Setter((f, s) => this.modify(f, s))
+    return new Setter(f => s => this.modify(f)(s))
   }
 
   /** compose a Traversal with a Traversal */
   compose<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return new Traversal<S, B>(<F>(F: Applicative<F>, f: (a: B) => HKT<F, B>, s: S): HKT<F, S> =>
-      this.modifyF(F, a => ab.modifyF(F, f, a), s)
+    return new Traversal<S, B>(<F>(F: Applicative<F>) => (f: (a: B) => HKT<F, B>) => (s: S): HKT<F, S> =>
+      this.modifyF(F)(a => ab.modifyF(F)(f)(a))(s)
     )
   }
 
@@ -509,16 +509,16 @@ export class Traversal<S, A> {
 
 export class Getter<S, A> {
   readonly _tag: 'Getter' = 'Getter'
-  constructor(public get: (s: S) => A) {}
+  constructor(readonly get: (s: S) => A) {}
 
   /** view a Getter as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold<S, A>(<M>(M: Monoid<M>, f: (a: A) => M, s: S): M => f(this.get(s)))
+    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
   }
 
   /** compose a Getter with a Getter */
   compose<B>(ab: Getter<A, B>): Getter<S, B> {
-    return new Getter((s: S) => ab.get(this.get(s)))
+    return new Getter(s => ab.get(this.get(s)))
   }
 
   /** compose a Getter with a Fold */
@@ -554,11 +554,19 @@ export class Getter<S, A> {
 
 export class Fold<S, A> {
   readonly _tag: 'Fold' = 'Fold'
-  constructor(public foldMap: <M>(M: Monoid<M>, f: (a: A) => M, s: S) => M) {}
+
+  private foldMapFirst: (f: (a: A) => Option<A>) => (s: S) => Option<A>
+
+  constructor(readonly foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M) {
+    this.getAll = foldMap(monoidArray)(a => [a])
+    this.exist = foldMap(monoidAny)
+    this.all = foldMap(monoidAll)
+    this.foldMapFirst = foldMap(option.getFirstMonoid())
+  }
 
   /** compose a Fold with a Fold */
   compose<B>(ab: Fold<A, B>): Fold<S, B> {
-    return new Fold<S, B>(<M>(M: Monoid<M>, f: (b: B) => M, s: S): M => this.foldMap(M, a => ab.foldMap(M, f, a), s))
+    return new Fold(<M>(M: Monoid<M>) => (f: (b: B) => M) => (s: S): M => this.foldMap(M)(a => ab.foldMap(M)(f)(a))(s))
   }
 
   /** compose a Fold with a Getter */
@@ -591,43 +599,37 @@ export class Fold<S, A> {
     return this.compose(ab.asFold())
   }
 
-  /** get all the targets of a Fold */
-  getAll(s: S): Array<A> {
-    return this.foldMap(monoidArray, a => [a], s)
-  }
-
   /** find the first target of a Fold matching the predicate */
-  find(p: Predicate<A>, s: S): Option<A> {
-    return this.foldMap(option.getFirstMonoid(), a => (p(a) ? option.of(a) : option.none), s)
+  find(p: Predicate<A>): (s: S) => Option<A> {
+    return this.foldMapFirst(a => (p(a) ? option.of(a) : option.none))
   }
 
   /** get the first target of a Fold */
   headOption(s: S): Option<A> {
-    return this.find(() => true, s)
+    return this.find(() => true)(s)
   }
+}
 
+export interface Fold<S, A> {
+  /** get all the targets of a Fold */
+  getAll(s: S): Array<A>
   /** check if at least one target satisfies the predicate */
-  exist(p: Predicate<A>, s: S): boolean {
-    return this.foldMap(monoidAny, p, s)
-  }
-
+  exist(p: Predicate<A>): Predicate<S>
   /** check if all targets satisfy the predicate */
-  all(p: Predicate<A>, s: S): boolean {
-    return this.foldMap(monoidAll, p, s)
-  }
+  all(p: Predicate<A>): Predicate<S>
 }
 
 export class Setter<S, A> {
   readonly _tag: 'Setter' = 'Setter'
-  constructor(public modify: (f: (a: A) => A, s: S) => S) {}
+  constructor(readonly modify: (f: Endomorphism<A>) => Endomorphism<S>) {}
 
-  set(a: A, s: S): S {
-    return this.modify(constant(a), s)
+  set(a: A): Endomorphism<S> {
+    return s => this.modify(constant(a))(s)
   }
 
   /** compose a Setter with a Setter */
   compose<B>(ab: Setter<A, B>): Setter<S, B> {
-    return new Setter<S, B>((f: (b: B) => B, s: S) => this.modify((a: A) => ab.modify(f, a), s))
+    return new Setter(f => s => this.modify((a: A) => ab.modify(f)(a))(s))
   }
 
   /** compose a Setter with a Traversal */
@@ -658,17 +660,20 @@ export class Setter<S, A> {
 
 export class Ops {
   /** create a Traversal from a Traversable */
-  fromTraversable<T, A>(T: Traversable<T>): Traversal<HKT<T, A>, A>
-  fromTraversable<T, A>(T: Traversable<T>): Traversal<HKT<T, A>, A> {
-    return new Traversal(<F>(F: Applicative<F>, f: (a: A) => HKT<F, A>, s: HKT<T, A>): HKT<F, HKT<T, A>> =>
-      T.traverse(F)(f, s)
-    )
+  fromTraversable<T extends HKT2S>(T: Traversable<T>): <L, A>() => Traversal<HKT2As<T, L, A>, A>
+  fromTraversable<T extends HKTS>(T: Traversable<T>): <A>() => Traversal<HKTAs<T, A>, A>
+  fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
+  fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
+    return <A>() =>
+      new Traversal<HKT<T, A>, A>(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => s => T.traverse(F)(f, s))
   }
 
   /** create a Fold from a Foldable */
-  fromFoldable<F, A>(F: Foldable<F>): Fold<HKT<F, A>, A>
-  fromFoldable<F, A>(F: Foldable<F>): Fold<HKT<F, A>, A> {
-    return new Fold(<M>(M: Monoid<M>, f: (a: A) => M, s: HKT<F, A>): M => foldMap(F, M)(f, s))
+  fromFoldable<F extends HKT2S>(F: Foldable<F>): <L, A>() => Fold<HKT2As<F, L, A>, A>
+  fromFoldable<F extends HKTS>(F: Foldable<F>): <A>() => Fold<HKTAs<F, A>, A>
+  fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
+  fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> {
+    return <A>() => new Fold<HKT<F, A>, A>(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => foldMap(F, M)(f)(s))
   }
 }
 

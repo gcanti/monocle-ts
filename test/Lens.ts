@@ -44,6 +44,6 @@ describe('Lens', () => {
       'street',
       'name'
     ])
-    assert.strictEqual(lens.modify(capitalize, employee).company.address.street.name, 'High street')
+    assert.strictEqual(lens.modify(capitalize)(employee).company.address.street.name, 'High street')
   })
 })
