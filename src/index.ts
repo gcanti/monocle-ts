@@ -16,7 +16,10 @@ import * as const_ from 'fp-ts/lib/Const'
 */
 export class Iso<S, A> {
   readonly _tag: 'Iso' = 'Iso'
-  constructor(readonly get: (s: S) => A, readonly reverseGet: (a: A) => S) {}
+  constructor(readonly get: (s: S) => A, readonly reverseGet: (a: A) => S) {
+    this.unwrap = this.to = get
+    this.wrap = this.from = reverseGet
+  }
 
   modify(f: Endomorphism<A>): Endomorphism<S> {
     return s => this.reverseGet(f(this.get(s)))
@@ -98,6 +101,13 @@ export class Iso<S, A> {
   composeSetter<B>(ab: Setter<A, B>): Setter<S, B> {
     return this.asSetter().compose(ab)
   }
+}
+
+export interface Iso<S, A> {
+  unwrap: (s: S) => A
+  to: (s: S) => A
+  wrap: (a: A) => S
+  from: (a: A) => S
 }
 
 export function lensFromPath<
