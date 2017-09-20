@@ -370,9 +370,9 @@ const somePrism = new Prism<Option<never>, never>(s => s, a => some(a))
 
 /*
   Laws:
-  1. getOption(s).fold(identity, a => set(a, s)) = s
-  2. getOption(set(a, s)) = getOption(s).map(_ => a)
-  3. set(a, set(a, s)) = set(a, s)
+  1. getOption(s).fold(() => s, a => set(a)(s)) = s
+  2. getOption(set(a)(s)) = getOption(s).map(_ => a)
+  3. set(a)(set(a)(s)) = set(a)(s)
 */
 export class Optional<S, A> {
   readonly _tag: 'Optional' = 'Optional'
