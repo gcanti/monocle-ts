@@ -5,7 +5,7 @@ import { Foldable, foldMap } from 'fp-ts/lib/Foldable'
 import { Traversable } from 'fp-ts/lib/Traversable'
 import * as option from 'fp-ts/lib/Option'
 import { Option, none, some } from 'fp-ts/lib/Option'
-import { identity, constant, Predicate, Endomorphism } from 'fp-ts/lib/function'
+import { identity, constant, Predicate } from 'fp-ts/lib/function'
 import * as id from 'fp-ts/lib/Identity'
 import * as const_ from 'fp-ts/lib/Const'
 
@@ -21,7 +21,7 @@ export class Iso<S, A> {
     this.wrap = this.from = reverseGet
   }
 
-  modify(f: Endomorphism<A>): Endomorphism<S> {
+  modify(f: (a: A) => A): (s: S) => S {
     return s => this.reverseGet(f(this.get(s)))
   }
 
@@ -199,14 +199,14 @@ export function lensFromPath(path: Array<any>) {
 export class Lens<S, A> {
   static fromPath = lensFromPath
   readonly _tag: 'Lens' = 'Lens'
-  constructor(readonly get: (s: S) => A, readonly set: (a: A) => Endomorphism<S>) {}
+  constructor(readonly get: (s: S) => A, readonly set: (a: A) => (s: S) => S) {}
 
   /** generate a lens from a type and a prop */
   static fromProp<T, P extends keyof T>(prop: P): Lens<T, T[P]> {
     return new Lens(s => s[prop], a => s => Object.assign({}, s, { [prop as any]: a }))
   }
 
-  modify(f: Endomorphism<A>): Endomorphism<S> {
+  modify(f: (a: A) => A): (s: S) => S {
     return s => this.set(f(this.get(s)))(s)
   }
 
@@ -295,11 +295,11 @@ export class Prism<S, A> {
     return somePrism
   }
 
-  modify(f: Endomorphism<A>): Endomorphism<S> {
+  modify(f: (a: A) => A): (s: S) => S {
     return s => this.modifyOption(f)(s).fold(constant(s), identity)
   }
 
-  modifyOption(f: Endomorphism<A>): (s: S) => Option<S> {
+  modifyOption(f: (a: A) => A): (s: S) => Option<S> {
     return s => this.getOption(s).map(a => this.reverseGet(f(a)))
   }
 
@@ -376,13 +376,13 @@ const somePrism = new Prism<Option<never>, never>(s => s, a => some(a))
 */
 export class Optional<S, A> {
   readonly _tag: 'Optional' = 'Optional'
-  constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => Endomorphism<S>) {}
+  constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
 
-  modify(f: Endomorphism<A>): Endomorphism<S> {
+  modify(f: (a: A) => A): (s: S) => S {
     return s => this.modifyOption(f)(s).fold(constant(s), identity)
   }
 
-  modifyOption(f: Endomorphism<A>): (s: S) => Option<S> {
+  modifyOption(f: (a: A) => A): (s: S) => Option<S> {
     return s => this.getOption(s).map(a => this.set(f(a))(s))
   }
 
@@ -454,11 +454,11 @@ export class Traversal<S, A> {
     readonly modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>
   ) {}
 
-  modify(f: Endomorphism<A>): Endomorphism<S> {
+  modify(f: (a: A) => A): (s: S) => S {
     return s => (this.modifyF(id)(a => id.of(f(a)))(s) as id.Identity<S>).extract()
   }
 
-  set(a: A): Endomorphism<S> {
+  set(a: A): (s: S) => S {
     return s => this.modify(constant(a))(s)
   }
 
@@ -631,9 +631,9 @@ export interface Fold<S, A> {
 
 export class Setter<S, A> {
   readonly _tag: 'Setter' = 'Setter'
-  constructor(readonly modify: (f: Endomorphism<A>) => Endomorphism<S>) {}
+  constructor(readonly modify: (f: (a: A) => A) => (s: S) => S) {}
 
-  set(a: A): Endomorphism<S> {
+  set(a: A): (s: S) => S {
     return s => this.modify(constant(a))(s)
   }
 
