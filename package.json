@@ -7,10 +7,13 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "lint": "tslint src/**/*.ts test/**/*.ts",
-    "typings-checker": "typings-checker --allow-expect-error --project typings-checker/tsconfig.json typings-checker/index.ts",
+    "typings-checker":
+      "typings-checker --allow-expect-error --project typings-checker/tsconfig.json typings-checker/index.ts",
     "mocha": "mocha -r ts-node/register test/*.ts",
-    "prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --list-different \"{src,test,examples}/**/*.ts\"",
-    "fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --write \"{src,test,exercises}/**/*.ts\"",
+    "prettier":
+      "prettier --no-semi --single-quote --print-width 120 --parser typescript --list-different \"{src,test,examples}/**/*.ts\"",
+    "fix-prettier":
+      "prettier --no-semi --single-quote --print-width 120 --parser typescript --write \"{src,test,examples}/**/*.ts\"",
     "test": "npm run prettier && npm run lint && npm run typings-checker && npm run mocha",
     "clean": "rm -rf lib/*",
     "build": "npm run clean && tsc"
@@ -29,14 +32,14 @@
     "fp-ts": "^0.5.1"
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.38",
-    "@types/node": "^7.0.4",
-    "mocha": "^3.2.0",
-    "prettier": "1.5.2",
+    "@types/mocha": "2.2.38",
+    "@types/node": "7.0.4",
+    "mocha": "3.2.0",
+    "prettier": "1.7.0",
     "ts-node": "3.1.0",
     "tslint": "4.4.2",
     "tslint-config-standard": "4.0.0",
-    "typescript": "2.4.1",
+    "typescript": "2.5.2",
     "typings-checker": "1.1.2"
   },
   "tags": ["typescript", "functional-programming", "optics", "lens", "fp-ts"],
