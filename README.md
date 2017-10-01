@@ -98,3 +98,215 @@ company
 
 Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`, one from `A` to `B` and another from `B` to `C` and creates a third `Optional` from `A` to `C`.
 All `Lenses` can be seen as `Optionals` where the optional element to zoom into is always present, hence composing an `Optional` and a `Lens` always produces an `Optional`.
+
+# Iso
+
+```ts
+class Iso<S, A> {
+  constructor(readonly get: (s: S) => A, readonly reverseGet: (a: A) => S)
+}
+```
+
+## Methods
+
+### unwrap
+
+```ts
+(s: S) => A
+```
+
+Alias of `get`
+
+### to
+
+```ts
+(s: S) => A
+```
+
+Alias of `get`
+
+### wrap
+
+```ts
+(a: A) => S
+```
+
+Alias of `reverseGet`
+
+### from
+
+```ts
+(a: A) => S
+```
+
+Alias of `reverseGet`
+
+### modify
+
+```ts
+(f: (a: A) => A): (s: S) => S
+```
+
+### asLens
+
+```ts
+(): Lens<S, A>
+```
+
+view an Iso as a Lens
+
+### asPrism
+
+```ts
+(): Prism<S, A>
+```
+
+view an Iso as a Prism
+
+### asOptional
+
+```ts
+(): Optional<S, A>
+```
+
+view an Iso as a Optional
+
+### asTraversal
+
+```ts
+(): Traversal<S, A>
+```
+
+view an Iso as a Traversal
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view an Iso as a Fold
+
+### asGetter
+
+```ts
+(): Getter<S, A>
+```
+
+view an Iso as a Getter
+
+### asSetter
+
+```ts
+(): Setter<S, A>
+```
+
+view an Iso as a Setter
+
+### compose
+
+```ts
+<B>(ab: Iso<A, B>): Iso<S, B>
+```
+
+compose an Iso with an Iso
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Lens<S, B>
+```
+
+compose an Iso with a Lens
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Prism<S, B>
+```
+
+compose an Iso with a Prism
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Optional<S, B>
+```
+
+compose an Iso with an Optional
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Traversal<S, B>
+```
+
+compose an Iso with a Traversal
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose an Iso with a Fold
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Getter<S, B>
+```
+
+compose an Iso with a Getter
+
+### composeSetter
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose an Iso with a Setter
+
+# Lens
+
+TODO
+
+# Prism
+
+TODO
+
+# Optional
+
+TODO
+
+# Traversal
+
+TODO
+
+# Getter
+
+TODO
+
+# Fold
+
+TODO
+
+# Setter
+
+TODO
+
+# fromTraversable
+
+```ts
+<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
+```
+
+create a Traversal from a Traversable
+
+# fromFoldable
+
+```ts
+<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
+```
+
+create a Fold from a Foldable
