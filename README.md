@@ -269,7 +269,171 @@ compose an Iso with a Setter
 
 # Lens
 
-TODO
+```ts
+class Lens<S, A> {
+  constructor(readonly get: (s: S) => A, readonly set: (a: A) => (s: S) => S)
+}
+```
+
+## fromPath
+
+```ts
+// other 9 overloadings
+<T, K1 extends keyof T>(path: [K1]): Lens<T, T[K1]>
+```
+
+Example
+
+```ts
+type Person = {
+  name: string
+  age: number
+}
+
+const age = Lens.fromProp<Person, 'age'>('age')
+
+const person: Person = { name: 'Giulio', age: 43 }
+
+console.log(age.get(person)) // 43
+console.log(age.set(44)(person)) // { name: 'Giulio', age: 44 }
+```
+
+## fromProp
+
+```ts
+<T, P extends keyof T>(prop: P): Lens<T, T[P]>
+```
+
+Example
+
+```ts
+type Person = {
+  name: string
+  age: number
+  address: {
+    city: string
+  }
+}
+
+const city = Lens.fromPath<Person, 'address', 'city'>(['address', 'city'])
+
+const person: Person = { name: 'Giulio', age: 43, address: { city: 'Milan' } }
+
+console.log(city.get(person)) // Milan
+console.log(city.set('London')(person)) // { name: 'Giulio', age: 43, address: { city: 'London' } }
+```
+
+## Methods
+
+### modify
+
+```ts
+(f: (a: A) => A): (s: S) => S
+```
+
+### asOptional
+
+```ts
+(): Optional<S, A>
+```
+
+view a Lens as a Optional
+
+### asTraversal
+
+```ts
+(): Traversal<S, A>
+```
+
+view a Lens as a Traversal
+
+### asSetter
+
+```ts
+(): Setter<S, A>
+```
+
+view a Lens as a Setter
+
+### asGetter
+
+```ts
+(): Getter<S, A>
+```
+
+view a Lens as a Getter
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view a Lens as a Fold
+
+### compose
+
+```ts
+<B>(ab: Lens<A, B>): Lens<S, B>
+```
+
+compose a Lens with a Lens
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Getter<S, B>
+```
+
+compose a Lens with a Getter
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose a Lens with a Fold
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Optional<S, B>
+```
+
+compose a Lens with an Optional
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Traversal<S, B>
+```
+
+compose a Lens with an Traversal
+
+### composeSetter
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose a Lens with an Setter
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Lens<S, B>
+```
+
+compose a Lens with an Iso
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Optional<S, B>
+```
+
+compose a Lens with a Prism
 
 # Prism
 
