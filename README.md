@@ -62,6 +62,20 @@
     - [composeLens](#composelens-1)
     - [composeGetter](#composegetter-2)
 - [Optional](#optional)
+  - [Methods](#methods-3)
+    - [modify](#modify-3)
+    - [modifyOption](#modifyoption-1)
+    - [asTraversal](#astraversal-3)
+    - [asFold](#asfold-3)
+    - [asSetter](#assetter-3)
+    - [compose](#compose-3)
+    - [composeTraversal](#composetraversal-3)
+    - [composeFold](#composefold-3)
+    - [composeSetter](#composesetter-3)
+    - [composeLens](#composelens-2)
+    - [composePrism](#composeprism-2)
+    - [composeIso](#composeiso-2)
+    - [composeGetter](#composegetter-3)
 - [Traversal](#traversal)
 - [Getter](#getter)
 - [Fold](#fold)
@@ -638,7 +652,113 @@ compose a Prism with a Getter
 
 # Optional
 
-TODO
+```ts
+class Optional<S, A> {
+  constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
+}
+```
+
+## Methods
+
+### modify
+
+```ts
+(f: (a: A) => A): (s: S) => S
+```
+
+### modifyOption
+
+```ts
+(f: (a: A) => A): (s: S) => Option<S>
+```
+
+### asTraversal
+
+```ts
+(): Traversal<S, A>
+```
+
+view a Optional as a Traversal
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view an Optional as a Fold
+
+### asSetter
+
+```ts
+(): Setter<S, A>
+```
+
+view an Optional as a Setter
+
+### compose
+
+```ts
+<B>(ab: Optional<A, B>): Optional<S, B>
+```
+
+compose a Optional with a Optional
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Traversal<S, B>
+```
+
+compose an Optional with a Traversal
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose an Optional with a Fold
+
+### composeSetter
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose an Optional with a Setter
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Optional<S, B>
+```
+
+compose an Optional with a Lens
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Optional<S, B>
+```
+
+compose an Optional with a Prism
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Optional<S, B>
+```
+
+compose an Optional with a Iso
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Fold<S, B>
+```
+
+compose an Optional with a Getter
 
 # Traversal
 
