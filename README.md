@@ -1,3 +1,59 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Motivation](#motivation)
+- [Iso](#iso)
+  - [Methods](#methods)
+    - [unwrap](#unwrap)
+    - [to](#to)
+    - [wrap](#wrap)
+    - [from](#from)
+    - [modify](#modify)
+    - [asLens](#aslens)
+    - [asPrism](#asprism)
+    - [asOptional](#asoptional)
+    - [asTraversal](#astraversal)
+    - [asFold](#asfold)
+    - [asGetter](#asgetter)
+    - [asSetter](#assetter)
+    - [compose](#compose)
+    - [composeLens](#composelens)
+    - [composePrism](#composeprism)
+    - [composeOptional](#composeoptional)
+    - [composeTraversal](#composetraversal)
+    - [composeFold](#composefold)
+    - [composeGetter](#composegetter)
+    - [composeSetter](#composesetter)
+- [Lens](#lens)
+  - [fromPath](#frompath)
+  - [fromProp](#fromprop)
+  - [Methods](#methods-1)
+    - [modify](#modify-1)
+    - [asOptional](#asoptional-1)
+    - [asTraversal](#astraversal-1)
+    - [asSetter](#assetter-1)
+    - [asGetter](#asgetter-1)
+    - [asFold](#asfold-1)
+    - [compose](#compose-1)
+    - [composeGetter](#composegetter-1)
+    - [composeFold](#composefold-1)
+    - [composeOptional](#composeoptional-1)
+    - [composeTraversal](#composetraversal-1)
+    - [composeSetter](#composesetter-1)
+    - [composeIso](#composeiso)
+    - [composePrism](#composeprism-1)
+- [Prism](#prism)
+- [Optional](#optional)
+- [Traversal](#traversal)
+- [Getter](#getter)
+- [Fold](#fold)
+- [Setter](#setter)
+- [fromTraversable](#fromtraversable)
+- [fromFoldable](#fromfoldable)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 A (partial) porting of scala [monocle](https://github.com/julien-truffaut/Monocle) library to TypeScript
 
 # Motivation
@@ -288,14 +344,17 @@ Example
 type Person = {
   name: string
   age: number
+  address: {
+    city: string
+  }
 }
 
-const age = Lens.fromProp<Person, 'age'>('age')
+const city = Lens.fromPath<Person, 'address', 'city'>(['address', 'city'])
 
-const person: Person = { name: 'Giulio', age: 43 }
+const person: Person = { name: 'Giulio', age: 43, address: { city: 'Milan' } }
 
-console.log(age.get(person)) // 43
-console.log(age.set(44)(person)) // { name: 'Giulio', age: 44 }
+console.log(city.get(person)) // Milan
+console.log(city.set('London')(person)) // { name: 'Giulio', age: 43, address: { city: 'London' } }
 ```
 
 ## fromProp
@@ -310,17 +369,14 @@ Example
 type Person = {
   name: string
   age: number
-  address: {
-    city: string
-  }
 }
 
-const city = Lens.fromPath<Person, 'address', 'city'>(['address', 'city'])
+const age = Lens.fromProp<Person, 'age'>('age')
 
-const person: Person = { name: 'Giulio', age: 43, address: { city: 'Milan' } }
+const person: Person = { name: 'Giulio', age: 43 }
 
-console.log(city.get(person)) // Milan
-console.log(city.set('London')(person)) // { name: 'Giulio', age: 43, address: { city: 'London' } }
+console.log(age.get(person)) // 43
+console.log(age.set(44)(person)) // { name: 'Giulio', age: 44 }
 ```
 
 ## Methods
