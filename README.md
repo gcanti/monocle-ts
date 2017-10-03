@@ -189,6 +189,15 @@ All `Lenses` can be seen as `Optionals` where the optional element to zoom into 
     - [composeIso](#composeiso-3)
     - [composeGetter](#composegetter-4)
 - [Getter](#getter)
+  - [Methods](#methods-5)
+    - [asFold](#asfold-5)
+    - [compose](#compose-5)
+    - [composeFold](#composefold-5)
+    - [composeLens](#composelens-4)
+    - [composeIso](#composeiso-4)
+    - [composeTraversal](#composetraversal-4)
+    - [composeOptional](#composeoptional-4)
+    - [composePrism](#composeprism-4)
 - [Fold](#fold)
 - [Setter](#setter)
 - [fromTraversable](#fromtraversable)
@@ -878,7 +887,77 @@ compose a Traversal with a Getter
 
 # Getter
 
-TODO
+```ts
+class Getter<S, A> {
+  constructor(readonly get: (s: S) => A)
+}
+```
+
+## Methods
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view a Getter as a Fold
+
+### compose
+
+```ts
+<B>(ab: Getter<A, B>): Getter<S, B>
+```
+
+compose a Getter with a Getter
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose a Getter with a Fold
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Getter<S, B>
+```
+
+compose a Getter with a Lens
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Getter<S, B>
+```
+
+compose a Getter with a Iso
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Fold<S, B>
+```
+
+compose a Getter with a Optional
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Fold<S, B>
+```
+
+compose a Getter with a Optional
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Fold<S, B>
+```
+
+compose a Getter with a Prism
 
 # Fold
 
