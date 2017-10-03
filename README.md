@@ -44,6 +44,23 @@
     - [composeIso](#composeiso)
     - [composePrism](#composeprism-1)
 - [Prism](#prism)
+  - [fromPredicate](#frompredicate)
+  - [some](#some)
+  - [Methods](#methods-2)
+    - [modify](#modify-2)
+    - [modifyOption](#modifyoption)
+    - [asOptional](#asoptional-2)
+    - [asTraversal](#astraversal-2)
+    - [asSetter](#assetter-2)
+    - [asFold](#asfold-2)
+    - [compose](#compose-2)
+    - [composeOptional](#composeoptional-2)
+    - [composeTraversal](#composetraversal-2)
+    - [composeFold](#composefold-2)
+    - [composeSetter](#composesetter-2)
+    - [composeIso](#composeiso-1)
+    - [composeLens](#composelens-1)
+    - [composeGetter](#composegetter-2)
 - [Optional](#optional)
 - [Traversal](#traversal)
 - [Getter](#getter)
@@ -53,8 +70,6 @@
 - [fromFoldable](#fromfoldable)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-A (partial) porting of scala [monocle](https://github.com/julien-truffaut/Monocle) library to TypeScript
 
 # Motivation
 
@@ -493,7 +508,133 @@ compose a Lens with a Prism
 
 # Prism
 
-TODO
+```ts
+class Prism<S, A> {
+  constructor(readonly getOption: (s: S) => Option<A>, readonly reverseGet: (a: A) => S)
+}
+```
+
+## fromPredicate
+
+```ts
+<A>(predicate: Predicate<A>): Prism<A, A>
+```
+
+## some
+
+```ts
+<A>(): Prism<Option<A>, A>
+```
+
+## Methods
+
+### modify
+
+```ts
+(f: (a: A) => A): (s: S) => S
+```
+
+### modifyOption
+
+```ts
+(f: (a: A) => A): (s: S) => Option<S>
+```
+
+### asOptional
+
+```ts
+(): Optional<S, A>
+```
+
+view a Prism as a Optional
+
+### asTraversal
+
+```ts
+(): Traversal<S, A>
+```
+
+view a Prism as a Traversal
+
+### asSetter
+
+```ts
+(): Setter<S, A>
+```
+
+view a Prism as a Setter
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view a Prism as a Fold
+
+### compose
+
+```ts
+<B>(ab: Prism<A, B>): Prism<S, B>
+```
+
+compose a Prism with a Prism
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Optional<S, B>
+```
+
+compose a Prism with a Optional
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Traversal<S, B>
+```
+
+compose a Prism with a Traversal
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose a Prism with a Fold
+
+### composeSetter
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose a Prism with a Setter
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Prism<S, B>
+```
+
+compose a Prism with a Iso
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Optional<S, B>
+```
+
+compose a Prism with a Lens
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Fold<S, B>
+```
+
+compose a Prism with a Getter
 
 # Optional
 
