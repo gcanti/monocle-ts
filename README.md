@@ -1,90 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [Motivation](#motivation)
-- [Iso](#iso)
-  - [Methods](#methods)
-    - [unwrap](#unwrap)
-    - [to](#to)
-    - [wrap](#wrap)
-    - [from](#from)
-    - [modify](#modify)
-    - [asLens](#aslens)
-    - [asPrism](#asprism)
-    - [asOptional](#asoptional)
-    - [asTraversal](#astraversal)
-    - [asFold](#asfold)
-    - [asGetter](#asgetter)
-    - [asSetter](#assetter)
-    - [compose](#compose)
-    - [composeLens](#composelens)
-    - [composePrism](#composeprism)
-    - [composeOptional](#composeoptional)
-    - [composeTraversal](#composetraversal)
-    - [composeFold](#composefold)
-    - [composeGetter](#composegetter)
-    - [composeSetter](#composesetter)
-- [Lens](#lens)
-  - [fromPath](#frompath)
-  - [fromProp](#fromprop)
-  - [Methods](#methods-1)
-    - [modify](#modify-1)
-    - [asOptional](#asoptional-1)
-    - [asTraversal](#astraversal-1)
-    - [asSetter](#assetter-1)
-    - [asGetter](#asgetter-1)
-    - [asFold](#asfold-1)
-    - [compose](#compose-1)
-    - [composeGetter](#composegetter-1)
-    - [composeFold](#composefold-1)
-    - [composeOptional](#composeoptional-1)
-    - [composeTraversal](#composetraversal-1)
-    - [composeSetter](#composesetter-1)
-    - [composeIso](#composeiso)
-    - [composePrism](#composeprism-1)
-- [Prism](#prism)
-  - [fromPredicate](#frompredicate)
-  - [some](#some)
-  - [Methods](#methods-2)
-    - [modify](#modify-2)
-    - [modifyOption](#modifyoption)
-    - [asOptional](#asoptional-2)
-    - [asTraversal](#astraversal-2)
-    - [asSetter](#assetter-2)
-    - [asFold](#asfold-2)
-    - [compose](#compose-2)
-    - [composeOptional](#composeoptional-2)
-    - [composeTraversal](#composetraversal-2)
-    - [composeFold](#composefold-2)
-    - [composeSetter](#composesetter-2)
-    - [composeIso](#composeiso-1)
-    - [composeLens](#composelens-1)
-    - [composeGetter](#composegetter-2)
-- [Optional](#optional)
-  - [Methods](#methods-3)
-    - [modify](#modify-3)
-    - [modifyOption](#modifyoption-1)
-    - [asTraversal](#astraversal-3)
-    - [asFold](#asfold-3)
-    - [asSetter](#assetter-3)
-    - [compose](#compose-3)
-    - [composeTraversal](#composetraversal-3)
-    - [composeFold](#composefold-3)
-    - [composeSetter](#composesetter-3)
-    - [composeLens](#composelens-2)
-    - [composePrism](#composeprism-2)
-    - [composeIso](#composeiso-2)
-    - [composeGetter](#composegetter-3)
-- [Traversal](#traversal)
-- [Getter](#getter)
-- [Fold](#fold)
-- [Setter](#setter)
-- [fromTraversable](#fromtraversable)
-- [fromFoldable](#fromfoldable)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # Motivation
 
 (Adapted from [monocle site](http://julien-truffaut.github.io/Monocle/))
@@ -183,6 +96,105 @@ company
 
 Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`, one from `A` to `B` and another from `B` to `C` and creates a third `Optional` from `A` to `C`.
 All `Lenses` can be seen as `Optionals` where the optional element to zoom into is always present, hence composing an `Optional` and a `Lens` always produces an `Optional`.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Iso](#iso)
+  - [Methods](#methods)
+    - [unwrap](#unwrap)
+    - [to](#to)
+    - [wrap](#wrap)
+    - [from](#from)
+    - [modify](#modify)
+    - [asLens](#aslens)
+    - [asPrism](#asprism)
+    - [asOptional](#asoptional)
+    - [asTraversal](#astraversal)
+    - [asFold](#asfold)
+    - [asGetter](#asgetter)
+    - [asSetter](#assetter)
+    - [compose](#compose)
+    - [composeLens](#composelens)
+    - [composePrism](#composeprism)
+    - [composeOptional](#composeoptional)
+    - [composeTraversal](#composetraversal)
+    - [composeFold](#composefold)
+    - [composeGetter](#composegetter)
+    - [composeSetter](#composesetter)
+- [Lens](#lens)
+  - [fromPath](#frompath)
+  - [fromProp](#fromprop)
+  - [Methods](#methods-1)
+    - [modify](#modify-1)
+    - [asOptional](#asoptional-1)
+    - [asTraversal](#astraversal-1)
+    - [asSetter](#assetter-1)
+    - [asGetter](#asgetter-1)
+    - [asFold](#asfold-1)
+    - [compose](#compose-1)
+    - [composeGetter](#composegetter-1)
+    - [composeFold](#composefold-1)
+    - [composeOptional](#composeoptional-1)
+    - [composeTraversal](#composetraversal-1)
+    - [composeSetter](#composesetter-1)
+    - [composeIso](#composeiso)
+    - [composePrism](#composeprism-1)
+- [Prism](#prism)
+  - [fromPredicate](#frompredicate)
+  - [some](#some)
+  - [Methods](#methods-2)
+    - [modify](#modify-2)
+    - [modifyOption](#modifyoption)
+    - [asOptional](#asoptional-2)
+    - [asTraversal](#astraversal-2)
+    - [asSetter](#assetter-2)
+    - [asFold](#asfold-2)
+    - [compose](#compose-2)
+    - [composeOptional](#composeoptional-2)
+    - [composeTraversal](#composetraversal-2)
+    - [composeFold](#composefold-2)
+    - [composeSetter](#composesetter-2)
+    - [composeIso](#composeiso-1)
+    - [composeLens](#composelens-1)
+    - [composeGetter](#composegetter-2)
+- [Optional](#optional)
+  - [Methods](#methods-3)
+    - [modify](#modify-3)
+    - [modifyOption](#modifyoption-1)
+    - [asTraversal](#astraversal-3)
+    - [asFold](#asfold-3)
+    - [asSetter](#assetter-3)
+    - [compose](#compose-3)
+    - [composeTraversal](#composetraversal-3)
+    - [composeFold](#composefold-3)
+    - [composeSetter](#composesetter-3)
+    - [composeLens](#composelens-2)
+    - [composePrism](#composeprism-2)
+    - [composeIso](#composeiso-2)
+    - [composeGetter](#composegetter-3)
+- [Traversal](#traversal)
+  - [Methods](#methods-4)
+    - [modify](#modify-4)
+    - [set](#set)
+    - [asFold](#asfold-4)
+    - [asSetter](#assetter-4)
+    - [compose](#compose-4)
+    - [composeFold](#composefold-4)
+    - [composeSetter](#composesetter-4)
+    - [composeOptional](#composeoptional-3)
+    - [composeLens](#composelens-3)
+    - [composePrism](#composeprism-3)
+    - [composeIso](#composeiso-3)
+    - [composeGetter](#composegetter-4)
+- [Getter](#getter)
+- [Fold](#fold)
+- [Setter](#setter)
+- [fromTraversable](#fromtraversable)
+- [fromFoldable](#fromfoldable)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Iso
 
@@ -762,7 +774,107 @@ compose an Optional with a Getter
 
 # Traversal
 
-TODO
+```ts
+class Traversal<S, A> {
+  constructor(
+    readonly modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>
+  )
+}
+```
+
+## Methods
+
+### modify
+
+```ts
+(f: (a: A) => A): (s: S) => S
+```
+
+### set
+
+```ts
+(a: A): (s: S) => S
+```
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view a Traversal as a Fold
+
+### asSetter
+
+```ts
+(): Setter<S, A>
+```
+
+view a Traversal as a Setter
+
+### compose
+
+```ts
+<B>(ab: Traversal<A, B>): Traversal<S, B>
+```
+
+compose a Traversal with a Traversal
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose a Traversal with a Fold
+
+### composeSetter
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose a Traversal with a Setter
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Traversal<S, B>
+```
+
+compose a Traversal with a Optional
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Traversal<S, B>
+```
+
+compose a Traversal with a Lens
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Traversal<S, B>
+```
+
+compose a Traversal with a Prism
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Traversal<S, B>
+```
+
+compose a Traversal with a Iso
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Fold<S, B>
+```
+
+compose a Traversal with a Getter
 
 # Getter
 
