@@ -199,6 +199,19 @@ All `Lenses` can be seen as `Optionals` where the optional element to zoom into 
     - [composeOptional](#composeoptional-4)
     - [composePrism](#composeprism-4)
 - [Fold](#fold)
+  - [Methods](#methods-6)
+    - [compose](#compose-6)
+    - [composeGetter](#composegetter-5)
+    - [composeTraversal](#composetraversal-5)
+    - [composeOptional](#composeoptional-5)
+    - [composeLens](#composelens-5)
+    - [composePrism](#composeprism-5)
+    - [composeIso](#composeiso-5)
+    - [find](#find)
+    - [headOption](#headoption)
+    - [getAll](#getall)
+    - [exist](#exist)
+    - [all](#all)
 - [Setter](#setter)
 - [fromTraversable](#fromtraversable)
 - [fromFoldable](#fromfoldable)
@@ -961,7 +974,109 @@ compose a Getter with a Prism
 
 # Fold
 
-TODO
+```ts
+export class Fold<S, A> {
+  constructor(readonly foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M)
+}
+```
+
+## Methods
+
+### compose
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Fold
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Getter
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Traversal
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Optional
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Lens
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Prism
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Iso
+
+### find
+
+```ts
+(p: Predicate<A>): (s: S) => Option<A>
+```
+
+find the first target of a Fold matching the predicate
+
+### headOption
+
+```ts
+(s: S): Option<A>
+```
+
+get the first target of a Fold
+
+### getAll
+
+```ts
+(s: S): Array<A>
+```
+
+get all the targets of a Fold
+
+### exist
+
+```ts
+(p: Predicate<A>): Predicate<S>
+```
+
+check if at least one target satisfies the predicate
+
+### all
+
+```ts
+(p: Predicate<A>): Predicate<S>
+```
+
+check if all targets satisfy the predicate
 
 # Setter
 
