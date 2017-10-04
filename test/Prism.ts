@@ -24,4 +24,10 @@ describe('Prism', () => {
     assert.deepEqual(optional.set(2)(some(1)), some(2))
     assert.deepEqual(optional.set(2)(none), some(2))
   })
+
+  it('set', () => {
+    const prism = Prism.some<number>()
+    assert.deepEqual(prism.set(2)(some(1)), some(2))
+    assert.deepEqual(prism.set(2)(none), none)
+  })
 })

@@ -303,6 +303,11 @@ export class Prism<S, A> {
     return s => this.getOption(s).map(a => this.reverseGet(f(a)))
   }
 
+  /** set the target of a Prism with a value */
+  set(a: A): (s: S) => S {
+    return this.modify(() => a)
+  }
+
   /** view a Prism as a Optional */
   asOptional(): Optional<S, A> {
     return new Optional(this.getOption, a => s => this.reverseGet(a))

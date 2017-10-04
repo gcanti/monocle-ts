@@ -147,6 +147,7 @@ All `Lenses` can be seen as `Optionals` where the optional element to zoom into 
   - [Methods](#methods-2)
     - [modify](#modify-2)
     - [modifyOption](#modifyoption)
+    - [set](#set)
     - [asOptional](#asoptional-2)
     - [asTraversal](#astraversal-2)
     - [asSetter](#assetter-2)
@@ -177,7 +178,7 @@ All `Lenses` can be seen as `Optionals` where the optional element to zoom into 
 - [Traversal](#traversal)
   - [Methods](#methods-4)
     - [modify](#modify-4)
-    - [set](#set)
+    - [set](#set-1)
     - [asFold](#asfold-4)
     - [asSetter](#assetter-4)
     - [compose](#compose-4)
@@ -214,7 +215,7 @@ All `Lenses` can be seen as `Optionals` where the optional element to zoom into 
     - [all](#all)
 - [Setter](#setter)
   - [Methods](#methods-7)
-    - [set](#set-1)
+    - [set](#set-2)
     - [compose](#compose-7)
     - [composeTraversal](#composetraversal-6)
     - [composeOptional](#composeoptional-6)
@@ -595,6 +596,14 @@ class Prism<S, A> {
 ```ts
 (f: (a: A) => A): (s: S) => Option<S>
 ```
+
+### set
+
+```ts
+(a: A): (s: S) => S
+```
+
+set the target of a Prism with a value
 
 ### asOptional
 
