@@ -1,6 +1,6 @@
 import * as assert from 'assert'
-import { none, some, Option } from 'fp-ts/lib/Option'
-import { Prism, Lens } from '../src'
+import { none, some } from 'fp-ts/lib/Option'
+import { Prism } from '../src'
 import { eqOptions as eq } from './helpers'
 
 describe('Prism', () => {
@@ -11,48 +11,17 @@ describe('Prism', () => {
   })
 
   it('some', () => {
-    interface Bar {
-      s: Option<string>
-    }
+    const prism = Prism.some<number>()
+    assert.deepEqual(prism.getOption(some(1)), some(1))
+    assert.deepEqual(prism.getOption(none), none)
+    assert.deepEqual(prism.reverseGet(2), some(2))
+  })
 
-    interface Foo {
-      bar: Option<Bar>
-    }
-
-    const foo1: Foo = {
-      bar: some({
-        s: some('a')
-      })
-    }
-    const foo2: Foo = {
-      bar: some({
-        s: none
-      })
-    }
-    const foo3: Foo = {
-      bar: none
-    }
-
-    const barLens = Lens.fromProp<Foo, 'bar'>('bar')
-    const sLens = Lens.fromProp<Bar, 's'>('s')
-
-    const sOptional = barLens
-      .composePrism(Prism.some<Bar>())
-      .composeLens(sLens)
-      .composePrism(Prism.some<string>())
-
-    assert.deepEqual(sOptional.set('b')(foo1), {
-      bar: some({
-        s: some('b')
-      })
-    })
-    assert.deepEqual(sOptional.set('c')(foo2), {
-      bar: some({
-        s: some('c')
-      })
-    })
-    assert.deepEqual(sOptional.set('d')(foo3), {
-      bar: none
-    })
+  it('asOptional', () => {
+    const optional = Prism.some<number>().asOptional()
+    assert.deepEqual(optional.getOption(some(1)), some(1))
+    assert.deepEqual(optional.getOption(none), none)
+    assert.deepEqual(optional.set(2)(some(1)), some(2))
+    assert.deepEqual(optional.set(2)(none), some(2))
   })
 })
