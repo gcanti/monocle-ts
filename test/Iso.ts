@@ -19,6 +19,12 @@ describe('Iso', () => {
   })
 
   it('compose', () => {
-    assert.strictEqual(mTokm.compose(kmToMile).get(1500).toFixed(2), '0.93')
+    assert.strictEqual(
+      mTokm
+        .compose(kmToMile)
+        .get(1500)
+        .toFixed(2),
+      '0.93'
+    )
   })
 })

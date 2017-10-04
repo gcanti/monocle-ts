@@ -1,5 +1,3 @@
-A (partial) porting of scala [monocle](https://github.com/julien-truffaut/Monocle) library to TypeScript
-
 # Motivation
 
 (Adapted from [monocle site](http://julien-truffaut.github.io/Monocle/))
@@ -98,3 +96,1072 @@ company
 
 Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`, one from `A` to `B` and another from `B` to `C` and creates a third `Optional` from `A` to `C`.
 All `Lenses` can be seen as `Optionals` where the optional element to zoom into is always present, hence composing an `Optional` and a `Lens` always produces an `Optional`.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Iso](#iso)
+  - [Methods](#methods)
+    - [unwrap](#unwrap)
+    - [to](#to)
+    - [wrap](#wrap)
+    - [from](#from)
+    - [modify](#modify)
+    - [asLens](#aslens)
+    - [asPrism](#asprism)
+    - [asOptional](#asoptional)
+    - [asTraversal](#astraversal)
+    - [asFold](#asfold)
+    - [asGetter](#asgetter)
+    - [asSetter](#assetter)
+    - [compose](#compose)
+    - [composeLens](#composelens)
+    - [composePrism](#composeprism)
+    - [composeOptional](#composeoptional)
+    - [composeTraversal](#composetraversal)
+    - [composeFold](#composefold)
+    - [composeGetter](#composegetter)
+    - [composeSetter](#composesetter)
+- [Lens](#lens)
+  - [fromPath](#frompath)
+  - [fromProp](#fromprop)
+  - [Methods](#methods-1)
+    - [modify](#modify-1)
+    - [asOptional](#asoptional-1)
+    - [asTraversal](#astraversal-1)
+    - [asSetter](#assetter-1)
+    - [asGetter](#asgetter-1)
+    - [asFold](#asfold-1)
+    - [compose](#compose-1)
+    - [composeGetter](#composegetter-1)
+    - [composeFold](#composefold-1)
+    - [composeOptional](#composeoptional-1)
+    - [composeTraversal](#composetraversal-1)
+    - [composeSetter](#composesetter-1)
+    - [composeIso](#composeiso)
+    - [composePrism](#composeprism-1)
+- [Prism](#prism)
+  - [fromPredicate](#frompredicate)
+  - [some](#some)
+  - [Methods](#methods-2)
+    - [modify](#modify-2)
+    - [modifyOption](#modifyoption)
+    - [asOptional](#asoptional-2)
+    - [asTraversal](#astraversal-2)
+    - [asSetter](#assetter-2)
+    - [asFold](#asfold-2)
+    - [compose](#compose-2)
+    - [composeOptional](#composeoptional-2)
+    - [composeTraversal](#composetraversal-2)
+    - [composeFold](#composefold-2)
+    - [composeSetter](#composesetter-2)
+    - [composeIso](#composeiso-1)
+    - [composeLens](#composelens-1)
+    - [composeGetter](#composegetter-2)
+- [Optional](#optional)
+  - [Methods](#methods-3)
+    - [modify](#modify-3)
+    - [modifyOption](#modifyoption-1)
+    - [asTraversal](#astraversal-3)
+    - [asFold](#asfold-3)
+    - [asSetter](#assetter-3)
+    - [compose](#compose-3)
+    - [composeTraversal](#composetraversal-3)
+    - [composeFold](#composefold-3)
+    - [composeSetter](#composesetter-3)
+    - [composeLens](#composelens-2)
+    - [composePrism](#composeprism-2)
+    - [composeIso](#composeiso-2)
+    - [composeGetter](#composegetter-3)
+- [Traversal](#traversal)
+  - [Methods](#methods-4)
+    - [modify](#modify-4)
+    - [set](#set)
+    - [asFold](#asfold-4)
+    - [asSetter](#assetter-4)
+    - [compose](#compose-4)
+    - [composeFold](#composefold-4)
+    - [composeSetter](#composesetter-4)
+    - [composeOptional](#composeoptional-3)
+    - [composeLens](#composelens-3)
+    - [composePrism](#composeprism-3)
+    - [composeIso](#composeiso-3)
+    - [composeGetter](#composegetter-4)
+- [Getter](#getter)
+  - [Methods](#methods-5)
+    - [asFold](#asfold-5)
+    - [compose](#compose-5)
+    - [composeFold](#composefold-5)
+    - [composeLens](#composelens-4)
+    - [composeIso](#composeiso-4)
+    - [composeTraversal](#composetraversal-4)
+    - [composeOptional](#composeoptional-4)
+    - [composePrism](#composeprism-4)
+- [Fold](#fold)
+  - [Methods](#methods-6)
+    - [compose](#compose-6)
+    - [composeGetter](#composegetter-5)
+    - [composeTraversal](#composetraversal-5)
+    - [composeOptional](#composeoptional-5)
+    - [composeLens](#composelens-5)
+    - [composePrism](#composeprism-5)
+    - [composeIso](#composeiso-5)
+    - [find](#find)
+    - [headOption](#headoption)
+    - [getAll](#getall)
+    - [exist](#exist)
+    - [all](#all)
+- [Setter](#setter)
+  - [Methods](#methods-7)
+    - [set](#set-1)
+    - [compose](#compose-7)
+    - [composeTraversal](#composetraversal-6)
+    - [composeOptional](#composeoptional-6)
+    - [composeLens](#composelens-6)
+    - [composePrism](#composeprism-6)
+    - [composeIso](#composeiso-6)
+- [fromTraversable](#fromtraversable)
+- [fromFoldable](#fromfoldable)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Iso
+
+```ts
+class Iso<S, A> {
+  constructor(readonly get: (s: S) => A, readonly reverseGet: (a: A) => S)
+}
+```
+
+## Methods
+
+### unwrap
+
+```ts
+(s: S) => A
+```
+
+Alias of `get`
+
+### to
+
+```ts
+(s: S) => A
+```
+
+Alias of `get`
+
+### wrap
+
+```ts
+(a: A) => S
+```
+
+Alias of `reverseGet`
+
+### from
+
+```ts
+(a: A) => S
+```
+
+Alias of `reverseGet`
+
+### modify
+
+```ts
+(f: (a: A) => A): (s: S) => S
+```
+
+### asLens
+
+```ts
+(): Lens<S, A>
+```
+
+view an Iso as a Lens
+
+### asPrism
+
+```ts
+(): Prism<S, A>
+```
+
+view an Iso as a Prism
+
+### asOptional
+
+```ts
+(): Optional<S, A>
+```
+
+view an Iso as a Optional
+
+### asTraversal
+
+```ts
+(): Traversal<S, A>
+```
+
+view an Iso as a Traversal
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view an Iso as a Fold
+
+### asGetter
+
+```ts
+(): Getter<S, A>
+```
+
+view an Iso as a Getter
+
+### asSetter
+
+```ts
+(): Setter<S, A>
+```
+
+view an Iso as a Setter
+
+### compose
+
+```ts
+<B>(ab: Iso<A, B>): Iso<S, B>
+```
+
+compose an Iso with an Iso
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Lens<S, B>
+```
+
+compose an Iso with a Lens
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Prism<S, B>
+```
+
+compose an Iso with a Prism
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Optional<S, B>
+```
+
+compose an Iso with an Optional
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Traversal<S, B>
+```
+
+compose an Iso with a Traversal
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose an Iso with a Fold
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Getter<S, B>
+```
+
+compose an Iso with a Getter
+
+### composeSetter
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose an Iso with a Setter
+
+# Lens
+
+```ts
+class Lens<S, A> {
+  constructor(readonly get: (s: S) => A, readonly set: (a: A) => (s: S) => S)
+}
+```
+
+## fromPath
+
+```ts
+// other 9 overloadings
+<T, K1 extends keyof T>(path: [K1]): Lens<T, T[K1]>
+```
+
+Example
+
+```ts
+type Person = {
+  name: string
+  age: number
+  address: {
+    city: string
+  }
+}
+
+const city = Lens.fromPath<Person, 'address', 'city'>(['address', 'city'])
+
+const person: Person = { name: 'Giulio', age: 43, address: { city: 'Milan' } }
+
+console.log(city.get(person)) // Milan
+console.log(city.set('London')(person)) // { name: 'Giulio', age: 43, address: { city: 'London' } }
+```
+
+## fromProp
+
+```ts
+<T, P extends keyof T>(prop: P): Lens<T, T[P]>
+```
+
+Example
+
+```ts
+type Person = {
+  name: string
+  age: number
+}
+
+const age = Lens.fromProp<Person, 'age'>('age')
+
+const person: Person = { name: 'Giulio', age: 43 }
+
+console.log(age.get(person)) // 43
+console.log(age.set(44)(person)) // { name: 'Giulio', age: 44 }
+```
+
+## Methods
+
+### modify
+
+```ts
+(f: (a: A) => A): (s: S) => S
+```
+
+### asOptional
+
+```ts
+(): Optional<S, A>
+```
+
+view a Lens as a Optional
+
+### asTraversal
+
+```ts
+(): Traversal<S, A>
+```
+
+view a Lens as a Traversal
+
+### asSetter
+
+```ts
+(): Setter<S, A>
+```
+
+view a Lens as a Setter
+
+### asGetter
+
+```ts
+(): Getter<S, A>
+```
+
+view a Lens as a Getter
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view a Lens as a Fold
+
+### compose
+
+```ts
+<B>(ab: Lens<A, B>): Lens<S, B>
+```
+
+compose a Lens with a Lens
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Getter<S, B>
+```
+
+compose a Lens with a Getter
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose a Lens with a Fold
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Optional<S, B>
+```
+
+compose a Lens with an Optional
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Traversal<S, B>
+```
+
+compose a Lens with an Traversal
+
+### composeSetter
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose a Lens with an Setter
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Lens<S, B>
+```
+
+compose a Lens with an Iso
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Optional<S, B>
+```
+
+compose a Lens with a Prism
+
+# Prism
+
+```ts
+class Prism<S, A> {
+  constructor(readonly getOption: (s: S) => Option<A>, readonly reverseGet: (a: A) => S)
+}
+```
+
+## fromPredicate
+
+```ts
+<A>(predicate: Predicate<A>): Prism<A, A>
+```
+
+## some
+
+```ts
+<A>(): Prism<Option<A>, A>
+```
+
+## Methods
+
+### modify
+
+```ts
+(f: (a: A) => A): (s: S) => S
+```
+
+### modifyOption
+
+```ts
+(f: (a: A) => A): (s: S) => Option<S>
+```
+
+### asOptional
+
+```ts
+(): Optional<S, A>
+```
+
+view a Prism as a Optional
+
+### asTraversal
+
+```ts
+(): Traversal<S, A>
+```
+
+view a Prism as a Traversal
+
+### asSetter
+
+```ts
+(): Setter<S, A>
+```
+
+view a Prism as a Setter
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view a Prism as a Fold
+
+### compose
+
+```ts
+<B>(ab: Prism<A, B>): Prism<S, B>
+```
+
+compose a Prism with a Prism
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Optional<S, B>
+```
+
+compose a Prism with a Optional
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Traversal<S, B>
+```
+
+compose a Prism with a Traversal
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose a Prism with a Fold
+
+### composeSetter
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose a Prism with a Setter
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Prism<S, B>
+```
+
+compose a Prism with a Iso
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Optional<S, B>
+```
+
+compose a Prism with a Lens
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Fold<S, B>
+```
+
+compose a Prism with a Getter
+
+# Optional
+
+```ts
+class Optional<S, A> {
+  constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
+}
+```
+
+## Methods
+
+### modify
+
+```ts
+(f: (a: A) => A): (s: S) => S
+```
+
+### modifyOption
+
+```ts
+(f: (a: A) => A): (s: S) => Option<S>
+```
+
+### asTraversal
+
+```ts
+(): Traversal<S, A>
+```
+
+view a Optional as a Traversal
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view an Optional as a Fold
+
+### asSetter
+
+```ts
+(): Setter<S, A>
+```
+
+view an Optional as a Setter
+
+### compose
+
+```ts
+<B>(ab: Optional<A, B>): Optional<S, B>
+```
+
+compose a Optional with a Optional
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Traversal<S, B>
+```
+
+compose an Optional with a Traversal
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose an Optional with a Fold
+
+### composeSetter
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose an Optional with a Setter
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Optional<S, B>
+```
+
+compose an Optional with a Lens
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Optional<S, B>
+```
+
+compose an Optional with a Prism
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Optional<S, B>
+```
+
+compose an Optional with a Iso
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Fold<S, B>
+```
+
+compose an Optional with a Getter
+
+# Traversal
+
+```ts
+class Traversal<S, A> {
+  constructor(
+    readonly modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>
+  )
+}
+```
+
+## Methods
+
+### modify
+
+```ts
+(f: (a: A) => A): (s: S) => S
+```
+
+### set
+
+```ts
+(a: A): (s: S) => S
+```
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view a Traversal as a Fold
+
+### asSetter
+
+```ts
+(): Setter<S, A>
+```
+
+view a Traversal as a Setter
+
+### compose
+
+```ts
+<B>(ab: Traversal<A, B>): Traversal<S, B>
+```
+
+compose a Traversal with a Traversal
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose a Traversal with a Fold
+
+### composeSetter
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose a Traversal with a Setter
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Traversal<S, B>
+```
+
+compose a Traversal with a Optional
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Traversal<S, B>
+```
+
+compose a Traversal with a Lens
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Traversal<S, B>
+```
+
+compose a Traversal with a Prism
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Traversal<S, B>
+```
+
+compose a Traversal with a Iso
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Fold<S, B>
+```
+
+compose a Traversal with a Getter
+
+# Getter
+
+```ts
+class Getter<S, A> {
+  constructor(readonly get: (s: S) => A)
+}
+```
+
+## Methods
+
+### asFold
+
+```ts
+(): Fold<S, A>
+```
+
+view a Getter as a Fold
+
+### compose
+
+```ts
+<B>(ab: Getter<A, B>): Getter<S, B>
+```
+
+compose a Getter with a Getter
+
+### composeFold
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose a Getter with a Fold
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Getter<S, B>
+```
+
+compose a Getter with a Lens
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Getter<S, B>
+```
+
+compose a Getter with a Iso
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Fold<S, B>
+```
+
+compose a Getter with a Optional
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Fold<S, B>
+```
+
+compose a Getter with a Optional
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Fold<S, B>
+```
+
+compose a Getter with a Prism
+
+# Fold
+
+```ts
+class Fold<S, A> {
+  constructor(readonly foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M)
+}
+```
+
+## Methods
+
+### compose
+
+```ts
+<B>(ab: Fold<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Fold
+
+### composeGetter
+
+```ts
+<B>(ab: Getter<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Getter
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Traversal
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Optional
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Lens
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Prism
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Fold<S, B>
+```
+
+compose a Fold with a Iso
+
+### find
+
+```ts
+(p: Predicate<A>): (s: S) => Option<A>
+```
+
+find the first target of a Fold matching the predicate
+
+### headOption
+
+```ts
+(s: S): Option<A>
+```
+
+get the first target of a Fold
+
+### getAll
+
+```ts
+(s: S): Array<A>
+```
+
+get all the targets of a Fold
+
+### exist
+
+```ts
+(p: Predicate<A>): Predicate<S>
+```
+
+check if at least one target satisfies the predicate
+
+### all
+
+```ts
+(p: Predicate<A>): Predicate<S>
+```
+
+check if all targets satisfy the predicate
+
+# Setter
+
+```ts
+class Setter<S, A> {
+  constructor(readonly modify: (f: (a: A) => A) => (s: S) => S)
+}
+```
+
+## Methods
+
+### set
+
+```ts
+(a: A): (s: S) => S
+```
+
+### compose
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Setter
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Traversal
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Optional
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Lens
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Prism
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Iso
+
+# fromTraversable
+
+```ts
+<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
+```
+
+create a Traversal from a Traversable
+
+# fromFoldable
+
+```ts
+<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
+```
+
+create a Fold from a Foldable

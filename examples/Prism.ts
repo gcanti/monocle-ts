@@ -19,7 +19,11 @@ console.log(jStr.getOption(new JStr('hello')))
 console.log(jStr.getOption(new JNum(1)))
 
 // a function is applied only if there is a match
-const reverse = (s: string): string => s.split('').reverse().join('')
+const reverse = (s: string): string =>
+  s
+    .split('')
+    .reverse()
+    .join('')
 console.log(jStr.modify(reverse)(new JStr('hello')))
 console.log(jStr.modify(reverse)(new JNum(1)))
 console.log(jStr.modifyOption(reverse)(new JStr('hello')))
