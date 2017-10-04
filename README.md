@@ -213,6 +213,14 @@ All `Lenses` can be seen as `Optionals` where the optional element to zoom into 
     - [exist](#exist)
     - [all](#all)
 - [Setter](#setter)
+  - [Methods](#methods-7)
+    - [set](#set-1)
+    - [compose](#compose-7)
+    - [composeTraversal](#composetraversal-6)
+    - [composeOptional](#composeoptional-6)
+    - [composeLens](#composelens-6)
+    - [composePrism](#composeprism-6)
+    - [composeIso](#composeiso-6)
 - [fromTraversable](#fromtraversable)
 - [fromFoldable](#fromfoldable)
 
@@ -975,7 +983,7 @@ compose a Getter with a Prism
 # Fold
 
 ```ts
-export class Fold<S, A> {
+class Fold<S, A> {
   constructor(readonly foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M)
 }
 ```
@@ -1080,7 +1088,67 @@ check if all targets satisfy the predicate
 
 # Setter
 
-TODO
+```ts
+class Setter<S, A> {
+  constructor(readonly modify: (f: (a: A) => A) => (s: S) => S)
+}
+```
+
+## Methods
+
+### set
+
+```ts
+(a: A): (s: S) => S
+```
+
+### compose
+
+```ts
+<B>(ab: Setter<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Setter
+
+### composeTraversal
+
+```ts
+<B>(ab: Traversal<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Traversal
+
+### composeOptional
+
+```ts
+<B>(ab: Optional<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Optional
+
+### composeLens
+
+```ts
+<B>(ab: Lens<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Lens
+
+### composePrism
+
+```ts
+<B>(ab: Prism<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Prism
+
+### composeIso
+
+```ts
+<B>(ab: Iso<A, B>): Setter<S, B>
+```
+
+compose a Setter with a Iso
 
 # fromTraversable
 
