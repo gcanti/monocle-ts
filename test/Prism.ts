@@ -22,7 +22,13 @@ describe('Prism', () => {
     assert.deepEqual(optional.getOption(some(1)), some(1))
     assert.deepEqual(optional.getOption(none), none)
     assert.deepEqual(optional.set(2)(some(1)), some(2))
-    assert.deepEqual(optional.set(2)(none), some(2))
+    assert.deepEqual(optional.set(2)(none), none)
+  })
+
+  it('asTraversal', () => {
+    const traversal = Prism.some<number>().asTraversal()
+    assert.deepEqual(traversal.asSetter().set(2)(some(1)), some(2))
+    assert.deepEqual(traversal.asSetter().set(2)(none), none)
   })
 
   it('set', () => {
