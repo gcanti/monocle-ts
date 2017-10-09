@@ -310,13 +310,13 @@ export class Prism<S, A> {
 
   /** view a Prism as a Optional */
   asOptional(): Optional<S, A> {
-    return new Optional(this.getOption, a => s => this.reverseGet(a))
+    return new Optional(this.getOption, a => this.set(a))
   }
 
   /** view a Prism as a Traversal */
   asTraversal(): Traversal<S, A> {
     return new Traversal(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => s =>
-      this.getOption(s).fold(() => F.of(s), a => F.map(fa => this.reverseGet(a), f(a)))
+      this.getOption(s).fold(() => F.of(s), a => F.map(a => this.set(a)(s), f(a)))
     )
   }
 
