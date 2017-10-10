@@ -2,18 +2,17 @@
   "name": "monocle-ts",
   "version": "0.4.2",
   "description": "A porting of scala monocle library to TypeScript",
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "lint": "tslint src/**/*.ts test/**/*.ts",
-    "typings-checker":
-      "typings-checker --allow-expect-error --project typings-checker/tsconfig.json typings-checker/index.ts",
+    "typings-checker": "typings-checker --allow-expect-error --project typings-checker/tsconfig.json typings-checker/index.ts",
     "mocha": "mocha -r ts-node/register test/*.ts",
-    "prettier":
-      "prettier --no-semi --single-quote --print-width 120 --parser typescript --list-different \"{src,test,examples}/**/*.ts\"",
-    "fix-prettier":
-      "prettier --no-semi --single-quote --print-width 120 --parser typescript --write \"{src,test,examples}/**/*.ts\"",
+    "prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --list-different \"{src,test,examples}/**/*.ts\"",
+    "fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --write \"{src,test,examples}/**/*.ts\"",
     "test": "npm run prettier && npm run lint && npm run typings-checker && npm run mocha",
     "clean": "rm -rf lib/*",
     "build": "npm run clean && tsc",
@@ -30,7 +29,7 @@
   },
   "homepage": "https://github.com/gcanti/monocle-ts",
   "dependencies": {
-    "fp-ts": "^0.5.1"
+    "fp-ts": "^0.5.4"
   },
   "devDependencies": {
     "@types/mocha": "2.2.38",
@@ -44,6 +43,18 @@
     "typescript": "2.5.2",
     "typings-checker": "1.1.2"
   },
-  "tags": ["typescript", "functional-programming", "optics", "lens", "fp-ts"],
-  "keywords": ["typescript", "functional-programming", "optics", "lens", "fp-ts"]
+  "tags": [
+    "typescript",
+    "functional-programming",
+    "optics",
+    "lens",
+    "fp-ts"
+  ],
+  "keywords": [
+    "typescript",
+    "functional-programming",
+    "optics",
+    "lens",
+    "fp-ts"
+  ]
 }
