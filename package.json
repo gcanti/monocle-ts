@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/gcanti/monocle-ts",
   "dependencies": {
-    "fp-ts": "^0.5.1"
+    "fp-ts": "^0.5.4"
   },
   "devDependencies": {
     "@types/mocha": "2.2.38",
