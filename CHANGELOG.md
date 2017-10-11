@@ -12,6 +12,14 @@
 **Note**: Gaps between patch versions are faulty/broken releases.
 **Note**: A feature tagged as Experimental is in a high state of flux, you're at risk of it changing without notice.
 
+# 0.4.3
+
+- **New Feature**
+  - `Prism`: add `set` method (@gcanti)
+  - `Optional`: add `fromNullableProps` static function (@gcanti)
+- **Bug fix**
+  - `Prism`: change `asOptional`, `asTraversal` implementations, fix #29 (@gcanti)
+
 # 0.4.2
 
 - **Polish**
