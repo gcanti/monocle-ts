@@ -4,7 +4,7 @@ import { Applicative } from 'fp-ts/lib/Applicative'
 import { Foldable, foldMap } from 'fp-ts/lib/Foldable'
 import { Traversable } from 'fp-ts/lib/Traversable'
 import * as option from 'fp-ts/lib/Option'
-import { Option, none, some } from 'fp-ts/lib/Option'
+import { Option, none, some, fromNullable } from 'fp-ts/lib/Option'
 import { identity, constant, Predicate } from 'fp-ts/lib/function'
 import * as id from 'fp-ts/lib/Identity'
 import * as const_ from 'fp-ts/lib/Const'
@@ -27,7 +27,7 @@ export class Iso<S, A> {
 
   /** view an Iso as a Lens */
   asLens(): Lens<S, A> {
-    return new Lens(this.get, a => s => this.reverseGet(a))
+    return new Lens(this.get, a => _ => this.reverseGet(a))
   }
 
   /** view an Iso as a Prism */
@@ -37,7 +37,7 @@ export class Iso<S, A> {
 
   /** view an Iso as a Optional */
   asOptional(): Optional<S, A> {
-    return new Optional(s => some(this.get(s)), a => s => this.reverseGet(a))
+    return new Optional(s => some(this.get(s)), a => _ => this.reverseGet(a))
   }
 
   /** view an Iso as a Traversal */
@@ -382,6 +382,9 @@ const somePrism = new Prism<Option<never>, never>(s => s, a => some(a))
 export class Optional<S, A> {
   readonly _tag: 'Optional' = 'Optional'
   constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
+
+  static fromNullableProp = <S, A extends S[K], K extends keyof S>(k: K): Optional<S, A> =>
+    new Optional((s: any) => fromNullable(s[k]), a => s => ({ ...s, [k as any]: a }))
 
   modify(f: (a: A) => A): (s: S) => S {
     return s => this.modifyOption(f)(s).fold(constant(s), identity)

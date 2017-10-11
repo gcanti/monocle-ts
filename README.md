@@ -161,6 +161,7 @@ All `Lenses` can be seen as `Optionals` where the optional element to zoom into 
     - [composeLens](#composelens-1)
     - [composeGetter](#composegetter-2)
 - [Optional](#optional)
+  - [fromNullableProp](#fromnullableprop)
   - [Methods](#methods-3)
     - [modify](#modify-3)
     - [modifyOption](#modifyoption-1)
@@ -707,6 +708,56 @@ compose a Prism with a Getter
 class Optional<S, A> {
   constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
 }
+```
+
+## fromNullableProp
+
+```ts
+<S, A extends S[K], K extends keyof S>(k: K): Optional<S, A>
+```
+
+Example
+
+```ts
+interface Phone {
+  number: string
+}
+interface Employment {
+  phone?: Phone
+}
+interface Info {
+  employment?: Employment
+}
+interface Response {
+  info?: Info
+}
+
+const info = Optional.fromNullableProp<Response, Info, 'info'>('info')
+const employment = Optional.fromNullableProp<Info, Employment, 'employment'>('employment')
+const phone = Optional.fromNullableProp<Employment, Phone, 'phone'>('phone')
+const number = Lens.fromProp<Phone, 'number'>('number')
+const numberFromResponse = info
+  .compose(employment)
+  .compose(phone)
+  .composeLens(number)
+
+const response1: Response = {
+  info: {
+    employment: {
+      phone: {
+        number: '555-1234'
+      }
+    }
+  }
+}
+const response2: Response = {
+  info: {
+    employment: {}
+  }
+}
+
+numberFromResponse.getOption(response1) // some('555-1234')
+numberFromResponse.getOption(response2) // none
 ```
 
 ## Methods
