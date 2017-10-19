@@ -206,6 +206,11 @@ export class Lens<S, A> {
     return new Lens(s => s[prop], a => s => Object.assign({}, s, { [prop as any]: a }))
   }
 
+  /** generate a lens from a type and a prop whose type is nullable */
+  static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, A> {
+    return new Lens((s: any) => fromNullable(s[k]).getOrElseValue(defaultValue), a => s => ({ ...s, [k as any]: a }))
+  }
+
   modify(f: (a: A) => A): (s: S) => S {
     return s => this.set(f(this.get(s)))(s)
   }

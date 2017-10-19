@@ -126,6 +126,7 @@ All `Lenses` can be seen as `Optionals` where the optional element to zoom into 
 - [Lens](#lens)
   - [fromPath](#frompath)
   - [fromProp](#fromprop)
+  - [fromNullableProp](#fromnullableprop)
   - [Methods](#methods-1)
     - [modify](#modify-1)
     - [asOptional](#asoptional-1)
@@ -161,7 +162,7 @@ All `Lenses` can be seen as `Optionals` where the optional element to zoom into 
     - [composeLens](#composelens-1)
     - [composeGetter](#composegetter-2)
 - [Optional](#optional)
-  - [fromNullableProp](#fromnullableprop)
+  - [fromNullableProp](#fromnullableprop-1)
   - [Methods](#methods-3)
     - [modify](#modify-3)
     - [modifyOption](#modifyoption-1)
@@ -436,6 +437,8 @@ console.log(city.set('London')(person)) // { name: 'Giulio', age: 43, address: {
 <T, P extends keyof T>(prop: P): Lens<T, T[P]>
 ```
 
+generate a lens from a type and a prop
+
 Example
 
 ```ts
@@ -450,6 +453,36 @@ const person: Person = { name: 'Giulio', age: 43 }
 
 console.log(age.get(person)) // 43
 console.log(age.set(44)(person)) // { name: 'Giulio', age: 44 }
+```
+
+## fromNullableProp
+
+```ts
+<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, A>
+```
+
+generate a lens from a type and a prop whose type is nullable
+
+Example
+
+```ts
+interface Outer {
+  inner?: Inner
+}
+
+interface Inner {
+  value: number
+  foo: string
+}
+
+const inner = Lens.fromNullableProp<Outer, Inner, 'inner'>('inner', { value: 0, foo: 'foo' })
+const value = Lens.fromProp<Inner, 'value'>('value')
+const lens = inner.compose(value)
+
+console.log(lens.set(1)({})) // { inner: { value: 1, foo: 'foo' } }
+console.log(lens.get({})) // 0
+console.log(lens.set(1)({ inner: { value: 1, foo: 'bar' } })) // { inner: { value: 1, foo: 'bar' } }
+console.log(lens.get({ inner: { value: 1, foo: 'bar' } })) // 1
 ```
 
 ## Methods
