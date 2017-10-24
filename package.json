@@ -1,6 +1,6 @@
 {
   "name": "monocle-ts",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "description": "A porting of scala monocle library to TypeScript",
   "files": ["lib"],
   "main": "lib/index.js",
@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/gcanti/monocle-ts",
   "dependencies": {
-    "fp-ts": "^0.5.1"
+    "fp-ts": "^0.6.0"
   },
   "devDependencies": {
     "@types/mocha": "2.2.38",
@@ -41,7 +41,7 @@
     "ts-node": "3.1.0",
     "tslint": "4.4.2",
     "tslint-config-standard": "4.0.0",
-    "typescript": "2.5.2",
+    "typescript": "2.6.0-rc",
     "typings-checker": "1.1.2"
   },
   "tags": ["typescript", "functional-programming", "optics", "lens", "fp-ts"],

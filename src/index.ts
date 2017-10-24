@@ -376,7 +376,7 @@ export class Prism<S, A> {
   }
 }
 
-const somePrism = new Prism<Option<never>, never>(s => s, a => some(a))
+const somePrism = new Prism<Option<any>, any>(s => s, a => some(a))
 
 /*
   Laws:

@@ -4,24 +4,18 @@
     "sourceMap": true,
     "declaration": true,
     "module": "commonjs",
-    "noImplicitAny": true,
+    "strict": true,
     "noImplicitReturns": false,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "noEmitOnError": false,
     "allowJs": false,
-    "strictNullChecks": true,
     "target": "es5",
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "suppressImplicitAnyIndexErrors": true,
-    "lib": [
-      "es6"
-    ]
+    "lib": ["es6"]
   },
-  "include": [
-    "./src/**/*"
-  ]
+  "include": ["./src/**/*"]
 }
