@@ -285,7 +285,7 @@ export class Lens<S, A> {
 
 /*
   Laws:
-  1. getOption(s).fold(identity, reverseGet) = s
+  1. getOption(s).fold(() => s, reverseGet) = s
   2. getOption(reverseGet(a)) = Some(a)
 */
 export class Prism<S, A> {
