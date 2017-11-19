@@ -681,25 +681,19 @@ export class Setter<S, A> {
   }
 }
 
-export class Ops {
-  /** create a Traversal from a Traversable */
-  fromTraversable<T extends HKT2S>(T: Traversable<T>): <L, A>() => Traversal<HKT2As<T, L, A>, A>
-  fromTraversable<T extends HKTS>(T: Traversable<T>): <A>() => Traversal<HKTAs<T, A>, A>
-  fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
-  fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
-    return <A>() =>
-      new Traversal<HKT<T, A>, A>(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => s => T.traverse(F)(f, s))
-  }
-
-  /** create a Fold from a Foldable */
-  fromFoldable<F extends HKT2S>(F: Foldable<F>): <L, A>() => Fold<HKT2As<F, L, A>, A>
-  fromFoldable<F extends HKTS>(F: Foldable<F>): <A>() => Fold<HKTAs<F, A>, A>
-  fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
-  fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> {
-    return <A>() => new Fold<HKT<F, A>, A>(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => foldMap(F, M)(f)(s))
-  }
+/** create a Traversal from a Traversable */
+export function fromTraversable<T extends HKT2S>(T: Traversable<T>): <L, A>() => Traversal<HKT2As<T, L, A>, A>
+export function fromTraversable<T extends HKTS>(T: Traversable<T>): <A>() => Traversal<HKTAs<T, A>, A>
+export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
+export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
+  return <A>() =>
+    new Traversal<HKT<T, A>, A>(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => s => T.traverse(F)(f, s))
 }
 
-const ops = new Ops()
-export const fromTraversable: Ops['fromTraversable'] = ops.fromTraversable
-export const fromFoldable: Ops['fromFoldable'] = ops.fromFoldable
+/** create a Fold from a Foldable */
+export function fromFoldable<F extends HKT2S>(F: Foldable<F>): <L, A>() => Fold<HKT2As<F, L, A>, A>
+export function fromFoldable<F extends HKTS>(F: Foldable<F>): <A>() => Fold<HKTAs<F, A>, A>
+export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
+export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> {
+  return <A>() => new Fold<HKT<F, A>, A>(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => foldMap(F, M)(f)(s))
+}
