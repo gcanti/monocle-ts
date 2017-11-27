@@ -1,7 +1,7 @@
 import * as assert from 'assert'
-import { none, some } from 'fp-ts/lib/Option'
 import { Prism } from '../src'
 import { eqOptions as eq } from './helpers'
+import { none, some } from 'fp-ts/lib/Option'
 
 describe('Prism', () => {
   it('fromPredicate', () => {

@@ -1,0 +1,288 @@
+// @flow
+import type { HKT } from 'fp-ts/lib/HKT'
+import type { Option } from 'fp-ts/lib/Option'
+import type { Applicative } from 'fp-ts/lib/Applicative'
+import type { Traversable } from 'fp-ts/lib/Traversable'
+import type { Foldable } from 'fp-ts/lib/Foldable'
+import type { Monoid } from 'fp-ts/lib/Monoid'
+import type { Predicate } from 'fp-ts/lib/function'
+
+declare export class Iso<S, A> {
+  +_tag: 'Iso';
+  +get: (s: S) => A;
+  +reverseGet: (a: A) => S;
+  +unwrap: (s: S) => A;
+  +to: (s: S) => A;
+  +wrap: (a: A) => S;
+  +from: (a: A) => S;
+  constructor(get: (s: S) => A, reverseGet: (a: A) => S): Iso<S, A>;
+  modify(f: (a: A) => A): (s: S) => S;
+  /** view an Iso as a Lens */
+  asLens(): Lens<S, A>;
+  /** view an Iso as a Prism */
+  asPrism(): Prism<S, A>;
+  /** view an Iso as a Optional */
+  asOptional(): Optional<S, A>;
+  /** view an Iso as a Traversal */
+  asTraversal(): Traversal<S, A>;
+  /** view an Iso as a Fold */
+  asFold(): Fold<S, A>;
+  /** view an Iso as a Getter */
+  asGetter(): Getter<S, A>;
+  /** view an Iso as a Setter */
+  asSetter(): Setter<S, A>;
+  /** compose an Iso with an Iso */
+  compose<B>(ab: Iso<A, B>): Iso<S, B>;
+  /** compose an Iso with a Lens */
+  composeLens<B>(ab: Lens<A, B>): Lens<S, B>;
+  /** compose an Iso with a Prism */
+  composePrism<B>(ab: Prism<A, B>): Prism<S, B>;
+  /** compose an Iso with an Optional */
+  composeOptional<B>(ab: Optional<A, B>): Optional<S, B>;
+  /** compose an Iso with a Traversal */
+  composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B>;
+  /** compose an Iso with a Fold */
+  composeFold<B>(ab: Fold<A, B>): Fold<S, B>;
+  /** compose an Iso with a Getter */
+  composeGetter<B>(ab: Getter<A, B>): Getter<S, B>;
+  /** compose an Iso with a Setter */
+  composeSetter<B>(ab: Setter<A, B>): Setter<S, B>;
+}
+
+declare export class Lens<S, A> {
+  static fromPath: typeof lensFromPath;
+  static fromProp<S, K: $Keys<S>>(k: K): Lens<S, $ElementType<S, K>>;
+  static fromNullableProp<S, K: $Keys<S>, A: $ElementType<S, K>>(k: K, defaultValue: A): Lens<S, A>;
+  +_tag: 'Lens';
+  +get: (s: S) => A;
+  +set: (a: A) => (s: S) => S;
+  constructor(get: (s: S) => A, set: (a: A) => (s: S) => S): Lens<S, A>;
+  modify(f: (a: A) => A): (s: S) => S;
+  /** view a Lens as a Optional */
+  asOptional(): Optional<S, A>;
+  /** view a Lens as a Traversal */
+  asTraversal(): Traversal<S, A>;
+  /** view a Lens as a Setter */
+  asSetter(): Setter<S, A>;
+  /** view a Lens as a Getter */
+  asGetter(): Getter<S, A>;
+  /** view a Lens as a Fold */
+  asFold(): Fold<S, A>;
+  /** compose a Lens with a Lens */
+  compose<B>(ab: Lens<A, B>): Lens<S, B>;
+  /** compose a Lens with a Getter */
+  composeGetter<B>(ab: Getter<A, B>): Getter<S, B>;
+  /** compose a Lens with a Fold */
+  composeFold<B>(ab: Fold<A, B>): Fold<S, B>;
+  /** compose a Lens with an Optional */
+  composeOptional<B>(ab: Optional<A, B>): Optional<S, B>;
+  /** compose a Lens with an Traversal */
+  composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B>;
+  /** compose a Lens with an Setter */
+  composeSetter<B>(ab: Setter<A, B>): Setter<S, B>;
+  /** compose a Lens with an Iso */
+  composeIso<B>(ab: Iso<A, B>): Lens<S, B>;
+  /** compose a Lens with a Prism */
+  composePrism<B>(ab: Prism<A, B>): Optional<S, B>;
+}
+
+declare export function lensFromPath<
+  S,
+  K1: $Keys<S>,
+  K2: $Keys<$ElementType<S, K1>>,
+  K3: $Keys<$ElementType<$ElementType<S, K1>, K2>>,
+  K4: $Keys<$ElementType<$ElementType<$ElementType<S, K1>, K2>, K3>>,
+  K5: $Keys<$ElementType<$ElementType<$ElementType<$ElementType<S, K1>, K2>, K3>, K4>>
+>(
+  path: [K1, K2, K3, K4, K5]
+): Lens<S, $ElementType<$ElementType<$ElementType<$ElementType<$ElementType<S, K1>, K2>, K3>, K4>, K5>>
+declare export function lensFromPath<
+  S,
+  K1: $Keys<S>,
+  K2: $Keys<$ElementType<S, K1>>,
+  K3: $Keys<$ElementType<$ElementType<S, K1>, K2>>,
+  K4: $Keys<$ElementType<$ElementType<$ElementType<S, K1>, K2>, K3>>
+>(
+  path: [K1, K2, K3, K4]
+): Lens<S, $ElementType<$ElementType<$ElementType<$ElementType<S, K1>, K2>, K3>, K4>>
+declare export function lensFromPath<
+  S,
+  K1: $Keys<S>,
+  K2: $Keys<$ElementType<S, K1>>,
+  K3: $Keys<$ElementType<$ElementType<S, K1>, K2>>
+>(
+  path: [K1, K2, K3]
+): Lens<S, $ElementType<$ElementType<$ElementType<S, K1>, K2>, K3>>
+declare export function lensFromPath<S, K1: $Keys<S>, K2: $Keys<$ElementType<S, K1>>>(
+  path: [K1, K2]
+): Lens<S, $ElementType<$ElementType<S, K1>, K2>>
+declare export function lensFromPath<S, K1: $Keys<S>>(path: [K1]): Lens<S, $ElementType<S, K1>>
+
+declare export class Prism<S, A> {
+  +_tag: 'Prism';
+  +getOption: (s: S) => Option<A>;
+  +reverseGet: (a: A) => S;
+  constructor(getOption: (s: S) => Option<A>, reverseGet: (a: A) => S): Prism<S, A>;
+  static some<A>(): Prism<Option<A>, A>;
+  modify(f: (a: A) => A): (s: S) => S;
+  modifyOption(f: (a: A) => A): (s: S) => Option<S>;
+  /** set the target of a Prism with a value */
+  set(a: A): (s: S) => S;
+  /** view a Prism as a Optional */
+  asOptional(): Optional<S, A>;
+  /** view a Prism as a Traversal */
+  asTraversal(): Traversal<S, A>;
+  /** view a Prism as a Setter */
+  asSetter(): Setter<S, A>;
+  /** view a Prism as a Fold */
+  asFold(): Fold<S, A>;
+  /** compose a Prism with a Prism */
+  compose<B>(ab: Prism<A, B>): Prism<S, B>;
+  /** compose a Prism with a Optional */
+  composeOptional<B>(ab: Optional<A, B>): Optional<S, B>;
+  /** compose a Prism with a Traversal */
+  composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B>;
+  /** compose a Prism with a Fold */
+  composeFold<B>(ab: Fold<A, B>): Fold<S, B>;
+  /** compose a Prism with a Setter */
+  composeSetter<B>(ab: Setter<A, B>): Setter<S, B>;
+  /** compose a Prism with a Iso */
+  composeIso<B>(ab: Iso<A, B>): Prism<S, B>;
+  /** compose a Prism with a Lens */
+  composeLens<B>(ab: Lens<A, B>): Optional<S, B>;
+  /** compose a Prism with a Getter */
+  composeGetter<B>(ab: Getter<A, B>): Fold<S, B>;
+}
+
+declare export class Optional<S, A> {
+  +_tag: 'Optional';
+  +getOption: (s: S) => Option<A>;
+  +set: (a: A) => (s: S) => S;
+  constructor(getOption: (s: S) => Option<A>, set: (a: A) => (s: S) => S): Optional<S, A>;
+  modify(f: (a: A) => A): (s: S) => S;
+  modifyOption(f: (a: A) => A): (s: S) => Option<S>;
+  /** view a Optional as a Traversal */
+  asTraversal(): Traversal<S, A>;
+  /** view an Optional as a Fold */
+  asFold(): Fold<S, A>;
+  /** view an Optional as a Setter */
+  asSetter(): Setter<S, A>;
+  /** compose a Optional with a Optional */
+  compose<B>(ab: Optional<A, B>): Optional<S, B>;
+  /** compose an Optional with a Traversal */
+  composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B>;
+  /** compose an Optional with a Fold */
+  composeFold<B>(ab: Fold<A, B>): Fold<S, B>;
+  /** compose an Optional with a Setter */
+  composeSetter<B>(ab: Setter<A, B>): Setter<S, B>;
+  /** compose an Optional with a Lens */
+  composeLens<B>(ab: Lens<A, B>): Optional<S, B>;
+  /** compose an Optional with a Prism */
+  composePrism<B>(ab: Prism<A, B>): Optional<S, B>;
+  /** compose an Optional with a Iso */
+  composeIso<B>(ab: Iso<A, B>): Optional<S, B>;
+  /** compose an Optional with a Getter */
+  composeGetter<B>(ab: Getter<A, B>): Fold<S, B>;
+}
+
+declare export class Traversal<S, A> {
+  +_tag: 'Traversal';
+  +modifyF: <F>(F: Applicative<F>) => <U, L>(f: (a: A) => HKT<F, U, L, A>) => (s: S) => HKT<F, U, L, S>;
+  constructor(
+    modifyF: <F>(F: Applicative<F>) => <U, L>(f: (a: A) => HKT<F, U, L, A>) => (s: S) => HKT<F, U, L, S>
+  ): Traversal<S, A>;
+  modify(f: (a: A) => A): (s: S) => S;
+  set(a: A): (s: S) => S;
+  /** view a Traversal as a Fold */
+  asFold(): Fold<S, A>;
+  /** view a Traversal as a Setter */
+  asSetter(): Setter<S, A>;
+  /** compose a Traversal with a Traversal */
+  compose<B>(ab: Traversal<A, B>): Traversal<S, B>;
+  /** compose a Traversal with a Fold */
+  composeFold<B>(ab: Fold<A, B>): Fold<S, B>;
+  /** compose a Traversal with a Setter */
+  composeSetter<B>(ab: Setter<A, B>): Setter<S, B>;
+  /** compose a Traversal with a Optional */
+  composeOptional<B>(ab: Optional<A, B>): Traversal<S, B>;
+  /** compose a Traversal with a Lens */
+  composeLens<B>(ab: Lens<A, B>): Traversal<S, B>;
+  /** compose a Traversal with a Prism */
+  composePrism<B>(ab: Prism<A, B>): Traversal<S, B>;
+  /** compose a Traversal with a Iso */
+  composeIso<B>(ab: Iso<A, B>): Traversal<S, B>;
+  /** compose a Traversal with a Getter */
+  composeGetter<B>(ab: Getter<A, B>): Fold<S, B>;
+}
+declare export class Getter<S, A> {
+  +_tag: 'Getter';
+  +get: (s: S) => A;
+  constructor(get: (s: S) => A): Getter<S, A>;
+  /** view a Getter as a Fold */
+  asFold(): Fold<S, A>;
+  /** compose a Getter with a Getter */
+  compose<B>(ab: Getter<A, B>): Getter<S, B>;
+  /** compose a Getter with a Fold */
+  composeFold<B>(ab: Fold<A, B>): Fold<S, B>;
+  /** compose a Getter with a Lens */
+  composeLens<B>(ab: Lens<A, B>): Getter<S, B>;
+  /** compose a Getter with a Iso */
+  composeIso<B>(ab: Iso<A, B>): Getter<S, B>;
+  /** compose a Getter with a Optional */
+  composeTraversal<B>(ab: Traversal<A, B>): Fold<S, B>;
+  /** compose a Getter with a Optional */
+  composeOptional<B>(ab: Optional<A, B>): Fold<S, B>;
+  /** compose a Getter with a Prism */
+  composePrism<B>(ab: Prism<A, B>): Fold<S, B>;
+}
+declare export class Fold<S, A> {
+  +_tag: 'Fold';
+  +foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M;
+  constructor(foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M): Fold<S, A>;
+  /** compose a Fold with a Fold */
+  compose<B>(ab: Fold<A, B>): Fold<S, B>;
+  /** compose a Fold with a Getter */
+  composeGetter<B>(ab: Getter<A, B>): Fold<S, B>;
+  /** compose a Fold with a Traversal */
+  composeTraversal<B>(ab: Traversal<A, B>): Fold<S, B>;
+  /** compose a Fold with a Optional */
+  composeOptional<B>(ab: Optional<A, B>): Fold<S, B>;
+  /** compose a Fold with a Lens */
+  composeLens<B>(ab: Lens<A, B>): Fold<S, B>;
+  /** compose a Fold with a Prism */
+  composePrism<B>(ab: Prism<A, B>): Fold<S, B>;
+  /** compose a Fold with a Iso */
+  composeIso<B>(ab: Iso<A, B>): Fold<S, B>;
+  /** find the first target of a Fold matching the predicate */
+  find(p: Predicate<A>): (s: S) => Option<A>;
+  /** get the first target of a Fold */
+  headOption(s: S): Option<A>;
+  /** get all the targets of a Fold */
+  getAll(s: S): Array<A>;
+  /** check if at least one target satisfies the predicate */
+  exist(p: Predicate<A>): Predicate<S>;
+  /** check if all targets satisfy the predicate */
+  all(p: Predicate<A>): Predicate<S>;
+}
+declare export class Setter<S, A> {
+  +_tag: 'Setter';
+  +modify: (f: (a: A) => A) => (s: S) => S;
+  constructor(modify: (f: (a: A) => A) => (s: S) => S): Setter<S, A>;
+  set(a: A): (s: S) => S;
+  /** compose a Setter with a Setter */
+  compose<B>(ab: Setter<A, B>): Setter<S, B>;
+  /** compose a Setter with a Traversal */
+  composeTraversal<B>(ab: Traversal<A, B>): Setter<S, B>;
+  /** compose a Setter with a Optional */
+  composeOptional<B>(ab: Optional<A, B>): Setter<S, B>;
+  /** compose a Setter with a Lens */
+  composeLens<B>(ab: Lens<A, B>): Setter<S, B>;
+  /** compose a Setter with a Prism */
+  composePrism<B>(ab: Prism<A, B>): Setter<S, B>;
+  /** compose a Setter with a Iso */
+  composeIso<B>(ab: Iso<A, B>): Setter<S, B>;
+}
+/** create a Traversal from a Traversable */
+declare export var fromTraversable: <T>(T: Traversable<T>) => <A, U, L>() => Traversal<HKT<T, U, L, A>, A>
+/** create a Fold from a Foldable */
+declare export var fromFoldable: <F>(F: Foldable<F>) => <A, U, L>() => Fold<HKT<F, U, L, A>, A>

@@ -1,8 +1,8 @@
-import { Option, none, some } from 'fp-ts/lib/Option'
 import { Optional, Lens } from '../src'
+import { none, some, Option } from 'fp-ts/lib/Option'
 import { eqOptions as eq } from './helpers'
 
-type A = {
+interface A {
   a: Option<number>
 }
 
