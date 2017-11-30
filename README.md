@@ -7,24 +7,37 @@ Modifying immutable nested object in JavaScript is verbose which makes code diff
 Let's have a look at some examples:
 
 ```ts
-interface Street { num: number, name: string }
-interface Address { city: string, street: Street }
-interface Company { name: string, address: Address }
-interface Employee { name: string, company: Company }
+interface Street {
+  num: number
+  name: string
+}
+interface Address {
+  city: string
+  street: Street
+}
+interface Company {
+  name: string
+  address: Address
+}
+interface Employee {
+  name: string
+  company: Company
+}
 ```
 
-Let’s say we have an employee and we need to upper case the first character of his company street name. Here is how we could write it in vanilla JavaScript
+Let’s say we have an employee and we need to upper case the first character of his company street name. Here is how we
+could write it in vanilla JavaScript
 
 ```ts
 const employee: Employee = {
-  name: "john",
+  name: 'john',
   company: {
-    name: "awesome inc",
+    name: 'awesome inc',
     address: {
-      city: "london",
+      city: 'london',
       street: {
         num: 23,
-        name: "high street"
+        name: 'high street'
       }
     }
   }
@@ -47,7 +60,8 @@ const employee2 = {
 }
 ```
 
-As we can see copy is not convenient to update nested objects because we need to repeat ourselves. Let's see what could we do with `monocle-ts`
+As we can see copy is not convenient to update nested objects because we need to repeat ourselves. Let's see what could
+we do with `monocle-ts`
 
 ```ts
 import { Lens, Optional } from 'monocle-ts'
@@ -57,12 +71,16 @@ const address = Lens.fromProp<Company, 'address'>('address')
 const street = Lens.fromProp<Address, 'street'>('street')
 const name = Lens.fromProp<Street, 'name'>('name')
 
-company.compose(address).compose(street).compose(name)
+company
+  .compose(address)
+  .compose(street)
+  .compose(name)
 ```
 
-`compose` takes two `Lenses`, one from `A` to `B` and another one from `B` to `C` and creates a third `Lens` from `A` to `C`.
-Therefore, after composing `company`, `address`, `street` and `name`, we obtain a `Lens` from `Employee` to `string` (the street name).
-Now we can use this `Lens` issued from the composition to modify the street name using the function `capitalize`
+`compose` takes two `Lenses`, one from `A` to `B` and another one from `B` to `C` and creates a third `Lens` from `A` to
+`C`. Therefore, after composing `company`, `address`, `street` and `name`, we obtain a `Lens` from `Employee` to
+`string` (the street name). Now we can use this `Lens` issued from the composition to modify the street name using the
+function `capitalize`
 
 ```ts
 company
@@ -72,18 +90,16 @@ company
   .modify(capitalize)(employee)
 ```
 
-Here `modify` lift a function `string => string` to a function `Employee => Employee`. It works but it would be clearer if we could zoom
-into the first character of a `string` with a `Lens`. However, we cannot write such a `Lens` because `Lenses` require the field they are directed
-at to be *mandatory*. In our case the first character of a `string` is optional as a `string` can be empty. So we need another abstraction that
-would be a sort of partial Lens, in `monocle-ts` it is called an `Optional`.
+Here `modify` lift a function `string => string` to a function `Employee => Employee`. It works but it would be clearer
+if we could zoom into the first character of a `string` with a `Lens`. However, we cannot write such a `Lens` because
+`Lenses` require the field they are directed at to be _mandatory_. In our case the first character of a `string` is
+optional as a `string` can be empty. So we need another abstraction that would be a sort of partial Lens, in
+`monocle-ts` it is called an `Optional`.
 
 ```ts
 import { some, none } from 'fp-ts/lib/Option'
 
-const firstLetter = new Optional<string, string>(
-  s => s.length > 0 ? some(s[0]) : none,
-  a => s => a + s.substring(1)
-)
+const firstLetter = new Optional<string, string>(s => (s.length > 0 ? some(s[0]) : none), a => s => a + s.substring(1))
 
 company
   .compose(address)
@@ -94,138 +110,142 @@ company
   .modify(s => s.toUpperCase())(employee)
 ```
 
-Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`, one from `A` to `B` and another from `B` to `C` and creates a third `Optional` from `A` to `C`.
-All `Lenses` can be seen as `Optionals` where the optional element to zoom into is always present, hence composing an `Optional` and a `Lens` always produces an `Optional`.
+Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`, one from `A` to `B` and another from
+`B` to `C` and creates a third `Optional` from `A` to `C`. All `Lenses` can be seen as `Optionals` where the optional
+element to zoom into is always present, hence composing an `Optional` and a `Lens` always produces an `Optional`.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Iso](#iso)
-  - [Methods](#methods)
-    - [unwrap](#unwrap)
-    - [to](#to)
-    - [wrap](#wrap)
-    - [from](#from)
-    - [modify](#modify)
-    - [asLens](#aslens)
-    - [asPrism](#asprism)
-    - [asOptional](#asoptional)
-    - [asTraversal](#astraversal)
-    - [asFold](#asfold)
-    - [asGetter](#asgetter)
-    - [asSetter](#assetter)
-    - [compose](#compose)
-    - [composeLens](#composelens)
-    - [composePrism](#composeprism)
-    - [composeOptional](#composeoptional)
-    - [composeTraversal](#composetraversal)
-    - [composeFold](#composefold)
-    - [composeGetter](#composegetter)
-    - [composeSetter](#composesetter)
-- [Lens](#lens)
-  - [fromPath](#frompath)
-  - [fromProp](#fromprop)
-  - [fromNullableProp](#fromnullableprop)
-  - [Methods](#methods-1)
-    - [modify](#modify-1)
-    - [asOptional](#asoptional-1)
-    - [asTraversal](#astraversal-1)
-    - [asSetter](#assetter-1)
-    - [asGetter](#asgetter-1)
-    - [asFold](#asfold-1)
-    - [compose](#compose-1)
-    - [composeGetter](#composegetter-1)
-    - [composeFold](#composefold-1)
-    - [composeOptional](#composeoptional-1)
-    - [composeTraversal](#composetraversal-1)
-    - [composeSetter](#composesetter-1)
-    - [composeIso](#composeiso)
-    - [composePrism](#composeprism-1)
-- [Prism](#prism)
-  - [fromPredicate](#frompredicate)
-  - [some](#some)
-  - [Methods](#methods-2)
-    - [modify](#modify-2)
-    - [modifyOption](#modifyoption)
-    - [set](#set)
-    - [asOptional](#asoptional-2)
-    - [asTraversal](#astraversal-2)
-    - [asSetter](#assetter-2)
-    - [asFold](#asfold-2)
-    - [compose](#compose-2)
-    - [composeOptional](#composeoptional-2)
-    - [composeTraversal](#composetraversal-2)
-    - [composeFold](#composefold-2)
-    - [composeSetter](#composesetter-2)
-    - [composeIso](#composeiso-1)
-    - [composeLens](#composelens-1)
-    - [composeGetter](#composegetter-2)
-- [Optional](#optional)
-  - [fromNullableProp](#fromnullableprop-1)
-  - [Methods](#methods-3)
-    - [modify](#modify-3)
-    - [modifyOption](#modifyoption-1)
-    - [asTraversal](#astraversal-3)
-    - [asFold](#asfold-3)
-    - [asSetter](#assetter-3)
-    - [compose](#compose-3)
-    - [composeTraversal](#composetraversal-3)
-    - [composeFold](#composefold-3)
-    - [composeSetter](#composesetter-3)
-    - [composeLens](#composelens-2)
-    - [composePrism](#composeprism-2)
-    - [composeIso](#composeiso-2)
-    - [composeGetter](#composegetter-3)
-- [Traversal](#traversal)
-  - [Methods](#methods-4)
-    - [modify](#modify-4)
-    - [set](#set-1)
-    - [asFold](#asfold-4)
-    - [asSetter](#assetter-4)
-    - [compose](#compose-4)
-    - [composeFold](#composefold-4)
-    - [composeSetter](#composesetter-4)
-    - [composeOptional](#composeoptional-3)
-    - [composeLens](#composelens-3)
-    - [composePrism](#composeprism-3)
-    - [composeIso](#composeiso-3)
-    - [composeGetter](#composegetter-4)
-- [Getter](#getter)
-  - [Methods](#methods-5)
-    - [asFold](#asfold-5)
-    - [compose](#compose-5)
-    - [composeFold](#composefold-5)
-    - [composeLens](#composelens-4)
-    - [composeIso](#composeiso-4)
-    - [composeTraversal](#composetraversal-4)
-    - [composeOptional](#composeoptional-4)
-    - [composePrism](#composeprism-4)
-- [Fold](#fold)
-  - [Methods](#methods-6)
-    - [compose](#compose-6)
-    - [composeGetter](#composegetter-5)
-    - [composeTraversal](#composetraversal-5)
-    - [composeOptional](#composeoptional-5)
-    - [composeLens](#composelens-5)
-    - [composePrism](#composeprism-5)
-    - [composeIso](#composeiso-5)
-    - [find](#find)
-    - [headOption](#headoption)
-    - [getAll](#getall)
-    - [exist](#exist)
-    - [all](#all)
-- [Setter](#setter)
-  - [Methods](#methods-7)
-    - [set](#set-2)
-    - [compose](#compose-7)
-    - [composeTraversal](#composetraversal-6)
-    - [composeOptional](#composeoptional-6)
-    - [composeLens](#composelens-6)
-    - [composePrism](#composeprism-6)
-    - [composeIso](#composeiso-6)
-- [fromTraversable](#fromtraversable)
-- [fromFoldable](#fromfoldable)
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+* [Iso](#iso)
+  * [Methods](#methods)
+    * [unwrap](#unwrap)
+    * [to](#to)
+    * [wrap](#wrap)
+    * [from](#from)
+    * [reverse](#reverse)
+    * [modify](#modify)
+    * [asLens](#aslens)
+    * [asPrism](#asprism)
+    * [asOptional](#asoptional)
+    * [asTraversal](#astraversal)
+    * [asFold](#asfold)
+    * [asGetter](#asgetter)
+    * [asSetter](#assetter)
+    * [compose](#compose)
+    * [composeLens](#composelens)
+    * [composePrism](#composeprism)
+    * [composeOptional](#composeoptional)
+    * [composeTraversal](#composetraversal)
+    * [composeFold](#composefold)
+    * [composeGetter](#composegetter)
+    * [composeSetter](#composesetter)
+* [Lens](#lens)
+  * [fromPath](#frompath)
+  * [fromProp](#fromprop)
+  * [fromNullableProp](#fromnullableprop)
+  * [Methods](#methods-1)
+    * [modify](#modify-1)
+    * [asOptional](#asoptional-1)
+    * [asTraversal](#astraversal-1)
+    * [asSetter](#assetter-1)
+    * [asGetter](#asgetter-1)
+    * [asFold](#asfold-1)
+    * [compose](#compose-1)
+    * [composeGetter](#composegetter-1)
+    * [composeFold](#composefold-1)
+    * [composeOptional](#composeoptional-1)
+    * [composeTraversal](#composetraversal-1)
+    * [composeSetter](#composesetter-1)
+    * [composeIso](#composeiso)
+    * [composePrism](#composeprism-1)
+* [Prism](#prism)
+  * [fromPredicate](#frompredicate)
+  * [some](#some)
+  * [Methods](#methods-2)
+    * [modify](#modify-2)
+    * [modifyOption](#modifyoption)
+    * [set](#set)
+    * [asOptional](#asoptional-2)
+    * [asTraversal](#astraversal-2)
+    * [asSetter](#assetter-2)
+    * [asFold](#asfold-2)
+    * [compose](#compose-2)
+    * [composeOptional](#composeoptional-2)
+    * [composeTraversal](#composetraversal-2)
+    * [composeFold](#composefold-2)
+    * [composeSetter](#composesetter-2)
+    * [composeIso](#composeiso-1)
+    * [composeLens](#composelens-1)
+    * [composeGetter](#composegetter-2)
+* [Optional](#optional)
+  * [fromNullableProp](#fromnullableprop-1)
+  * [Methods](#methods-3)
+    * [modify](#modify-3)
+    * [modifyOption](#modifyoption-1)
+    * [asTraversal](#astraversal-3)
+    * [asFold](#asfold-3)
+    * [asSetter](#assetter-3)
+    * [compose](#compose-3)
+    * [composeTraversal](#composetraversal-3)
+    * [composeFold](#composefold-3)
+    * [composeSetter](#composesetter-3)
+    * [composeLens](#composelens-2)
+    * [composePrism](#composeprism-2)
+    * [composeIso](#composeiso-2)
+    * [composeGetter](#composegetter-3)
+* [Traversal](#traversal)
+  * [Methods](#methods-4)
+    * [modify](#modify-4)
+    * [set](#set-1)
+    * [asFold](#asfold-4)
+    * [asSetter](#assetter-4)
+    * [compose](#compose-4)
+    * [composeFold](#composefold-4)
+    * [composeSetter](#composesetter-4)
+    * [composeOptional](#composeoptional-3)
+    * [composeLens](#composelens-3)
+    * [composePrism](#composeprism-3)
+    * [composeIso](#composeiso-3)
+    * [composeGetter](#composegetter-4)
+* [Getter](#getter)
+  * [Methods](#methods-5)
+    * [asFold](#asfold-5)
+    * [compose](#compose-5)
+    * [composeFold](#composefold-5)
+    * [composeLens](#composelens-4)
+    * [composeIso](#composeiso-4)
+    * [composeTraversal](#composetraversal-4)
+    * [composeOptional](#composeoptional-4)
+    * [composePrism](#composeprism-4)
+* [Fold](#fold)
+  * [Methods](#methods-6)
+    * [compose](#compose-6)
+    * [composeGetter](#composegetter-5)
+    * [composeTraversal](#composetraversal-5)
+    * [composeOptional](#composeoptional-5)
+    * [composeLens](#composelens-5)
+    * [composePrism](#composeprism-5)
+    * [composeIso](#composeiso-5)
+    * [find](#find)
+    * [headOption](#headoption)
+    * [getAll](#getall)
+    * [exist](#exist)
+    * [all](#all)
+* [Setter](#setter)
+  * [Methods](#methods-7)
+    * [set](#set-2)
+    * [compose](#compose-7)
+    * [composeTraversal](#composetraversal-6)
+    * [composeOptional](#composeoptional-6)
+    * [composeLens](#composelens-6)
+    * [composePrism](#composeprism-6)
+    * [composeIso](#composeiso-6)
+* [fromTraversable](#fromtraversable)
+* [fromFoldable](#fromfoldable)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -242,7 +262,7 @@ class Iso<S, A> {
 ### unwrap
 
 ```ts
-(s: S) => A
+;(s: S) => A
 ```
 
 Alias of `get`
@@ -250,7 +270,7 @@ Alias of `get`
 ### to
 
 ```ts
-(s: S) => A
+;(s: S) => A
 ```
 
 Alias of `get`
@@ -258,7 +278,7 @@ Alias of `get`
 ### wrap
 
 ```ts
-(a: A) => S
+;(a: A) => S
 ```
 
 Alias of `reverseGet`
@@ -266,10 +286,18 @@ Alias of `reverseGet`
 ### from
 
 ```ts
-(a: A) => S
+;(a: A) => S
 ```
 
 Alias of `reverseGet`
+
+### reverse
+
+```ts
+(): Iso<A, S>
+```
+
+reverse the `Iso`: the source becomes the target and the target becomes the source
 
 ### modify
 
@@ -899,9 +927,7 @@ compose an Optional with a Getter
 
 ```ts
 class Traversal<S, A> {
-  constructor(
-    readonly modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>
-  )
+  constructor(readonly modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>)
 }
 ```
 

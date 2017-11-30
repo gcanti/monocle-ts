@@ -21,6 +21,11 @@ export class Iso<S, A> {
     this.wrap = this.from = reverseGet
   }
 
+  /** reverse the `Iso`: the source becomes the target and the target becomes the source */
+  reverse(): Iso<A, S> {
+    return new Iso(this.reverseGet, this.get)
+  }
+
   modify(f: (a: A) => A): (s: S) => S {
     return s => this.reverseGet(f(this.get(s)))
   }

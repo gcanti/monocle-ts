@@ -1,6 +1,6 @@
 {
   "name": "monocle-ts",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A porting of scala monocle library to TypeScript",
   "files": ["lib"],
   "main": "lib/index.js",
@@ -20,7 +20,8 @@
     "test": "npm run prettier && npm run lint && npm run typings-checker && npm run mocha",
     "clean": "rm -rf lib/*",
     "build": "npm run clean && tsc && npm run flow-copy-definition-files",
-    "doctoc": "doctoc README.md"
+    "docs-fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser markdown --write \"README.md\"",
+    "docs": "doctoc README.md && npm run docs-fix-prettier"
   },
   "repository": {
     "type": "git",
