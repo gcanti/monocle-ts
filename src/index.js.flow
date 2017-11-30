@@ -16,6 +16,7 @@ declare export class Iso<S, A> {
   +wrap: (a: A) => S;
   +from: (a: A) => S;
   constructor(get: (s: S) => A, reverseGet: (a: A) => S): Iso<S, A>;
+  reverse(): Iso<A, S>;
   modify(f: (a: A) => A): (s: S) => S;
   /** view an Iso as a Lens */
   asLens(): Lens<S, A>;

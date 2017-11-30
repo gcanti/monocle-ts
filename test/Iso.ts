@@ -18,6 +18,11 @@ describe('Iso', () => {
     assert.strictEqual(mTokm.modify(double)(1000), 2000)
   })
 
+  it('reverse', () => {
+    const double = (x: number) => x * 2
+    assert.strictEqual(mTokm.reverse().modify(double)(2000), 4000)
+  })
+
   it('compose', () => {
     assert.strictEqual(
       mTokm
