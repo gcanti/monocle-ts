@@ -1277,6 +1277,38 @@ compose a Setter with a Iso
 
 create a Traversal from a Traversable
 
+Example: reversing strings in a nested array
+
+```ts
+import { Lens, fromTraversable } from 'monocle-ts'
+import { array } from 'fp-ts/lib/Array'
+
+interface Tweet {
+  text: string
+}
+
+interface Tweets {
+  tweets: Tweet[]
+}
+
+const tweetsLens = Lens.fromProp<Tweets, 'tweets'>('tweets')
+const tweetTextLens = Lens.fromProp<Tweet, 'text'>('text')
+const tweetTraversal = fromTraversable(array)<Tweet>()
+const composedTraversal = tweetsLens.composeTraversal(tweetTraversal).composeLens(tweetTextLens)
+
+const tweet1: Tweet = { text: 'hello world' }
+const tweet2: Tweet = { text: 'foobar' }
+const model: Tweets = { tweets: [tweet1, tweet2] }
+
+const newModel = composedTraversal.modify(text =>
+  text
+    .split('')
+    .reverse()
+    .join('')
+)(model)
+// { tweets: [ { text: 'dlrow olleh' }, { text: 'raboof' } ] }
+```
+
 # fromFoldable
 
 ```ts
