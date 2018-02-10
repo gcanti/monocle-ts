@@ -12,7 +12,7 @@ import { Foldable, Foldable1, Foldable2, Foldable3, foldMap } from 'fp-ts/lib/Fo
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
 import { Option, none, some, fromNullable, option, getFirstMonoid } from 'fp-ts/lib/Option'
 import { identity, constant, Predicate } from 'fp-ts/lib/function'
-import { Identity, identity as id } from 'fp-ts/lib/Identity'
+import { identity as id } from 'fp-ts/lib/Identity'
 import { Const, getApplicative } from 'fp-ts/lib/Const'
 
 /*
@@ -488,7 +488,7 @@ export class Traversal<S, A> {
   ) {}
 
   modify(f: (a: A) => A): (s: S) => S {
-    return s => (this.modifyF(id)(a => id.of(f(a)))(s) as Identity<S>).extract()
+    return s => this.modifyF(id)(a => id.of(f(a)))(s).extract()
   }
 
   set(a: A): (s: S) => S {
