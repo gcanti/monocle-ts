@@ -6,7 +6,7 @@ interface A {
   a: Option<number>
 }
 
-const optional = new Optional<A, number>(s => s.a, a => s => s.a.fold<A>(() => s, () => ({ ...s, a: some(a) })))
+const optional = new Optional<A, number>(s => s.a, a => s => s.a.fold<A>(s, () => ({ ...s, a: some(a) })))
 
 describe('Optional', () => {
   it('getOption', () => {
