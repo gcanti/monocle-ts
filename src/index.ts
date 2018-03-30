@@ -498,7 +498,7 @@ export class Traversal<S, A> {
   /** view a Traversal as a Fold */
   asFold(): Fold<S, A> {
     return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s =>
-      (this.modifyF(getApplicative(M))(a => new Const(f(a)))(s) as Const<M, S>).fold(identity)
+      this.modifyF(getApplicative(M))(a => new Const(f(a)))(s).fold(identity)
     )
   }
 
