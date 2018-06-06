@@ -14,111 +14,119 @@ import { Option, none, some, fromNullable, option, getFirstMonoid } from 'fp-ts/
 import { identity, constant, Predicate } from 'fp-ts/lib/function'
 import { identity as id } from 'fp-ts/lib/Identity'
 import { Const, getApplicative } from 'fp-ts/lib/Const'
+import { Iso } from './Iso'
 
-/*
-  Laws:
-  1. get . reverseGet = identity
-  2. reversetGet . get = identity
-*/
-export class Iso<S, A> {
-  readonly _tag: 'Iso' = 'Iso'
-  constructor(readonly get: (s: S) => A, readonly reverseGet: (a: A) => S) {
-    this.unwrap = this.to = get
-    this.wrap = this.from = reverseGet
-  }
+export { Iso }
 
-  /** reverse the `Iso`: the source becomes the target and the target becomes the source */
-  reverse(): Iso<A, S> {
-    return new Iso(this.reverseGet, this.get)
-  }
+declare module './Iso' {
+  interface Iso<S, A> {
+    /** view an Iso as a Lens */
+    asLens(): Lens<S, A>
 
-  modify(f: (a: A) => A): (s: S) => S {
-    return s => this.reverseGet(f(this.get(s)))
-  }
+    /** view an Iso as a Prism */
+    asPrism(): Prism<S, A>
 
-  /** view an Iso as a Lens */
-  asLens(): Lens<S, A> {
-    return new Lens(this.get, a => _ => this.reverseGet(a))
-  }
+    /** view an Iso as a Optional */
+    asOptional(): Optional<S, A>
 
-  /** view an Iso as a Prism */
-  asPrism(): Prism<S, A> {
-    return new Prism(s => some(this.get(s)), this.reverseGet)
-  }
+    /** view an Iso as a Traversal */
+    asTraversal(): Traversal<S, A>
 
-  /** view an Iso as a Optional */
-  asOptional(): Optional<S, A> {
-    return new Optional(s => some(this.get(s)), a => _ => this.reverseGet(a))
-  }
+    /** view an Iso as a Fold */
+    asFold(): Fold<S, A>
 
-  /** view an Iso as a Traversal */
-  asTraversal(): Traversal<S, A> {
-    return new Traversal(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
-      F.map(f(this.get(s)), a => this.reverseGet(a))
-    )
-  }
+    /** view an Iso as a Getter */
+    asGetter(): Getter<S, A>
 
-  /** view an Iso as a Fold */
-  asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
-  }
+    /** view an Iso as a Setter */
+    asSetter(): Setter<S, A>
 
-  /** view an Iso as a Getter */
-  asGetter(): Getter<S, A> {
-    return new Getter(s => this.get(s))
-  }
+    /** compose an Iso with an Iso */
+    compose<B>(ab: Iso<A, B>): Iso<S, B>
 
-  /** view an Iso as a Setter */
-  asSetter(): Setter<S, A> {
-    return new Setter(f => s => this.modify(f)(s))
-  }
+    /** compose an Iso with a Lens */
+    composeLens<B>(ab: Lens<A, B>): Lens<S, B>
 
-  /** compose an Iso with an Iso */
-  compose<B>(ab: Iso<A, B>): Iso<S, B> {
-    return new Iso(s => ab.get(this.get(s)), b => this.reverseGet(ab.reverseGet(b)))
-  }
+    /** compose an Iso with a Prism */
+    composePrism<B>(ab: Prism<A, B>): Prism<S, B>
 
-  /** compose an Iso with a Lens */
-  composeLens<B>(ab: Lens<A, B>): Lens<S, B> {
-    return this.asLens().compose(ab)
-  }
+    /** compose an Iso with an Optional */
+    composeOptional<B>(ab: Optional<A, B>): Optional<S, B>
 
-  /** compose an Iso with a Prism */
-  composePrism<B>(ab: Prism<A, B>): Prism<S, B> {
-    return this.asPrism().compose(ab)
-  }
+    /** compose an Iso with a Traversal */
+    composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B>
 
-  /** compose an Iso with an Optional */
-  composeOptional<B>(ab: Optional<A, B>): Optional<S, B> {
-    return this.asOptional().compose(ab)
-  }
+    /** compose an Iso with a Fold */
+    composeFold<B>(ab: Fold<A, B>): Fold<S, B>
 
-  /** compose an Iso with a Traversal */
-  composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return this.asTraversal().compose(ab)
-  }
+    /** compose an Iso with a Getter */
+    composeGetter<B>(ab: Getter<A, B>): Getter<S, B>
 
-  /** compose an Iso with a Fold */
-  composeFold<B>(ab: Fold<A, B>): Fold<S, B> {
-    return this.asFold().compose(ab)
-  }
-
-  /** compose an Iso with a Getter */
-  composeGetter<B>(ab: Getter<A, B>): Getter<S, B> {
-    return this.asGetter().compose(ab)
-  }
-
-  /** compose an Iso with a Setter */
-  composeSetter<B>(ab: Setter<A, B>): Setter<S, B> {
-    return this.asSetter().compose(ab)
+    /** compose an Iso with a Setter */
+    composeSetter<B>(ab: Setter<A, B>): Setter<S, B>
   }
 }
 
-export interface Iso<S, A> {
-  unwrap: (s: S) => A
-  to: (s: S) => A
-  wrap: (a: A) => S
-  from: (a: A) => S
+Iso.prototype.asLens = function<S, A>(this: Iso<S, A>): Lens<S, A> {
+  return new Lens(this.get, a => _ => this.reverseGet(a))
+}
+
+Iso.prototype.asPrism = function<S, A>(this: Iso<S, A>): Prism<S, A> {
+  return new Prism(s => some(this.get(s)), this.reverseGet)
+}
+
+Iso.prototype.asOptional = function<S, A>(this: Iso<S, A>): Optional<S, A> {
+  return new Optional(s => some(this.get(s)), a => _ => this.reverseGet(a))
+}
+
+Iso.prototype.asTraversal = function<S, A>(this: Iso<S, A>): Traversal<S, A> {
+  return new Traversal(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
+    F.map(f(this.get(s)), a => this.reverseGet(a))
+  )
+}
+
+Iso.prototype.asFold = function<S, A>(this: Iso<S, A>): Fold<S, A> {
+  return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
+}
+
+Iso.prototype.asGetter = function<S, A>(this: Iso<S, A>): Getter<S, A> {
+  return new Getter(s => this.get(s))
+}
+
+Iso.prototype.asSetter = function<S, A>(this: Iso<S, A>): Setter<S, A> {
+  return new Setter(f => s => this.modify(f)(s))
+}
+
+Iso.prototype.compose = function<S, A, B>(this: Iso<S, A>, ab: Iso<A, B>): Iso<S, B> {
+  return new Iso(s => ab.get(this.get(s)), b => this.reverseGet(ab.reverseGet(b)))
+}
+
+Iso.prototype.composeLens = function<S, A, B>(this: Iso<S, A>, ab: Lens<A, B>): Lens<S, B> {
+  return this.asLens().compose(ab)
+}
+
+Iso.prototype.composePrism = function<S, A, B>(this: Iso<S, A>, ab: Prism<A, B>): Prism<S, B> {
+  return this.asPrism().compose(ab)
+}
+
+Iso.prototype.composeOptional = function<S, A, B>(this: Iso<S, A>, ab: Optional<A, B>): Optional<S, B> {
+  return this.asOptional().compose(ab)
+}
+
+Iso.prototype.composeTraversal = function<S, A, B>(this: Iso<S, A>, ab: Traversal<A, B>): Traversal<S, B> {
+  return this.asTraversal().compose(ab)
+}
+
+Iso.prototype.composeFold = function<S, A, B>(this: Iso<S, A>, ab: Fold<A, B>): Fold<S, B> {
+  return this.asFold().compose(ab)
+}
+
+Iso.prototype.composeGetter = function<S, A, B>(this: Iso<S, A>, ab: Getter<A, B>): Getter<S, B> {
+  return this.asGetter().compose(ab)
+}
+
+Iso.prototype.composeSetter = function<S, A, B>(this: Iso<S, A>, ab: Setter<A, B>): Setter<S, B> {
+  return this.asSetter().compose(ab)
 }
 
 export function lensFromPath<
