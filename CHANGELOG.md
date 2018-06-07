@@ -17,6 +17,7 @@ high state of flux, you're at risk of it changing without notice.
 
 - **New Feature**
   - move `Iso` to its own module (@gcanti)
+  - move `Getter` to its own module (@gcanti)
 
 # 1.0.0
 

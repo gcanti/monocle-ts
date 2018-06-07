@@ -22,4 +22,9 @@ export class Iso<S, A> {
   modify(f: (a: A) => A): (s: S) => S {
     return s => this.reverseGet(f(this.get(s)))
   }
+
+  /** compose an Iso with an Iso */
+  compose<B>(ab: Iso<A, B>): Iso<S, B> {
+    return new Iso(s => ab.get(this.get(s)), b => this.reverseGet(ab.reverseGet(b)))
+  }
 }

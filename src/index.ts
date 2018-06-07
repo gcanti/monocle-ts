@@ -15,8 +15,9 @@ import { identity, constant, Predicate } from 'fp-ts/lib/function'
 import { identity as id } from 'fp-ts/lib/Identity'
 import { Const, getApplicative } from 'fp-ts/lib/Const'
 import { Iso } from './Iso'
+import { Getter } from './Getter'
 
-export { Iso }
+export { Iso, Getter }
 
 declare module './Iso' {
   interface Iso<S, A> {
@@ -40,9 +41,6 @@ declare module './Iso' {
 
     /** view an Iso as a Setter */
     asSetter(): Setter<S, A>
-
-    /** compose an Iso with an Iso */
-    compose<B>(ab: Iso<A, B>): Iso<S, B>
 
     /** compose an Iso with a Lens */
     composeLens<B>(ab: Lens<A, B>): Lens<S, B>
@@ -95,10 +93,6 @@ Iso.prototype.asGetter = function<S, A>(this: Iso<S, A>): Getter<S, A> {
 
 Iso.prototype.asSetter = function<S, A>(this: Iso<S, A>): Setter<S, A> {
   return new Setter(f => s => this.modify(f)(s))
-}
-
-Iso.prototype.compose = function<S, A, B>(this: Iso<S, A>, ab: Iso<A, B>): Iso<S, B> {
-  return new Iso(s => ab.get(this.get(s)), b => this.reverseGet(ab.reverseGet(b)))
 }
 
 Iso.prototype.composeLens = function<S, A, B>(this: Iso<S, A>, ab: Lens<A, B>): Lens<S, B> {
@@ -558,49 +552,57 @@ export class Traversal<S, A> {
   }
 }
 
-export class Getter<S, A> {
-  readonly _tag: 'Getter' = 'Getter'
-  constructor(readonly get: (s: S) => A) {}
+declare module './Getter' {
+  interface Getter<S, A> {
+    /** view a Getter as a Fold */
+    asFold(): Fold<S, A>
 
-  /** view a Getter as a Fold */
-  asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
-  }
+    /** compose a Getter with a Fold */
+    composeFold<B>(ab: Fold<A, B>): Fold<S, B>
 
-  /** compose a Getter with a Getter */
-  compose<B>(ab: Getter<A, B>): Getter<S, B> {
-    return new Getter(s => ab.get(this.get(s)))
-  }
+    /** compose a Getter with a Lens */
+    composeLens<B>(ab: Lens<A, B>): Getter<S, B>
 
-  /** compose a Getter with a Fold */
-  composeFold<B>(ab: Fold<A, B>): Fold<S, B> {
-    return this.asFold().compose(ab)
-  }
+    /** compose a Getter with a Iso */
+    composeIso<B>(ab: Iso<A, B>): Getter<S, B>
 
-  /** compose a Getter with a Lens */
-  composeLens<B>(ab: Lens<A, B>): Getter<S, B> {
-    return this.compose(ab.asGetter())
-  }
+    /** compose a Getter with a Optional */
+    composeTraversal<B>(ab: Traversal<A, B>): Fold<S, B>
 
-  /** compose a Getter with a Iso */
-  composeIso<B>(ab: Iso<A, B>): Getter<S, B> {
-    return this.compose(ab.asGetter())
-  }
+    /** compose a Getter with a Optional */
+    composeOptional<B>(ab: Optional<A, B>): Fold<S, B>
 
-  /** compose a Getter with a Optional */
-  composeTraversal<B>(ab: Traversal<A, B>): Fold<S, B> {
-    return this.asFold().compose(ab.asFold())
+    /** compose a Getter with a Prism */
+    composePrism<B>(ab: Prism<A, B>): Fold<S, B>
   }
+}
 
-  /** compose a Getter with a Optional */
-  composeOptional<B>(ab: Optional<A, B>): Fold<S, B> {
-    return this.asFold().compose(ab.asFold())
-  }
+Getter.prototype.asFold = function<S, A>(this: Getter<S, A>): Fold<S, A> {
+  return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
+}
 
-  /** compose a Getter with a Prism */
-  composePrism<B>(ab: Prism<A, B>): Fold<S, B> {
-    return this.asFold().compose(ab.asFold())
-  }
+Getter.prototype.composeFold = function<S, A, B>(this: Getter<S, A>, ab: Fold<A, B>): Fold<S, B> {
+  return this.asFold().compose(ab)
+}
+
+Getter.prototype.composeLens = function<S, A, B>(this: Getter<S, A>, ab: Lens<A, B>): Getter<S, B> {
+  return this.compose(ab.asGetter())
+}
+
+Getter.prototype.composeIso = function<S, A, B>(this: Getter<S, A>, ab: Iso<A, B>): Getter<S, B> {
+  return this.compose(ab.asGetter())
+}
+
+Getter.prototype.composeTraversal = function<S, A, B>(this: Getter<S, A>, ab: Traversal<A, B>): Fold<S, B> {
+  return this.asFold().compose(ab.asFold())
+}
+
+Getter.prototype.composeOptional = function<S, A, B>(this: Getter<S, A>, ab: Optional<A, B>): Fold<S, B> {
+  return this.asFold().compose(ab.asFold())
+}
+
+Getter.prototype.composePrism = function<S, A, B>(this: Getter<S, A>, ab: Prism<A, B>): Fold<S, B> {
+  return this.asFold().compose(ab.asFold())
 }
 
 export class Fold<S, A> {
