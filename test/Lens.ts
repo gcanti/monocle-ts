@@ -32,6 +32,12 @@ const employee: Employee = {
   }
 }
 
+interface Person {
+  name: string
+  age: number
+  rememberMe: boolean
+}
+
 function capitalize(s: string): string {
   return s.substring(0, 1).toUpperCase() + s.substring(1)
 }
@@ -65,5 +71,12 @@ describe('Lens', () => {
     assert.strictEqual(lens.get({}), 0)
     assert.deepEqual(lens.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
     assert.strictEqual(lens.get({ inner: { value: 1, foo: 'bar' } }), 1)
+  })
+
+  it('fromProps', () => {
+    const person: Person = { name: 'Giulio', age: 44, rememberMe: true }
+    const lens = Lens.fromProps<Person>()(['name', 'age'])
+    assert.deepEqual(lens.get(person), { name: 'Giulio', age: 44 })
+    assert.deepEqual(lens.set({ name: 'Guido', age: 47 })(person), { name: 'Guido', age: 47, rememberMe: true })
   })
 })

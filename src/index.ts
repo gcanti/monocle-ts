@@ -60,7 +60,7 @@ export class Iso<S, A> {
 
   /** view an Iso as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
+    return new Fold(<M>(_: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
   }
 
   /** view an Iso as a Getter */
@@ -217,6 +217,24 @@ export class Lens<S, A> {
     return new Lens(s => s[prop], a => s => Object.assign({}, s, { [prop as any]: a }))
   }
 
+  /** generate a lens from a type and an array of props */
+  static fromProps<S>(): <P extends keyof S>(props: Array<P>) => Lens<S, { [K in P]: S[K] }> {
+    return props => {
+      const len = props.length
+      return new Lens(
+        s => {
+          const r: any = {}
+          for (let i = 0; i < len; i++) {
+            const k = props[i]
+            r[k] = s[k]
+          }
+          return r
+        },
+        a => s => Object.assign({}, s, a)
+      )
+    }
+  }
+
   /** generate a lens from a type and a prop whose type is nullable */
   static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, A> {
     return new Lens((s: any) => fromNullable(s[k]).getOrElse(defaultValue), a => s => ({ ...s, [k as any]: a }))
@@ -250,7 +268,7 @@ export class Lens<S, A> {
 
   /** view a Lens as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
+    return new Fold(<M>(_: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
   }
 
   /** compose a Lens with a Lens */
@@ -556,7 +574,7 @@ export class Getter<S, A> {
 
   /** view a Getter as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
+    return new Fold(<M>(_: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
   }
 
   /** compose a Getter with a Getter */
