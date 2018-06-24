@@ -568,6 +568,15 @@ export class Traversal<S, A> {
   }
 }
 
+export class At<S, I, A> {
+  readonly _tag: 'At' = 'At'
+  constructor(readonly at: (i: I) => Lens<S, A>) {}
+
+  fromIso<T>(iso: Iso<T, S>): At<T, I, A> {
+    return new At(i => iso.composeLens(this.at(i)))
+  }
+}
+
 export class Getter<S, A> {
   readonly _tag: 'Getter' = 'Getter'
   constructor(readonly get: (s: S) => A) {}
