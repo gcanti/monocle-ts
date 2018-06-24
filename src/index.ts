@@ -577,6 +577,19 @@ export class At<S, I, A> {
   }
 }
 
+export class Index<S, I, A> {
+  readonly _tag: 'Index' = 'Index'
+  constructor(readonly index: (i: I) => Optional<S, A>) {}
+
+  static fromAt<T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> {
+    return new Index(i => at.at(i).composePrism(Prism.some()))
+  }
+
+  fromIso<T>(iso: Iso<T, S>): Index<T, I, A> {
+    return new Index(i => iso.composeOptional(this.index(i)))
+  }
+}
+
 export class Getter<S, A> {
   readonly _tag: 'Getter' = 'Getter'
   constructor(readonly get: (s: S) => A) {}
