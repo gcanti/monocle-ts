@@ -13,6 +13,16 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 1.2.0
+
+- **New Feature**
+  - add `At` (@leighman)
+    - add `Set` instance
+    - add `StrMap` instance
+  - add `Index` (@leighman)
+    - add `Array` instance
+    - add `StrMap` instance
+
 # 1.1.0
 
 - **New Feature**

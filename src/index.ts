@@ -572,6 +572,7 @@ export class At<S, I, A> {
   readonly _tag: 'At' = 'At'
   constructor(readonly at: (i: I) => Lens<S, A>) {}
 
+  /** lift an instance of `At` using an `Iso` */
   fromIso<T>(iso: Iso<T, S>): At<T, I, A> {
     return new At(i => iso.composeLens(this.at(i)))
   }
@@ -585,6 +586,7 @@ export class Index<S, I, A> {
     return new Index(i => at.at(i).composePrism(Prism.some()))
   }
 
+  /** lift an instance of `Index` using an `Iso` */
   fromIso<T>(iso: Iso<T, S>): Index<T, I, A> {
     return new Index(i => iso.composeOptional(this.index(i)))
   }

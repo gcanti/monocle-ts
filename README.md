@@ -245,6 +245,23 @@ element to zoom into is always present, hence composing an `Optional` and a `Len
     - [composeIso](#composeiso-6)
 - [fromTraversable](#fromtraversable)
 - [fromFoldable](#fromfoldable)
+- [At](#at)
+  - [Methods](#methods-8)
+    - [fromIso](#fromiso)
+  - [Instances](#instances)
+    - [Set](#set)
+      - [atSet](#atset)
+    - [StrMap](#strmap)
+      - [atStrMap](#atstrmap)
+- [Index](#index)
+  - [fromAt](#fromat)
+  - [Methods](#methods-9)
+    - [fromIso](#fromiso-1)
+  - [Instances](#instances-1)
+    - [Array](#array)
+      - [indexArray](#indexarray)
+    - [StrMap](#strmap-1)
+      - [indexStrMap](#indexstrmap)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -1340,3 +1357,69 @@ const newModel = composedTraversal.modify(text =>
 ```
 
 create a Fold from a Foldable
+
+# At
+
+## Methods
+
+### fromIso
+
+lift an instance of `At` using an `Iso`
+
+```ts
+<T>(iso: Iso<T, S>): At<T, I, A>
+```
+
+## Instances
+
+### Set
+
+#### atSet
+
+```ts
+<A = never>(setoid: Setoid<A>): At<Set<A>, A, boolean>
+```
+
+### StrMap
+
+#### atStrMap
+
+```ts
+<A = never>(): At<SM.StrMap<A>, string, Option<A>>
+```
+
+# Index
+
+## fromAt
+
+```ts
+<T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B>
+```
+
+## Methods
+
+### fromIso
+
+lift an instance of `Index` using an `Iso`
+
+```ts
+<T>(iso: Iso<T, S>): Index<T, I, A>
+```
+
+## Instances
+
+### Array
+
+#### indexArray
+
+```ts
+<A = never>(): Index<Array<A>, number, A>
+```
+
+### StrMap
+
+#### indexStrMap
+
+```ts
+<A = never>(): Index<StrMap<A>, string, A>
+```
