@@ -1,3 +1,7 @@
+[![build status](https://img.shields.io/travis/gcanti/monocle-ts/master.svg?style=flat-square)](https://travis-ci.org/gcanti/monocle-ts)
+[![dependency status](https://img.shields.io/david/gcanti/monocle-ts.svg?style=flat-square)](https://david-dm.org/gcanti/monocle-ts)
+![npm downloads](https://img.shields.io/npm/dm/monocle-ts.svg)
+
 # Motivation
 
 (Adapted from [monocle site](http://julien-truffaut.github.io/Monocle/))
