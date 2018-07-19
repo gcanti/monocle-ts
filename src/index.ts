@@ -14,6 +14,7 @@ import { Option, none, some, fromNullable, option, getFirstMonoid } from 'fp-ts/
 import { identity, constant, Predicate } from 'fp-ts/lib/function'
 import { identity as id } from 'fp-ts/lib/Identity'
 import { Const, getApplicative } from 'fp-ts/lib/Const'
+import { shallowCopy } from './util'
 
 /*
   Laws:
@@ -214,7 +215,7 @@ export class Lens<S, A> {
 
   /** generate a lens from a type and a prop */
   static fromProp<T, P extends keyof T>(prop: P): Lens<T, T[P]> {
-    return new Lens(s => s[prop], a => s => Object.assign({}, s, { [prop as any]: a }))
+    return new Lens(s => s[prop], a => s => shallowCopy(s, { [prop]: a }))
   }
 
   /** generate a lens from a type and an array of props */
@@ -230,14 +231,14 @@ export class Lens<S, A> {
           }
           return r
         },
-        a => s => Object.assign({}, s, a)
+        a => s => shallowCopy(s, a)
       )
     }
   }
 
   /** generate a lens from a type and a prop whose type is nullable */
   static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, A> {
-    return new Lens((s: any) => fromNullable(s[k]).getOrElse(defaultValue), a => s => ({ ...s, [k as any]: a }))
+    return new Lens((s: any) => fromNullable(s[k]).getOrElse(defaultValue), a => s => shallowCopy(s, { [k]: a }))
   }
 
   modify(f: (a: A) => A): (s: S) => S {
@@ -418,7 +419,7 @@ export class Optional<S, A> {
   constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
 
   static fromNullableProp = <S, A extends S[K], K extends keyof S>(k: K): Optional<S, A> =>
-    new Optional((s: any) => fromNullable(s[k]), a => s => ({ ...s, [k as any]: a }))
+    new Optional((s: any) => fromNullable(s[k]), a => s => shallowCopy(s, { [k]: a }))
 
   modify(f: (a: A) => A): (s: S) => S {
     return s => this.modifyOption(f)(s).fold(s, identity)

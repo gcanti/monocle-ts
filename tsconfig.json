@@ -15,7 +15,7 @@
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "suppressImplicitAnyIndexErrors": true,
-    "lib": ["es6"]
+    "lib": ["es2017"]
   },
   "include": ["./src/**/*"]
 }
