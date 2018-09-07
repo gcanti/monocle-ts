@@ -1,3 +1,4 @@
+import * as assert from 'assert'
 import { Optional, Lens } from '../src'
 import { none, some, Option } from 'fp-ts/lib/Option'
 import { eqOptions as eq } from './helpers'
@@ -58,5 +59,11 @@ describe('Optional', () => {
 
     eq(numberFromResponse.getOption(response1), some('555-1234'))
     eq(numberFromResponse.getOption(response2), none)
+  })
+
+  it('modify', () => {
+    const double = (n: number): number => n * 2
+    assert.deepEqual(optional.modify(double)({ a: some(2) }), { a: some(4) })
+    assert.deepEqual(optional.modify(double)({ a: none }), { a: none })
   })
 })

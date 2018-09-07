@@ -36,4 +36,20 @@ describe('Prism', () => {
     assert.deepEqual(prism.set(2)(some(1)), some(2))
     assert.deepEqual(prism.set(2)(none), none)
   })
+
+  it('modify', () => {
+    interface A {
+      type: 'A'
+      a: string
+    }
+    interface B {
+      type: 'B'
+      b: number
+    }
+    type U = A | B
+    const prism = new Prism<U, string>(s => (s.type === 'A' ? some(s.a) : none), a => ({ type: 'A', a }))
+    const toUpperCase = (s: string): string => s.toUpperCase()
+    assert.deepEqual(prism.modify(toUpperCase)({ type: 'A', a: 'foo' }), { type: 'A', a: 'FOO' })
+    assert.deepEqual(prism.modify(toUpperCase)({ type: 'B', b: 1 }), { type: 'B', b: 1 })
+  })
 })
