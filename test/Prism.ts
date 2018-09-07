@@ -1,13 +1,12 @@
 import * as assert from 'assert'
 import { Prism } from '../src'
-import { eqOptions as eq } from './helpers'
 import { none, some } from 'fp-ts/lib/Option'
 
 describe('Prism', () => {
   it('fromPredicate', () => {
     const prism = Prism.fromPredicate<number>(n => n % 1 === 0)
-    eq(prism.getOption(1), some(1))
-    eq(prism.getOption(1.1), none)
+    assert.deepEqual(prism.getOption(1), some(1))
+    assert.deepEqual(prism.getOption(1.1), none)
   })
 
   it('some', () => {
