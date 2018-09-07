@@ -1,7 +1,6 @@
 import * as assert from 'assert'
 import { Optional, Lens } from '../src'
 import { none, some, Option } from 'fp-ts/lib/Option'
-import { eqOptions as eq } from './helpers'
 
 interface A {
   a: Option<number>
@@ -11,12 +10,12 @@ const optional = new Optional<A, number>(s => s.a, a => s => s.a.fold<A>(s, () =
 
 describe('Optional', () => {
   it('getOption', () => {
-    eq(optional.getOption({ a: none }), none)
-    eq(optional.getOption({ a: some(1) }), some(1))
+    assert.deepEqual(optional.getOption({ a: none }), none)
+    assert.deepEqual(optional.getOption({ a: some(1) }), some(1))
   })
 
   it('set', () => {
-    eq(optional.set(2)({ a: some(1) }).a, some(2))
+    assert.deepEqual(optional.set(2)({ a: some(1) }).a, some(2))
   })
 
   it('fromNullableProp', () => {
@@ -57,8 +56,8 @@ describe('Optional', () => {
       }
     }
 
-    eq(numberFromResponse.getOption(response1), some('555-1234'))
-    eq(numberFromResponse.getOption(response2), none)
+    assert.deepEqual(numberFromResponse.getOption(response1), some('555-1234'))
+    assert.deepEqual(numberFromResponse.getOption(response2), none)
   })
 
   it('modify', () => {
