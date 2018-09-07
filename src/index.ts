@@ -330,7 +330,7 @@ export class Prism<S, A> {
   }
 
   modify(f: (a: A) => A): (s: S) => S {
-    return s => this.modifyOption(f)(s).fold(s, identity)
+    return s => this.modifyOption(f)(s).getOrElse(s)
   }
 
   modifyOption(f: (a: A) => A): (s: S) => Option<S> {
@@ -421,7 +421,7 @@ export class Optional<S, A> {
     new Optional((s: any) => fromNullable(s[k]), a => s => ({ ...s, [k as any]: a }))
 
   modify(f: (a: A) => A): (s: S) => S {
-    return s => this.modifyOption(f)(s).fold(s, identity)
+    return s => this.modifyOption(f)(s).getOrElse(s)
   }
 
   modifyOption(f: (a: A) => A): (s: S) => Option<S> {
