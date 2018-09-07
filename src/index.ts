@@ -17,8 +17,8 @@ import { Const, getApplicative } from 'fp-ts/lib/Const'
 
 /*
   Laws:
-  1. get . reverseGet = identity
-  2. reversetGet . get = identity
+  1. reverseGet(get(s)) = s
+  2. get(reversetGet(a)) = a
 */
 export class Iso<S, A> {
   readonly _tag: 'Iso' = 'Iso'
@@ -203,9 +203,9 @@ export function lensFromPath(path: Array<any>) {
 
 /*
   Laws:
-  1. get(set(a, s)) = a
-  2. set(get(s), s) = s
-  3. set(a, set(a, s)) = set(a, s)
+  1. get(set(a)(s)) = a
+  2. set(get(s))(s) = s
+  3. set(a)(set(a)(s)) = set(a)(s)
 */
 export class Lens<S, A> {
   static fromPath = lensFromPath
@@ -314,7 +314,7 @@ export class Lens<S, A> {
 
 /*
   Laws:
-  1. getOption(s).fold(() => s, reverseGet) = s
+  1. getOption(s).fold(s, reverseGet) = s
   2. getOption(reverseGet(a)) = Some(a)
 */
 export class Prism<S, A> {
