@@ -978,6 +978,8 @@ class Traversal<S, A> {
 }
 ```
 
+an optic that focuses on multiple elements in a data structure. See [fromTraversable](#fromTraversable)
+
 ## Methods
 
 ### modify
@@ -986,11 +988,15 @@ class Traversal<S, A> {
 (f: (a: A) => A): (s: S) => S
 ```
 
+modify each element focused by a traversal using the passed function
+
 ### set
 
 ```ts
 (a: A): (s: S) => S
 ```
+
+set the value of each element focused by the traversal
 
 ### asFold
 
@@ -1014,7 +1020,7 @@ view a Traversal as a Setter
 <B>(ab: Traversal<A, B>): Traversal<S, B>
 ```
 
-compose a Traversal with a Traversal
+compose a Traversal with another Traversal
 
 ### composeFold
 
