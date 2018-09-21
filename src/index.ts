@@ -750,9 +750,10 @@ export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Tr
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
   return <A>() =>
-    new Traversal<HKT<T, A>, A>(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: HKT<T, A>) =>
-      T.traverse(F)(s, f)
-    )
+    new Traversal(<F>(F: Applicative<F>) => {
+      const traverseF = T.traverse(F)
+      return (f: (a: A) => HKT<F, A>) => (s: HKT<T, A>) => traverseF(s, f)
+    })
 }
 
 /** create a Fold from a Foldable */
@@ -761,5 +762,9 @@ export function fromFoldable<F extends URIS2>(F: Foldable2<F>): <L, A>() => Fold
 export function fromFoldable<F extends URIS>(F: Foldable1<F>): <A>() => Fold<Type<F, A>, A>
 export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
 export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> {
-  return <A>() => new Fold<HKT<F, A>, A>(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => foldMap(F, M)(s, f))
+  return <A>() =>
+    new Fold<HKT<F, A>, A>(<M>(M: Monoid<M>) => {
+      const foldMapFM = foldMap(F, M)
+      return (f: (a: A) => M) => s => foldMapFM(s, f)
+    })
 }
