@@ -1,6 +1,7 @@
-import { Getter } from '../src'
+import { Getter, fromFoldable } from '../src'
 import * as assert from 'assert'
 import { some, none } from 'fp-ts/lib/Option'
+import { array } from 'fp-ts/lib/Array'
 
 type Point = { x: number; y: number }
 
@@ -26,5 +27,11 @@ describe('Fold', () => {
   it('all', () => {
     assert.deepEqual(_x.asFold().all(n => n >= 42)(eg0), true)
     assert.deepEqual(_x.asFold().all(n => n < 42)(eg0), false)
+  })
+
+  it('fromFoldable', () => {
+    const fold = fromFoldable(array)<number>()
+    assert.deepEqual(fold.all(n => n >= 2)([1, 2, 3]), false)
+    assert.deepEqual(fold.all(n => n >= 1)([1, 2, 3]), true)
   })
 })
