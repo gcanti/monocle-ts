@@ -15,6 +15,7 @@
     "test": "npm run prettier && npm run lint && npm run dtslint && npm run jest",
     "clean": "rm -rf lib/*",
     "build": "npm run clean && tsc",
+    "prepublish": "npm run build",
     "docs-fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser markdown --write \"README.md\"",
     "docs": "doctoc README.md && npm run docs-fix-prettier",
     "dtslint": "dtslint dtslint"
