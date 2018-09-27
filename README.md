@@ -118,6 +118,10 @@ Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`
 `B` to `C` and creates a third `Optional` from `A` to `C`. All `Lenses` can be seen as `Optionals` where the optional
 element to zoom into is always present, hence composing an `Optional` and a `Lens` always produces an `Optional`.
 
+# TypeScript compatibility
+
+The stable version is tested against TypeScript 3.1.1, but should run with TypeScript 2.3.0+ too
+
 # API
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
