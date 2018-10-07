@@ -32,13 +32,13 @@ describe('Optional', () => {
       info?: Info
     }
 
-    const info = Optional.fromNullableProp<Response, Info, 'info'>('info')
-    const employment = Optional.fromNullableProp<Info, Employment, 'employment'>('employment')
-    const phone = Optional.fromNullableProp<Employment, Phone, 'phone'>('phone')
-    const number = Lens.fromProp<Phone, 'number'>('number')
-    const numberFromResponse = info
-      .compose(employment)
-      .compose(phone)
+    const info1 = Optional.fromNullableProp<Response, Info, 'info'>('info')
+    const employment1 = Optional.fromNullableProp<Info, Employment, 'employment'>('employment')
+    const phone1 = Optional.fromNullableProp<Employment, Phone, 'phone'>('phone')
+    const number = Lens.fromProp<Phone>()('number')
+    const numberFromResponse1 = info1
+      .compose(employment1)
+      .compose(phone1)
       .composeLens(number)
 
     const response1: Response = {
@@ -56,8 +56,19 @@ describe('Optional', () => {
       }
     }
 
-    assert.deepEqual(numberFromResponse.getOption(response1), some('555-1234'))
-    assert.deepEqual(numberFromResponse.getOption(response2), none)
+    assert.deepEqual(numberFromResponse1.getOption(response1), some('555-1234'))
+    assert.deepEqual(numberFromResponse1.getOption(response2), none)
+
+    const info2 = Optional.fromNullableProp<Response>()('info')
+    const employment2 = Optional.fromNullableProp<Info>()('employment')
+    const phone2 = Optional.fromNullableProp<Employment>()('phone')
+    const numberFromResponse2 = info2
+      .compose(employment2)
+      .compose(phone2)
+      .composeLens(number)
+
+    assert.deepEqual(numberFromResponse2.getOption(response1), some('555-1234'))
+    assert.deepEqual(numberFromResponse2.getOption(response2), none)
   })
 
   it('modify', () => {
