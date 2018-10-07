@@ -121,84 +121,35 @@ export interface Iso<S, A> {
   from: (a: A) => S
 }
 
-export function lensFromPath<
-  T,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
-  K4 extends keyof T[K1][K2][K3],
-  K5 extends keyof T[K1][K2][K3][K4],
-  K6 extends keyof T[K1][K2][K3][K4][K5],
-  K7 extends keyof T[K1][K2][K3][K4][K5][K6],
-  K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7],
-  K9 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8],
-  K10 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8][K9]
->(path: [K1, K2, K3, K4, K5, K6, K7, K8, K9, K10]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8][K9][K10]>
-export function lensFromPath<
-  T,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
-  K4 extends keyof T[K1][K2][K3],
-  K5 extends keyof T[K1][K2][K3][K4],
-  K6 extends keyof T[K1][K2][K3][K4][K5],
-  K7 extends keyof T[K1][K2][K3][K4][K5][K6],
-  K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7],
-  K9 extends keyof T[K1][K2][K3][K4][K5][K6][K7][K8]
->(path: [K1, K2, K3, K4, K5, K6, K7, K8, K9]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8][K9]>
-export function lensFromPath<
-  T,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
-  K4 extends keyof T[K1][K2][K3],
-  K5 extends keyof T[K1][K2][K3][K4],
-  K6 extends keyof T[K1][K2][K3][K4][K5],
-  K7 extends keyof T[K1][K2][K3][K4][K5][K6],
-  K8 extends keyof T[K1][K2][K3][K4][K5][K6][K7]
->(path: [K1, K2, K3, K4, K5, K6, K7, K8]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7][K8]>
-export function lensFromPath<
-  T,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
-  K4 extends keyof T[K1][K2][K3],
-  K5 extends keyof T[K1][K2][K3][K4],
-  K6 extends keyof T[K1][K2][K3][K4][K5],
-  K7 extends keyof T[K1][K2][K3][K4][K5][K6]
->(path: [K1, K2, K3, K4, K5, K6, K7]): Lens<T, T[K1][K2][K3][K4][K5][K6][K7]>
-export function lensFromPath<
-  T,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
-  K4 extends keyof T[K1][K2][K3],
-  K5 extends keyof T[K1][K2][K3][K4],
-  K6 extends keyof T[K1][K2][K3][K4][K5]
->(path: [K1, K2, K3, K4, K5, K6]): Lens<T, T[K1][K2][K3][K4][K5][K6]>
-export function lensFromPath<
-  T,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
-  K4 extends keyof T[K1][K2][K3],
-  K5 extends keyof T[K1][K2][K3][K4]
->(path: [K1, K2, K3, K4, K5]): Lens<T, T[K1][K2][K3][K4][K5]>
-export function lensFromPath<
-  T,
-  K1 extends keyof T,
-  K2 extends keyof T[K1],
-  K3 extends keyof T[K1][K2],
-  K4 extends keyof T[K1][K2][K3]
->(path: [K1, K2, K3, K4]): Lens<T, T[K1][K2][K3][K4]>
-export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(
-  path: [K1, K2, K3]
-): Lens<T, T[K1][K2][K3]>
-export function lensFromPath<T, K1 extends keyof T, K2 extends keyof T[K1]>(path: [K1, K2]): Lens<T, T[K1][K2]>
-export function lensFromPath<T, K1 extends keyof T>(path: [K1]): Lens<T, T[K1]>
-export function lensFromPath(path: Array<any>) {
+export interface LensFromPath<S> {
+  <
+    K1 extends keyof S,
+    K2 extends keyof S[K1],
+    K3 extends keyof S[K1][K2],
+    K4 extends keyof S[K1][K2][K3],
+    K5 extends keyof S[K1][K2][K3][K4]
+  >(
+    path: [K1, K2, K3, K4, K5]
+  ): Lens<S, S[K1][K2][K3][K4][K5]>
+  <K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof S[K1][K2], K4 extends keyof S[K1][K2][K3]>(
+    path: [K1, K2, K3, K4]
+  ): Lens<S, S[K1][K2][K3][K4]>
+  <K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof S[K1][K2]>(path: [K1, K2, K3]): Lens<S, S[K1][K2][K3]>
+  <K1 extends keyof S, K2 extends keyof S[K1]>(path: [K1, K2]): Lens<S, S[K1][K2]>
+  <K1 extends keyof S>(path: [K1]): Lens<S, S[K1]>
+}
+
+function lensFromPath(path: Array<any>): any {
   const lens = Lens.fromProp<any, any>(path[0])
   return path.slice(1).reduce((acc, prop) => acc.compose(Lens.fromProp<any, any>(prop)), lens)
+}
+
+function lensFromProp<S, P extends keyof S>(prop: P): Lens<S, S[P]> {
+  return new Lens(s => s[prop], a => s => Object.assign({}, s, { [prop as any]: a }))
+}
+
+function lensFromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, A> {
+  return new Lens((s: any) => fromNullable(s[k]).getOrElse(defaultValue), a => s => ({ ...s, [k as any]: a }))
 }
 
 /*
@@ -208,13 +159,38 @@ export function lensFromPath(path: Array<any>) {
   3. set(a)(set(a)(s)) = set(a)(s)
 */
 export class Lens<S, A> {
-  static fromPath = lensFromPath
   readonly _tag: 'Lens' = 'Lens'
   constructor(readonly get: (s: S) => A, readonly set: (a: A) => (s: S) => S) {}
 
-  /** generate a lens from a type and a prop */
-  static fromProp<T, P extends keyof T>(prop: P): Lens<T, T[P]> {
-    return new Lens(s => s[prop], a => s => Object.assign({}, s, { [prop as any]: a }))
+  static fromPath<S>(): LensFromPath<S>
+  static fromPath<
+    S,
+    K1 extends keyof S,
+    K2 extends keyof S[K1],
+    K3 extends keyof S[K1][K2],
+    K4 extends keyof S[K1][K2][K3],
+    K5 extends keyof S[K1][K2][K3][K4]
+  >(path: [K1, K2, K3, K4, K5]): Lens<S, S[K1][K2][K3][K4][K5]>
+  static fromPath<
+    S,
+    K1 extends keyof S,
+    K2 extends keyof S[K1],
+    K3 extends keyof S[K1][K2],
+    K4 extends keyof S[K1][K2][K3]
+  >(path: [K1, K2, K3, K4]): Lens<S, S[K1][K2][K3][K4]>
+  static fromPath<S, K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof S[K1][K2]>(
+    path: [K1, K2, K3]
+  ): Lens<S, S[K1][K2][K3]>
+  static fromPath<S, K1 extends keyof S, K2 extends keyof S[K1]>(path: [K1, K2]): Lens<S, S[K1][K2]>
+  static fromPath<S, K1 extends keyof S>(path: [K1]): Lens<S, S[K1]>
+  static fromPath(): any {
+    return arguments.length === 0 ? lensFromPath : lensFromPath(arguments[0])
+  }
+
+  static fromProp<S>(): <P extends keyof S>(prop: P) => Lens<S, S[P]>
+  static fromProp<S, P extends keyof S>(prop: P): Lens<S, S[P]>
+  static fromProp(): any {
+    return arguments.length === 0 ? lensFromProp : lensFromProp<any, any>(arguments[0])
   }
 
   /** generate a lens from a type and an array of props */
@@ -236,8 +212,12 @@ export class Lens<S, A> {
   }
 
   /** generate a lens from a type and a prop whose type is nullable */
-  static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, A> {
-    return new Lens((s: any) => fromNullable(s[k]).getOrElse(defaultValue), a => s => ({ ...s, [k as any]: a }))
+  static fromNullableProp<S>(): <A extends S[K], K extends keyof S>(k: K, defaultValue: A) => Lens<S, NonNullable<S[K]>>
+  static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, NonNullable<S[K]>>
+  static fromNullableProp(): any {
+    return arguments.length === 0
+      ? lensFromNullableProp
+      : lensFromNullableProp<any, any, any>(arguments[0], arguments[1])
   }
 
   modify(f: (a: A) => A): (s: S) => S {
@@ -407,6 +387,10 @@ export class Prism<S, A> {
 
 const somePrism = new Prism<Option<any>, any>(s => s, a => some(a))
 
+function optionalFromNullableProp<S, K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>> {
+  return new Optional((s: any) => fromNullable(s[k]), a => s => ({ ...s, [k as any]: a }))
+}
+
 /*
   Laws:
   1. getOption(s).fold(() => s, a => set(a)(s)) = s
@@ -417,8 +401,11 @@ export class Optional<S, A> {
   readonly _tag: 'Optional' = 'Optional'
   constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
 
-  static fromNullableProp = <S, A extends S[K], K extends keyof S>(k: K): Optional<S, A> =>
-    new Optional((s: any) => fromNullable(s[k]), a => s => ({ ...s, [k as any]: a }))
+  static fromNullableProp<S>(): <K extends keyof S>(k: K) => Optional<S, NonNullable<S[K]>>
+  static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>>
+  static fromNullableProp(): any {
+    return arguments.length === 0 ? optionalFromNullableProp : optionalFromNullableProp<any, any>(arguments[0])
+  }
 
   modify(f: (a: A) => A): (s: S) => S {
     return s => this.modifyOption(f)(s).getOrElse(s)

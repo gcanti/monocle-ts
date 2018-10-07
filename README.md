@@ -70,10 +70,10 @@ we do with `monocle-ts`
 ```ts
 import { Lens, Optional } from 'monocle-ts'
 
-const company = Lens.fromProp<Employee, 'company'>('company')
-const address = Lens.fromProp<Company, 'address'>('address')
-const street = Lens.fromProp<Address, 'street'>('street')
-const name = Lens.fromProp<Street, 'name'>('name')
+const company = Lens.fromProp<Employee>()('company')
+const address = Lens.fromProp<Company>()('address')
+const street = Lens.fromProp<Address>()('street')
+const name = Lens.fromProp<Street>()('name')
 
 company
   .compose(address)
@@ -462,8 +462,9 @@ class Lens<S, A> {
 ## fromPath
 
 ```ts
-// other 9 overloadings
-<T, K1 extends keyof T>(path: [K1]): Lens<T, T[K1]>
+<S>(): <K1 extends keyof S>(path: [K1]) => Lens<S, S[K1]> // other 4 overloadings
+// or (deprecated)
+<S, K1 extends keyof S>(path: [K1]): Lens<S, S[K1]> // other 4 overloadings
 ```
 
 Example
@@ -477,7 +478,7 @@ type Person = {
   }
 }
 
-const city = Lens.fromPath<Person, 'address', 'city'>(['address', 'city'])
+const city = Lens.fromPath<Person>()(['address', 'city'])
 
 const person: Person = { name: 'Giulio', age: 43, address: { city: 'Milan' } }
 
@@ -488,7 +489,9 @@ console.log(city.set('London')(person)) // { name: 'Giulio', age: 43, address: {
 ## fromProp
 
 ```ts
-<T, P extends keyof T>(prop: P): Lens<T, T[P]>
+<S>(): <P extends keyof S>(prop: P) => Lens<S, S[P]>
+// or (deprecated)
+<S, P extends keyof T>(prop: P): Lens<S, S[P]>
 ```
 
 generate a lens from a type and a prop
@@ -501,7 +504,9 @@ type Person = {
   age: number
 }
 
-const age = Lens.fromProp<Person, 'age'>('age')
+const age = Lens.fromProp<Person>()('age')
+// or (deprecated)
+// const age = Lens.fromProp<Person, 'age'>('age')
 
 const person: Person = { name: 'Giulio', age: 43 }
 
@@ -537,6 +542,8 @@ console.log(lens.set({ name: 'Guido', age: 47 })(person)) // { name: 'Guido', ag
 ## fromNullableProp
 
 ```ts
+<S>(): <A extends S[K], K extends keyof S>(k: K, defaultValue: A) => Lens<S, A>
+// or (deprecated)
 <S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, A>
 ```
 
@@ -554,8 +561,8 @@ interface Inner {
   foo: string
 }
 
-const inner = Lens.fromNullableProp<Outer, Inner, 'inner'>('inner', { value: 0, foo: 'foo' })
-const value = Lens.fromProp<Inner, 'value'>('value')
+const inner = Lens.fromNullableProp<Outer>()('inner', { value: 0, foo: 'foo' })
+const value = Lens.fromProp<Inner>()('value')
 const lens = inner.compose(value)
 
 console.log(lens.set(1)({})) // { inner: { value: 1, foo: 'foo' } }
@@ -825,6 +832,8 @@ class Optional<S, A> {
 ## fromNullableProp
 
 ```ts
+<S>() <K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>>
+// or (deprecated)
 <S, A extends S[K], K extends keyof S>(k: K): Optional<S, A>
 ```
 
@@ -844,10 +853,10 @@ interface Response {
   info?: Info
 }
 
-const info = Optional.fromNullableProp<Response, Info, 'info'>('info')
-const employment = Optional.fromNullableProp<Info, Employment, 'employment'>('employment')
-const phone = Optional.fromNullableProp<Employment, Phone, 'phone'>('phone')
-const number = Lens.fromProp<Phone, 'number'>('number')
+const info = Optional.fromNullableProp<Response>()('info')
+const employment = Optional.fromNullableProp<Info>()('employment')
+const phone = Optional.fromNullableProp<Employment>()('phone')
+const number = Lens.fromProp<Phone>()('number')
 const numberFromResponse = info
   .compose(employment)
   .compose(phone)
@@ -1348,8 +1357,8 @@ interface Tweets {
   tweets: Tweet[]
 }
 
-const tweetsLens = Lens.fromProp<Tweets, 'tweets'>('tweets')
-const tweetTextLens = Lens.fromProp<Tweet, 'text'>('text')
+const tweetsLens = Lens.fromProp<Tweets>()('tweets')
+const tweetTextLens = Lens.fromProp<Tweet>()('text')
 const tweetTraversal = fromTraversable(array)<Tweet>()
 const composedTraversal = tweetsLens.composeTraversal(tweetTraversal).composeLens(tweetTextLens)
 
