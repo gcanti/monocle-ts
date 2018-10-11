@@ -13,6 +13,11 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 1.3.0
+
+- **New Feature**
+  - add `Lens.{fromProp, fromPath, fromNullableProp}` and `Optional.fromNullableProp` curried overloadings (@gcanti)
+
 # 1.2.0
 
 - **New Feature**
