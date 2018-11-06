@@ -302,11 +302,11 @@ export class Prism<S, A> {
   constructor(readonly getOption: (s: S) => Option<A>, readonly reverseGet: (a: A) => S) {}
 
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
-    return new Prism(s => (predicate(s) ? some(s) : none), a => a)
+    return new Prism(s => (predicate(s) ? some(s) : none), identity)
   }
 
   static fromRefinement<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A> {
-    return new Prism(s => (refinement(s) ? some(s) : none), a => a)
+    return new Prism<S, A>(s => (refinement(s) ? some(s) : none), identity)
   }
 
   static some<A>(): Prism<Option<A>, A> {
