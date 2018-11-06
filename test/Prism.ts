@@ -1,5 +1,6 @@
 import * as assert from 'assert'
 import { Prism } from '../src'
+import { Refinement } from 'fp-ts/lib/function'
 import { none, some } from 'fp-ts/lib/Option'
 
 describe('Prism', () => {
@@ -7,6 +8,25 @@ describe('Prism', () => {
     const prism = Prism.fromPredicate<number>(n => n % 1 === 0)
     assert.deepEqual(prism.getOption(1), some(1))
     assert.deepEqual(prism.getOption(1.1), none)
+  })
+
+  it('fromRefinement', () => {
+    interface A {
+      type: 'A'
+      a: string
+    }
+    interface B {
+      type: 'B'
+      b: number
+    }
+    type U = A | B
+
+    const isA: Refinement<U, A> = (u): u is A => u.type === 'A'
+
+    const prism = Prism.fromRefinement(isA)
+    const toUpperCase = (a: A): A => ({ type: 'A', a: a.a.toUpperCase() })
+    assert.deepEqual(prism.modify(toUpperCase)({ type: 'A', a: 'foo' }), { type: 'A', a: 'FOO' })
+    assert.deepEqual(prism.modify(toUpperCase)({ type: 'B', b: 1 }), { type: 'B', b: 1 })
   })
 
   it('some', () => {

@@ -11,7 +11,7 @@ import {
 import { Foldable, Foldable1, Foldable2, Foldable3, foldMap } from 'fp-ts/lib/Foldable'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
 import { Option, none, some, fromNullable, option, getFirstMonoid } from 'fp-ts/lib/Option'
-import { identity, constant, Predicate } from 'fp-ts/lib/function'
+import { identity, constant, Predicate, Refinement } from 'fp-ts/lib/function'
 import { identity as id } from 'fp-ts/lib/Identity'
 import { Const, getApplicative } from 'fp-ts/lib/Const'
 
@@ -303,6 +303,10 @@ export class Prism<S, A> {
 
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
     return new Prism(s => (predicate(s) ? some(s) : none), a => a)
+  }
+
+  static fromRefinement<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A> {
+    return new Prism(s => (refinement(s) ? some(s) : none), a => a)
   }
 
   static some<A>(): Prism<Option<A>, A> {
