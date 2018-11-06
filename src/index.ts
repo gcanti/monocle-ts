@@ -395,6 +395,13 @@ function optionalFromNullableProp<S, K extends keyof S>(k: K): Optional<S, NonNu
   return new Optional((s: any) => fromNullable(s[k]), a => s => ({ ...s, [k as any]: a }))
 }
 
+type OptionPropertyNames<T, U> = { [K in keyof T]: T[K] extends Option<U> ? K : never }[keyof T]
+type OptionProperties<T, U> = Pick<T, OptionPropertyNames<T, U>>
+
+function optionalFromOptionProp<S extends object, T, K extends keyof OptionProperties<S, T>>(k: K): Optional<S, T> {
+  return new Optional(s => (s[k] as any) as Option<T>, a => s => Object.assign({}, s, { [k as any]: some(a) }))
+}
+
 /*
   Laws:
   1. getOption(s).fold(() => s, a => set(a)(s)) = s
@@ -409,6 +416,12 @@ export class Optional<S, A> {
   static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>>
   static fromNullableProp(): any {
     return arguments.length === 0 ? optionalFromNullableProp : optionalFromNullableProp<any, any>(arguments[0])
+  }
+
+  static fromOptionProp<S, T>(): <P extends keyof OptionProperties<S, T>>(prop: P) => Optional<S, T>
+  static fromOptionProp<S extends object, T, P extends keyof OptionProperties<S, T>>(prop: P): Optional<S, T>
+  static fromOptionProp(): any {
+    return arguments.length === 0 ? optionalFromOptionProp : optionalFromOptionProp<any, any, any>(arguments[0])
   }
 
   modify(f: (a: A) => A): (s: S) => S {

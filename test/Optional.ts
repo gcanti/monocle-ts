@@ -71,6 +71,78 @@ describe('Optional', () => {
     assert.deepEqual(numberFromResponse2.getOption(response2), none)
   })
 
+  it('fromOptionProp', () => {
+    interface Phone {
+      number: string
+    }
+    interface Employment {
+      phone: Option<Phone>
+    }
+    interface Info {
+      employment: Option<Employment>
+    }
+    interface Response {
+      info: Option<Info>
+    }
+
+    const info1 = Optional.fromOptionProp<Response, Info, 'info'>('info')
+    const employment1 = Optional.fromOptionProp<Info, Employment, 'employment'>('employment')
+    const phone1 = Optional.fromOptionProp<Employment, Phone, 'phone'>('phone')
+    const number = Lens.fromProp<Phone>()('number')
+    const numberFromResponse1 = info1
+      .compose(employment1)
+      .compose(phone1)
+      .composeLens(number)
+
+    const response1: Response = {
+      info: some({
+        employment: some({
+          phone: some({
+            number: '555-1234'
+          })
+        })
+      })
+    }
+    const response2: Response = {
+      info: some({
+        employment: none
+      })
+    }
+
+    assert.deepEqual(numberFromResponse1.getOption(response1), some('555-1234'))
+    assert.deepEqual(numberFromResponse1.getOption(response2), none)
+
+    const info2 = Optional.fromOptionProp<Response, Info>()('info')
+    const employment2 = Optional.fromOptionProp<Info, Employment>()('employment')
+    const phone2 = Optional.fromOptionProp<Employment, Phone>()('phone')
+    const numberFromResponse2 = info2
+      .compose(employment2)
+      .compose(phone2)
+      .composeLens(number)
+
+    assert.deepEqual(numberFromResponse2.getOption(response1), some('555-1234'))
+    assert.deepEqual(numberFromResponse2.getOption(response2), none)
+
+    // Check the laws
+    const opt = numberFromResponse1
+    // Law 1
+    assert.deepEqual(opt.set('555-4321')(response1), {
+      info: some({
+        employment: some({
+          phone: some({
+            number: '555-4321'
+          })
+        })
+      })
+    })
+    assert.deepEqual(opt.set('555-4321')(response2), response2)
+    // Law2
+    assert.deepEqual(opt.getOption(opt.set('555-4321')(response1)), opt.getOption(response1).map(() => '555-4321'))
+    assert.deepEqual(opt.getOption(opt.set('555-4321')(response2)), opt.getOption(response2).map(() => '555-4321'))
+
+    // Should not compile since not an Option field: Optional.fromOptionProp<Phone, string, 'number'>
+  })
+
   it('modify', () => {
     const double = (n: number): number => n * 2
     assert.deepEqual(optional.modify(double)({ a: some(2) }), { a: some(4) })
