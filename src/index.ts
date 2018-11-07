@@ -389,7 +389,7 @@ export class Prism<S, A> {
   }
 }
 
-const somePrism = new Prism<Option<any>, any>(s => s, a => some(a))
+const somePrism = new Prism<Option<any>, any>(identity, some)
 
 function optionalFromNullableProp<S, K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>> {
   return new Optional((s: any) => fromNullable(s[k]), a => s => ({ ...s, [k as any]: a }))
