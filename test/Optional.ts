@@ -142,8 +142,6 @@ describe('Optional', () => {
     // law 3
     assert.deepEqual(opt.set('555-4321')(opt.set('555-4321')(response1)), opt.set('555-4321')(response1))
     assert.deepEqual(opt.set('555-4321')(opt.set('555-4321')(response2)), opt.set('555-4321')(response2))
-
-    // Should not compile since not an Option field: Optional.fromOptionProp<Phone, string, 'number'>
   })
 
   it('modify', () => {
