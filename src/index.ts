@@ -399,7 +399,7 @@ type OptionPropertyNames<S> = { [K in keyof S]: S[K] extends Option<any> ? K : n
 type OptionPropertyType<S, K extends OptionPropertyNames<S>> = S[K] extends Option<infer A> ? A : never
 
 function optionalFromOptionProp<S, K extends OptionPropertyNames<S>>(k: K): Optional<S, OptionPropertyType<S, K>> {
-  return Lens.fromProp<S>()(k).composePrism(Prism.some())
+  return Lens.fromProp<S>()(k).composePrism(Prism.some() as Prism<any, any>)
 }
 
 /*
