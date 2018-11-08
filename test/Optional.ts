@@ -85,9 +85,9 @@ describe('Optional', () => {
       info: Option<Info>
     }
 
-    const info1 = Optional.fromOptionProp<Response, Info, 'info'>('info')
-    const employment1 = Optional.fromOptionProp<Info, Employment, 'employment'>('employment')
-    const phone1 = Optional.fromOptionProp<Employment, Phone, 'phone'>('phone')
+    const info1 = Optional.fromOptionProp<Response>('info')
+    const employment1 = Optional.fromOptionProp<Info>('employment')
+    const phone1 = Optional.fromOptionProp<Employment>('phone')
     const number = Lens.fromProp<Phone>()('number')
     const numberFromResponse1 = info1
       .compose(employment1)
