@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import { Optional, Lens } from '../src'
+import { Optional, Lens, Prism } from '../src'
 import { none, some, Option } from 'fp-ts/lib/Option'
 
 interface A {
@@ -112,9 +112,9 @@ describe('Optional', () => {
     assert.deepEqual(numberFromResponse1.getOption(response1), some('555-1234'))
     assert.deepEqual(numberFromResponse1.getOption(response2), none)
 
-    const info2 = Optional.fromOptionProp<Response, Info>()('info')
-    const employment2 = Optional.fromOptionProp<Info, Employment>()('employment')
-    const phone2 = Optional.fromOptionProp<Employment, Phone>()('phone')
+    const info2 = Optional.fromOptionProp<Response>()('info')
+    const employment2 = Optional.fromOptionProp<Info>()('employment')
+    const phone2 = Optional.fromOptionProp<Employment>()('phone')
     const numberFromResponse2 = info2
       .compose(employment2)
       .compose(phone2)
@@ -136,9 +136,12 @@ describe('Optional', () => {
       })
     })
     assert.deepEqual(opt.set('555-4321')(response2), response2)
-    // Law2
+    // Law 2
     assert.deepEqual(opt.getOption(opt.set('555-4321')(response1)), opt.getOption(response1).map(() => '555-4321'))
     assert.deepEqual(opt.getOption(opt.set('555-4321')(response2)), opt.getOption(response2).map(() => '555-4321'))
+    // law 3
+    assert.deepEqual(opt.set('555-4321')(opt.set('555-4321')(response1)), opt.set('555-4321')(response1))
+    assert.deepEqual(opt.set('555-4321')(opt.set('555-4321')(response2)), opt.set('555-4321')(response2))
 
     // Should not compile since not an Option field: Optional.fromOptionProp<Phone, string, 'number'>
   })

@@ -395,11 +395,11 @@ function optionalFromNullableProp<S, K extends keyof S>(k: K): Optional<S, NonNu
   return new Optional((s: any) => fromNullable(s[k]), a => s => ({ ...s, [k as any]: a }))
 }
 
-type OptionPropertyNames<T, U> = { [K in keyof T]: T[K] extends Option<U> ? K : never }[keyof T]
-type OptionProperties<T, U> = Pick<T, OptionPropertyNames<T, U>>
+type OptionPropertyNames<S> = { [K in keyof S]: S[K] extends Option<any> ? K : never }[keyof S]
+type OptionPropertyType<S, K extends OptionPropertyNames<S>> = S[K] extends Option<infer A> ? A : never
 
-function optionalFromOptionProp<S extends object, T, K extends keyof OptionProperties<S, T>>(k: K): Optional<S, T> {
-  return new Optional(s => (s[k] as any) as Option<T>, a => s => Object.assign({}, s, { [k as any]: some(a) }))
+function optionalFromOptionProp<S, K extends OptionPropertyNames<S>>(k: K): Optional<S, OptionPropertyType<S, K>> {
+  return Lens.fromProp<S>()(k).composePrism(Prism.some())
 }
 
 /*
@@ -418,10 +418,10 @@ export class Optional<S, A> {
     return arguments.length === 0 ? optionalFromNullableProp : optionalFromNullableProp<any, any>(arguments[0])
   }
 
-  static fromOptionProp<S, T>(): <P extends keyof OptionProperties<S, T>>(prop: P) => Optional<S, T>
-  static fromOptionProp<S extends object, T, P extends keyof OptionProperties<S, T>>(prop: P): Optional<S, T>
+  static fromOptionProp<S>(): <P extends OptionPropertyNames<S>>(prop: P) => Optional<S, OptionPropertyType<S, P>>
+  static fromOptionProp<S>(prop: OptionPropertyNames<S>): Optional<S, OptionPropertyType<S, typeof prop>>
   static fromOptionProp(): any {
-    return arguments.length === 0 ? optionalFromOptionProp : optionalFromOptionProp<any, any, any>(arguments[0])
+    return arguments.length === 0 ? optionalFromOptionProp : optionalFromOptionProp<any, any>(arguments[0])
   }
 
   modify(f: (a: A) => A): (s: S) => S {
