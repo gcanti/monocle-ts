@@ -120,7 +120,7 @@ element to zoom into is always present, hence composing an `Optional` and a `Len
 
 # TypeScript compatibility
 
-The stable version is tested against TypeScript 3.1.2, but should run with TypeScript 2.3.0+ too
+The stable version is tested against TypeScript 3.1.6, but should run with TypeScript 2.8.0+ too
 
 # API
 
