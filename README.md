@@ -192,6 +192,7 @@ The stable version is tested against TypeScript 3.1.6, but should run with TypeS
     - [composeGetter](#composegetter-2)
 - [Optional](#optional)
   - [fromNullableProp](#fromnullableprop-1)
+  - [fromOptionProp](#fromoptionprop)
   - [Methods](#methods-3)
     - [modify](#modify-3)
     - [modifyOption](#modifyoption-1)
@@ -879,6 +880,39 @@ const response2: Response = {
 
 numberFromResponse.getOption(response1) // some('555-1234')
 numberFromResponse.getOption(response2) // none
+```
+
+## fromOptionProp
+
+```ts
+<S>(): <P extends OptionPropertyNames<S>>(prop: P) => Optional<S, OptionPropertyType<S, P>>
+<S>(prop: OptionPropertyNames<S>) => Optional<S, OptionPropertyType<S, typeof prop>>
+```
+
+Example
+
+```ts
+interface Phone {
+  number: string
+}
+interface Employment {
+  phone: Option<Phone>
+}
+interface Info {
+  employment: Option<Employment>
+}
+interface Response {
+  info: Option<Info>
+}
+
+const info = Optional.fromOptionProp<Response>('info')
+const employment = Optional.fromOptionProp<Info>('employment')
+const phone = Optional.fromOptionProp<Employment>('phone')
+const number = Lens.fromProp<Phone>()('number')
+const numberFromResponse = info
+  .compose(employment)
+  .compose(phone)
+  .composeLens(number)
 ```
 
 ## Methods

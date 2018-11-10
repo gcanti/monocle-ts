@@ -1,5 +1,5 @@
 import { Lens, Optional } from '../src'
-import { Option } from 'fp-ts/lib/Option';
+import { Option } from 'fp-ts/lib/Option'
 
 interface Person {
   name: string
