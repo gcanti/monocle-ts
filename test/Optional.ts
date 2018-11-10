@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import { Optional, Lens, Prism } from '../src'
+import { Optional, Lens } from '../src'
 import { none, some, Option } from 'fp-ts/lib/Option'
 
 interface A {
