@@ -13,10 +13,11 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
-# 1.4.0
+# 1.4.1
 
 - **New Feature**
   - add `Prism.fromRefinement` (@bepremeg)
+  - add `Optional.fromOptionProp` (@bepremeg)
 
 # 1.3.0
 
