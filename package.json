@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/gcanti/monocle-ts",
   "dependencies": {
-    "fp-ts": "^1.0.0"
+    "fp-ts": "^1.11.0"
   },
   "devDependencies": {
     "@types/jest": "22.2.2",
