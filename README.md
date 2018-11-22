@@ -122,6 +122,10 @@ element to zoom into is always present, hence composing an `Optional` and a `Len
 
 The stable version is tested against TypeScript 3.1.6, but should run with TypeScript 2.8.0+ too
 
+**Note**. If you are running `< typescript@3.0.1` you have to polyfill `unknown`.
+
+You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
+
 # API
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
