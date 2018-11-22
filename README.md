@@ -271,6 +271,8 @@ The stable version is tested against TypeScript 3.1.6, but should run with TypeS
   - [Instances](#instances-1)
     - [Array](#array)
       - [indexArray](#indexarray)
+    - [NonEmptyArray](#nonemptyarray)
+      - [indexNonEmptyArray](#indexnonemptyarray)
     - [StrMap](#strmap-1)
       - [indexStrMap](#indexstrmap)
 
@@ -1473,6 +1475,14 @@ lift an instance of `Index` using an `Iso`
 
 ```ts
 <A = never>(): Index<Array<A>, number, A>
+```
+
+### NonEmptyArray
+
+#### indexNonEmptyArray
+
+```ts
+<A = never>(): Index<NonEmptyArray<A>, number, A>
 ```
 
 ### StrMap
