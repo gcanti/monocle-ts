@@ -13,6 +13,17 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 1.5.0
+
+- **New Feature**
+  - add `indexNonEmptyArray` (@sledorze)
+- **Internal**
+  - upgrade to `fp-ts@1.11.0` (@sledorze)
+
+**Note**. If you are running `< typescript@3.0.1` you have to polyfill `unknown`.
+
+You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
+
 # 1.4.1
 
 - **New Feature**
