@@ -22,11 +22,11 @@ import { Const, getApplicative } from 'fp-ts/lib/Const'
 */
 export class Iso<S, A> {
   readonly _tag: 'Iso' = 'Iso'
-  constructor(readonly get: (s: S) => A, readonly reverseGet: (a: A) => S) {
-    this.unwrap = this.to = get
-    this.wrap = this.from = reverseGet
-  }
-
+  readonly unwrap = this.get
+  readonly to = this.get
+  readonly wrap = this.reverseGet
+  readonly from = this.reverseGet
+  constructor(readonly get: (s: S) => A, readonly reverseGet: (a: A) => S) {}
   /** reverse the `Iso`: the source becomes the target and the target becomes the source */
   reverse(): Iso<A, S> {
     return new Iso(this.reverseGet, this.get)
@@ -78,6 +78,11 @@ export class Iso<S, A> {
     return new Iso(s => ab.get(this.get(s)), b => this.reverseGet(ab.reverseGet(b)))
   }
 
+  /** @alias of `compose` */
+  composeIso<B>(ab: Iso<A, B>): Iso<S, B> {
+    return this.compose(ab)
+  }
+
   /** compose an Iso with a Lens */
   composeLens<B>(ab: Lens<A, B>): Lens<S, B> {
     return this.asLens().compose(ab)
@@ -112,13 +117,6 @@ export class Iso<S, A> {
   composeSetter<B>(ab: Setter<A, B>): Setter<S, B> {
     return this.asSetter().compose(ab)
   }
-}
-
-export interface Iso<S, A> {
-  unwrap: (s: S) => A
-  to: (s: S) => A
-  wrap: (a: A) => S
-  from: (a: A) => S
 }
 
 export interface LensFromPath<S> {
@@ -256,6 +254,11 @@ export class Lens<S, A> {
     return new Lens(s => ab.get(this.get(s)), b => s => this.set(ab.set(b)(this.get(s)))(s))
   }
 
+  /** @alias of `compose` */
+  composeLens<B>(ab: Lens<A, B>): Lens<S, B> {
+    return this.compose(ab)
+  }
+
   /** compose a Lens with a Getter */
   composeGetter<B>(ab: Getter<A, B>): Getter<S, B> {
     return this.asGetter().compose(ab)
@@ -351,6 +354,11 @@ export class Prism<S, A> {
   /** compose a Prism with a Prism */
   compose<B>(ab: Prism<A, B>): Prism<S, B> {
     return new Prism(s => this.getOption(s).chain(a => ab.getOption(a)), b => this.reverseGet(ab.reverseGet(b)))
+  }
+
+  /** @alias of `compose` */
+  composePrism<B>(ab: Prism<A, B>): Prism<S, B> {
+    return this.compose(ab)
   }
 
   /** compose a Prism with a Optional */
@@ -457,6 +465,11 @@ export class Optional<S, A> {
     )
   }
 
+  /** @alias of `compose` */
+  composeOptional<B>(ab: Optional<A, B>): Optional<S, B> {
+    return this.compose(ab)
+  }
+
   /** compose an Optional with a Traversal */
   composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> {
     return this.asTraversal().compose(ab)
@@ -536,6 +549,11 @@ export class Traversal<S, A> {
     )
   }
 
+  /** @alias of `compose` */
+  composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> {
+    return this.compose(ab)
+  }
+
   /** compose a Traversal with a Fold */
   composeFold<B>(ab: Fold<A, B>): Fold<S, B> {
     return this.asFold().compose(ab)
@@ -610,6 +628,11 @@ export class Getter<S, A> {
     return new Getter(s => ab.get(this.get(s)))
   }
 
+  /** @alias of `compose` */
+  composeGetter<B>(ab: Getter<A, B>): Getter<S, B> {
+    return this.compose(ab)
+  }
+
   /** compose a Getter with a Fold */
   composeFold<B>(ab: Fold<A, B>): Fold<S, B> {
     return this.asFold().compose(ab)
@@ -643,9 +666,13 @@ export class Getter<S, A> {
 
 export class Fold<S, A> {
   readonly _tag: 'Fold' = 'Fold'
-
+  /** get all the targets of a Fold */
+  readonly getAll: (s: S) => Array<A>
+  /** check if at least one target satisfies the predicate */
+  readonly exist: (p: Predicate<A>) => Predicate<S>
+  /** check if all targets satisfy the predicate */
+  readonly all: (p: Predicate<A>) => Predicate<S>
   private foldMapFirst: (f: (a: A) => Option<A>) => (s: S) => Option<A>
-
   constructor(readonly foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M) {
     this.getAll = foldMap(getArrayMonoid<A>())(a => [a])
     this.exist = foldMap(monoidAny)
@@ -656,6 +683,11 @@ export class Fold<S, A> {
   /** compose a Fold with a Fold */
   compose<B>(ab: Fold<A, B>): Fold<S, B> {
     return new Fold(<M>(M: Monoid<M>) => (f: (b: B) => M) => (s: S): M => this.foldMap(M)(a => ab.foldMap(M)(f)(a))(s))
+  }
+
+  /** @alias of `compose` */
+  composeFold<B>(ab: Fold<A, B>): Fold<S, B> {
+    return this.compose(ab)
   }
 
   /** compose a Fold with a Getter */
@@ -699,15 +731,6 @@ export class Fold<S, A> {
   }
 }
 
-export interface Fold<S, A> {
-  /** get all the targets of a Fold */
-  getAll(s: S): Array<A>
-  /** check if at least one target satisfies the predicate */
-  exist(p: Predicate<A>): Predicate<S>
-  /** check if all targets satisfy the predicate */
-  all(p: Predicate<A>): Predicate<S>
-}
-
 export class Setter<S, A> {
   readonly _tag: 'Setter' = 'Setter'
   constructor(readonly modify: (f: (a: A) => A) => (s: S) => S) {}
@@ -719,6 +742,11 @@ export class Setter<S, A> {
   /** compose a Setter with a Setter */
   compose<B>(ab: Setter<A, B>): Setter<S, B> {
     return new Setter(f => s => this.modify((a: A) => ab.modify(f)(a))(s))
+  }
+
+  /** @alias of `compose` */
+  composeSetter<B>(ab: Setter<A, B>): Setter<S, B> {
+    return this.compose(ab)
   }
 
   /** compose a Setter with a Traversal */

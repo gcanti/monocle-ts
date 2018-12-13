@@ -34,4 +34,10 @@ describe('Fold', () => {
     assert.deepEqual(fold.all(n => n >= 2)([1, 2, 3]), false)
     assert.deepEqual(fold.all(n => n >= 1)([1, 2, 3]), true)
   })
+
+  it('headOption', () => {
+    const fold = fromFoldable(array)<number>()
+    assert.deepEqual(fold.headOption([]), none)
+    assert.deepEqual(fold.headOption([1, 2, 3]), some(1))
+  })
 })

@@ -1,6 +1,6 @@
 {
   "name": "monocle-ts",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "A porting of scala monocle library to TypeScript",
   "files": [
     "lib"
@@ -10,6 +10,7 @@
   "scripts": {
     "lint": "tslint -p tsconfig.json src/**/*.ts test/**/*.ts",
     "jest": "jest",
+    "jest-coverage": "jest --ci --coverage",
     "prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --list-different \"{src,test,examples}/**/*.ts\"",
     "fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --write \"{src,test,examples}/**/*.ts\"",
     "test": "npm run prettier && npm run lint && npm run dtslint && npm run jest",
