@@ -99,4 +99,30 @@ describe('Lens', () => {
     assert.deepEqual(lens.get(person), { name: 'giulio', age: 44 })
     assert.deepEqual(lens.set({ name: 'Guido', age: 47 })(person), { name: 'Guido', age: 47, rememberMe: true })
   })
+
+  it('compose', () => {
+    const street = Lens.fromProp<Address>()('street')
+    const name = Lens.fromProp<Street>()('name')
+    const composition1 = street.compose(name)
+    const composition2 = street.composeLens(name)
+    const address: Address = {
+      city: 'city',
+      street: {
+        name: 'name',
+        num: 1
+      }
+    }
+    const expected = {
+      city: 'city',
+      street: {
+        name: 'name2',
+        num: 1
+      }
+    }
+    assert.strictEqual(composition1.get(address), 'name')
+    assert.deepEqual(composition1.set('name2')(address), expected)
+
+    assert.strictEqual(composition2.get(address), composition1.get(address))
+    assert.deepEqual(composition2.set('name2')(address), composition1.set('name2')(address))
+  })
 })

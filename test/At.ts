@@ -5,6 +5,8 @@ import { none, some } from 'fp-ts/lib/Option'
 import { setoidNumber } from 'fp-ts/lib/Setoid'
 import * as S from 'fp-ts/lib/Set'
 import * as SM from 'fp-ts/lib/StrMap'
+import { Iso } from '../src'
+import { string } from 'parsimmon'
 
 describe('At', () => {
   describe('atStrMap', () => {
@@ -47,5 +49,17 @@ describe('At', () => {
 
       assert.deepEqual(newSet, new Set())
     })
+  })
+
+  it('fromIso', () => {
+    const iso = new Iso<SM.StrMap<string>, SM.StrMap<number>>(s => s.map(v => +v), a => a.map(String))
+    const at = atStrMap<number>()
+      .fromIso(iso)
+      .at('a')
+    assert.deepEqual(at.get(new SM.StrMap({})), none)
+    assert.deepEqual(at.get(new SM.StrMap({ a: '1' })), some(1))
+
+    assert.deepEqual(at.set(none)(new SM.StrMap({})), new SM.StrMap({}))
+    assert.deepEqual(at.set(some(1))(new SM.StrMap({})), new SM.StrMap({ a: '1' }))
   })
 })

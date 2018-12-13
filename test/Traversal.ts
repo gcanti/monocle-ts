@@ -29,4 +29,10 @@ describe('Traversal', () => {
     )(model)
     assert.deepEqual(newModel, { tweets: [{ text: 'dlrow olleh' }, { text: 'raboof' }] })
   })
+
+  it('set', () => {
+    const traversal = fromTraversable(array)<string>()
+    assert.deepEqual(traversal.set('a')([]), [])
+    assert.deepEqual(traversal.set('a')(['b', 'c']), ['a', 'a'])
+  })
 })

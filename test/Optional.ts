@@ -58,6 +58,16 @@ describe('Optional', () => {
 
     assert.deepEqual(numberFromResponse1.getOption(response1), some('555-1234'))
     assert.deepEqual(numberFromResponse1.getOption(response2), none)
+    assert.deepEqual(numberFromResponse1.set('b')(response1), {
+      info: {
+        employment: {
+          phone: {
+            number: 'b'
+          }
+        }
+      }
+    })
+    assert.deepEqual(numberFromResponse1.set('b')(response2), response2)
 
     const info2 = Optional.fromNullableProp<Response>()('info')
     const employment2 = Optional.fromNullableProp<Info>()('employment')
@@ -67,8 +77,10 @@ describe('Optional', () => {
       .compose(phone2)
       .composeLens(number)
 
-    assert.deepEqual(numberFromResponse2.getOption(response1), some('555-1234'))
-    assert.deepEqual(numberFromResponse2.getOption(response2), none)
+    assert.deepEqual(numberFromResponse2.getOption(response1), numberFromResponse1.getOption(response1))
+    assert.deepEqual(numberFromResponse2.getOption(response2), numberFromResponse1.getOption(response2))
+    assert.deepEqual(numberFromResponse2.set('b')(response1), numberFromResponse1.set('b')(response1))
+    assert.deepEqual(numberFromResponse2.set('b')(response2), numberFromResponse1.set('b')(response2))
   })
 
   it('fromOptionProp', () => {
@@ -148,5 +160,46 @@ describe('Optional', () => {
     const double = (n: number): number => n * 2
     assert.deepEqual(optional.modify(double)({ a: some(2) }), { a: some(4) })
     assert.deepEqual(optional.modify(double)({ a: none }), { a: none })
+  })
+
+  it('compose', () => {
+    interface Phone {
+      number: Option<string>
+    }
+    interface Employment {
+      phone: Option<Phone>
+    }
+    const phone = Optional.fromOptionProp<Employment>()('phone')
+    const number = Optional.fromOptionProp<Phone>()('number')
+    const composition1 = phone.compose(number)
+    const composition2 = phone.composeOptional(number)
+    assert.deepEqual(composition1.getOption({ phone: none }), none)
+    assert.deepEqual(composition1.getOption({ phone: some({ number: none }) }), none)
+    assert.deepEqual(composition1.getOption({ phone: some({ number: some('a') }) }), some('a'))
+    assert.deepEqual(composition1.set('a')({ phone: none }), { phone: none })
+    assert.deepEqual(composition1.set('a')({ phone: some({ number: none }) }), { phone: some({ number: none }) })
+    assert.deepEqual(composition1.set('a')({ phone: some({ number: some('b') }) }), {
+      phone: some({ number: some('a') })
+    })
+
+    assert.deepEqual(composition2.getOption({ phone: none }), composition1.getOption({ phone: none }))
+    assert.deepEqual(
+      composition2.getOption({ phone: some({ number: none }) }),
+      composition1.getOption({ phone: some({ number: none }) })
+    )
+    assert.deepEqual(
+      composition2.getOption({ phone: some({ number: some('a') }) }),
+      composition1.getOption({ phone: some({ number: some('a') }) })
+    )
+
+    assert.deepEqual(composition2.set('a')({ phone: none }), composition1.set('a')({ phone: none }))
+    assert.deepEqual(
+      composition2.set('a')({ phone: some({ number: none }) }),
+      composition1.set('a')({ phone: some({ number: none }) })
+    )
+    assert.deepEqual(
+      composition2.set('a')({ phone: some({ number: some('b') }) }),
+      composition1.set('a')({ phone: some({ number: some('b') }) })
+    )
   })
 })

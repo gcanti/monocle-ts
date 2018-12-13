@@ -148,6 +148,7 @@ You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
     - [asGetter](#asgetter)
     - [asSetter](#assetter)
     - [compose](#compose)
+    - [composeIso](#composeiso)
     - [composeLens](#composelens)
     - [composePrism](#composeprism)
     - [composeOptional](#composeoptional)
@@ -168,12 +169,13 @@ You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
     - [asGetter](#asgetter-1)
     - [asFold](#asfold-1)
     - [compose](#compose-1)
+    - [composeLens](#composelens-1)
     - [composeGetter](#composegetter-1)
     - [composeFold](#composefold-1)
     - [composeOptional](#composeoptional-1)
     - [composeTraversal](#composetraversal-1)
     - [composeSetter](#composesetter-1)
-    - [composeIso](#composeiso)
+    - [composeIso](#composeiso-1)
     - [composePrism](#composeprism-1)
 - [Prism](#prism)
   - [fromPredicate](#frompredicate)
@@ -187,12 +189,13 @@ You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
     - [asSetter](#assetter-2)
     - [asFold](#asfold-2)
     - [compose](#compose-2)
+    - [composePrism](#composeprism-2)
     - [composeOptional](#composeoptional-2)
     - [composeTraversal](#composetraversal-2)
     - [composeFold](#composefold-2)
     - [composeSetter](#composesetter-2)
-    - [composeIso](#composeiso-1)
-    - [composeLens](#composelens-1)
+    - [composeIso](#composeiso-2)
+    - [composeLens](#composelens-2)
     - [composeGetter](#composegetter-2)
 - [Optional](#optional)
   - [fromNullableProp](#fromnullableprop-1)
@@ -204,12 +207,13 @@ You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
     - [asFold](#asfold-3)
     - [asSetter](#assetter-3)
     - [compose](#compose-3)
+    - [composeOptional](#composeoptional-3)
     - [composeTraversal](#composetraversal-3)
     - [composeFold](#composefold-3)
     - [composeSetter](#composesetter-3)
-    - [composeLens](#composelens-2)
-    - [composePrism](#composeprism-2)
-    - [composeIso](#composeiso-2)
+    - [composeLens](#composelens-3)
+    - [composePrism](#composeprism-3)
+    - [composeIso](#composeiso-3)
     - [composeGetter](#composegetter-3)
 - [Traversal](#traversal)
   - [Methods](#methods-4)
@@ -218,32 +222,35 @@ You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
     - [asFold](#asfold-4)
     - [asSetter](#assetter-4)
     - [compose](#compose-4)
+    - [composeTraversal](#composetraversal-4)
     - [composeFold](#composefold-4)
     - [composeSetter](#composesetter-4)
-    - [composeOptional](#composeoptional-3)
-    - [composeLens](#composelens-3)
-    - [composePrism](#composeprism-3)
-    - [composeIso](#composeiso-3)
+    - [composeOptional](#composeoptional-4)
+    - [composeLens](#composelens-4)
+    - [composePrism](#composeprism-4)
+    - [composeIso](#composeiso-4)
     - [composeGetter](#composegetter-4)
 - [Getter](#getter)
   - [Methods](#methods-5)
     - [asFold](#asfold-5)
     - [compose](#compose-5)
+    - [composeGetter](#composegetter-5)
     - [composeFold](#composefold-5)
-    - [composeLens](#composelens-4)
-    - [composeIso](#composeiso-4)
-    - [composeTraversal](#composetraversal-4)
-    - [composeOptional](#composeoptional-4)
-    - [composePrism](#composeprism-4)
+    - [composeLens](#composelens-5)
+    - [composeIso](#composeiso-5)
+    - [composeTraversal](#composetraversal-5)
+    - [composeOptional](#composeoptional-5)
+    - [composePrism](#composeprism-5)
 - [Fold](#fold)
   - [Methods](#methods-6)
     - [compose](#compose-6)
-    - [composeGetter](#composegetter-5)
-    - [composeTraversal](#composetraversal-5)
-    - [composeOptional](#composeoptional-5)
-    - [composeLens](#composelens-5)
-    - [composePrism](#composeprism-5)
-    - [composeIso](#composeiso-5)
+    - [composeFold](#composefold-6)
+    - [composeGetter](#composegetter-6)
+    - [composeTraversal](#composetraversal-6)
+    - [composeOptional](#composeoptional-6)
+    - [composeLens](#composelens-6)
+    - [composePrism](#composeprism-6)
+    - [composeIso](#composeiso-6)
     - [find](#find)
     - [headOption](#headoption)
     - [getAll](#getall)
@@ -253,11 +260,12 @@ You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
   - [Methods](#methods-7)
     - [set](#set-2)
     - [compose](#compose-7)
-    - [composeTraversal](#composetraversal-6)
-    - [composeOptional](#composeoptional-6)
-    - [composeLens](#composelens-6)
-    - [composePrism](#composeprism-6)
-    - [composeIso](#composeiso-6)
+    - [composeSetter](#composesetter-5)
+    - [composeTraversal](#composetraversal-7)
+    - [composeOptional](#composeoptional-7)
+    - [composeLens](#composelens-7)
+    - [composePrism](#composeprism-7)
+    - [composeIso](#composeiso-7)
 - [fromTraversable](#fromtraversable)
 - [fromFoldable](#fromfoldable)
 - [At](#at)
@@ -401,6 +409,10 @@ view an Iso as a Setter
 ```
 
 compose an Iso with an Iso
+
+### composeIso
+
+Alias of `compose`
 
 ### composeLens
 
@@ -634,6 +646,10 @@ view a Lens as a Fold
 
 compose a Lens with a Lens
 
+### composeLens
+
+Alias of `compose`
+
 ### composeGetter
 
 ```ts
@@ -771,6 +787,10 @@ view a Prism as a Fold
 ```
 
 compose a Prism with a Prism
+
+### composePrism
+
+Alias of `compose`
 
 ### composeOptional
 
@@ -967,6 +987,10 @@ view an Optional as a Setter
 
 compose a Optional with a Optional
 
+### composeOptional
+
+Alias of `compose`
+
 ### composeTraversal
 
 ```ts
@@ -1075,6 +1099,10 @@ view a Traversal as a Setter
 
 compose a Traversal with another Traversal
 
+### composeTraversal
+
+Alias of `compose`
+
 ### composeFold
 
 ```ts
@@ -1157,6 +1185,10 @@ view a Getter as a Fold
 
 compose a Getter with a Getter
 
+### composeGetter
+
+Alias of `compose`
+
 ### composeFold
 
 ```ts
@@ -1222,6 +1254,10 @@ class Fold<S, A> {
 ```
 
 compose a Fold with a Fold
+
+### composeFold
+
+Alias of `compose`
 
 ### composeGetter
 
@@ -1334,6 +1370,10 @@ class Setter<S, A> {
 ```
 
 compose a Setter with a Setter
+
+### composeSetter
+
+Alias of `compose`
 
 ### composeTraversal
 
