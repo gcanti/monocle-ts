@@ -6,7 +6,6 @@ import { setoidNumber } from 'fp-ts/lib/Setoid'
 import * as S from 'fp-ts/lib/Set'
 import * as SM from 'fp-ts/lib/StrMap'
 import { Iso } from '../src'
-import { string } from 'parsimmon'
 
 describe('At', () => {
   describe('atStrMap', () => {

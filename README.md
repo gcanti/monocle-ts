@@ -1465,6 +1465,12 @@ create a Fold from a Foldable
 
 # At
 
+```ts
+class At<S, I, A> {
+  constructor(readonly at: (i: I) => Lens<S, A>) {}
+}
+```
+
 ## Methods
 
 ### fromIso
@@ -1494,6 +1500,12 @@ lift an instance of `At` using an `Iso`
 ```
 
 # Index
+
+```ts
+class Index<S, I, A> {
+  constructor(readonly index: (i: I) => Optional<S, A>) {}
+}
+```
 
 ## fromAt
 
