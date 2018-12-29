@@ -122,8 +122,8 @@ export class Iso<S, A> {
 type ObjectProp<S> = number extends keyof S // disallows arrays, tuples and Record<number, _>
   ? never
   : string extends keyof S // disallows Record<string, _>
-    ? never
-    : keyof S
+  ? never
+  : keyof S
 
 export interface LensFromPath<S> {
   <
