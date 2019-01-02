@@ -13,6 +13,11 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 1.5.2
+
+- **Polish**
+  - disallow improper use of `from`\* APIs, closes #73 (@gcanti)
+
 # 1.5.1
 
 - **Polish**
