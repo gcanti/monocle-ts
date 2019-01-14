@@ -35,11 +35,11 @@ describe('Optional', () => {
     const info1 = Optional.fromNullableProp<Response, Info, 'info'>('info')
     const employment1 = Optional.fromNullableProp<Info, Employment, 'employment'>('employment')
     const phone1 = Optional.fromNullableProp<Employment, Phone, 'phone'>('phone')
-    const number = Lens.fromProp<Phone>()('number')
+    const phoneNumber = Lens.fromProp<Phone>()('number')
     const numberFromResponse1 = info1
       .compose(employment1)
       .compose(phone1)
-      .composeLens(number)
+      .composeLens(phoneNumber)
 
     const response1: Response = {
       info: {
@@ -75,7 +75,7 @@ describe('Optional', () => {
     const numberFromResponse2 = info2
       .compose(employment2)
       .compose(phone2)
-      .composeLens(number)
+      .composeLens(phoneNumber)
 
     assert.deepEqual(numberFromResponse2.getOption(response1), numberFromResponse1.getOption(response1))
     assert.deepEqual(numberFromResponse2.getOption(response2), numberFromResponse1.getOption(response2))
@@ -100,11 +100,11 @@ describe('Optional', () => {
     const info1 = Optional.fromOptionProp<Response>('info')
     const employment1 = Optional.fromOptionProp<Info>('employment')
     const phone1 = Optional.fromOptionProp<Employment>('phone')
-    const number = Lens.fromProp<Phone>()('number')
+    const phoneNumber = Lens.fromProp<Phone>()('number')
     const numberFromResponse1 = info1
       .compose(employment1)
       .compose(phone1)
-      .composeLens(number)
+      .composeLens(phoneNumber)
 
     const response1: Response = {
       info: some({
@@ -130,7 +130,7 @@ describe('Optional', () => {
     const numberFromResponse2 = info2
       .compose(employment2)
       .compose(phone2)
-      .composeLens(number)
+      .composeLens(phoneNumber)
 
     assert.deepEqual(numberFromResponse2.getOption(response1), some('555-1234'))
     assert.deepEqual(numberFromResponse2.getOption(response2), none)
@@ -170,9 +170,9 @@ describe('Optional', () => {
       phone: Option<Phone>
     }
     const phone = Optional.fromOptionProp<Employment>()('phone')
-    const number = Optional.fromOptionProp<Phone>()('number')
-    const composition1 = phone.compose(number)
-    const composition2 = phone.composeOptional(number)
+    const phoneNumber = Optional.fromOptionProp<Phone>()('number')
+    const composition1 = phone.compose(phoneNumber)
+    const composition2 = phone.composeOptional(phoneNumber)
     assert.deepEqual(composition1.getOption({ phone: none }), none)
     assert.deepEqual(composition1.getOption({ phone: some({ number: none }) }), none)
     assert.deepEqual(composition1.getOption({ phone: some({ number: some('a') }) }), some('a'))
