@@ -2,8 +2,7 @@
   "extends": "tslint-config-standard",
   "rules": {
     "space-before-function-paren": false,
-    "no-use-before-declare": false,
-    "variable-name": false,
-    "ter-indent": false
+    "no-unnecessary-generics": false,
+    "deprecation": false // TODO remove when fp-ts@2.0.0 lends
   }
 }

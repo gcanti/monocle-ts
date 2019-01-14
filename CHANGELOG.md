@@ -13,6 +13,11 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 1.5.3
+
+- **Bug Fix**
+  - revert 27b587b, closes #75 (@gcanti)
+
 # 1.5.2
 
 - **Polish**
