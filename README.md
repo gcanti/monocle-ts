@@ -68,7 +68,7 @@ As we can see copy is not convenient to update nested objects because we need to
 we do with `monocle-ts`
 
 ```ts
-import { Lens, Optional } from 'monocle-ts'
+import { Lens } from 'monocle-ts'
 
 const company = Lens.fromProp<Employee>()('company')
 const address = Lens.fromProp<Company>()('address')
@@ -94,6 +94,16 @@ company
   .modify(capitalize)(employee)
 ```
 
+You can use the `fromPath` API to avoid some boilerplate
+
+```ts
+import { Lens } from 'monocle-ts'
+
+const name = Lens.fromPath<Employee>()(['company', 'address', 'street', 'name'])
+
+name.modify(capitalize)(employee)
+```
+
 Here `modify` lift a function `string => string` to a function `Employee => Employee`. It works but it would be clearer
 if we could zoom into the first character of a `string` with a `Lens`. However, we cannot write such a `Lens` because
 `Lenses` require the field they are directed at to be _mandatory_. In our case the first character of a `string` is
@@ -101,6 +111,7 @@ optional as a `string` can be empty. So we need another abstraction that would b
 `monocle-ts` it is called an `Optional`.
 
 ```ts
+import { Optional } from 'monocle-ts'
 import { some, none } from 'fp-ts/lib/Option'
 
 const firstLetter = new Optional<string, string>(s => (s.length > 0 ? some(s[0]) : none), a => s => a + s.substring(1))
