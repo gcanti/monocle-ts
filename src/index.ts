@@ -304,10 +304,16 @@ export class Prism<S, A> {
   readonly _tag: 'Prism' = 'Prism'
   constructor(readonly getOption: (s: S) => Option<A>, readonly reverseGet: (a: A) => S) {}
 
+  static fromPredicate<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
+  static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A>
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
     return new Prism(s => (predicate(s) ? some(s) : none), identity)
   }
 
+  /**
+   * Use `fromPredicate` instead
+   * @deprecated
+   */
   static fromRefinement<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A> {
     return new Prism<S, A>(s => (refinement(s) ? some(s) : none), identity)
   }
