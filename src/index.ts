@@ -536,6 +536,12 @@ export class Traversal<S, A> {
     return s => this.modify(constant(a))(s)
   }
 
+  filter<B extends A>(refinement: Refinement<A, B>): Traversal<S, B>
+  filter(predicate: Predicate<A>): Traversal<S, A>
+  filter(predicate: Predicate<A>): Traversal<S, A> {
+    return this.composePrism(Prism.fromPredicate(predicate))
+  }
+
   /** view a Traversal as a Fold */
   asFold(): Fold<S, A> {
     return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s =>

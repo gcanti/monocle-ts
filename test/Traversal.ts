@@ -1,6 +1,7 @@
 import { Lens, fromTraversable } from '../src'
 import * as assert from 'assert'
 import { array } from 'fp-ts/lib/Array'
+import { Option, isSome, some, Some } from 'fp-ts/lib/Option'
 
 describe('Traversal', () => {
   it('fromTraversable', () => {
@@ -34,5 +35,18 @@ describe('Traversal', () => {
     const traversal = fromTraversable(array)<string>()
     assert.deepEqual(traversal.set('a')([]), [])
     assert.deepEqual(traversal.set('a')(['b', 'c']), ['a', 'a'])
+  })
+
+  it('filter', () => {
+    const traversal1 = fromTraversable(array)<string>().filter(s => s.length > 2)
+    assert.deepEqual(traversal1.set('a')([]), [])
+    assert.deepEqual(traversal1.set('a')(['b', 'c']), ['b', 'c'])
+    assert.deepEqual(traversal1.set('a')(['b', 'foo', 'c']), ['b', 'a', 'c'])
+
+    const traversal2 = fromTraversable(array)<Option<number>>()
+      .filter(isSome)
+      .filter(o => o.value > 2)
+    assert.deepEqual(traversal2.set(new Some(2))([]), [])
+    assert.deepEqual(traversal2.set(new Some(4))([some(1), some(2), some(3)]), [some(1), some(2), some(4)])
   })
 })
