@@ -1,4 +1,4 @@
-import { Lens, Optional } from '../src'
+import { Lens, Optional } from '../../src'
 import { Option } from 'fp-ts/lib/Option'
 
 interface Person {
