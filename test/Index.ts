@@ -5,9 +5,15 @@ import * as assert from 'assert'
 import { some, none } from 'fp-ts/lib/Option'
 import * as SM from 'fp-ts/lib/StrMap'
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray'
-import { Iso } from '../src'
+import { Iso, update } from '../src'
 
 describe('Index', () => {
+  describe('update', () => {
+    assert.deepStrictEqual(update({ a: 1, b: 2 }, 'a', 2), { a: 2, b: 2 })
+    const orig = { a: 2, b: 2 }
+    assert.strictEqual(update(orig, 'a', 2), orig)
+  })
+
   describe('indexStrMap', () => {
     const index = indexStrMap<string>().index('key')
 
