@@ -70,7 +70,7 @@ export class Iso<S, A> {
 
   /** view an Iso as a Setter */
   asSetter(): Setter<S, A> {
-    return new Setter(f => s => this.modify(f)(s))
+    return new Setter(f => this.modify(f))
   }
 
   /** compose an Iso with an Iso */
@@ -143,11 +143,14 @@ function lensFromPath(path: Array<any>): any {
 }
 
 function lensFromProp<S, P extends keyof S>(prop: P): Lens<S, S[P]> {
-  return new Lens(s => s[prop], a => s => Object.assign({}, s, { [prop as any]: a }))
+  return new Lens(s => s[prop], a => s => (s[prop] === a ? s : Object.assign({}, s, { [prop as any]: a })))
 }
 
 function lensFromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, A> {
-  return new Lens((s: any) => fromNullable(s[k]).getOrElse(defaultValue), a => s => ({ ...s, [k as any]: a }))
+  return new Lens(
+    (s: any) => fromNullable(s[k]).getOrElse(defaultValue),
+    a => s => (s[k as any] === a ? s : { ...s, [k as any]: a })
+  )
 }
 
 /*
@@ -204,7 +207,15 @@ export class Lens<S, A> {
           }
           return r
         },
-        a => s => Object.assign({}, s, a)
+        a => s => {
+          for (let i = 0; i < len; i++) {
+            const k = props[i]
+            if (a[k] !== s[k]) {
+              return Object.assign({}, s, a)
+            }
+          }
+          return s
+        }
       )
     }
   }
@@ -219,7 +230,11 @@ export class Lens<S, A> {
   }
 
   modify(f: (a: A) => A): (s: S) => S {
-    return s => this.set(f(this.get(s)))(s)
+    return s => {
+      const v = this.get(s)
+      const n = f(v)
+      return v === n ? s : this.set(n)(s)
+    }
   }
 
   /** view a Lens as a Optional */
@@ -236,7 +251,7 @@ export class Lens<S, A> {
 
   /** view a Lens as a Setter */
   asSetter(): Setter<S, A> {
-    return new Setter(f => s => this.modify(f)(s))
+    return new Setter(f => this.modify(f))
   }
 
   /** view a Lens as a Getter */
@@ -349,7 +364,7 @@ export class Prism<S, A> {
 
   /** view a Prism as a Setter */
   asSetter(): Setter<S, A> {
-    return new Setter(f => s => this.modify(f)(s))
+    return new Setter(f => this.modify(f))
   }
 
   /** view a Prism as a Fold */
@@ -406,7 +421,7 @@ export class Prism<S, A> {
 const somePrism = new Prism<Option<any>, any>(identity, some)
 
 function optionalFromNullableProp<S, K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>> {
-  return new Optional((s: any) => fromNullable(s[k]), a => s => ({ ...s, [k as any]: a }))
+  return new Optional((s: any) => fromNullable(s[k]), a => s => (s[k as any] === a ? s : { ...s, [k as any]: a }))
 }
 
 type OptionPropertyNames<S> = { [K in keyof S]-?: S[K] extends Option<any> ? K : never }[keyof S]
@@ -443,7 +458,11 @@ export class Optional<S, A> {
   }
 
   modifyOption(f: (a: A) => A): (s: S) => Option<S> {
-    return s => this.getOption(s).map(a => this.set(f(a))(s))
+    return s =>
+      this.getOption(s).map(a => {
+        const n = f(a)
+        return n === a ? s : this.set(n)(s)
+      })
   }
 
   /** view a Optional as a Traversal */
@@ -460,7 +479,7 @@ export class Optional<S, A> {
 
   /** view an Optional as a Setter */
   asSetter(): Setter<S, A> {
-    return new Setter(f => s => this.modify(f)(s))
+    return new Setter(f => this.modify(f))
   }
 
   /** compose a Optional with a Optional */
@@ -551,7 +570,7 @@ export class Traversal<S, A> {
 
   /** view a Traversal as a Setter */
   asSetter(): Setter<S, A> {
-    return new Setter(f => s => this.modify(f)(s))
+    return new Setter(f => this.modify(f))
   }
 
   /** compose a Traversal with a Traversal */
