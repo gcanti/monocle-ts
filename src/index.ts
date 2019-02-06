@@ -342,7 +342,16 @@ export class Prism<S, A> {
   }
 
   modifyOption(f: (a: A) => A): (s: S) => Option<S> {
-    return s => this.getOption(s).map(a => this.reverseGet(f(a)))
+    return s => {
+      const opt = this.getOption(s)
+      if (opt.isSome()) {
+        const v = opt.value
+        const n = f(v)
+        return some(n === v ? s : this.reverseGet(n))
+      } else {
+        return none
+      }
+    }
   }
 
   /** set the target of a Prism with a value */
