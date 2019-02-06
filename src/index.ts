@@ -15,6 +15,10 @@ import { identity, constant, Predicate, Refinement } from 'fp-ts/lib/function'
 import { identity as id } from 'fp-ts/lib/Identity'
 import { Const, getApplicative } from 'fp-ts/lib/Const'
 
+const update = <O, K extends keyof O, A extends O[K]>(o: O, k: K, a: A): O => {
+  return a === o[k] ? o : { ...o, [k]: a }
+}
+
 /*
   Laws:
   1. reverseGet(get(s)) = s
@@ -143,14 +147,11 @@ function lensFromPath(path: Array<any>): any {
 }
 
 function lensFromProp<S, P extends keyof S>(prop: P): Lens<S, S[P]> {
-  return new Lens(s => s[prop], a => s => (s[prop] === a ? s : Object.assign({}, s, { [prop as any]: a })))
+  return new Lens(s => s[prop], a => s => update(s, prop, a))
 }
 
 function lensFromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, A> {
-  return new Lens(
-    (s: any) => fromNullable(s[k]).getOrElse(defaultValue),
-    a => s => (s[k as any] === a ? s : { ...s, [k as any]: a })
-  )
+  return new Lens((s: any) => fromNullable(s[k]).getOrElse(defaultValue), a => s => update(s, k, a))
 }
 
 /*
@@ -425,7 +426,7 @@ export class Prism<S, A> {
 const somePrism = new Prism<Option<any>, any>(identity, some)
 
 function optionalFromNullableProp<S, K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>> {
-  return new Optional((s: any) => fromNullable(s[k]), a => s => (s[k as any] === a ? s : { ...s, [k as any]: a }))
+  return new Optional((s: any) => fromNullable(s[k]), a => s => update(s, k, a))
 }
 
 type OptionPropertyNames<S> = { [K in keyof S]-?: S[K] extends Option<any> ? K : never }[keyof S]
@@ -488,10 +489,7 @@ export class Optional<S, A> {
 
   /** compose a Optional with a Optional */
   compose<B>(ab: Optional<A, B>): Optional<S, B> {
-    return new Optional<S, B>(
-      s => this.getOption(s).chain(a => ab.getOption(a)),
-      b => s => this.modify(a => ab.set(b)(a))(s)
-    )
+    return new Optional<S, B>(s => this.getOption(s).chain(a => ab.getOption(a)), b => this.modify(ab.set(b)))
   }
 
   /** @alias of `compose` */
@@ -556,7 +554,7 @@ export class Traversal<S, A> {
   }
 
   set(a: A): (s: S) => S {
-    return s => this.modify(constant(a))(s)
+    return this.modify(constant(a))
   }
 
   filter<B extends A>(refinement: Refinement<A, B>): Traversal<S, B>
@@ -579,9 +577,7 @@ export class Traversal<S, A> {
 
   /** compose a Traversal with a Traversal */
   compose<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return new Traversal<S, B>(<F>(F: Applicative<F>) => (f: (a: B) => HKT<F, B>) => (s: S): HKT<F, S> =>
-      this.modifyF(F)(a => ab.modifyF(F)(f)(a))(s)
-    )
+    return new Traversal<S, B>(<F>(F: Applicative<F>) => (f: (a: B) => HKT<F, B>) => this.modifyF(F)(ab.modifyF(F)(f)))
   }
 
   /** @alias of `compose` */
@@ -717,7 +713,7 @@ export class Fold<S, A> {
 
   /** compose a Fold with a Fold */
   compose<B>(ab: Fold<A, B>): Fold<S, B> {
-    return new Fold(<M>(M: Monoid<M>) => (f: (b: B) => M) => (s: S): M => this.foldMap(M)(a => ab.foldMap(M)(f)(a))(s))
+    return new Fold(<M>(M: Monoid<M>) => (f: (b: B) => M) => this.foldMap(M)(ab.foldMap(M)(f)))
   }
 
   /** @alias of `compose` */
@@ -771,12 +767,12 @@ export class Setter<S, A> {
   constructor(readonly modify: (f: (a: A) => A) => (s: S) => S) {}
 
   set(a: A): (s: S) => S {
-    return s => this.modify(constant(a))(s)
+    return this.modify(constant(a))
   }
 
   /** compose a Setter with a Setter */
   compose<B>(ab: Setter<A, B>): Setter<S, B> {
-    return new Setter(f => s => this.modify((a: A) => ab.modify(f)(a))(s))
+    return new Setter(f => this.modify(ab.modify(f)))
   }
 
   /** @alias of `compose` */
