@@ -1,6 +1,7 @@
 import * as assert from 'assert'
 import { Optional, Lens } from '../src'
 import { none, some, Option } from 'fp-ts/lib/Option'
+import { identity } from 'fp-ts/lib/function'
 
 interface A {
   a: Option<number>
@@ -68,6 +69,9 @@ describe('Optional', () => {
       }
     })
     assert.deepStrictEqual(numberFromResponse1.set('b')(response2), response2)
+    assert.strictEqual(numberFromResponse1.set('555-1234')(response1), response1)
+    assert.strictEqual(numberFromResponse1.modify(identity)(response1), response1)
+    assert.strictEqual(numberFromResponse1.modify(identity)(response2), response2)
 
     const info2 = Optional.fromNullableProp<Response>()('info')
     const employment2 = Optional.fromNullableProp<Info>()('employment')
@@ -81,6 +85,9 @@ describe('Optional', () => {
     assert.deepStrictEqual(numberFromResponse2.getOption(response2), numberFromResponse1.getOption(response2))
     assert.deepStrictEqual(numberFromResponse2.set('b')(response1), numberFromResponse1.set('b')(response1))
     assert.deepStrictEqual(numberFromResponse2.set('b')(response2), numberFromResponse1.set('b')(response2))
+    assert.strictEqual(numberFromResponse2.set('555-1234')(response1), response1)
+    assert.strictEqual(numberFromResponse2.modify(identity)(response1), response1)
+    assert.strictEqual(numberFromResponse2.modify(identity)(response2), response2)
   })
 
   it('fromOptionProp', () => {
