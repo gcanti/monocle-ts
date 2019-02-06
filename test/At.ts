@@ -13,13 +13,13 @@ describe('At', () => {
     const at = atStrMap<string>().at('key')
 
     it('get', () => {
-      assert.deepEqual(at.get(map), some('value'))
+      assert.deepStrictEqual(at.get(map), some('value'))
     })
 
     it('add', () => {
       const newMap = at.set(some('NEW'))(map)
 
-      assert.deepEqual(newMap, SM.singleton('key', 'NEW'))
+      assert.deepStrictEqual(newMap, SM.singleton('key', 'NEW'))
     })
 
     it('delete', () => {
@@ -34,19 +34,19 @@ describe('At', () => {
     const at = atSet(setoidNumber).at(3)
 
     it('get', () => {
-      assert.deepEqual(at.get(set), true)
+      assert.deepStrictEqual(at.get(set), true)
     })
 
     it('add', () => {
       const newSet = at.set(true)(set)
 
-      assert.deepEqual(newSet, set)
+      assert.deepStrictEqual(newSet, set)
     })
 
     it('delete', () => {
       const newSet = at.set(false)(set)
 
-      assert.deepEqual(newSet, new Set())
+      assert.deepStrictEqual(newSet, new Set())
     })
   })
 
@@ -55,10 +55,10 @@ describe('At', () => {
     const at = atStrMap<number>()
       .fromIso(iso)
       .at('a')
-    assert.deepEqual(at.get(new SM.StrMap({})), none)
-    assert.deepEqual(at.get(new SM.StrMap({ a: '1' })), some(1))
+    assert.deepStrictEqual(at.get(new SM.StrMap({})), none)
+    assert.deepStrictEqual(at.get(new SM.StrMap({ a: '1' })), some(1))
 
-    assert.deepEqual(at.set(none)(new SM.StrMap({})), new SM.StrMap({}))
-    assert.deepEqual(at.set(some(1))(new SM.StrMap({})), new SM.StrMap({ a: '1' }))
+    assert.deepStrictEqual(at.set(none)(new SM.StrMap({})), new SM.StrMap({}))
+    assert.deepStrictEqual(at.set(some(1))(new SM.StrMap({})), new SM.StrMap({ a: '1' }))
   })
 })

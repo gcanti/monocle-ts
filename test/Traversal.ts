@@ -28,25 +28,25 @@ describe('Traversal', () => {
         .reverse()
         .join('')
     )(model)
-    assert.deepEqual(newModel, { tweets: [{ text: 'dlrow olleh' }, { text: 'raboof' }] })
+    assert.deepStrictEqual(newModel, { tweets: [{ text: 'dlrow olleh' }, { text: 'raboof' }] })
   })
 
   it('set', () => {
     const traversal = fromTraversable(array)<string>()
-    assert.deepEqual(traversal.set('a')([]), [])
-    assert.deepEqual(traversal.set('a')(['b', 'c']), ['a', 'a'])
+    assert.deepStrictEqual(traversal.set('a')([]), [])
+    assert.deepStrictEqual(traversal.set('a')(['b', 'c']), ['a', 'a'])
   })
 
   it('filter', () => {
     const traversal1 = fromTraversable(array)<string>().filter(s => s.length > 2)
-    assert.deepEqual(traversal1.set('a')([]), [])
-    assert.deepEqual(traversal1.set('a')(['b', 'c']), ['b', 'c'])
-    assert.deepEqual(traversal1.set('a')(['b', 'foo', 'c']), ['b', 'a', 'c'])
+    assert.deepStrictEqual(traversal1.set('a')([]), [])
+    assert.deepStrictEqual(traversal1.set('a')(['b', 'c']), ['b', 'c'])
+    assert.deepStrictEqual(traversal1.set('a')(['b', 'foo', 'c']), ['b', 'a', 'c'])
 
     const traversal2 = fromTraversable(array)<Option<number>>()
       .filter(isSome)
       .filter(o => o.value > 2)
-    assert.deepEqual(traversal2.set(new Some(2))([]), [])
-    assert.deepEqual(traversal2.set(new Some(4))([some(1), some(2), some(3)]), [some(1), some(2), some(4)])
+    assert.deepStrictEqual(traversal2.set(new Some(2))([]), [])
+    assert.deepStrictEqual(traversal2.set(new Some(4))([some(1), some(2), some(3)]), [some(1), some(2), some(4)])
   })
 })

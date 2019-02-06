@@ -11,33 +11,33 @@ describe('Fold', () => {
   const eg0 = { x: 42, y: -1 }
 
   it('getAll', () => {
-    assert.deepEqual(_x.asFold().getAll(eg0), [42])
+    assert.deepStrictEqual(_x.asFold().getAll(eg0), [42])
   })
 
   it('find', () => {
-    assert.deepEqual(_x.asFold().find(n => n >= 42)(eg0), some(42))
-    assert.deepEqual(_x.asFold().find(n => n < 42)(eg0), none)
+    assert.deepStrictEqual(_x.asFold().find(n => n >= 42)(eg0), some(42))
+    assert.deepStrictEqual(_x.asFold().find(n => n < 42)(eg0), none)
   })
 
   it('exist', () => {
-    assert.deepEqual(_x.asFold().exist(n => n >= 42)(eg0), true)
-    assert.deepEqual(_x.asFold().exist(n => n < 42)(eg0), false)
+    assert.deepStrictEqual(_x.asFold().exist(n => n >= 42)(eg0), true)
+    assert.deepStrictEqual(_x.asFold().exist(n => n < 42)(eg0), false)
   })
 
   it('all', () => {
-    assert.deepEqual(_x.asFold().all(n => n >= 42)(eg0), true)
-    assert.deepEqual(_x.asFold().all(n => n < 42)(eg0), false)
+    assert.deepStrictEqual(_x.asFold().all(n => n >= 42)(eg0), true)
+    assert.deepStrictEqual(_x.asFold().all(n => n < 42)(eg0), false)
   })
 
   it('fromFoldable', () => {
     const fold = fromFoldable(array)<number>()
-    assert.deepEqual(fold.all(n => n >= 2)([1, 2, 3]), false)
-    assert.deepEqual(fold.all(n => n >= 1)([1, 2, 3]), true)
+    assert.deepStrictEqual(fold.all(n => n >= 2)([1, 2, 3]), false)
+    assert.deepStrictEqual(fold.all(n => n >= 1)([1, 2, 3]), true)
   })
 
   it('headOption', () => {
     const fold = fromFoldable(array)<number>()
-    assert.deepEqual(fold.headOption([]), none)
-    assert.deepEqual(fold.headOption([1, 2, 3]), some(1))
+    assert.deepStrictEqual(fold.headOption([]), none)
+    assert.deepStrictEqual(fold.headOption([1, 2, 3]), some(1))
   })
 })

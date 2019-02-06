@@ -6,13 +6,13 @@ import { some, none } from 'fp-ts/lib/Option'
 describe('Either', () => {
   it('_right', () => {
     const prism = _right<string, number>()
-    assert.deepEqual(prism.getOption(right(1)), some(1))
-    assert.deepEqual(prism.getOption(left('a')), none)
+    assert.deepStrictEqual(prism.getOption(right(1)), some(1))
+    assert.deepStrictEqual(prism.getOption(left('a')), none)
   })
 
   it('_left', () => {
     const prism = _left<string, number>()
-    assert.deepEqual(prism.getOption(right(1)), none)
-    assert.deepEqual(prism.getOption(left('a')), some('a'))
+    assert.deepStrictEqual(prism.getOption(right(1)), none)
+    assert.deepStrictEqual(prism.getOption(left('a')), some('a'))
   })
 })
