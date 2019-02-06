@@ -81,23 +81,23 @@ describe('Lens', () => {
     const value = Lens.fromProp<Inner, 'value'>('value')
     const lens1 = inner1.compose(value)
 
-    assert.deepEqual(lens1.set(1)({}), { inner: { value: 1, foo: 'foo' } })
+    assert.deepStrictEqual(lens1.set(1)({}), { inner: { value: 1, foo: 'foo' } })
     assert.strictEqual(lens1.get({}), 0)
-    assert.deepEqual(lens1.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
+    assert.deepStrictEqual(lens1.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
     assert.strictEqual(lens1.get({ inner: { value: 1, foo: 'bar' } }), 1)
 
     const inner2 = Lens.fromNullableProp<Outer>()('inner', { value: 0, foo: 'foo' })
     const lens2 = inner2.compose(value)
-    assert.deepEqual(lens2.set(1)({}), { inner: { value: 1, foo: 'foo' } })
+    assert.deepStrictEqual(lens2.set(1)({}), { inner: { value: 1, foo: 'foo' } })
     assert.strictEqual(lens2.get({}), 0)
-    assert.deepEqual(lens2.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
+    assert.deepStrictEqual(lens2.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
     assert.strictEqual(lens2.get({ inner: { value: 1, foo: 'bar' } }), 1)
   })
 
   it('fromProps', () => {
     const lens = Lens.fromProps<Person>()(['name', 'age'])
-    assert.deepEqual(lens.get(person), { name: 'giulio', age: 44 })
-    assert.deepEqual(lens.set({ name: 'Guido', age: 47 })(person), { name: 'Guido', age: 47, rememberMe: true })
+    assert.deepStrictEqual(lens.get(person), { name: 'giulio', age: 44 })
+    assert.deepStrictEqual(lens.set({ name: 'Guido', age: 47 })(person), { name: 'Guido', age: 47, rememberMe: true })
   })
 
   it('compose', () => {
@@ -120,9 +120,9 @@ describe('Lens', () => {
       }
     }
     assert.strictEqual(composition1.get(address), 'name')
-    assert.deepEqual(composition1.set('name2')(address), expected)
+    assert.deepStrictEqual(composition1.set('name2')(address), expected)
 
     assert.strictEqual(composition2.get(address), composition1.get(address))
-    assert.deepEqual(composition2.set('name2')(address), composition1.set('name2')(address))
+    assert.deepStrictEqual(composition2.set('name2')(address), composition1.set('name2')(address))
   })
 })

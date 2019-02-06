@@ -19,49 +19,49 @@ const isB: Refinement<U, B> = (u): u is B => u.type === 'B'
 describe('Prism', () => {
   it('fromPredicate', () => {
     const prism = Prism.fromPredicate<number>(n => n % 1 === 0)
-    assert.deepEqual(prism.getOption(1), some(1))
-    assert.deepEqual(prism.getOption(1.1), none)
+    assert.deepStrictEqual(prism.getOption(1), some(1))
+    assert.deepStrictEqual(prism.getOption(1.1), none)
   })
 
   it('fromRefinement', () => {
     const prism = Prism.fromRefinement(isA)
     const toUpperCase = (a: A): A => ({ type: 'A', a: a.a.toUpperCase() })
-    assert.deepEqual(prism.modify(toUpperCase)({ type: 'A', a: 'foo' }), { type: 'A', a: 'FOO' })
-    assert.deepEqual(prism.modify(toUpperCase)({ type: 'B', b: some(1) }), { type: 'B', b: some(1) })
+    assert.deepStrictEqual(prism.modify(toUpperCase)({ type: 'A', a: 'foo' }), { type: 'A', a: 'FOO' })
+    assert.deepStrictEqual(prism.modify(toUpperCase)({ type: 'B', b: some(1) }), { type: 'B', b: some(1) })
   })
 
   it('some', () => {
     const prism = Prism.some<number>()
-    assert.deepEqual(prism.getOption(some(1)), some(1))
-    assert.deepEqual(prism.getOption(none), none)
-    assert.deepEqual(prism.reverseGet(2), some(2))
+    assert.deepStrictEqual(prism.getOption(some(1)), some(1))
+    assert.deepStrictEqual(prism.getOption(none), none)
+    assert.deepStrictEqual(prism.reverseGet(2), some(2))
   })
 
   it('asOptional', () => {
     const optional = Prism.some<number>().asOptional()
-    assert.deepEqual(optional.getOption(some(1)), some(1))
-    assert.deepEqual(optional.getOption(none), none)
-    assert.deepEqual(optional.set(2)(some(1)), some(2))
-    assert.deepEqual(optional.set(2)(none), none)
+    assert.deepStrictEqual(optional.getOption(some(1)), some(1))
+    assert.deepStrictEqual(optional.getOption(none), none)
+    assert.deepStrictEqual(optional.set(2)(some(1)), some(2))
+    assert.deepStrictEqual(optional.set(2)(none), none)
   })
 
   it('asTraversal', () => {
     const traversal = Prism.some<number>().asTraversal()
-    assert.deepEqual(traversal.asSetter().set(2)(some(1)), some(2))
-    assert.deepEqual(traversal.asSetter().set(2)(none), none)
+    assert.deepStrictEqual(traversal.asSetter().set(2)(some(1)), some(2))
+    assert.deepStrictEqual(traversal.asSetter().set(2)(none), none)
   })
 
   it('set', () => {
     const prism = Prism.some<number>()
-    assert.deepEqual(prism.set(2)(some(1)), some(2))
-    assert.deepEqual(prism.set(2)(none), none)
+    assert.deepStrictEqual(prism.set(2)(some(1)), some(2))
+    assert.deepStrictEqual(prism.set(2)(none), none)
   })
 
   it('modify', () => {
     const prism = new Prism<U, string>(s => (s.type === 'A' ? some(s.a) : none), a => ({ type: 'A', a }))
     const toUpperCase = (s: string): string => s.toUpperCase()
-    assert.deepEqual(prism.modify(toUpperCase)({ type: 'A', a: 'foo' }), { type: 'A', a: 'FOO' })
-    assert.deepEqual(prism.modify(toUpperCase)({ type: 'B', b: some(1) }), { type: 'B', b: some(1) })
+    assert.deepStrictEqual(prism.modify(toUpperCase)({ type: 'A', a: 'foo' }), { type: 'A', a: 'FOO' })
+    assert.deepStrictEqual(prism.modify(toUpperCase)({ type: 'B', b: some(1) }), { type: 'B', b: some(1) })
   })
 
   it('compose', () => {
@@ -69,17 +69,20 @@ describe('Prism', () => {
     const prism = new Prism<B, number>(s => s.b, b => ({ type: 'B', b: some(b) }))
     const composition1 = prismB.compose(prism)
     const composition2 = prismB.composePrism(prism)
-    assert.deepEqual(composition1.getOption({ type: 'B', b: some(1) }), some(1))
-    assert.deepEqual(composition1.getOption({ type: 'B', b: none }), none)
-    assert.deepEqual(composition1.getOption({ type: 'A', a: 'a' }), none)
-    assert.deepEqual(composition1.reverseGet(1), { type: 'B', b: some(1) })
+    assert.deepStrictEqual(composition1.getOption({ type: 'B', b: some(1) }), some(1))
+    assert.deepStrictEqual(composition1.getOption({ type: 'B', b: none }), none)
+    assert.deepStrictEqual(composition1.getOption({ type: 'A', a: 'a' }), none)
+    assert.deepStrictEqual(composition1.reverseGet(1), { type: 'B', b: some(1) })
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       composition2.getOption({ type: 'B', b: some(1) }),
       composition1.getOption({ type: 'B', b: some(1) })
     )
-    assert.deepEqual(composition2.getOption({ type: 'B', b: none }), composition1.getOption({ type: 'B', b: none }))
-    assert.deepEqual(composition2.getOption({ type: 'A', a: 'a' }), composition1.getOption({ type: 'A', a: 'a' }))
-    assert.deepEqual(composition2.reverseGet(1), composition1.reverseGet(1))
+    assert.deepStrictEqual(
+      composition2.getOption({ type: 'B', b: none }),
+      composition1.getOption({ type: 'B', b: none })
+    )
+    assert.deepStrictEqual(composition2.getOption({ type: 'A', a: 'a' }), composition1.getOption({ type: 'A', a: 'a' }))
+    assert.deepStrictEqual(composition2.reverseGet(1), composition1.reverseGet(1))
   })
 })
