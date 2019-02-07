@@ -1070,6 +1070,13 @@ an optic that focuses on multiple elements in a data structure. See [fromTravers
 
 ## Methods
 
+### filter
+
+```ts
+filter<B extends A>(refinement: Refinement<A, B>): Traversal<S, B>
+filter(predicate: Predicate<A>): Traversal<S, A>
+```
+
 ### modify
 
 ```ts
@@ -1558,4 +1565,18 @@ lift an instance of `Index` using an `Iso`
 
 ```ts
 <A = never>(): Index<StrMap<A>, string, A>
+```
+
+# Either
+
+## `_right` prism
+
+```ts
+export const _right = <L, A>(): Prism<Either<L, A>, A>
+```
+
+## `_left` prism
+
+```ts
+export const _left = <L, A>(): Prism<Either<L, A>, L>
 ```

@@ -13,6 +13,16 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 1.6.0
+
+- **New Feature**
+  - add `Traversal.prototype.filter` (@gcanti)
+  - add `Either` prisms (@gcanti)
+- **Polish**
+  - many optimizitions (@sledorze)
+- **Deprecation**
+  - deprecate `Prism.fromRefinement` in favour of `Prism.fromPredicate` (@gcanti)
+
 # 1.5.3
 
 - **Bug Fix**
