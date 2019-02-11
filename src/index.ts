@@ -755,6 +755,8 @@ export class Fold<S, A> {
   }
 
   /** find the first target of a Fold matching the predicate */
+  find<B extends A>(p: Refinement<A, B>): (s: S) => Option<B>
+  find(p: Predicate<A>): (s: S) => Option<A>
   find(p: Predicate<A>): (s: S) => Option<A> {
     return this.foldMapFirst(a => (p(a) ? option.of(a) : none))
   }
