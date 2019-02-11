@@ -1077,6 +1077,27 @@ filter<B extends A>(refinement: Refinement<A, B>): Traversal<S, B>
 filter(predicate: Predicate<A>): Traversal<S, A>
 ```
 
+focus the items matched by a traversal to those that match a predicate.
+
+Example:
+
+```ts
+import { fromTraversable } from 'monocle-ts'
+import { array } from 'fp-ts/lib/Array'
+interface Person {
+  name: string;
+  cool: boolean;
+}
+
+type People = Person[]
+const peopleTraversal = fromTraversable(array)<Person>()
+const coolLens = Lens.fromProp<Person>()('cool')
+const people = [{name: 'bill', cool: false}, {name: 'jill', cool: true}]
+
+peopleTraversal.filter(p => p.name === 'bill').composeLens(coolLens)
+  .set(true)(people) // [{name: 'bill', cool: true}, {name: 'jill', cool: true}]
+```
+
 ### modify
 
 ```ts
