@@ -1,5 +1,6 @@
-import { Lens, Optional } from '../../src'
+import { Lens, Optional, fromFoldable } from '../../src'
 import { Option } from 'fp-ts/lib/Option'
+import { array } from 'fp-ts/lib/Array'
 
 interface Person {
   name: string
@@ -119,3 +120,17 @@ interface Employment {
 Optional.fromOptionProp<Employment>('phone') // $ExpectType Optional<Employment, Phone>
 // $ExpectError
 Optional.fromOptionProp<Employment>('foo')
+
+interface A {
+  type: 'A'
+}
+interface B {
+  type: 'B'
+}
+
+const fold =  fromFoldable(array)<A | B>()
+const isB = (x: A | B): x is B => x.type === 'B'
+const s: Array<A | B> = []
+
+// Fold find method
+fold.find(isB)(s) // $ExpectType Option<B>
