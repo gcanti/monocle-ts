@@ -10,7 +10,7 @@ import {
 } from 'fp-ts/lib/Applicative'
 import { Foldable, Foldable1, Foldable2, Foldable3, foldMap } from 'fp-ts/lib/Foldable'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
-import { Option, none, some, fromNullable, option, getFirstMonoid } from 'fp-ts/lib/Option'
+import { Option, none, some, fromNullable, option, getFirstMonoid, fromPredicate } from 'fp-ts/lib/Option'
 import { identity, constant, Predicate, Refinement } from 'fp-ts/lib/function'
 import { identity as id } from 'fp-ts/lib/Identity'
 import { Const, getApplicative } from 'fp-ts/lib/Const'
@@ -758,7 +758,7 @@ export class Fold<S, A> {
   find<B extends A>(p: Refinement<A, B>): (s: S) => Option<B>
   find(p: Predicate<A>): (s: S) => Option<A>
   find(p: Predicate<A>): (s: S) => Option<A> {
-    return this.foldMapFirst(a => (p(a) ? option.of(a) : none))
+    return this.foldMapFirst(fromPredicate(p))
   }
 
   /** get the first target of a Fold */
