@@ -10,7 +10,7 @@ import {
 } from 'fp-ts/lib/Applicative'
 import { Foldable, Foldable1, Foldable2, Foldable3, foldMap } from 'fp-ts/lib/Foldable'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
-import { Option, none, some, fromNullable, option, getFirstMonoid, fromPredicate } from 'fp-ts/lib/Option'
+import { Option, none, some, fromNullable, getFirstMonoid, fromPredicate } from 'fp-ts/lib/Option'
 import { identity, constant, Predicate, Refinement } from 'fp-ts/lib/function'
 import { identity as id } from 'fp-ts/lib/Identity'
 import { Const, getApplicative } from 'fp-ts/lib/Const'
