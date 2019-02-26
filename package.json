@@ -18,9 +18,9 @@
     "build": "npm run clean && tsc",
     "prepublish": "npm run build",
     "docs-fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser markdown --write \"README.md\"",
-    "docs": "doctoc README.md && npm run docs-fix-prettier",
     "dtslint": "dtslint dtslint",
-    "mocha": "TS_NODE_CACHE=false mocha -r ts-node/register test/*.ts"
+    "mocha": "TS_NODE_CACHE=false mocha -r ts-node/register test/*.ts",
+    "docs": "rimraf rm -rf docs/**/*.md!docs/index.md && ts-node docs.ts"
   },
   "repository": {
     "type": "git",
@@ -38,11 +38,12 @@
   "devDependencies": {
     "@types/jest": "22.2.2",
     "@types/node": "7.0.4",
-    "doctoc": "1.3.0",
+    "docs-ts": "github:gcanti/docs-ts",
     "dtslint": "github:gcanti/dtslint",
     "jest": "^23.5.0",
     "mocha": "^5.2.0",
     "prettier": "^1.15.3",
+    "rimraf": "^2.6.3",
     "ts-jest": "22.4.2",
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",

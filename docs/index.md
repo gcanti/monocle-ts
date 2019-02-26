@@ -1,6 +1,6 @@
-[![build status](https://img.shields.io/travis/gcanti/monocle-ts/master.svg?style=flat-square)](https://travis-ci.org/gcanti/monocle-ts)
-[![dependency status](https://img.shields.io/david/gcanti/monocle-ts.svg?style=flat-square)](https://david-dm.org/gcanti/monocle-ts)
-![npm downloads](https://img.shields.io/npm/dm/monocle-ts.svg)
+---
+title: Home
+---
 
 # Motivation
 
@@ -136,7 +136,3 @@ The stable version is tested against TypeScript 3.2.2, but should run with TypeS
 **Note**. If you are running `< typescript@3.0.1` you have to polyfill `unknown`.
 
 You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
-
-# Documentation
-
-- [API Reference](docs/index.md)
