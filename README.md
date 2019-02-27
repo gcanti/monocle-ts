@@ -139,4 +139,4 @@ You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
 
 # Documentation
 
-- [API Reference](docs/index.md)
+- [API Reference](https://gcanti.github.io/monocle-ts/)

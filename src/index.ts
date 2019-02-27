@@ -167,6 +167,25 @@ export class Lens<S, A> {
   readonly _tag: 'Lens' = 'Lens'
   constructor(readonly get: (s: S) => A, readonly set: (a: A) => (s: S) => S) {}
 
+  /**
+   * @example
+   * import { Lens } from 'monocle-ts'
+   *
+   * type Person = {
+   *   name: string
+   *   age: number
+   *   address: {
+   *     city: string
+   *   }
+   * }
+   *
+   * const city = Lens.fromPath<Person>()(['address', 'city'])
+   *
+   * const person: Person = { name: 'Giulio', age: 43, address: { city: 'Milan' } }
+   *
+   * console.log(city.get(person)) // Milan
+   * console.log(city.set('London')(person)) // { name: 'Giulio', age: 43, address: { city: 'London' } }
+   */
   static fromPath<S>(): LensFromPath<S>
   static fromPath<
     S,
@@ -192,13 +211,51 @@ export class Lens<S, A> {
     return arguments.length === 0 ? lensFromPath : lensFromPath(arguments[0])
   }
 
+  /**
+   * generate a lens from a type and a prop
+   *
+   * @example
+   * import { Lens } from 'monocle-ts'
+   *
+   * type Person = {
+   *   name: string
+   *   age: number
+   * }
+   *
+   * const age = Lens.fromProp<Person>()('age')
+   * // or (deprecated)
+   * // const age = Lens.fromProp<Person, 'age'>('age')
+   *
+   * const person: Person = { name: 'Giulio', age: 43 }
+   *
+   * console.log(age.get(person)) // 43
+   * console.log(age.set(44)(person)) // { name: 'Giulio', age: 44 }
+   */
   static fromProp<S>(): <P extends keyof S>(prop: P) => Lens<S, S[P]>
   static fromProp<S, P extends keyof S>(prop: P): Lens<S, S[P]>
   static fromProp(): any {
     return arguments.length === 0 ? lensFromProp : lensFromProp<any, any>(arguments[0])
   }
 
-  /** generate a lens from a type and an array of props */
+  /**
+   * generate a lens from a type and an array of props
+   *
+   * @example
+   * import { Lens } from 'monocle-ts'
+   *
+   * interface Person {
+   *   name: string
+   *   age: number
+   *   rememberMe: boolean
+   * }
+   *
+   * const lens = Lens.fromProps<Person>()(['name', 'age'])
+   *
+   * const person: Person = { name: 'Giulio', age: 44, rememberMe: true }
+   *
+   * console.log(lens.get(person)) // { name: 'Giulio', age: 44 }
+   * console.log(lens.set({ name: 'Guido', age: 47 })(person)) // { name: 'Guido', age: 47, rememberMe: true }
+   */
   static fromProps<S>(): <P extends keyof S>(props: Array<P>) => Lens<S, { [K in P]: S[K] }> {
     return props => {
       const len = props.length
@@ -224,7 +281,30 @@ export class Lens<S, A> {
     }
   }
 
-  /** generate a lens from a type and a prop whose type is nullable */
+  /**
+   * generate a lens from a type and a prop whose type is nullable
+   *
+   * @example
+   * import { Lens } from 'monocle-ts'
+   *
+   * interface Outer {
+   *   inner?: Inner
+   * }
+   *
+   * interface Inner {
+   *   value: number
+   *   foo: string
+   * }
+   *
+   * const inner = Lens.fromNullableProp<Outer>()('inner', { value: 0, foo: 'foo' })
+   * const value = Lens.fromProp<Inner>()('value')
+   * const lens = inner.compose(value)
+   *
+   * console.log(lens.set(1)({})) // { inner: { value: 1, foo: 'foo' } }
+   * console.log(lens.get({})) // 0
+   * console.log(lens.set(1)({ inner: { value: 1, foo: 'bar' } })) // { inner: { value: 1, foo: 'bar' } }
+   * console.log(lens.get({ inner: { value: 1, foo: 'bar' } })) // 1
+   */
   static fromNullableProp<S>(): <A extends S[K], K extends keyof S>(k: K, defaultValue: A) => Lens<S, NonNullable<S[K]>>
   static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, NonNullable<S[K]>>
   static fromNullableProp(): any {
@@ -449,12 +529,82 @@ export class Optional<S, A> {
   readonly _tag: 'Optional' = 'Optional'
   constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
 
+  /**
+   * @example
+   * import { Optional, Lens } from 'monocle-ts'
+   *
+   * interface Phone {
+   *   number: string
+   * }
+   * interface Employment {
+   *   phone?: Phone
+   * }
+   * interface Info {
+   *   employment?: Employment
+   * }
+   * interface Response {
+   *   info?: Info
+   * }
+   *
+   * const info = Optional.fromNullableProp<Response>()('info')
+   * const employment = Optional.fromNullableProp<Info>()('employment')
+   * const phone = Optional.fromNullableProp<Employment>()('phone')
+   * const number = Lens.fromProp<Phone>()('number')
+   * const numberFromResponse = info
+   *   .compose(employment)
+   *   .compose(phone)
+   *   .composeLens(number)
+   *
+   * const response1: Response = {
+   *   info: {
+   *     employment: {
+   *       phone: {
+   *         number: '555-1234'
+   *       }
+   *     }
+   *   }
+   * }
+   * const response2: Response = {
+   *   info: {
+   *     employment: {}
+   *   }
+   * }
+   *
+   * numberFromResponse.getOption(response1) // some('555-1234')
+   * numberFromResponse.getOption(response2) // none
+   */
   static fromNullableProp<S>(): <K extends keyof S>(k: K) => Optional<S, NonNullable<S[K]>>
   static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>>
   static fromNullableProp(): any {
     return arguments.length === 0 ? optionalFromNullableProp : optionalFromNullableProp<any, any>(arguments[0])
   }
 
+  /**
+   * @example
+   * import { Optional, Lens } from 'monocle-ts'
+   *
+   * interface Phone {
+   *   number: string
+   * }
+   * interface Employment {
+   *   phone: Option<Phone>
+   * }
+   * interface Info {
+   *   employment: Option<Employment>
+   * }
+   * interface Response {
+   *   info: Option<Info>
+   * }
+   *
+   * const info = Optional.fromOptionProp<Response>('info')
+   * const employment = Optional.fromOptionProp<Info>('employment')
+   * const phone = Optional.fromOptionProp<Employment>('phone')
+   * const number = Lens.fromProp<Phone>()('number')
+   * const numberFromResponse = info
+   *   .compose(employment)
+   *   .compose(phone)
+   *   .composeLens(number)
+   */
   static fromOptionProp<S>(): <P extends OptionPropertyNames<S>>(prop: P) => Optional<S, OptionPropertyType<S, P>>
   static fromOptionProp<S>(prop: OptionPropertyNames<S>): Optional<S, OptionPropertyType<S, typeof prop>>
   static fromOptionProp(): any {
@@ -566,6 +716,7 @@ export class Traversal<S, A> {
    * @example
    * import { fromTraversable } from 'monocle-ts'
    * import { array } from 'fp-ts/lib/Array'
+   *
    * interface Person {
    *   name: string;
    *   cool: boolean;
@@ -828,7 +979,38 @@ export class Setter<S, A> {
   }
 }
 
-/** create a Traversal from a Traversable */
+/**
+ * create a Traversal from a Traversable
+ *
+ * @example
+ * import { Lens, fromTraversable } from 'monocle-ts'
+ * import { array } from 'fp-ts/lib/Array'
+ *
+ * interface Tweet {
+ *   text: string
+ * }
+ *
+ * interface Tweets {
+ *   tweets: Tweet[]
+ * }
+ *
+ * const tweetsLens = Lens.fromProp<Tweets>()('tweets')
+ * const tweetTextLens = Lens.fromProp<Tweet>()('text')
+ * const tweetTraversal = fromTraversable(array)<Tweet>()
+ * const composedTraversal = tweetsLens.composeTraversal(tweetTraversal).composeLens(tweetTextLens)
+ *
+ * const tweet1: Tweet = { text: 'hello world' }
+ * const tweet2: Tweet = { text: 'foobar' }
+ * const model: Tweets = { tweets: [tweet1, tweet2] }
+ *
+ * const newModel = composedTraversal.modify(text =>
+ *   text
+ *     .split('')
+ *     .reverse()
+ *     .join('')
+ * )(model)
+ * // { tweets: [ { text: 'dlrow olleh' }, { text: 'raboof' } ] }
+ */
 export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Type3<T, U, L, A>, A>
 export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <L, A>() => Traversal<Type2<T, L, A>, A>
 export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Type<T, A>, A>
