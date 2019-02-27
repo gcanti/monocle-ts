@@ -2,6 +2,15 @@
 title: Home
 ---
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Motivation](#motivation)
+- [TypeScript compatibility](#typescript-compatibility)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Motivation
 
 (Adapted from [monocle site](http://julien-truffaut.github.io/Monocle/))
