@@ -3,6 +3,6 @@
   "rules": {
     "space-before-function-paren": false,
     "no-unnecessary-generics": false,
-    "deprecation": false // TODO remove when fp-ts@2.0.0 lends
+    "deprecation": true
   }
 }

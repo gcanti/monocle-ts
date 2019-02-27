@@ -1014,7 +1014,9 @@ export class Setter<S, A> {
 export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Type3<T, U, L, A>, A>
 export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <L, A>() => Traversal<Type2<T, L, A>, A>
 export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Type<T, A>, A>
+// tslint:disable-next-line: deprecation
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
+// tslint:disable-next-line: deprecation
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
   return <A>() =>
     new Traversal(<F>(F: Applicative<F>) => {
@@ -1027,7 +1029,9 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 export function fromFoldable<F extends URIS3>(F: Foldable3<F>): <U, L, A>() => Fold<Type3<F, U, L, A>, A>
 export function fromFoldable<F extends URIS2>(F: Foldable2<F>): <L, A>() => Fold<Type2<F, L, A>, A>
 export function fromFoldable<F extends URIS>(F: Foldable1<F>): <A>() => Fold<Type<F, A>, A>
+// tslint:disable-next-line: deprecation
 export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
+// tslint:disable-next-line: deprecation
 export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> {
   return <A>() =>
     new Fold<HKT<F, A>, A>(<M>(M: Monoid<M>) => {
