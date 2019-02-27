@@ -1018,6 +1018,7 @@ static fromOptionProp(): any { ... }
 
 ```ts
 import { Optional, Lens } from 'monocle-ts'
+import { Option } from 'fp-ts/lib/Option'
 
 interface Phone {
   number: string
@@ -1036,7 +1037,7 @@ const info = Optional.fromOptionProp<Response>('info')
 const employment = Optional.fromOptionProp<Info>('employment')
 const phone = Optional.fromOptionProp<Employment>('phone')
 const number = Lens.fromProp<Phone>()('number')
-const numberFromResponse = info
+export const numberFromResponse = info
   .compose(employment)
   .compose(phone)
   .composeLens(number)
@@ -1501,21 +1502,24 @@ filter(predicate: Predicate<A>): Traversal<S, A> { ... }
 **Example**
 
 ```ts
-import { fromTraversable } from 'monocle-ts'
+import { fromTraversable, Lens } from 'monocle-ts'
 import { array } from 'fp-ts/lib/Array'
 
 interface Person {
   name: string
   cool: boolean
 }
-type People = Person[]
+
 const peopleTraversal = fromTraversable(array)<Person>()
 const coolLens = Lens.fromProp<Person>()('cool')
 const people = [{ name: 'bill', cool: false }, { name: 'jill', cool: true }]
-peopleTraversal
+
+const actual = peopleTraversal
   .filter(p => p.name === 'bill')
   .composeLens(coolLens)
-  .set(true)(people) // [{name: 'bill', cool: true}, {name: 'jill', cool: true}]
+  .set(true)(people)
+
+assert.deepStrictEqual(actual, [{ name: 'bill', cool: true }, { name: 'jill', cool: true }])
 ```
 
 ## asFold
@@ -1677,11 +1681,12 @@ const tweet1: Tweet = { text: 'hello world' }
 const tweet2: Tweet = { text: 'foobar' }
 const model: Tweets = { tweets: [tweet1, tweet2] }
 
-const newModel = composedTraversal.modify(text =>
+const actual = composedTraversal.modify(text =>
   text
     .split('')
     .reverse()
     .join('')
 )(model)
-// { tweets: [ { text: 'dlrow olleh' }, { text: 'raboof' } ] }
+
+assert.deepStrictEqual(actual, { tweets: [{ text: 'dlrow olleh' }, { text: 'raboof' }] })
 ```

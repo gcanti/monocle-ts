@@ -1,3 +1,3 @@
 import { main } from 'docs-ts'
 
-main('src/**/*.ts', 'docs').run()
+main('src/**/*.ts', 'docs', 'monocle-ts').run()

@@ -582,6 +582,7 @@ export class Optional<S, A> {
   /**
    * @example
    * import { Optional, Lens } from 'monocle-ts'
+   * import { Option } from 'fp-ts/lib/Option'
    *
    * interface Phone {
    *   number: string
@@ -600,7 +601,7 @@ export class Optional<S, A> {
    * const employment = Optional.fromOptionProp<Info>('employment')
    * const phone = Optional.fromOptionProp<Employment>('phone')
    * const number = Lens.fromProp<Phone>()('number')
-   * const numberFromResponse = info
+   * export const numberFromResponse = info
    *   .compose(employment)
    *   .compose(phone)
    *   .composeLens(number)
@@ -714,19 +715,22 @@ export class Traversal<S, A> {
    * focus the items matched by a traversal to those that match a predicate
    *
    * @example
-   * import { fromTraversable } from 'monocle-ts'
+   * import { fromTraversable, Lens } from 'monocle-ts'
    * import { array } from 'fp-ts/lib/Array'
    *
    * interface Person {
    *   name: string;
    *   cool: boolean;
    * }
-   * type People = Person[]
+   *
    * const peopleTraversal = fromTraversable(array)<Person>()
    * const coolLens = Lens.fromProp<Person>()('cool')
    * const people = [{name: 'bill', cool: false}, {name: 'jill', cool: true}]
-   * peopleTraversal.filter(p => p.name === 'bill').composeLens(coolLens)
-   *   .set(true)(people) // [{name: 'bill', cool: true}, {name: 'jill', cool: true}]
+   *
+   * const actual = peopleTraversal.filter(p => p.name === 'bill').composeLens(coolLens)
+   *   .set(true)(people)
+   *
+   * assert.deepStrictEqual(actual, [{name: 'bill', cool: true}, {name: 'jill', cool: true}])
    */
   filter<B extends A>(refinement: Refinement<A, B>): Traversal<S, B>
   filter(predicate: Predicate<A>): Traversal<S, A>
@@ -1003,13 +1007,14 @@ export class Setter<S, A> {
  * const tweet2: Tweet = { text: 'foobar' }
  * const model: Tweets = { tweets: [tweet1, tweet2] }
  *
- * const newModel = composedTraversal.modify(text =>
+ * const actual = composedTraversal.modify(text =>
  *   text
  *     .split('')
  *     .reverse()
  *     .join('')
  * )(model)
- * // { tweets: [ { text: 'dlrow olleh' }, { text: 'raboof' } ] }
+ *
+ * assert.deepStrictEqual(actual, { tweets: [ { text: 'dlrow olleh' }, { text: 'raboof' } ] })
  */
 export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Type3<T, U, L, A>, A>
 export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <L, A>() => Traversal<Type2<T, L, A>, A>
