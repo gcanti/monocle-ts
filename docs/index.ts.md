@@ -11,8 +11,6 @@ Table of Contents
 
 - [LensFromPath](#lensfrompath)
 - [ModifyF](#modifyf)
-- [fromFoldable](#fromfoldable)
-- [fromTraversable](#fromtraversable)
 - [At](#at)
   - [fromIso](#fromiso)
 - [Fold](#fold)
@@ -139,6 +137,8 @@ Table of Contents
   - [composePrism](#composeprism-7)
   - [composeIso](#composeiso-7)
   - [composeGetter](#composegetter-6)
+- [fromFoldable](#fromfoldable)
+- [fromTraversable](#fromtraversable)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -179,66 +179,6 @@ export interface ModifyF<S, A> {
   <F extends URIS>(F: Applicative1<F>): (f: (a: A) => Type<F, A>) => (s: S) => Type<F, S>
   <F>(F: Applicative<F>): (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>
 }
-```
-
-# fromFoldable
-
-create a Fold from a Foldable
-
-**Signature** (function)
-
-```ts
-export function fromFoldable<F extends URIS3>(F: Foldable3<F>): <U, L, A>() => Fold<Type3<F, U, L, A>, A>
-export function fromFoldable<F extends URIS2>(F: Foldable2<F>): <L, A>() => Fold<Type2<F, L, A>, A>
-export function fromFoldable<F extends URIS>(F: Foldable1<F>): <A>() => Fold<Type<F, A>, A>
-export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
-export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> { ... }
-```
-
-# fromTraversable
-
-create a Traversal from a Traversable
-
-**Signature** (function)
-
-```ts
-export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Type3<T, U, L, A>, A>
-export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <L, A>() => Traversal<Type2<T, L, A>, A>
-export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Type<T, A>, A>
-export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
-export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> { ... }
-```
-
-**Example**
-
-```ts
-import { Lens, fromTraversable } from 'monocle-ts'
-import { array } from 'fp-ts/lib/Array'
-
-interface Tweet {
-  text: string
-}
-
-interface Tweets {
-  tweets: Tweet[]
-}
-
-const tweetsLens = Lens.fromProp<Tweets>()('tweets')
-const tweetTextLens = Lens.fromProp<Tweet>()('text')
-const tweetTraversal = fromTraversable(array)<Tweet>()
-const composedTraversal = tweetsLens.composeTraversal(tweetTraversal).composeLens(tweetTextLens)
-
-const tweet1: Tweet = { text: 'hello world' }
-const tweet2: Tweet = { text: 'foobar' }
-const model: Tweets = { tweets: [tweet1, tweet2] }
-
-const newModel = composedTraversal.modify(text =>
-  text
-    .split('')
-    .reverse()
-    .join('')
-)(model)
-// { tweets: [ { text: 'dlrow olleh' }, { text: 'raboof' } ] }
 ```
 
 # At
@@ -1684,4 +1624,64 @@ compose a Traversal with a Getter
 
 ```ts
 composeGetter<B>(ab: Getter<A, B>): Fold<S, B> { ... }
+```
+
+# fromFoldable
+
+create a Fold from a Foldable
+
+**Signature** (function)
+
+```ts
+export function fromFoldable<F extends URIS3>(F: Foldable3<F>): <U, L, A>() => Fold<Type3<F, U, L, A>, A>
+export function fromFoldable<F extends URIS2>(F: Foldable2<F>): <L, A>() => Fold<Type2<F, L, A>, A>
+export function fromFoldable<F extends URIS>(F: Foldable1<F>): <A>() => Fold<Type<F, A>, A>
+export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
+export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> { ... }
+```
+
+# fromTraversable
+
+create a Traversal from a Traversable
+
+**Signature** (function)
+
+```ts
+export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Type3<T, U, L, A>, A>
+export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <L, A>() => Traversal<Type2<T, L, A>, A>
+export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Type<T, A>, A>
+export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
+export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> { ... }
+```
+
+**Example**
+
+```ts
+import { Lens, fromTraversable } from 'monocle-ts'
+import { array } from 'fp-ts/lib/Array'
+
+interface Tweet {
+  text: string
+}
+
+interface Tweets {
+  tweets: Tweet[]
+}
+
+const tweetsLens = Lens.fromProp<Tweets>()('tweets')
+const tweetTextLens = Lens.fromProp<Tweet>()('text')
+const tweetTraversal = fromTraversable(array)<Tweet>()
+const composedTraversal = tweetsLens.composeTraversal(tweetTraversal).composeLens(tweetTextLens)
+
+const tweet1: Tweet = { text: 'hello world' }
+const tweet2: Tweet = { text: 'foobar' }
+const model: Tweets = { tweets: [tweet1, tweet2] }
+
+const newModel = composedTraversal.modify(text =>
+  text
+    .split('')
+    .reverse()
+    .join('')
+)(model)
+// { tweets: [ { text: 'dlrow olleh' }, { text: 'raboof' } ] }
 ```
