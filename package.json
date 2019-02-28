@@ -20,8 +20,7 @@
     "docs-fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser markdown --write \"README.md\"",
     "dtslint": "dtslint dtslint",
     "mocha": "TS_NODE_CACHE=false mocha -r ts-node/register test/*.ts",
-    "doctoc": "doctoc docs",
-    "docs": "rimraf rm -rf docs/**/*.md!docs/index.md && ts-node docs.ts && npm run doctoc"
+    "docs": "rimraf rm -rf \"docs/!(index.md|_config.yml)\" && ts-node docs.ts && doctoc docs"
   },
   "repository": {
     "type": "git",
