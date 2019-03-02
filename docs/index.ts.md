@@ -3,146 +3,140 @@ title: index.ts
 nav_order: 4
 ---
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of contents**
 
-- [LensFromPath](#lensfrompath)
-- [ModifyF](#modifyf)
-- [At](#at)
-  - [fromIso](#fromiso)
-- [Fold](#fold)
-  - [compose](#compose)
-  - [composeFold](#composefold)
-  - [composeGetter](#composegetter)
-  - [composeTraversal](#composetraversal)
-  - [composeOptional](#composeoptional)
-  - [composeLens](#composelens)
-  - [composePrism](#composeprism)
-  - [composeIso](#composeiso)
-  - [find](#find)
-  - [headOption](#headoption)
-- [Getter](#getter)
-  - [asFold](#asfold)
-  - [compose](#compose-1)
-  - [composeGetter](#composegetter-1)
-  - [composeFold](#composefold-1)
-  - [composeLens](#composelens-1)
-  - [composeIso](#composeiso-1)
-  - [composeTraversal](#composetraversal-1)
-  - [composeOptional](#composeoptional-1)
-  - [composePrism](#composeprism-1)
-- [Index](#index)
-  - [fromAt](#fromat)
-  - [fromIso](#fromiso-1)
-- [Iso](#iso)
-  - [reverse](#reverse)
-  - [modify](#modify)
-  - [asLens](#aslens)
-  - [asPrism](#asprism)
-  - [asOptional](#asoptional)
-  - [asTraversal](#astraversal)
-  - [asFold](#asfold-1)
-  - [asGetter](#asgetter)
-  - [asSetter](#assetter)
-  - [compose](#compose-2)
-  - [composeIso](#composeiso-2)
-  - [composeLens](#composelens-2)
-  - [composePrism](#composeprism-2)
-  - [composeOptional](#composeoptional-2)
-  - [composeTraversal](#composetraversal-2)
-  - [composeFold](#composefold-2)
-  - [composeGetter](#composegetter-2)
-  - [composeSetter](#composesetter)
-- [Lens](#lens)
-  - [fromPath](#frompath)
-  - [fromProp](#fromprop)
-  - [fromProps](#fromprops)
-  - [fromNullableProp](#fromnullableprop)
-  - [modify](#modify-1)
-  - [asOptional](#asoptional-1)
-  - [asTraversal](#astraversal-1)
-  - [asSetter](#assetter-1)
-  - [asGetter](#asgetter-1)
-  - [asFold](#asfold-2)
-  - [compose](#compose-3)
-  - [composeLens](#composelens-3)
-  - [composeGetter](#composegetter-3)
-  - [composeFold](#composefold-3)
-  - [composeOptional](#composeoptional-3)
-  - [composeTraversal](#composetraversal-3)
-  - [composeSetter](#composesetter-1)
-  - [composeIso](#composeiso-3)
-  - [composePrism](#composeprism-3)
-- [Optional](#optional)
-  - [fromNullableProp](#fromnullableprop-1)
-  - [fromOptionProp](#fromoptionprop)
-  - [modify](#modify-2)
-  - [modifyOption](#modifyoption)
-  - [asTraversal](#astraversal-2)
-  - [asFold](#asfold-3)
-  - [asSetter](#assetter-2)
-  - [compose](#compose-4)
-  - [composeOptional](#composeoptional-4)
-  - [composeTraversal](#composetraversal-4)
-  - [composeFold](#composefold-4)
-  - [composeSetter](#composesetter-2)
-  - [composeLens](#composelens-4)
-  - [composePrism](#composeprism-4)
-  - [composeIso](#composeiso-4)
-  - [composeGetter](#composegetter-4)
-- [Prism](#prism)
-  - [fromPredicate](#frompredicate)
-  - [~~fromRefinement~~](#fromrefinement)
-  - [some](#some)
-  - [modify](#modify-3)
-  - [modifyOption](#modifyoption-1)
-  - [set](#set)
-  - [asOptional](#asoptional-2)
-  - [asTraversal](#astraversal-3)
-  - [asSetter](#assetter-3)
-  - [asFold](#asfold-4)
-  - [compose](#compose-5)
-  - [composePrism](#composeprism-5)
-  - [composeOptional](#composeoptional-5)
-  - [composeTraversal](#composetraversal-5)
-  - [composeFold](#composefold-5)
-  - [composeSetter](#composesetter-3)
-  - [composeIso](#composeiso-5)
-  - [composeLens](#composelens-5)
-  - [composeGetter](#composegetter-5)
-- [Setter](#setter)
-  - [set](#set-1)
-  - [compose](#compose-6)
-  - [composeSetter](#composesetter-4)
-  - [composeTraversal](#composetraversal-6)
-  - [composeOptional](#composeoptional-6)
-  - [composeLens](#composelens-6)
-  - [composePrism](#composeprism-6)
-  - [composeIso](#composeiso-6)
-- [Traversal](#traversal)
-  - [modify](#modify-4)
-  - [set](#set-2)
-  - [filter](#filter)
-  - [asFold](#asfold-5)
-  - [asSetter](#assetter-4)
-  - [compose](#compose-7)
-  - [composeTraversal](#composetraversal-7)
-  - [composeFold](#composefold-6)
-  - [composeSetter](#composesetter-5)
-  - [composeOptional](#composeoptional-7)
-  - [composeLens](#composelens-7)
-  - [composePrism](#composeprism-7)
-  - [composeIso](#composeiso-7)
-  - [composeGetter](#composegetter-6)
-- [fromFoldable](#fromfoldable)
-- [fromTraversable](#fromtraversable)
+- [LensFromPath (interface)](#lensfrompath-interface)
+- [ModifyF (interface)](#modifyf-interface)
+- [At (class)](#at-class)
+  - [fromIso (method)](#fromiso-method)
+- [Fold (class)](#fold-class)
+  - [compose (method)](#compose-method)
+  - [composeFold (method)](#composefold-method)
+  - [composeGetter (method)](#composegetter-method)
+  - [composeTraversal (method)](#composetraversal-method)
+  - [composeOptional (method)](#composeoptional-method)
+  - [composeLens (method)](#composelens-method)
+  - [composePrism (method)](#composeprism-method)
+  - [composeIso (method)](#composeiso-method)
+  - [find (method)](#find-method)
+  - [headOption (method)](#headoption-method)
+- [Getter (class)](#getter-class)
+  - [asFold (method)](#asfold-method)
+  - [compose (method)](#compose-method-1)
+  - [composeGetter (method)](#composegetter-method-1)
+  - [composeFold (method)](#composefold-method-1)
+  - [composeLens (method)](#composelens-method-1)
+  - [composeIso (method)](#composeiso-method-1)
+  - [composeTraversal (method)](#composetraversal-method-1)
+  - [composeOptional (method)](#composeoptional-method-1)
+  - [composePrism (method)](#composeprism-method-1)
+- [Index (class)](#index-class)
+  - [fromAt (method)](#fromat-method)
+  - [fromIso (method)](#fromiso-method-1)
+- [Iso (class)](#iso-class)
+  - [reverse (method)](#reverse-method)
+  - [modify (method)](#modify-method)
+  - [asLens (method)](#aslens-method)
+  - [asPrism (method)](#asprism-method)
+  - [asOptional (method)](#asoptional-method)
+  - [asTraversal (method)](#astraversal-method)
+  - [asFold (method)](#asfold-method-1)
+  - [asGetter (method)](#asgetter-method)
+  - [asSetter (method)](#assetter-method)
+  - [compose (method)](#compose-method-2)
+  - [composeIso (method)](#composeiso-method-2)
+  - [composeLens (method)](#composelens-method-2)
+  - [composePrism (method)](#composeprism-method-2)
+  - [composeOptional (method)](#composeoptional-method-2)
+  - [composeTraversal (method)](#composetraversal-method-2)
+  - [composeFold (method)](#composefold-method-2)
+  - [composeGetter (method)](#composegetter-method-2)
+  - [composeSetter (method)](#composesetter-method)
+- [Lens (class)](#lens-class)
+  - [fromPath (method)](#frompath-method)
+  - [fromProp (method)](#fromprop-method)
+  - [fromProps (method)](#fromprops-method)
+  - [fromNullableProp (method)](#fromnullableprop-method)
+  - [modify (method)](#modify-method-1)
+  - [asOptional (method)](#asoptional-method-1)
+  - [asTraversal (method)](#astraversal-method-1)
+  - [asSetter (method)](#assetter-method-1)
+  - [asGetter (method)](#asgetter-method-1)
+  - [asFold (method)](#asfold-method-2)
+  - [compose (method)](#compose-method-3)
+  - [composeLens (method)](#composelens-method-3)
+  - [composeGetter (method)](#composegetter-method-3)
+  - [composeFold (method)](#composefold-method-3)
+  - [composeOptional (method)](#composeoptional-method-3)
+  - [composeTraversal (method)](#composetraversal-method-3)
+  - [composeSetter (method)](#composesetter-method-1)
+  - [composeIso (method)](#composeiso-method-3)
+  - [composePrism (method)](#composeprism-method-3)
+- [Optional (class)](#optional-class)
+  - [fromNullableProp (method)](#fromnullableprop-method-1)
+  - [fromOptionProp (method)](#fromoptionprop-method)
+  - [modify (method)](#modify-method-2)
+  - [modifyOption (method)](#modifyoption-method)
+  - [asTraversal (method)](#astraversal-method-2)
+  - [asFold (method)](#asfold-method-3)
+  - [asSetter (method)](#assetter-method-2)
+  - [compose (method)](#compose-method-4)
+  - [composeOptional (method)](#composeoptional-method-4)
+  - [composeTraversal (method)](#composetraversal-method-4)
+  - [composeFold (method)](#composefold-method-4)
+  - [composeSetter (method)](#composesetter-method-2)
+  - [composeLens (method)](#composelens-method-4)
+  - [composePrism (method)](#composeprism-method-4)
+  - [composeIso (method)](#composeiso-method-4)
+  - [composeGetter (method)](#composegetter-method-4)
+- [Prism (class)](#prism-class)
+  - [fromPredicate (method)](#frompredicate-method)
+  - [~~fromRefinement~~ (method)](#fromrefinement-method)
+  - [some (method)](#some-method)
+  - [modify (method)](#modify-method-3)
+  - [modifyOption (method)](#modifyoption-method-1)
+  - [set (method)](#set-method)
+  - [asOptional (method)](#asoptional-method-2)
+  - [asTraversal (method)](#astraversal-method-3)
+  - [asSetter (method)](#assetter-method-3)
+  - [asFold (method)](#asfold-method-4)
+  - [compose (method)](#compose-method-5)
+  - [composePrism (method)](#composeprism-method-5)
+  - [composeOptional (method)](#composeoptional-method-5)
+  - [composeTraversal (method)](#composetraversal-method-5)
+  - [composeFold (method)](#composefold-method-5)
+  - [composeSetter (method)](#composesetter-method-3)
+  - [composeIso (method)](#composeiso-method-5)
+  - [composeLens (method)](#composelens-method-5)
+  - [composeGetter (method)](#composegetter-method-5)
+- [Setter (class)](#setter-class)
+  - [set (method)](#set-method-1)
+  - [compose (method)](#compose-method-6)
+  - [composeSetter (method)](#composesetter-method-4)
+  - [composeTraversal (method)](#composetraversal-method-6)
+  - [composeOptional (method)](#composeoptional-method-6)
+  - [composeLens (method)](#composelens-method-6)
+  - [composePrism (method)](#composeprism-method-6)
+  - [composeIso (method)](#composeiso-method-6)
+- [Traversal (class)](#traversal-class)
+  - [modify (method)](#modify-method-4)
+  - [set (method)](#set-method-2)
+  - [filter (method)](#filter-method)
+  - [asFold (method)](#asfold-method-5)
+  - [asSetter (method)](#assetter-method-4)
+  - [compose (method)](#compose-method-7)
+  - [composeTraversal (method)](#composetraversal-method-7)
+  - [composeFold (method)](#composefold-method-6)
+  - [composeSetter (method)](#composesetter-method-5)
+  - [composeOptional (method)](#composeoptional-method-7)
+  - [composeLens (method)](#composelens-method-7)
+  - [composePrism (method)](#composeprism-method-7)
+  - [composeIso (method)](#composeiso-method-7)
+  - [composeGetter (method)](#composegetter-method-6)
+- [fromFoldable (function)](#fromfoldable-function)
+- [fromTraversable (function)](#fromtraversable-function)# LensFromPath (interface)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# LensFromPath
-
-**Signature** (interface)
+**Signature**
 
 ```ts
 export interface LensFromPath<S> {
@@ -164,9 +158,9 @@ export interface LensFromPath<S> {
 }
 ```
 
-# ModifyF
+# ModifyF (interface)
 
-**Signature** (interface)
+**Signature**
 
 ```ts
 export interface ModifyF<S, A> {
@@ -179,9 +173,9 @@ export interface ModifyF<S, A> {
 }
 ```
 
-# At
+# At (class)
 
-**Signature** (class)
+**Signature**
 
 ```ts
 export class At<S, I, A> {
@@ -190,19 +184,19 @@ export class At<S, I, A> {
 }
 ```
 
-## fromIso
+## fromIso (method)
 
 lift an instance of `At` using an `Iso`
 
-**Signature** (method)
+**Signature**
 
 ```ts
 fromIso<T>(iso: Iso<T, S>): At<T, I, A> { ... }
 ```
 
-# Fold
+# Fold (class)
 
-**Signature** (class)
+**Signature**
 
 ```ts
 export class Fold<S, A> {
@@ -211,89 +205,89 @@ export class Fold<S, A> {
 }
 ```
 
-## compose
+## compose (method)
 
 compose a Fold with a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 compose<B>(ab: Fold<A, B>): Fold<S, B> { ... }
 ```
 
-## composeFold
+## composeFold (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeFold<B>(ab: Fold<A, B>): Fold<S, B> { ... }
 ```
 
-## composeGetter
+## composeGetter (method)
 
 compose a Fold with a Getter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeGetter<B>(ab: Getter<A, B>): Fold<S, B> { ... }
 ```
 
-## composeTraversal
+## composeTraversal (method)
 
 compose a Fold with a Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeTraversal<B>(ab: Traversal<A, B>): Fold<S, B> { ... }
 ```
 
-## composeOptional
+## composeOptional (method)
 
 compose a Fold with a Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeOptional<B>(ab: Optional<A, B>): Fold<S, B> { ... }
 ```
 
-## composeLens
+## composeLens (method)
 
 compose a Fold with a Lens
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeLens<B>(ab: Lens<A, B>): Fold<S, B> { ... }
 ```
 
-## composePrism
+## composePrism (method)
 
 compose a Fold with a Prism
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composePrism<B>(ab: Prism<A, B>): Fold<S, B> { ... }
 ```
 
-## composeIso
+## composeIso (method)
 
 compose a Fold with a Iso
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeIso<B>(ab: Iso<A, B>): Fold<S, B> { ... }
 ```
 
-## find
+## find (method)
 
 find the first target of a Fold matching the predicate
 
-**Signature** (method)
+**Signature**
 
 ```ts
 find<B extends A>(p: Refinement<A, B>): (s: S) => Option<B>
@@ -301,19 +295,19 @@ find(p: Predicate<A>): (s: S) => Option<A>
 find(p: Predicate<A>): (s: S) => Option<A> { ... }
 ```
 
-## headOption
+## headOption (method)
 
 get the first target of a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 headOption(s: S): Option<A> { ... }
 ```
 
-# Getter
+# Getter (class)
 
-**Signature** (class)
+**Signature**
 
 ```ts
 export class Getter<S, A> {
@@ -322,97 +316,97 @@ export class Getter<S, A> {
 }
 ```
 
-## asFold
+## asFold (method)
 
 view a Getter as a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asFold(): Fold<S, A> { ... }
 ```
 
-## compose
+## compose (method)
 
 compose a Getter with a Getter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 compose<B>(ab: Getter<A, B>): Getter<S, B> { ... }
 ```
 
-## composeGetter
+## composeGetter (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeGetter<B>(ab: Getter<A, B>): Getter<S, B> { ... }
 ```
 
-## composeFold
+## composeFold (method)
 
 compose a Getter with a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeFold<B>(ab: Fold<A, B>): Fold<S, B> { ... }
 ```
 
-## composeLens
+## composeLens (method)
 
 compose a Getter with a Lens
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeLens<B>(ab: Lens<A, B>): Getter<S, B> { ... }
 ```
 
-## composeIso
+## composeIso (method)
 
 compose a Getter with a Iso
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeIso<B>(ab: Iso<A, B>): Getter<S, B> { ... }
 ```
 
-## composeTraversal
+## composeTraversal (method)
 
 compose a Getter with a Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeTraversal<B>(ab: Traversal<A, B>): Fold<S, B> { ... }
 ```
 
-## composeOptional
+## composeOptional (method)
 
 compose a Getter with a Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeOptional<B>(ab: Optional<A, B>): Fold<S, B> { ... }
 ```
 
-## composePrism
+## composePrism (method)
 
 compose a Getter with a Prism
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composePrism<B>(ab: Prism<A, B>): Fold<S, B> { ... }
 ```
 
-# Index
+# Index (class)
 
-**Signature** (class)
+**Signature**
 
 ```ts
 export class Index<S, I, A> {
@@ -421,27 +415,27 @@ export class Index<S, I, A> {
 }
 ```
 
-## fromAt
+## fromAt (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 static fromAt<T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> { ... }
 ```
 
-## fromIso
+## fromIso (method)
 
 lift an instance of `Index` using an `Iso`
 
-**Signature** (method)
+**Signature**
 
 ```ts
 fromIso<T>(iso: Iso<T, S>): Index<T, I, A> { ... }
 ```
 
-# Iso
+# Iso (class)
 
-**Signature** (class)
+**Signature**
 
 ```ts
 export class Iso<S, A> {
@@ -450,185 +444,185 @@ export class Iso<S, A> {
 }
 ```
 
-## reverse
+## reverse (method)
 
 reverse the `Iso`: the source becomes the target and the target becomes the source
 
-**Signature** (method)
+**Signature**
 
 ```ts
 reverse(): Iso<A, S> { ... }
 ```
 
-## modify
+## modify (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 modify(f: (a: A) => A): (s: S) => S { ... }
 ```
 
-## asLens
+## asLens (method)
 
 view an Iso as a Lens
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asLens(): Lens<S, A> { ... }
 ```
 
-## asPrism
+## asPrism (method)
 
 view an Iso as a Prism
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asPrism(): Prism<S, A> { ... }
 ```
 
-## asOptional
+## asOptional (method)
 
 view an Iso as a Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asOptional(): Optional<S, A> { ... }
 ```
 
-## asTraversal
+## asTraversal (method)
 
 view an Iso as a Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asTraversal(): Traversal<S, A> { ... }
 ```
 
-## asFold
+## asFold (method)
 
 view an Iso as a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asFold(): Fold<S, A> { ... }
 ```
 
-## asGetter
+## asGetter (method)
 
 view an Iso as a Getter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asGetter(): Getter<S, A> { ... }
 ```
 
-## asSetter
+## asSetter (method)
 
 view an Iso as a Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asSetter(): Setter<S, A> { ... }
 ```
 
-## compose
+## compose (method)
 
 compose an Iso with an Iso
 
-**Signature** (method)
+**Signature**
 
 ```ts
 compose<B>(ab: Iso<A, B>): Iso<S, B> { ... }
 ```
 
-## composeIso
+## composeIso (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeIso<B>(ab: Iso<A, B>): Iso<S, B> { ... }
 ```
 
-## composeLens
+## composeLens (method)
 
 compose an Iso with a Lens
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeLens<B>(ab: Lens<A, B>): Lens<S, B> { ... }
 ```
 
-## composePrism
+## composePrism (method)
 
 compose an Iso with a Prism
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composePrism<B>(ab: Prism<A, B>): Prism<S, B> { ... }
 ```
 
-## composeOptional
+## composeOptional (method)
 
 compose an Iso with an Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeOptional<B>(ab: Optional<A, B>): Optional<S, B> { ... }
 ```
 
-## composeTraversal
+## composeTraversal (method)
 
 compose an Iso with a Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> { ... }
 ```
 
-## composeFold
+## composeFold (method)
 
 compose an Iso with a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeFold<B>(ab: Fold<A, B>): Fold<S, B> { ... }
 ```
 
-## composeGetter
+## composeGetter (method)
 
 compose an Iso with a Getter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeGetter<B>(ab: Getter<A, B>): Getter<S, B> { ... }
 ```
 
-## composeSetter
+## composeSetter (method)
 
 compose an Iso with a Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeSetter<B>(ab: Setter<A, B>): Setter<S, B> { ... }
 ```
 
-# Lens
+# Lens (class)
 
-**Signature** (class)
+**Signature**
 
 ```ts
 export class Lens<S, A> {
@@ -637,9 +631,9 @@ export class Lens<S, A> {
 }
 ```
 
-## fromPath
+## fromPath (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 static fromPath<S>(): LensFromPath<S>
@@ -687,11 +681,11 @@ console.log(city.get(person)) // Milan
 console.log(city.set('London')(person)) // { name: 'Giulio', age: 43, address: { city: 'London' } }
 ```
 
-## fromProp
+## fromProp (method)
 
 generate a lens from a type and a prop
 
-**Signature** (method)
+**Signature**
 
 ```ts
 static fromProp<S>(): <P extends keyof S>(prop: P) => Lens<S, S[P]>
@@ -719,11 +713,11 @@ console.log(age.get(person)) // 43
 console.log(age.set(44)(person)) // { name: 'Giulio', age: 44 }
 ```
 
-## fromProps
+## fromProps (method)
 
 generate a lens from a type and an array of props
 
-**Signature** (method)
+**Signature**
 
 ```ts
 static fromProps<S>(): <P extends keyof S>(props: Array<P>) => Lens<S, { ... }
@@ -748,11 +742,11 @@ console.log(lens.get(person)) // { name: 'Giulio', age: 44 }
 console.log(lens.set({ name: 'Guido', age: 47 })(person)) // { name: 'Guido', age: 47, rememberMe: true }
 ```
 
-## fromNullableProp
+## fromNullableProp (method)
 
 generate a lens from a type and a prop whose type is nullable
 
-**Signature** (method)
+**Signature**
 
 ```ts
 static fromNullableProp<S>(): <A extends S[K], K extends keyof S>(k: K, defaultValue: A) => Lens<S, NonNullable<S[K]>>
@@ -784,155 +778,155 @@ console.log(lens.set(1)({ inner: { value: 1, foo: 'bar' } })) // { inner: { valu
 console.log(lens.get({ inner: { value: 1, foo: 'bar' } })) // 1
 ```
 
-## modify
+## modify (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 modify(f: (a: A) => A): (s: S) => S { ... }
 ```
 
-## asOptional
+## asOptional (method)
 
 view a Lens as a Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asOptional(): Optional<S, A> { ... }
 ```
 
-## asTraversal
+## asTraversal (method)
 
 view a Lens as a Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asTraversal(): Traversal<S, A> { ... }
 ```
 
-## asSetter
+## asSetter (method)
 
 view a Lens as a Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asSetter(): Setter<S, A> { ... }
 ```
 
-## asGetter
+## asGetter (method)
 
 view a Lens as a Getter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asGetter(): Getter<S, A> { ... }
 ```
 
-## asFold
+## asFold (method)
 
 view a Lens as a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asFold(): Fold<S, A> { ... }
 ```
 
-## compose
+## compose (method)
 
 compose a Lens with a Lens
 
-**Signature** (method)
+**Signature**
 
 ```ts
 compose<B>(ab: Lens<A, B>): Lens<S, B> { ... }
 ```
 
-## composeLens
+## composeLens (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeLens<B>(ab: Lens<A, B>): Lens<S, B> { ... }
 ```
 
-## composeGetter
+## composeGetter (method)
 
 compose a Lens with a Getter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeGetter<B>(ab: Getter<A, B>): Getter<S, B> { ... }
 ```
 
-## composeFold
+## composeFold (method)
 
 compose a Lens with a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeFold<B>(ab: Fold<A, B>): Fold<S, B> { ... }
 ```
 
-## composeOptional
+## composeOptional (method)
 
 compose a Lens with an Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeOptional<B>(ab: Optional<A, B>): Optional<S, B> { ... }
 ```
 
-## composeTraversal
+## composeTraversal (method)
 
 compose a Lens with an Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> { ... }
 ```
 
-## composeSetter
+## composeSetter (method)
 
 compose a Lens with an Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeSetter<B>(ab: Setter<A, B>): Setter<S, B> { ... }
 ```
 
-## composeIso
+## composeIso (method)
 
 compose a Lens with an Iso
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeIso<B>(ab: Iso<A, B>): Lens<S, B> { ... }
 ```
 
-## composePrism
+## composePrism (method)
 
 compose a Lens with a Prism
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composePrism<B>(ab: Prism<A, B>): Optional<S, B> { ... }
 ```
 
-# Optional
+# Optional (class)
 
-**Signature** (class)
+**Signature**
 
 ```ts
 export class Optional<S, A> {
@@ -941,9 +935,9 @@ export class Optional<S, A> {
 }
 ```
 
-## fromNullableProp
+## fromNullableProp (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 static fromNullableProp<S>(): <K extends keyof S>(k: K) => Optional<S, NonNullable<S[K]>>
@@ -997,9 +991,9 @@ numberFromResponse.getOption(response1) // some('555-1234')
 numberFromResponse.getOption(response2) // none
 ```
 
-## fromOptionProp
+## fromOptionProp (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 static fromOptionProp<S>(): <P extends OptionPropertyNames<S>>(prop: P) => Optional<S, OptionPropertyType<S, P>>
@@ -1036,143 +1030,143 @@ export const numberFromResponse = info
   .composeLens(number)
 ```
 
-## modify
+## modify (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 modify(f: (a: A) => A): (s: S) => S { ... }
 ```
 
-## modifyOption
+## modifyOption (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 modifyOption(f: (a: A) => A): (s: S) => Option<S> { ... }
 ```
 
-## asTraversal
+## asTraversal (method)
 
 view a Optional as a Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asTraversal(): Traversal<S, A> { ... }
 ```
 
-## asFold
+## asFold (method)
 
 view an Optional as a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asFold(): Fold<S, A> { ... }
 ```
 
-## asSetter
+## asSetter (method)
 
 view an Optional as a Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asSetter(): Setter<S, A> { ... }
 ```
 
-## compose
+## compose (method)
 
 compose a Optional with a Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 compose<B>(ab: Optional<A, B>): Optional<S, B> { ... }
 ```
 
-## composeOptional
+## composeOptional (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeOptional<B>(ab: Optional<A, B>): Optional<S, B> { ... }
 ```
 
-## composeTraversal
+## composeTraversal (method)
 
 compose an Optional with a Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> { ... }
 ```
 
-## composeFold
+## composeFold (method)
 
 compose an Optional with a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeFold<B>(ab: Fold<A, B>): Fold<S, B> { ... }
 ```
 
-## composeSetter
+## composeSetter (method)
 
 compose an Optional with a Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeSetter<B>(ab: Setter<A, B>): Setter<S, B> { ... }
 ```
 
-## composeLens
+## composeLens (method)
 
 compose an Optional with a Lens
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeLens<B>(ab: Lens<A, B>): Optional<S, B> { ... }
 ```
 
-## composePrism
+## composePrism (method)
 
 compose an Optional with a Prism
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composePrism<B>(ab: Prism<A, B>): Optional<S, B> { ... }
 ```
 
-## composeIso
+## composeIso (method)
 
 compose an Optional with a Iso
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeIso<B>(ab: Iso<A, B>): Optional<S, B> { ... }
 ```
 
-## composeGetter
+## composeGetter (method)
 
 compose an Optional with a Getter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeGetter<B>(ab: Getter<A, B>): Fold<S, B> { ... }
 ```
 
-# Prism
+# Prism (class)
 
-**Signature** (class)
+**Signature**
 
 ```ts
 export class Prism<S, A> {
@@ -1181,9 +1175,9 @@ export class Prism<S, A> {
 }
 ```
 
-## fromPredicate
+## fromPredicate (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 static fromPredicate<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
@@ -1191,181 +1185,181 @@ static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A>
 static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> { ... }
 ```
 
-## ~~fromRefinement~~
+## ~~fromRefinement~~ (method)
 
 Use `fromPredicate` instead
 
-**Signature** (method)
+**Signature**
 
 ```ts
 static fromRefinement<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A> { ... }
 ```
 
-## some
+## some (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 static some<A>(): Prism<Option<A>, A> { ... }
 ```
 
-## modify
+## modify (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 modify(f: (a: A) => A): (s: S) => S { ... }
 ```
 
-## modifyOption
+## modifyOption (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 modifyOption(f: (a: A) => A): (s: S) => Option<S> { ... }
 ```
 
-## set
+## set (method)
 
 set the target of a Prism with a value
 
-**Signature** (method)
+**Signature**
 
 ```ts
 set(a: A): (s: S) => S { ... }
 ```
 
-## asOptional
+## asOptional (method)
 
 view a Prism as a Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asOptional(): Optional<S, A> { ... }
 ```
 
-## asTraversal
+## asTraversal (method)
 
 view a Prism as a Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asTraversal(): Traversal<S, A> { ... }
 ```
 
-## asSetter
+## asSetter (method)
 
 view a Prism as a Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asSetter(): Setter<S, A> { ... }
 ```
 
-## asFold
+## asFold (method)
 
 view a Prism as a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asFold(): Fold<S, A> { ... }
 ```
 
-## compose
+## compose (method)
 
 compose a Prism with a Prism
 
-**Signature** (method)
+**Signature**
 
 ```ts
 compose<B>(ab: Prism<A, B>): Prism<S, B> { ... }
 ```
 
-## composePrism
+## composePrism (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composePrism<B>(ab: Prism<A, B>): Prism<S, B> { ... }
 ```
 
-## composeOptional
+## composeOptional (method)
 
 compose a Prism with a Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeOptional<B>(ab: Optional<A, B>): Optional<S, B> { ... }
 ```
 
-## composeTraversal
+## composeTraversal (method)
 
 compose a Prism with a Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> { ... }
 ```
 
-## composeFold
+## composeFold (method)
 
 compose a Prism with a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeFold<B>(ab: Fold<A, B>): Fold<S, B> { ... }
 ```
 
-## composeSetter
+## composeSetter (method)
 
 compose a Prism with a Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeSetter<B>(ab: Setter<A, B>): Setter<S, B> { ... }
 ```
 
-## composeIso
+## composeIso (method)
 
 compose a Prism with a Iso
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeIso<B>(ab: Iso<A, B>): Prism<S, B> { ... }
 ```
 
-## composeLens
+## composeLens (method)
 
 compose a Prism with a Lens
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeLens<B>(ab: Lens<A, B>): Optional<S, B> { ... }
 ```
 
-## composeGetter
+## composeGetter (method)
 
 compose a Prism with a Getter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeGetter<B>(ab: Getter<A, B>): Fold<S, B> { ... }
 ```
 
-# Setter
+# Setter (class)
 
-**Signature** (class)
+**Signature**
 
 ```ts
 export class Setter<S, A> {
@@ -1374,85 +1368,85 @@ export class Setter<S, A> {
 }
 ```
 
-## set
+## set (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 set(a: A): (s: S) => S { ... }
 ```
 
-## compose
+## compose (method)
 
 compose a Setter with a Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 compose<B>(ab: Setter<A, B>): Setter<S, B> { ... }
 ```
 
-## composeSetter
+## composeSetter (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeSetter<B>(ab: Setter<A, B>): Setter<S, B> { ... }
 ```
 
-## composeTraversal
+## composeTraversal (method)
 
 compose a Setter with a Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeTraversal<B>(ab: Traversal<A, B>): Setter<S, B> { ... }
 ```
 
-## composeOptional
+## composeOptional (method)
 
 compose a Setter with a Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeOptional<B>(ab: Optional<A, B>): Setter<S, B> { ... }
 ```
 
-## composeLens
+## composeLens (method)
 
 compose a Setter with a Lens
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeLens<B>(ab: Lens<A, B>): Setter<S, B> { ... }
 ```
 
-## composePrism
+## composePrism (method)
 
 compose a Setter with a Prism
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composePrism<B>(ab: Prism<A, B>): Setter<S, B> { ... }
 ```
 
-## composeIso
+## composeIso (method)
 
 compose a Setter with a Iso
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeIso<B>(ab: Iso<A, B>): Setter<S, B> { ... }
 ```
 
-# Traversal
+# Traversal (class)
 
-**Signature** (class)
+**Signature**
 
 ```ts
 export class Traversal<S, A> {
@@ -1464,27 +1458,27 @@ export class Traversal<S, A> {
 }
 ```
 
-## modify
+## modify (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 modify(f: (a: A) => A): (s: S) => S { ... }
 ```
 
-## set
+## set (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 set(a: A): (s: S) => S { ... }
 ```
 
-## filter
+## filter (method)
 
 focus the items matched by a traversal to those that match a predicate
 
-**Signature** (method)
+**Signature**
 
 ```ts
 filter<B extends A>(refinement: Refinement<A, B>): Traversal<S, B>
@@ -1515,119 +1509,119 @@ const actual = peopleTraversal
 assert.deepStrictEqual(actual, [{ name: 'bill', cool: true }, { name: 'jill', cool: true }])
 ```
 
-## asFold
+## asFold (method)
 
 view a Traversal as a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asFold(): Fold<S, A> { ... }
 ```
 
-## asSetter
+## asSetter (method)
 
 view a Traversal as a Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 asSetter(): Setter<S, A> { ... }
 ```
 
-## compose
+## compose (method)
 
 compose a Traversal with a Traversal
 
-**Signature** (method)
+**Signature**
 
 ```ts
 compose<B>(ab: Traversal<A, B>): Traversal<S, B> { ... }
 ```
 
-## composeTraversal
+## composeTraversal (method)
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> { ... }
 ```
 
-## composeFold
+## composeFold (method)
 
 compose a Traversal with a Fold
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeFold<B>(ab: Fold<A, B>): Fold<S, B> { ... }
 ```
 
-## composeSetter
+## composeSetter (method)
 
 compose a Traversal with a Setter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeSetter<B>(ab: Setter<A, B>): Setter<S, B> { ... }
 ```
 
-## composeOptional
+## composeOptional (method)
 
 compose a Traversal with a Optional
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeOptional<B>(ab: Optional<A, B>): Traversal<S, B> { ... }
 ```
 
-## composeLens
+## composeLens (method)
 
 compose a Traversal with a Lens
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeLens<B>(ab: Lens<A, B>): Traversal<S, B> { ... }
 ```
 
-## composePrism
+## composePrism (method)
 
 compose a Traversal with a Prism
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composePrism<B>(ab: Prism<A, B>): Traversal<S, B> { ... }
 ```
 
-## composeIso
+## composeIso (method)
 
 compose a Traversal with a Iso
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeIso<B>(ab: Iso<A, B>): Traversal<S, B> { ... }
 ```
 
-## composeGetter
+## composeGetter (method)
 
 compose a Traversal with a Getter
 
-**Signature** (method)
+**Signature**
 
 ```ts
 composeGetter<B>(ab: Getter<A, B>): Fold<S, B> { ... }
 ```
 
-# fromFoldable
+# fromFoldable (function)
 
 create a Fold from a Foldable
 
-**Signature** (function)
+**Signature**
 
 ```ts
 export function fromFoldable<F extends URIS3>(F: Foldable3<F>): <U, L, A>() => Fold<Type3<F, U, L, A>, A>
@@ -1637,11 +1631,11 @@ export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
 export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> { ... }
 ```
 
-# fromTraversable
+# fromTraversable (function)
 
 create a Traversal from a Traversable
 
-**Signature** (function)
+**Signature**
 
 ```ts
 export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Type3<T, U, L, A>, A>

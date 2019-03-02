@@ -3,17 +3,11 @@ title: At/Set.ts
 nav_order: 1
 ---
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of contents**
 
-- [atSet](#atset)
+- [atSet (function)](#atset-function)# atSet (function)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# atSet
-
-**Signature** (function)
+**Signature**
 
 ```ts
 export function atSet<A = never>(setoid: Setoid<A>): At<Set<A>, A, boolean> { ... }

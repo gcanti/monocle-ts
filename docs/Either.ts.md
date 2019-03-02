@@ -3,26 +3,20 @@ title: Either.ts
 nav_order: 3
 ---
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of contents**
 
-- [\_left](#%5C_left)
-- [\_right](#%5C_right)
+- [\_left (function)](#_left-function)
+- [\_right (function)](#_right-function)# \_left (function)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# \_left
-
-**Signature** (function)
+**Signature**
 
 ```ts
 export const _left = <L, A>(): Prism<Either<L, A>, L> => ...
 ```
 
-# \_right
+# \_right (function)
 
-**Signature** (function)
+**Signature**
 
 ```ts
 export const _right = <L, A>(): Prism<Either<L, A>, A> => ...

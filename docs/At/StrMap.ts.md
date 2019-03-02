@@ -3,17 +3,11 @@ title: At/StrMap.ts
 nav_order: 2
 ---
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of contents**
 
-- [atStrMap](#atstrmap)
+- [atStrMap (function)](#atstrmap-function)# atStrMap (function)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# atStrMap
-
-**Signature** (function)
+**Signature**
 
 ```ts
 export function atStrMap<A = never>(): At<SM.StrMap<A>, string, Option<A>> { ... }
