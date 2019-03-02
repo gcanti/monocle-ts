@@ -39,7 +39,6 @@
     "@types/jest": "22.2.2",
     "@types/node": "7.0.4",
     "docs-ts": "github:gcanti/docs-ts",
-    "doctoc": "^1.4.0",
     "dtslint": "github:gcanti/dtslint",
     "jest": "^23.5.0",
     "mocha": "^5.2.0",
