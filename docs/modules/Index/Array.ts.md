@@ -1,11 +1,18 @@
 ---
 title: Index/Array.ts
 nav_order: 5
+parent: Modules
 ---
 
-**Table of contents**
+---
 
-- [indexArray (function)](#indexarray-function)# indexArray (function)
+<h2 class="text-delta">Table of contents</h2>
+
+- [indexArray (function)](#indexarray-function)
+
+---
+
+# indexArray (function)
 
 **Signature**
 

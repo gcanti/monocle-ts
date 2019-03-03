@@ -1,11 +1,18 @@
 ---
 title: Index/StrMap.ts
 nav_order: 7
+parent: Modules
 ---
 
-**Table of contents**
+---
 
-- [indexStrMap (function)](#indexstrmap-function)# indexStrMap (function)
+<h2 class="text-delta">Table of contents</h2>
+
+- [indexStrMap (function)](#indexstrmap-function)
+
+---
+
+# indexStrMap (function)
 
 **Signature**
 

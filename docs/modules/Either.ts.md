@@ -1,12 +1,19 @@
 ---
 title: Either.ts
 nav_order: 3
+parent: Modules
 ---
 
-**Table of contents**
+---
+
+<h2 class="text-delta">Table of contents</h2>
 
 - [\_left (function)](#_left-function)
-- [\_right (function)](#_right-function)# \_left (function)
+- [\_right (function)](#_right-function)
+
+---
+
+# \_left (function)
 
 **Signature**
 

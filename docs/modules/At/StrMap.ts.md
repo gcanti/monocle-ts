@@ -1,11 +1,18 @@
 ---
 title: At/StrMap.ts
 nav_order: 2
+parent: Modules
 ---
 
-**Table of contents**
+---
 
-- [atStrMap (function)](#atstrmap-function)# atStrMap (function)
+<h2 class="text-delta">Table of contents</h2>
+
+- [atStrMap (function)](#atstrmap-function)
+
+---
+
+# atStrMap (function)
 
 **Signature**
 

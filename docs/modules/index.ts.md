@@ -1,9 +1,12 @@
 ---
 title: index.ts
 nav_order: 4
+parent: Modules
 ---
 
-**Table of contents**
+---
+
+<h2 class="text-delta">Table of contents</h2>
 
 - [LensFromPath (interface)](#lensfrompath-interface)
 - [ModifyF (interface)](#modifyf-interface)
@@ -134,7 +137,11 @@ nav_order: 4
   - [composeIso (method)](#composeiso-method-7)
   - [composeGetter (method)](#composegetter-method-6)
 - [fromFoldable (function)](#fromfoldable-function)
-- [fromTraversable (function)](#fromtraversable-function)# LensFromPath (interface)
+- [fromTraversable (function)](#fromtraversable-function)
+
+---
+
+# LensFromPath (interface)
 
 **Signature**
 

@@ -1,11 +1,18 @@
 ---
 title: At/Set.ts
 nav_order: 1
+parent: Modules
 ---
 
-**Table of contents**
+---
 
-- [atSet (function)](#atset-function)# atSet (function)
+<h2 class="text-delta">Table of contents</h2>
+
+- [atSet (function)](#atset-function)
+
+---
+
+# atSet (function)
 
 **Signature**
 

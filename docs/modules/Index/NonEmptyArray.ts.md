@@ -1,11 +1,18 @@
 ---
 title: Index/NonEmptyArray.ts
 nav_order: 6
+parent: Modules
 ---
 
-**Table of contents**
+---
 
-- [indexNonEmptyArray (function)](#indexnonemptyarray-function)# indexNonEmptyArray (function)
+<h2 class="text-delta">Table of contents</h2>
+
+- [indexNonEmptyArray (function)](#indexnonemptyarray-function)
+
+---
+
+# indexNonEmptyArray (function)
 
 **Signature**
 
