@@ -183,8 +183,8 @@ export class Lens<S, A> {
    *
    * const person: Person = { name: 'Giulio', age: 43, address: { city: 'Milan' } }
    *
-   * console.log(city.get(person)) // Milan
-   * console.log(city.set('London')(person)) // { name: 'Giulio', age: 43, address: { city: 'London' } }
+   * assert.strictEqual(city.get(person), 'Milan')
+   * assert.deepStrictEqual(city.set('London')(person), { name: 'Giulio', age: 43, address: { city: 'London' } })
    */
   static fromPath<S>(): LensFromPath<S>
   static fromPath<
@@ -228,8 +228,8 @@ export class Lens<S, A> {
    *
    * const person: Person = { name: 'Giulio', age: 43 }
    *
-   * console.log(age.get(person)) // 43
-   * console.log(age.set(44)(person)) // { name: 'Giulio', age: 44 }
+   * assert.strictEqual(age.get(person), 43)
+   * assert.deepStrictEqual(age.set(44)(person), { name: 'Giulio', age: 44 })
    */
   static fromProp<S>(): <P extends keyof S>(prop: P) => Lens<S, S[P]>
   static fromProp<S, P extends keyof S>(prop: P): Lens<S, S[P]>
@@ -253,8 +253,8 @@ export class Lens<S, A> {
    *
    * const person: Person = { name: 'Giulio', age: 44, rememberMe: true }
    *
-   * console.log(lens.get(person)) // { name: 'Giulio', age: 44 }
-   * console.log(lens.set({ name: 'Guido', age: 47 })(person)) // { name: 'Guido', age: 47, rememberMe: true }
+   * assert.deepStrictEqual(lens.get(person), { name: 'Giulio', age: 44 })
+   * assert.deepStrictEqual(lens.set({ name: 'Guido', age: 47 })(person), { name: 'Guido', age: 47, rememberMe: true })
    */
   static fromProps<S>(): <P extends keyof S>(props: Array<P>) => Lens<S, { [K in P]: S[K] }> {
     return props => {
@@ -300,10 +300,10 @@ export class Lens<S, A> {
    * const value = Lens.fromProp<Inner>()('value')
    * const lens = inner.compose(value)
    *
-   * console.log(lens.set(1)({})) // { inner: { value: 1, foo: 'foo' } }
-   * console.log(lens.get({})) // 0
-   * console.log(lens.set(1)({ inner: { value: 1, foo: 'bar' } })) // { inner: { value: 1, foo: 'bar' } }
-   * console.log(lens.get({ inner: { value: 1, foo: 'bar' } })) // 1
+   * assert.deepStrictEqual(lens.set(1)({})), { inner: { value: 1, foo: 'foo' } })
+   * assert.strictEqual(lens.get({})), 0)
+   * assert.deepStrictEqual(lens.set(1)({ inner: { value: 1, foo: 'bar' } })), { inner: { value: 1, foo: 'bar' } })
+   * assert.strictEqual(lens.get({ inner: { value: 1, foo: 'bar' } })), 1)
    */
   static fromNullableProp<S>(): <A extends S[K], K extends keyof S>(k: K, defaultValue: A) => Lens<S, NonNullable<S[K]>>
   static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, NonNullable<S[K]>>
