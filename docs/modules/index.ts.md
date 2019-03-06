@@ -298,7 +298,6 @@ find the first target of a Fold matching the predicate
 
 ```ts
 find<B extends A>(p: Refinement<A, B>): (s: S) => Option<B>
-find(p: Predicate<A>): (s: S) => Option<A>
 find(p: Predicate<A>): (s: S) => Option<A> { ... }
 ```
 
@@ -663,8 +662,7 @@ static fromPath<S, K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof 
     path: [K1, K2, K3]
   ): Lens<S, S[K1][K2][K3]>
 static fromPath<S, K1 extends keyof S, K2 extends keyof S[K1]>(path: [K1, K2]): Lens<S, S[K1][K2]>
-static fromPath<S, K1 extends keyof S>(path: [K1]): Lens<S, S[K1]>
-static fromPath(): any { ... }
+static fromPath<S, K1 extends keyof S>(path: [K1]): Lens<S, S[K1]> { ... }
 ```
 
 **Example**
@@ -696,8 +694,7 @@ generate a lens from a type and a prop
 
 ```ts
 static fromProp<S>(): <P extends keyof S>(prop: P) => Lens<S, S[P]>
-static fromProp<S, P extends keyof S>(prop: P): Lens<S, S[P]>
-static fromProp(): any { ... }
+static fromProp<S, P extends keyof S>(prop: P): Lens<S, S[P]> { ... }
 ```
 
 **Example**
@@ -757,8 +754,7 @@ generate a lens from a type and a prop whose type is nullable
 
 ```ts
 static fromNullableProp<S>(): <A extends S[K], K extends keyof S>(k: K, defaultValue: A) => Lens<S, NonNullable<S[K]>>
-static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, NonNullable<S[K]>>
-static fromNullableProp(): any { ... }
+static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, NonNullable<S[K]>> { ... }
 ```
 
 **Example**
@@ -948,8 +944,7 @@ export class Optional<S, A> {
 
 ```ts
 static fromNullableProp<S>(): <K extends keyof S>(k: K) => Optional<S, NonNullable<S[K]>>
-static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>>
-static fromNullableProp(): any { ... }
+static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>> { ... }
 ```
 
 **Example**
@@ -1004,8 +999,7 @@ numberFromResponse.getOption(response2) // none
 
 ```ts
 static fromOptionProp<S>(): <P extends OptionPropertyNames<S>>(prop: P) => Optional<S, OptionPropertyType<S, P>>
-static fromOptionProp<S>(prop: OptionPropertyNames<S>): Optional<S, OptionPropertyType<S, typeof prop>>
-static fromOptionProp(): any { ... }
+static fromOptionProp<S>(prop: OptionPropertyNames<S>): Optional<S, OptionPropertyType<S, typeof prop>> { ... }
 ```
 
 **Example**
@@ -1188,7 +1182,6 @@ export class Prism<S, A> {
 
 ```ts
 static fromPredicate<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
-static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A>
 static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> { ... }
 ```
 
@@ -1489,7 +1482,6 @@ focus the items matched by a traversal to those that match a predicate
 
 ```ts
 filter<B extends A>(refinement: Refinement<A, B>): Traversal<S, B>
-filter(predicate: Predicate<A>): Traversal<S, A>
 filter(predicate: Predicate<A>): Traversal<S, A> { ... }
 ```
 
@@ -1634,7 +1626,6 @@ create a Fold from a Foldable
 export function fromFoldable<F extends URIS3>(F: Foldable3<F>): <U, L, A>() => Fold<Type3<F, U, L, A>, A>
 export function fromFoldable<F extends URIS2>(F: Foldable2<F>): <L, A>() => Fold<Type2<F, L, A>, A>
 export function fromFoldable<F extends URIS>(F: Foldable1<F>): <A>() => Fold<Type<F, A>, A>
-export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
 export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> { ... }
 ```
 
@@ -1648,7 +1639,6 @@ create a Traversal from a Traversable
 export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Type3<T, U, L, A>, A>
 export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <L, A>() => Traversal<Type2<T, L, A>, A>
 export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Type<T, A>, A>
-export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> { ... }
 ```
 
