@@ -1,13 +1,36 @@
 import { indexArray } from '../src/Index/Array'
 import { indexNonEmptyArray } from '../src/Index/NonEmptyArray'
+import { indexRecord } from '../src/Index/Record'
 import { indexStrMap } from '../src/Index/StrMap'
 import * as assert from 'assert'
 import { some, none } from 'fp-ts/lib/Option'
+import * as R from 'fp-ts/lib/Record'
 import * as SM from 'fp-ts/lib/StrMap'
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray'
 import { Iso } from '../src'
 
 describe('Index', () => {
+  describe('indexRecord', () => {
+    const index = indexRecord<string>().index('key')
+
+    it('get', () => {
+      const map = R.singleton('key', 'value')
+      assert.deepStrictEqual(index.getOption(map), some('value'))
+    })
+
+    it('set if there', () => {
+      const map = R.singleton('key', 'value')
+      const newMap = index.set('new')(map)
+      assert.deepStrictEqual(newMap, R.singleton('key', 'new'))
+    })
+
+    it('leave if missing', () => {
+      const map = {}
+      const newMap = index.set('new')(map)
+      assert.deepStrictEqual(newMap, map)
+    })
+  })
+
   describe('indexStrMap', () => {
     const index = indexStrMap<string>().index('key')
 

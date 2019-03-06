@@ -1,13 +1,36 @@
+import { atRecord } from '../src/At/Record'
 import { atSet } from '../src/At/Set'
 import { atStrMap } from '../src/At/StrMap'
 import * as assert from 'assert'
 import { none, some } from 'fp-ts/lib/Option'
 import { setoidNumber } from 'fp-ts/lib/Setoid'
+import * as R from 'fp-ts/lib/Record'
 import * as S from 'fp-ts/lib/Set'
 import * as SM from 'fp-ts/lib/StrMap'
 import { Iso } from '../src'
 
 describe('At', () => {
+  describe('atRecord', () => {
+    const map = R.singleton('key', 'value')
+    const at = atRecord<string>().at('key')
+
+    it('get', () => {
+      assert.deepStrictEqual(at.get(map), some('value'))
+    })
+
+    it('add', () => {
+      const newMap = at.set(some('NEW'))(map)
+
+      assert.deepStrictEqual(newMap, R.singleton('key', 'NEW'))
+    })
+
+    it('delete', () => {
+      const newMap = at.set(none)(map)
+
+      assert(R.isEmpty(newMap))
+    })
+  })
+
   describe('atStrMap', () => {
     const map = SM.singleton('key', 'value')
     const at = atStrMap<string>().at('key')
