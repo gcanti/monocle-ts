@@ -34,7 +34,7 @@ parent: Modules
   - [composeOptional (method)](#composeoptional-method-1)
   - [composePrism (method)](#composeprism-method-1)
 - [Index (class)](#index-class)
-  - [fromAt (method)](#fromat-method)
+- [fromAt (static method)](#fromat-static-method)
   - [fromIso (method)](#fromiso-method-1)
 - [Iso (class)](#iso-class)
   - [reverse (method)](#reverse-method)
@@ -56,10 +56,10 @@ parent: Modules
   - [composeGetter (method)](#composegetter-method-2)
   - [composeSetter (method)](#composesetter-method)
 - [Lens (class)](#lens-class)
-  - [fromPath (method)](#frompath-method)
-  - [fromProp (method)](#fromprop-method)
-  - [fromProps (method)](#fromprops-method)
-  - [fromNullableProp (method)](#fromnullableprop-method)
+- [fromPath (static method)](#frompath-static-method)
+- [fromProp (static method)](#fromprop-static-method)
+- [fromProps (static method)](#fromprops-static-method)
+- [fromNullableProp (static method)](#fromnullableprop-static-method)
   - [modify (method)](#modify-method-1)
   - [asOptional (method)](#asoptional-method-1)
   - [asTraversal (method)](#astraversal-method-1)
@@ -76,8 +76,8 @@ parent: Modules
   - [composeIso (method)](#composeiso-method-3)
   - [composePrism (method)](#composeprism-method-3)
 - [Optional (class)](#optional-class)
-  - [fromNullableProp (method)](#fromnullableprop-method-1)
-  - [fromOptionProp (method)](#fromoptionprop-method)
+- [fromNullableProp (static method)](#fromnullableprop-static-method-1)
+- [fromOptionProp (static method)](#fromoptionprop-static-method)
   - [modify (method)](#modify-method-2)
   - [modifyOption (method)](#modifyoption-method)
   - [asTraversal (method)](#astraversal-method-2)
@@ -93,9 +93,9 @@ parent: Modules
   - [composeIso (method)](#composeiso-method-4)
   - [composeGetter (method)](#composegetter-method-4)
 - [Prism (class)](#prism-class)
-  - [fromPredicate (method)](#frompredicate-method)
-  - [~~fromRefinement~~ (method)](#fromrefinement-method)
-  - [some (method)](#some-method)
+- [fromPredicate (static method)](#frompredicate-static-method)
+- [~~fromRefinement~~ (static method)](#fromrefinement-static-method)
+- [some (static method)](#some-static-method)
   - [modify (method)](#modify-method-3)
   - [modifyOption (method)](#modifyoption-method-1)
   - [set (method)](#set-method)
@@ -422,7 +422,7 @@ export class Index<S, I, A> {
 }
 ```
 
-## fromAt (method)
+# fromAt (static method)
 
 **Signature**
 
@@ -638,7 +638,7 @@ export class Lens<S, A> {
 }
 ```
 
-## fromPath (method)
+# fromPath (static method)
 
 **Signature**
 
@@ -688,7 +688,7 @@ assert.strictEqual(city.get(person), 'Milan')
 assert.deepStrictEqual(city.set('London')(person), { name: 'Giulio', age: 43, address: { city: 'London' } })
 ```
 
-## fromProp (method)
+# fromProp (static method)
 
 generate a lens from a type and a prop
 
@@ -720,7 +720,7 @@ assert.strictEqual(age.get(person), 43)
 assert.deepStrictEqual(age.set(44)(person), { name: 'Giulio', age: 44 })
 ```
 
-## fromProps (method)
+# fromProps (static method)
 
 generate a lens from a type and an array of props
 
@@ -749,7 +749,7 @@ assert.deepStrictEqual(lens.get(person), { name: 'Giulio', age: 44 })
 assert.deepStrictEqual(lens.set({ name: 'Guido', age: 47 })(person), { name: 'Guido', age: 47, rememberMe: true })
 ```
 
-## fromNullableProp (method)
+# fromNullableProp (static method)
 
 generate a lens from a type and a prop whose type is nullable
 
@@ -942,7 +942,7 @@ export class Optional<S, A> {
 }
 ```
 
-## fromNullableProp (method)
+# fromNullableProp (static method)
 
 **Signature**
 
@@ -998,7 +998,7 @@ numberFromResponse.getOption(response1) // some('555-1234')
 numberFromResponse.getOption(response2) // none
 ```
 
-## fromOptionProp (method)
+# fromOptionProp (static method)
 
 **Signature**
 
@@ -1182,7 +1182,7 @@ export class Prism<S, A> {
 }
 ```
 
-## fromPredicate (method)
+# fromPredicate (static method)
 
 **Signature**
 
@@ -1192,7 +1192,7 @@ static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A>
 static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> { ... }
 ```
 
-## ~~fromRefinement~~ (method)
+# ~~fromRefinement~~ (static method)
 
 Use `fromPredicate` instead
 
@@ -1202,7 +1202,7 @@ Use `fromPredicate` instead
 static fromRefinement<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A> { ... }
 ```
 
-## some (method)
+# some (static method)
 
 **Signature**
 
