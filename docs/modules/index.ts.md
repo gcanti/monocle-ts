@@ -724,7 +724,7 @@ generate a lens from a type and an array of props
 **Signature**
 
 ```ts
-static fromProps<S>(): <P extends keyof S>(props: Array<P>) => Lens<S, { ... }
+static fromProps<S>(): <P extends keyof S>(props: Array<P>) => Lens<S, { [K in P]: S[K] }> { ... }
 ```
 
 **Example**
