@@ -1,6 +1,6 @@
 {
   "name": "monocle-ts",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "A porting of scala monocle library to TypeScript",
   "files": [
     "lib"

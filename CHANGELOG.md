@@ -13,6 +13,12 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 1.7.0
+
+- **New Feature**
+  - add `At/Record` (@mlegenhausen)
+  - add `Index/Record` (@mlegenhausen)
+
 # 1.6.1
 
 - **Polish**
