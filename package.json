@@ -1,6 +1,6 @@
 {
   "name": "monocle-ts",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "A porting of scala monocle library to TypeScript",
   "files": [
     "lib"
@@ -32,7 +32,7 @@
     "url": "https://github.com/gcanti/monocle-ts/issues"
   },
   "homepage": "https://github.com/gcanti/monocle-ts",
-  "dependencies": {
+  "peerDependencies": {
     "fp-ts": "^1.11.0"
   },
   "devDependencies": {
@@ -48,7 +48,8 @@
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.3.1"
+    "typescript": "^3.3.1",
+    "fp-ts": "^1.11.0"
   },
   "tags": [
     "typescript",
