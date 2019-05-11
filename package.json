@@ -1,12 +1,15 @@
 {
   "name": "monocle-ts",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "A porting of scala monocle library to TypeScript",
   "files": [
-    "lib"
+    "lib",
+    "es6"
   ],
   "main": "lib/index.js",
+  "module": "es6/index.js",
   "typings": "lib/index.d.ts",
+  "sideEffects": false,
   "scripts": {
     "lint": "tslint -p tsconfig.tslint.json src/**/*.ts test/**/*.ts",
     "jest": "jest",
@@ -14,8 +17,8 @@
     "prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --list-different \"{src,test,examples}/**/*.ts\"",
     "fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --write \"{src,test,examples}/**/*.ts\"",
     "test": "npm run prettier && npm run lint && npm run dtslint && npm run jest && npm run docs",
-    "clean": "rm -rf lib/*",
-    "build": "npm run clean && tsc",
+    "clean": "rimraf lib/* es6/*",
+    "build": "npm run clean && tsc && tsc -p tsconfig.es6.json",
     "prepublish": "npm run build",
     "docs-fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser markdown --write \"README.md\"",
     "dtslint": "dtslint dtslint",
