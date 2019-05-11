@@ -13,6 +13,10 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 1.7.2
+
+output ES modules to better support tree-shaking (@gcanti)
+
 # 1.7.1
 
 - **Polish**
