@@ -1,8 +1,19 @@
 import { At, Lens } from '../index'
-import { Option } from 'fp-ts/lib/Option'
+import { Option, isNone } from 'fp-ts/lib/Option'
 import * as R from 'fp-ts/lib/Record'
 
 export function atRecord<A = never>(): At<Record<string, A>, string, Option<A>> {
-  // tslint:disable-next-line: deprecation
-  return new At(at => new Lens(s => R.lookup(at, s), a => s => a.fold(R.remove(at, s), x => R.insert(at, x, s))))
+  return new At(
+    k =>
+      new Lens(
+        r => R.lookup(k, r),
+        oa => r => {
+          if (isNone(oa)) {
+            return R.deleteAt(k)(r)
+          } else {
+            return R.insertAt(k, oa.value)(r)
+          }
+        }
+      )
+  )
 }

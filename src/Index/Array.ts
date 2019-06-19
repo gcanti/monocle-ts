@@ -1,7 +1,20 @@
 import { Index, Optional } from '../index'
-import { index, updateAt } from 'fp-ts/lib/Array'
+import { lookup, updateAt } from 'fp-ts/lib/Array'
+import { isNone } from 'fp-ts/lib/Option'
 
 export function indexArray<A = never>(): Index<Array<A>, number, A> {
-  // tslint:disable-next-line: deprecation
-  return new Index(i => new Optional(s => index(i, s), a => s => updateAt(i, a, s).getOrElse(s)))
+  return new Index(
+    i =>
+      new Optional(
+        as => lookup(i, as),
+        a => as => {
+          const oas = updateAt(i, a)(as)
+          if (isNone(oas)) {
+            return as
+          } else {
+            return oas.value
+          }
+        }
+      )
+  )
 }

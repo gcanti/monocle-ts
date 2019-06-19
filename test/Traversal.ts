@@ -13,8 +13,8 @@ describe('Traversal', () => {
       tweets: Tweet[]
     }
 
-    const tweetsLens = Lens.fromProp<Tweets, 'tweets'>('tweets')
-    const tweetTextLens = Lens.fromProp<Tweet, 'text'>('text')
+    const tweetsLens = Lens.fromProp<Tweets>()('tweets')
+    const tweetTextLens = Lens.fromProp<Tweet>()('text')
     const tweetTraversal = fromTraversable(array)<Tweet>()
     const composedTraversal = tweetsLens.composeTraversal(tweetTraversal).composeLens(tweetTextLens)
 
@@ -46,7 +46,11 @@ describe('Traversal', () => {
     const traversal2 = fromTraversable(array)<Option<number>>()
       .filter(isSome)
       .filter(o => o.value > 2)
-    assert.deepStrictEqual(traversal2.set(new Some(2))([]), [])
-    assert.deepStrictEqual(traversal2.set(new Some(4))([some(1), some(2), some(3)]), [some(1), some(2), some(4)])
+    assert.deepStrictEqual(traversal2.set(some(2) as Some<number>)([]), [])
+    assert.deepStrictEqual(traversal2.set(some(4) as Some<number>)([some(1), some(2), some(3)]), [
+      some(1),
+      some(2),
+      some(4)
+    ])
   })
 })

@@ -1,12 +1,14 @@
 import { At, Lens } from '../index'
-import { Setoid } from 'fp-ts/lib/Setoid'
+import { Eq } from 'fp-ts/lib/Eq'
 import * as S from 'fp-ts/lib/Set'
 
-// tslint:disable-next-line: deprecation
-export function atSet<A = never>(setoid: Setoid<A>): At<Set<A>, A, boolean> {
-  // tslint:disable-next-line: deprecation
-  const member = S.member(setoid)
-  const insert = S.insert(setoid)
-  const remove = S.remove(setoid)
-  return new At(at => new Lens(s => member(s)(at), a => s => (a ? insert(at, s) : remove(at, s))))
+export function atSet<A = never>(E: Eq<A>): At<Set<A>, A, boolean> {
+  const elemE = S.elem(E)
+  const insertE = S.insert(E)
+  const removeE = S.remove(E)
+  return new At(at => {
+    const insertEAt = insertE(at)
+    const removeEAt = removeE(at)
+    return new Lens(s => elemE(at, s), a => s => (a ? insertEAt(s) : removeEAt(s)))
+  })
 }

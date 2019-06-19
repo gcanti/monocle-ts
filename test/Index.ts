@@ -1,12 +1,10 @@
 import { indexArray } from '../src/Index/Array'
 import { indexNonEmptyArray } from '../src/Index/NonEmptyArray'
 import { indexRecord } from '../src/Index/Record'
-import { indexStrMap } from '../src/Index/StrMap'
 import * as assert from 'assert'
 import { some, none } from 'fp-ts/lib/Option'
 import * as R from 'fp-ts/lib/Record'
-import * as SM from 'fp-ts/lib/StrMap'
-import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray'
+import { cons } from 'fp-ts/lib/NonEmptyArray'
 import { Iso } from '../src'
 
 describe('Index', () => {
@@ -26,27 +24,6 @@ describe('Index', () => {
 
     it('leave if missing', () => {
       const map = {}
-      const newMap = index.set('new')(map)
-      assert.deepStrictEqual(newMap, map)
-    })
-  })
-
-  describe('indexStrMap', () => {
-    const index = indexStrMap<string>().index('key')
-
-    it('get', () => {
-      const map = SM.singleton('key', 'value')
-      assert.deepStrictEqual(index.getOption(map), some('value'))
-    })
-
-    it('set if there', () => {
-      const map = SM.singleton('key', 'value')
-      const newMap = index.set('new')(map)
-      assert.deepStrictEqual(newMap, SM.singleton('key', 'new'))
-    })
-
-    it('leave if missing', () => {
-      const map = new SM.StrMap<string>({})
       const newMap = index.set('new')(map)
       assert.deepStrictEqual(newMap, map)
     })
@@ -80,26 +57,23 @@ describe('Index', () => {
     const one = indexNonEmptyArray<string>().index(1)
 
     it('get', () => {
-      assert.deepStrictEqual(one.getOption(new NonEmptyArray('a', [])), none)
-      assert.deepStrictEqual(one.getOption(new NonEmptyArray('a', ['b'])), some('b'))
+      assert.deepStrictEqual(one.getOption(cons('a', [])), none)
+      assert.deepStrictEqual(one.getOption(cons('a', ['b'])), some('b'))
     })
 
     it('get', () => {
-      assert.deepStrictEqual(one.set('x')(new NonEmptyArray('a', [])), new NonEmptyArray('a', []))
-      assert.deepStrictEqual(one.set('x')(new NonEmptyArray('a', ['b'])), new NonEmptyArray('a', ['x']))
+      assert.deepStrictEqual(one.set('x')(cons('a', [])), cons('a', []))
+      assert.deepStrictEqual(one.set('x')(cons('a', ['b'])), cons('a', ['x']))
     })
 
     it('modify', () => {
-      assert.deepStrictEqual(one.modify(v => `${v}X`)(new NonEmptyArray('a', [])), new NonEmptyArray('a', []))
-      assert.deepStrictEqual(one.modify(v => `${v}X`)(new NonEmptyArray('a', ['b'])), new NonEmptyArray('a', ['bX']))
+      assert.deepStrictEqual(one.modify(v => `${v}X`)(cons('a', [])), cons('a', []))
+      assert.deepStrictEqual(one.modify(v => `${v}X`)(cons('a', ['b'])), cons('a', ['bX']))
     })
 
     it('modifyOption', () => {
-      assert.deepStrictEqual(one.modifyOption(v => `${v}X`)(new NonEmptyArray('a', [])), none)
-      assert.deepStrictEqual(
-        one.modifyOption(v => `${v}X`)(new NonEmptyArray('a', ['b'])),
-        some(new NonEmptyArray('a', ['bX']))
-      )
+      assert.deepStrictEqual(one.modifyOption(v => `${v}X`)(cons('a', [])), none)
+      assert.deepStrictEqual(one.modifyOption(v => `${v}X`)(cons('a', ['b'])), some(cons('a', ['bX'])))
     })
   })
 
