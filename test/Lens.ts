@@ -47,12 +47,6 @@ function capitalize(s: string): string {
 
 describe('Lens', () => {
   it('fromProp', () => {
-    const name1 = Lens.fromProp<Person, 'name'>('name')
-    assert.strictEqual(name1.get(person), 'giulio')
-    assert.strictEqual(name1.modify(capitalize)(person).name, 'Giulio')
-    assert.strictEqual(name1.set('giulio')(person), person)
-    assert.strictEqual(name1.modify(identity)(person), person)
-
     const name2 = Lens.fromProp<Person>()('name')
     assert.strictEqual(name2.get(person), 'giulio')
     assert.strictEqual(name2.modify(capitalize)(person).name, 'Giulio')
@@ -61,20 +55,10 @@ describe('Lens', () => {
   })
 
   it('fromPath', () => {
-    const lens1 = Lens.fromPath<Employee, 'company', 'address', 'street', 'name'>([
-      'company',
-      'address',
-      'street',
-      'name'
-    ])
-    assert.strictEqual(lens1.modify(capitalize)(employee).company.address.street.name, 'High street')
-    assert.strictEqual(lens1.set('high street')(employee), employee)
-    assert.strictEqual(lens1.modify(identity)(employee), employee)
-
-    const lens2 = Lens.fromPath<Employee>()(['company', 'address', 'street', 'name'])
-    assert.strictEqual(lens2.modify(capitalize)(employee).company.address.street.name, 'High street')
-    assert.strictEqual(lens2.set('high street')(employee), employee)
-    assert.strictEqual(lens2.modify(identity)(employee), employee)
+    const lens = Lens.fromPath<Employee>()(['company', 'address', 'street', 'name'])
+    assert.strictEqual(lens.modify(capitalize)(employee).company.address.street.name, 'High street')
+    assert.strictEqual(lens.set('high street')(employee), employee)
+    assert.strictEqual(lens.modify(identity)(employee), employee)
   })
 
   it('fromNullableProp', () => {
@@ -88,25 +72,15 @@ describe('Lens', () => {
       foo: string
     }
 
-    const inner1 = Lens.fromNullableProp<Outer, Inner, 'inner'>('inner', { value: 0, foo: 'foo' })
-    const value = Lens.fromProp<Inner, 'value'>('value')
-    const lens1 = inner1.compose(value)
-
-    assert.deepStrictEqual(lens1.set(1)({}), { inner: { value: 1, foo: 'foo' } })
-    assert.strictEqual(lens1.get({}), 0)
-    assert.deepStrictEqual(lens1.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
-    assert.strictEqual(lens1.get({ inner: { value: 1, foo: 'bar' } }), 1)
-    assert.strictEqual(lens1.set(1)(outer1), outer1)
-    assert.strictEqual(lens1.modify(identity)(outer1), outer1)
-
-    const inner2 = Lens.fromNullableProp<Outer>()('inner', { value: 0, foo: 'foo' })
-    const lens2 = inner2.compose(value)
-    assert.deepStrictEqual(lens2.set(1)({}), { inner: { value: 1, foo: 'foo' } })
-    assert.strictEqual(lens2.get({}), 0)
-    assert.deepStrictEqual(lens2.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
-    assert.strictEqual(lens2.get({ inner: { value: 1, foo: 'bar' } }), 1)
-    assert.strictEqual(lens2.set(1)(outer1), outer1)
-    assert.strictEqual(lens2.modify(identity)(outer1), outer1)
+    const value = Lens.fromProp<Inner>()('value')
+    const inner = Lens.fromNullableProp<Outer>()('inner', { value: 0, foo: 'foo' })
+    const lens = inner.compose(value)
+    assert.deepStrictEqual(lens.set(1)({}), { inner: { value: 1, foo: 'foo' } })
+    assert.strictEqual(lens.get({}), 0)
+    assert.deepStrictEqual(lens.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
+    assert.strictEqual(lens.get({ inner: { value: 1, foo: 'bar' } }), 1)
+    assert.strictEqual(lens.set(1)(outer1), outer1)
+    assert.strictEqual(lens.modify(identity)(outer1), outer1)
   })
 
   it('fromProps', () => {

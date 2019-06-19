@@ -13,6 +13,19 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 2.0.0-rc.1
+
+- **Breaking Change**
+  - upgrade to `fp-ts@2.x` (@gcanti)
+  - remove deprecated APIs (@gcanti)
+    - uncurried `Lens.fromProp`
+    - uncurried `Lens.fromProps`
+    - uncurried `Lens.fromNullableProp`
+    - uncurried `Optional.fromNullableProp`
+    - uncurried `Optional.fromOptionProp`
+  - remove `At/StrMap` (@gcanti)
+  - remove `Index/StrMap` (@gcanti)
+
 # 1.7.2
 
 output ES modules to better support tree-shaking (@gcanti)

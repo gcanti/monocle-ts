@@ -1,8 +1,10 @@
 {
   "extends": "tslint-config-standard",
+  "rulesDirectory": ["./node_modules/fp-ts/rules"],
   "rules": {
     "space-before-function-paren": false,
     "no-unnecessary-generics": false,
-    "deprecation": true
+    "deprecation": true,
+    "obsolete": true
   }
 }

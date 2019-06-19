@@ -13,8 +13,8 @@ describe('Traversal', () => {
       tweets: Tweet[]
     }
 
-    const tweetsLens = Lens.fromProp<Tweets, 'tweets'>('tweets')
-    const tweetTextLens = Lens.fromProp<Tweet, 'text'>('text')
+    const tweetsLens = Lens.fromProp<Tweets>()('tweets')
+    const tweetTextLens = Lens.fromProp<Tweet>()('text')
     const tweetTraversal = fromTraversable(array)<Tweet>()
     const composedTraversal = tweetsLens.composeTraversal(tweetTraversal).composeLens(tweetTextLens)
 

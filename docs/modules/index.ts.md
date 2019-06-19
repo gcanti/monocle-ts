@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 5
+nav_order: 4
 parent: Modules
 ---
 
@@ -171,11 +171,10 @@ export interface LensFromPath<S> {
 
 ```ts
 export interface ModifyF<S, A> {
-  <F extends URIS3>(F: Applicative3<F>): <U, L>(f: (a: A) => Type3<F, U, L, A>) => (s: S) => Type3<F, U, L, S>
-  <F extends URIS3, U, L>(F: Applicative3C<F, U, L>): (f: (a: A) => Type3<F, U, L, A>) => (s: S) => Type3<F, U, L, S>
-  <F extends URIS2>(F: Applicative2<F>): <L>(f: (a: A) => Type2<F, L, A>) => (s: S) => Type2<F, L, S>
-  <F extends URIS2, L>(F: Applicative2C<F, L>): (f: (a: A) => Type2<F, L, A>) => (s: S) => Type2<F, L, S>
-  <F extends URIS>(F: Applicative1<F>): (f: (a: A) => Type<F, A>) => (s: S) => Type<F, S>
+  <F extends URIS3>(F: Applicative3<F>): <U, L>(f: (a: A) => Kind3<F, U, L, A>) => (s: S) => Kind3<F, U, L, S>
+  <F extends URIS2>(F: Applicative2<F>): <L>(f: (a: A) => Kind2<F, L, A>) => (s: S) => Kind2<F, L, S>
+  <F extends URIS2, L>(F: Applicative2C<F, L>): (f: (a: A) => Kind2<F, L, A>) => (s: S) => Kind2<F, L, S>
+  <F extends URIS>(F: Applicative1<F>): (f: (a: A) => Kind<F, A>) => (s: S) => Kind<F, S>
   <F>(F: Applicative<F>): (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>
 }
 ```
@@ -642,27 +641,7 @@ export class Lens<S, A> {
 **Signature**
 
 ```ts
-static fromPath<S>(): LensFromPath<S>
-static fromPath<
-    S,
-    K1 extends keyof S,
-    K2 extends keyof S[K1],
-    K3 extends keyof S[K1][K2],
-    K4 extends keyof S[K1][K2][K3],
-    K5 extends keyof S[K1][K2][K3][K4]
-  >(path: [K1, K2, K3, K4, K5]): Lens<S, S[K1][K2][K3][K4][K5]>
-static fromPath<
-    S,
-    K1 extends keyof S,
-    K2 extends keyof S[K1],
-    K3 extends keyof S[K1][K2],
-    K4 extends keyof S[K1][K2][K3]
-  >(path: [K1, K2, K3, K4]): Lens<S, S[K1][K2][K3][K4]>
-static fromPath<S, K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof S[K1][K2]>(
-    path: [K1, K2, K3]
-  ): Lens<S, S[K1][K2][K3]>
-static fromPath<S, K1 extends keyof S, K2 extends keyof S[K1]>(path: [K1, K2]): Lens<S, S[K1][K2]>
-static fromPath<S, K1 extends keyof S>(path: [K1]): Lens<S, S[K1]> { ... }
+static fromPath<S>(): LensFromPath<S> { ... }
 ```
 
 **Example**
@@ -693,8 +672,7 @@ generate a lens from a type and a prop
 **Signature**
 
 ```ts
-static fromProp<S>(): <P extends keyof S>(prop: P) => Lens<S, S[P]>
-static fromProp<S, P extends keyof S>(prop: P): Lens<S, S[P]> { ... }
+static fromProp<S>(): <P extends keyof S>(prop: P) => Lens<S, S[P]> { ... }
 ```
 
 **Example**
@@ -753,8 +731,10 @@ generate a lens from a type and a prop whose type is nullable
 **Signature**
 
 ```ts
-static fromNullableProp<S>(): <A extends S[K], K extends keyof S>(k: K, defaultValue: A) => Lens<S, NonNullable<S[K]>>
-static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K, defaultValue: A): Lens<S, NonNullable<S[K]>> { ... }
+static fromNullableProp<S>(): <A extends S[K], K extends keyof S>(
+    k: K,
+    defaultValue: A
+  ) => Lens<S, NonNullable<S[K]>> { ... }
 ```
 
 **Example**
@@ -943,8 +923,7 @@ export class Optional<S, A> {
 **Signature**
 
 ```ts
-static fromNullableProp<S>(): <K extends keyof S>(k: K) => Optional<S, NonNullable<S[K]>>
-static fromNullableProp<S, A extends S[K], K extends keyof S>(k: K): Optional<S, NonNullable<S[K]>> { ... }
+static fromNullableProp<S>(): <K extends keyof S>(k: K) => Optional<S, NonNullable<S[K]>> { ... }
 ```
 
 **Example**
@@ -998,8 +977,7 @@ numberFromResponse.getOption(response2) // none
 **Signature**
 
 ```ts
-static fromOptionProp<S>(): <P extends OptionPropertyNames<S>>(prop: P) => Optional<S, OptionPropertyType<S, P>>
-static fromOptionProp<S>(prop: OptionPropertyNames<S>): Optional<S, OptionPropertyType<S, typeof prop>> { ... }
+static fromOptionProp<S>(): <P extends OptionPropertyNames<S>>(prop: P) => Optional<S, OptionPropertyType<S, P>> { ... }
 ```
 
 **Example**
@@ -1021,9 +999,9 @@ interface Response {
   info: Option<Info>
 }
 
-const info = Optional.fromOptionProp<Response>('info')
-const employment = Optional.fromOptionProp<Info>('employment')
-const phone = Optional.fromOptionProp<Employment>('phone')
+const info = Optional.fromOptionProp<Response>()('info')
+const employment = Optional.fromOptionProp<Info>()('employment')
+const phone = Optional.fromOptionProp<Employment>()('phone')
 const number = Lens.fromProp<Phone>()('number')
 export const numberFromResponse = info
   .compose(employment)
@@ -1623,9 +1601,9 @@ create a Fold from a Foldable
 **Signature**
 
 ```ts
-export function fromFoldable<F extends URIS3>(F: Foldable3<F>): <U, L, A>() => Fold<Type3<F, U, L, A>, A>
-export function fromFoldable<F extends URIS2>(F: Foldable2<F>): <L, A>() => Fold<Type2<F, L, A>, A>
-export function fromFoldable<F extends URIS>(F: Foldable1<F>): <A>() => Fold<Type<F, A>, A>
+export function fromFoldable<F extends URIS3>(F: Foldable3<F>): <U, L, A>() => Fold<Kind3<F, U, L, A>, A>
+export function fromFoldable<F extends URIS2>(F: Foldable2<F>): <L, A>() => Fold<Kind2<F, L, A>, A>
+export function fromFoldable<F extends URIS>(F: Foldable1<F>): <A>() => Fold<Kind<F, A>, A>
 export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> { ... }
 ```
 
@@ -1636,9 +1614,9 @@ create a Traversal from a Traversable
 **Signature**
 
 ```ts
-export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Type3<T, U, L, A>, A>
-export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <L, A>() => Traversal<Type2<T, L, A>, A>
-export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Type<T, A>, A>
+export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Kind3<T, U, L, A>, A>
+export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <L, A>() => Traversal<Kind2<T, L, A>, A>
+export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Kind<T, A>, A>
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> { ... }
 ```
 

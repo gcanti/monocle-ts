@@ -17,5 +17,5 @@ parent: Modules
 **Signature**
 
 ```ts
-export function atSet<A = never>(setoid: Setoid<A>): At<Set<A>, A, boolean> { ... }
+export function atSet<A = never>(E: Eq<A>): At<Set<A>, A, boolean> { ... }
 ```
