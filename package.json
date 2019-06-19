@@ -43,7 +43,7 @@
     "@types/node": "7.0.4",
     "docs-ts": "^0.1.0",
     "dtslint": "github:gcanti/dtslint",
-    "fp-ts": "^1.19.0",
+    "fp-ts": "^2.0.0-rc.6",
     "jest": "^24.3.0",
     "mocha": "^5.2.0",
     "prettier": "^1.15.3",
