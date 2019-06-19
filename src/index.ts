@@ -1,17 +1,15 @@
 import { HKT, URIS, URIS2, URIS3, Kind3, Kind2, Kind } from 'fp-ts/lib/HKT'
-import { Monoid, monoidAll, monoidAny, getArrayMonoid } from 'fp-ts/lib/Monoid'
+import { Monoid, monoidAll, monoidAny } from 'fp-ts/lib/Monoid'
 import { Applicative, Applicative1, Applicative2, Applicative3, Applicative2C } from 'fp-ts/lib/Applicative'
-import { Foldable, Foldable1, Foldable2, Foldable3, foldMap } from 'fp-ts/lib/Foldable'
+import { Foldable, Foldable1, Foldable2, Foldable3 } from 'fp-ts/lib/Foldable'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
 import { Option, none, some, fromNullable, getFirstMonoid, fromPredicate, isNone, option } from 'fp-ts/lib/Option'
 import { identity, constant, Predicate, Refinement } from 'fp-ts/lib/function'
 import { identity as id } from 'fp-ts/lib/Identity'
-import { getApplicative, Const } from 'fp-ts/lib/Const'
+import { getApplicative, make } from 'fp-ts/lib/Const'
+import { getMonoid } from 'fp-ts/lib/Array'
 
-/**
- * @internal
- */
-export const update = <O, K extends keyof O, A extends O[K]>(o: O, k: K, a: A): O => {
+const update = <O, K extends keyof O, A extends O[K]>(o: O, k: K, a: A): O => {
   return a === o[k] ? o : Object.assign({}, o, { [k]: a })
 }
 
@@ -78,7 +76,7 @@ export class Iso<S, A> {
     return new Iso(s => ab.get(this.get(s)), b => this.reverseGet(ab.reverseGet(b)))
   }
 
-  /** @alias of `compose` */
+  /** Alias of `compose` */
   composeIso<B>(ab: Iso<A, B>): Iso<S, B> {
     return this.compose(ab)
   }
@@ -186,8 +184,6 @@ export class Lens<S, A> {
    * }
    *
    * const age = Lens.fromProp<Person>()('age')
-   * // or (deprecated)
-   * // const age = Lens.fromProp<Person, 'age'>('age')
    *
    * const person: Person = { name: 'Giulio', age: 43 }
    *
@@ -324,7 +320,7 @@ export class Lens<S, A> {
     return new Lens(s => ab.get(this.get(s)), b => s => this.set(ab.set(b)(this.get(s)))(s))
   }
 
-  /** @alias of `compose` */
+  /** Alias of `compose` */
   composeLens<B>(ab: Lens<A, B>): Lens<S, B> {
     return this.compose(ab)
   }
@@ -378,14 +374,6 @@ export class Prism<S, A> {
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A>
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
     return new Prism(s => (predicate(s) ? some(s) : none), identity)
-  }
-
-  /**
-   * Use `fromPredicate` instead
-   * @deprecated
-   */
-  static fromRefinement<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A> {
-    return new Prism<S, A>(s => (refinement(s) ? some(s) : none), identity)
   }
 
   static some<A>(): Prism<Option<A>, A> {
@@ -455,7 +443,7 @@ export class Prism<S, A> {
     return new Prism(s => option.chain(this.getOption(s), a => ab.getOption(a)), b => this.reverseGet(ab.reverseGet(b)))
   }
 
-  /** @alias of `compose` */
+  /** Alias of `compose` */
   composePrism<B>(ab: Prism<A, B>): Prism<S, B> {
     return this.compose(ab)
   }
@@ -644,7 +632,7 @@ export class Optional<S, A> {
     return new Optional<S, B>(s => option.chain(this.getOption(s), a => ab.getOption(a)), b => this.modify(ab.set(b)))
   }
 
-  /** @alias of `compose` */
+  /** Alias of `compose` */
   composeOptional<B>(ab: Optional<A, B>): Optional<S, B> {
     return this.compose(ab)
   }
@@ -701,7 +689,7 @@ export class Traversal<S, A> {
   ) {}
 
   modify(f: (a: A) => A): (s: S) => S {
-    return s => this.modifyF(id)(a => id.of(f(a)))(s).value
+    return s => this.modifyF(id)(f)(s)
   }
 
   set(a: A): (s: S) => S {
@@ -737,10 +725,7 @@ export class Traversal<S, A> {
 
   /** view a Traversal as a Fold */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s =>
-      // tslint:disable-next-line: deprecation
-      this.modifyF(getApplicative(M))(a => new Const(f(a)))(s).value
-    )
+    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => this.modifyF(getApplicative(M))(a => make(f(a)))(s))
   }
 
   /** view a Traversal as a Setter */
@@ -753,7 +738,7 @@ export class Traversal<S, A> {
     return new Traversal<S, B>(<F>(F: Applicative<F>) => (f: (a: B) => HKT<F, B>) => this.modifyF(F)(ab.modifyF(F)(f)))
   }
 
-  /** @alias of `compose` */
+  /** Alias of `compose` */
   composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> {
     return this.compose(ab)
   }
@@ -832,7 +817,7 @@ export class Getter<S, A> {
     return new Getter(s => ab.get(this.get(s)))
   }
 
-  /** @alias of `compose` */
+  /** Alias of `compose` */
   composeGetter<B>(ab: Getter<A, B>): Getter<S, B> {
     return this.compose(ab)
   }
@@ -878,8 +863,7 @@ export class Fold<S, A> {
   readonly all: (p: Predicate<A>) => Predicate<S>
   private foldMapFirst: (f: (a: A) => Option<A>) => (s: S) => Option<A>
   constructor(readonly foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M) {
-    // tslint:disable-next-line: deprecation
-    this.getAll = foldMap(getArrayMonoid<A>())(a => [a])
+    this.getAll = foldMap(getMonoid<A>())(a => [a])
     this.exist = foldMap(monoidAny)
     this.all = foldMap(monoidAll)
     this.foldMapFirst = foldMap(getFirstMonoid())
@@ -890,7 +874,7 @@ export class Fold<S, A> {
     return new Fold(<M>(M: Monoid<M>) => (f: (b: B) => M) => this.foldMap(M)(ab.foldMap(M)(f)))
   }
 
-  /** @alias of `compose` */
+  /** Alias of `compose` */
   composeFold<B>(ab: Fold<A, B>): Fold<S, B> {
     return this.compose(ab)
   }
@@ -951,7 +935,7 @@ export class Setter<S, A> {
     return new Setter(f => this.modify(ab.modify(f)))
   }
 
-  /** @alias of `compose` */
+  /** Alias of `compose` */
   composeSetter<B>(ab: Setter<A, B>): Setter<S, B> {
     return this.compose(ab)
   }
@@ -1018,9 +1002,7 @@ export class Setter<S, A> {
 export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Kind3<T, U, L, A>, A>
 export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <L, A>() => Traversal<Kind2<T, L, A>, A>
 export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Kind<T, A>, A>
-// tslint:disable-next-line: deprecation
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
-// tslint:disable-next-line: deprecation
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
   return <A>() =>
     new Traversal(<F>(F: Applicative<F>) => {
@@ -1033,13 +1015,11 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 export function fromFoldable<F extends URIS3>(F: Foldable3<F>): <U, L, A>() => Fold<Kind3<F, U, L, A>, A>
 export function fromFoldable<F extends URIS2>(F: Foldable2<F>): <L, A>() => Fold<Kind2<F, L, A>, A>
 export function fromFoldable<F extends URIS>(F: Foldable1<F>): <A>() => Fold<Kind<F, A>, A>
-// tslint:disable-next-line: deprecation
 export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A>
-// tslint:disable-next-line: deprecation
 export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> {
   return <A>() =>
     new Fold<HKT<F, A>, A>(<M>(M: Monoid<M>) => {
-      const foldMapFM = foldMap(F, M)
+      const foldMapFM = F.foldMap(M)
       return (f: (a: A) => M) => s => foldMapFM(s, f)
     })
 }

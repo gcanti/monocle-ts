@@ -4,7 +4,7 @@ import { indexRecord } from '../src/Index/Record'
 import * as assert from 'assert'
 import { some, none } from 'fp-ts/lib/Option'
 import * as R from 'fp-ts/lib/Record'
-import { cons } from 'fp-ts/lib/NonEmptyArray2v'
+import { cons } from 'fp-ts/lib/NonEmptyArray'
 import { Iso } from '../src'
 
 describe('Index', () => {

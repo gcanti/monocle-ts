@@ -94,7 +94,6 @@ parent: Modules
   - [composeGetter (method)](#composegetter-method-4)
 - [Prism (class)](#prism-class)
 - [fromPredicate (static method)](#frompredicate-static-method)
-- [~~fromRefinement~~ (static method)](#fromrefinement-static-method)
 - [some (static method)](#some-static-method)
   - [modify (method)](#modify-method-3)
   - [modifyOption (method)](#modifyoption-method-1)
@@ -223,6 +222,8 @@ compose<B>(ab: Fold<A, B>): Fold<S, B> { ... }
 
 ## composeFold (method)
 
+Alias of `compose`
+
 **Signature**
 
 ```ts
@@ -342,6 +343,8 @@ compose<B>(ab: Getter<A, B>): Getter<S, B> { ... }
 ```
 
 ## composeGetter (method)
+
+Alias of `compose`
 
 **Signature**
 
@@ -549,6 +552,8 @@ compose<B>(ab: Iso<A, B>): Iso<S, B> { ... }
 
 ## composeIso (method)
 
+Alias of `compose`
+
 **Signature**
 
 ```ts
@@ -686,8 +691,6 @@ type Person = {
 }
 
 const age = Lens.fromProp<Person>()('age')
-// or (deprecated)
-// const age = Lens.fromProp<Person, 'age'>('age')
 
 const person: Person = { name: 'Giulio', age: 43 }
 
@@ -830,6 +833,8 @@ compose<B>(ab: Lens<A, B>): Lens<S, B> { ... }
 ```
 
 ## composeLens (method)
+
+Alias of `compose`
 
 **Signature**
 
@@ -1067,6 +1072,8 @@ compose<B>(ab: Optional<A, B>): Optional<S, B> { ... }
 
 ## composeOptional (method)
 
+Alias of `compose`
+
 **Signature**
 
 ```ts
@@ -1163,16 +1170,6 @@ static fromPredicate<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
 static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> { ... }
 ```
 
-# ~~fromRefinement~~ (static method)
-
-Use `fromPredicate` instead
-
-**Signature**
-
-```ts
-static fromRefinement<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A> { ... }
-```
-
 # some (static method)
 
 **Signature**
@@ -1258,6 +1255,8 @@ compose<B>(ab: Prism<A, B>): Prism<S, B> { ... }
 ```
 
 ## composePrism (method)
+
+Alias of `compose`
 
 **Signature**
 
@@ -1365,6 +1364,8 @@ compose<B>(ab: Setter<A, B>): Setter<S, B> { ... }
 ```
 
 ## composeSetter (method)
+
+Alias of `compose`
 
 **Signature**
 
@@ -1517,6 +1518,8 @@ compose<B>(ab: Traversal<A, B>): Traversal<S, B> { ... }
 ```
 
 ## composeTraversal (method)
+
+Alias of `compose`
 
 **Signature**
 

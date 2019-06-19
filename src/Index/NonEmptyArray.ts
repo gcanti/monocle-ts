@@ -1,5 +1,5 @@
 import { Index, Optional } from '../index'
-import { NonEmptyArray, updateAt } from 'fp-ts/lib/NonEmptyArray2v'
+import { NonEmptyArray, updateAt } from 'fp-ts/lib/NonEmptyArray'
 import { lookup } from 'fp-ts/lib/Array'
 import { isNone } from 'fp-ts/lib/Option'
 
