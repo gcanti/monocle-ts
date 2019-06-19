@@ -1,7 +1,21 @@
 import { Index, Optional } from '../index'
-import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray'
+import { NonEmptyArray, updateAt } from 'fp-ts/lib/NonEmptyArray'
+import { lookup } from 'fp-ts/lib/Array'
+import { isNone } from 'fp-ts/lib/Option'
 
 export function indexNonEmptyArray<A = never>(): Index<NonEmptyArray<A>, number, A> {
-  // tslint:disable-next-line: deprecation
-  return new Index(i => new Optional(s => s.index(i), a => s => s.updateAt(i, a).getOrElse(s)))
+  return new Index(
+    i =>
+      new Optional(
+        s => lookup(i, s),
+        a => nea => {
+          const onea = updateAt(i, a)(nea)
+          if (isNone(onea)) {
+            return nea
+          } else {
+            return onea.value
+          }
+        }
+      )
+  )
 }
