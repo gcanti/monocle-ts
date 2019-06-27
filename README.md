@@ -131,7 +131,7 @@ element to zoom into is always present, hence composing an `Optional` and a `Len
 
 # TypeScript compatibility
 
-The stable version is tested against TypeScript 3.2.2, but should run with TypeScript 2.8.0+ too
+The stable version is tested against TypeScript 3.5.2, but should run with TypeScript 2.8.0+ too
 
 **Note**. If you are running `< typescript@3.0.1` you have to polyfill `unknown`.
 

@@ -54,6 +54,7 @@ describe('At', () => {
 
   describe('atSet', () => {
     const set = S.singleton(3)
+    // tslint:disable-next-line: deprecation
     const at = atSet(setoidNumber).at(3)
 
     it('get', () => {

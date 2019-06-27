@@ -2,6 +2,7 @@ import { At, Lens } from '../index'
 import { Setoid } from 'fp-ts/lib/Setoid'
 import * as S from 'fp-ts/lib/Set'
 
+// tslint:disable-next-line: deprecation
 export function atSet<A = never>(setoid: Setoid<A>): At<Set<A>, A, boolean> {
   // tslint:disable-next-line: deprecation
   const member = S.member(setoid)

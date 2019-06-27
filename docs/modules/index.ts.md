@@ -171,10 +171,15 @@ export interface LensFromPath<S> {
 
 ```ts
 export interface ModifyF<S, A> {
+  // tslint:disable-next-line: deprecation
   <F extends URIS3>(F: Applicative3<F>): <U, L>(f: (a: A) => Type3<F, U, L, A>) => (s: S) => Type3<F, U, L, S>
+  // tslint:disable-next-line: deprecation
   <F extends URIS3, U, L>(F: Applicative3C<F, U, L>): (f: (a: A) => Type3<F, U, L, A>) => (s: S) => Type3<F, U, L, S>
+  // tslint:disable-next-line: deprecation
   <F extends URIS2>(F: Applicative2<F>): <L>(f: (a: A) => Type2<F, L, A>) => (s: S) => Type2<F, L, S>
+  // tslint:disable-next-line: deprecation
   <F extends URIS2, L>(F: Applicative2C<F, L>): (f: (a: A) => Type2<F, L, A>) => (s: S) => Type2<F, L, S>
+  // tslint:disable-next-line: deprecation
   <F extends URIS>(F: Applicative1<F>): (f: (a: A) => Type<F, A>) => (s: S) => Type<F, S>
   <F>(F: Applicative<F>): (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>
 }

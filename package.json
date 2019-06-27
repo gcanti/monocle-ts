@@ -43,6 +43,7 @@
     "@types/node": "7.0.4",
     "docs-ts": "github:gcanti/docs-ts",
     "dtslint": "github:gcanti/dtslint",
+    "fp-ts": "^1.19.3",
     "jest": "^24.3.0",
     "mocha": "^5.2.0",
     "prettier": "^1.15.3",
@@ -51,8 +52,7 @@
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.3.1",
-    "fp-ts": "^1.11.0"
+    "typescript": "^3.5.2"
   },
   "tags": [
     "typescript",
