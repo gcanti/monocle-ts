@@ -41,7 +41,7 @@
   "devDependencies": {
     "@types/jest": "22.2.2",
     "@types/node": "7.0.4",
-    "docs-ts": "github:gcanti/docs-ts",
+    "docs-ts": "^0.1.0",
     "dtslint": "github:gcanti/dtslint",
     "fp-ts": "^1.19.3",
     "jest": "^24.3.0",
