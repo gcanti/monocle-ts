@@ -21,6 +21,8 @@ parent: Modules
 export const _left = <L, A>(): Prism<Either<L, A>, L> => ...
 ```
 
+Added in v1.6.0
+
 # \_right (function)
 
 **Signature**
@@ -28,3 +30,5 @@ export const _left = <L, A>(): Prism<Either<L, A>, L> => ...
 ```ts
 export const _right = <L, A>(): Prism<Either<L, A>, A> => ...
 ```
+
+Added in v1.6.0

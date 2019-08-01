@@ -19,3 +19,5 @@ parent: Modules
 ```ts
 export function atRecord<A = never>(): At<Record<string, A>, string, Option<A>> { ... }
 ```
+
+Added in v1.7.0

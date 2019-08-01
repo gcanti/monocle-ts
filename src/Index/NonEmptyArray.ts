@@ -3,6 +3,9 @@ import { NonEmptyArray, updateAt } from 'fp-ts/lib/NonEmptyArray'
 import { lookup } from 'fp-ts/lib/Array'
 import { isNone } from 'fp-ts/lib/Option'
 
+/**
+ * @since 1.2.0
+ */
 export function indexNonEmptyArray<A = never>(): Index<NonEmptyArray<A>, number, A> {
   return new Index(
     i =>

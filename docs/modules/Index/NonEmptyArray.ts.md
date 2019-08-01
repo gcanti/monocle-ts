@@ -19,3 +19,5 @@ parent: Modules
 ```ts
 export function indexNonEmptyArray<A = never>(): Index<NonEmptyArray<A>, number, A> { ... }
 ```
+
+Added in v1.2.0

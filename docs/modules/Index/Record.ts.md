@@ -19,3 +19,5 @@ parent: Modules
 ```ts
 export function indexRecord<A = never>(): Index<Record<string, A>, string, A> { ... }
 ```
+
+Added in v1.7.0

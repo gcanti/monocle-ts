@@ -19,3 +19,5 @@ parent: Modules
 ```ts
 export function atSet<A = never>(E: Eq<A>): At<Set<A>, A, boolean> { ... }
 ```
+
+Added in v1.2.0
