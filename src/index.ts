@@ -973,7 +973,7 @@ export class Traversal<S, A> {
    * @since 1.0.0
    */
   modify(f: (a: A) => A): (s: S) => S {
-    return s => this.modifyF(id)(f)(s)
+    return this.modifyF(id)(f)
   }
 
   /**
