@@ -1,3 +1,6 @@
+/**
+ * @since 1.6.0
+ */
 import { Either, right, left, fold } from 'fp-ts/lib/Either'
 import { fromEither, none, some } from 'fp-ts/lib/Option'
 import { Prism } from '.'

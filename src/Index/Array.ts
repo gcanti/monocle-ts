@@ -1,3 +1,6 @@
+/**
+ * @since 1.2.0
+ */
 import { Index, Optional } from '../index'
 import { lookup, updateAt } from 'fp-ts/lib/Array'
 import { isNone } from 'fp-ts/lib/Option'

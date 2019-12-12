@@ -1,3 +1,6 @@
+/**
+ * @since 1.2.0
+ */
 import { At, Lens } from '../index'
 import { Eq } from 'fp-ts/lib/Eq'
 import * as S from 'fp-ts/lib/Set'

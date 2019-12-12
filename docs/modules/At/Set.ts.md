@@ -4,6 +4,10 @@ nav_order: 2
 parent: Modules
 ---
 
+# Set overview
+
+Added in v1.2.0
+
 ---
 
 <h2 class="text-delta">Table of contents</h2>
