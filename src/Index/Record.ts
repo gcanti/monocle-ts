@@ -1,3 +1,6 @@
+/**
+ * @since 1.7.0
+ */
 import { Index } from '../index'
 import { atRecord } from '../At/Record'
 

@@ -1,3 +1,6 @@
+/**
+ * @since 1.0.0
+ */
 import { HKT, URIS, URIS2, URIS3, Kind3, Kind2, Kind } from 'fp-ts/lib/HKT'
 import { Monoid, monoidAll, monoidAny } from 'fp-ts/lib/Monoid'
 import { Applicative, Applicative1, Applicative2, Applicative3, Applicative2C } from 'fp-ts/lib/Applicative'

@@ -4,6 +4,10 @@ nav_order: 6
 parent: Modules
 ---
 
+# NonEmptyArray overview
+
+Added in v1.5.0
+
 ---
 
 <h2 class="text-delta">Table of contents</h2>
@@ -20,4 +24,4 @@ parent: Modules
 export function indexNonEmptyArray<A = never>(): Index<NonEmptyArray<A>, number, A> { ... }
 ```
 
-Added in v1.2.0
+Added in v1.5.0

@@ -1,3 +1,6 @@
+/**
+ * @since 1.7.0
+ */
 import { At, Lens } from '../index'
 import { Option, isNone } from 'fp-ts/lib/Option'
 import * as R from 'fp-ts/lib/Record'

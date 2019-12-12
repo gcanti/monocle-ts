@@ -1,10 +1,13 @@
+/**
+ * @since 1.5.0
+ */
 import { Index, Optional } from '../index'
 import { NonEmptyArray, updateAt } from 'fp-ts/lib/NonEmptyArray'
 import { lookup } from 'fp-ts/lib/Array'
 import { isNone } from 'fp-ts/lib/Option'
 
 /**
- * @since 1.2.0
+ * @since 1.5.0
  */
 export function indexNonEmptyArray<A = never>(): Index<NonEmptyArray<A>, number, A> {
   return new Index(
