@@ -13,6 +13,11 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 2.0.1
+
+- **Bug Fix**
+  - rewrite es6 imports (@gcanti)
+
 # 2.0.0
 
 - **Breaking Change**

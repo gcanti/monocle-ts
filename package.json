@@ -1,6 +1,6 @@
 {
   "name": "monocle-ts",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A porting of scala monocle library to TypeScript",
   "files": [
     "lib",
@@ -18,12 +18,13 @@
     "fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --write \"{src,test,examples}/**/*.ts\"",
     "test": "npm run prettier && npm run lint && npm run dtslint && npm run jest && npm run docs",
     "clean": "rimraf lib/* es6/*",
-    "build": "npm run clean && tsc && tsc -p tsconfig.es6.json",
+    "build": "npm run clean && tsc && tsc -p tsconfig.es6.json && npm run import-path-rewrite",
     "prepublish": "npm run build",
     "docs-fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser markdown --write \"README.md\"",
     "dtslint": "dtslint dtslint",
     "mocha": "TS_NODE_CACHE=false mocha -r ts-node/register test/*.ts",
-    "docs": "docs-ts"
+    "docs": "docs-ts",
+    "import-path-rewrite": "import-path-rewrite"
   },
   "repository": {
     "type": "git",
@@ -44,6 +45,7 @@
     "docs-ts": "^0.3.0",
     "dtslint": "github:gcanti/dtslint",
     "fp-ts": "^2.0.0",
+    "import-path-rewrite": "github:gcanti/import-path-rewrite",
     "jest": "^24.3.0",
     "mocha": "^5.2.0",
     "prettier": "^1.15.3",
