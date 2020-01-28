@@ -707,6 +707,35 @@ const somePrism = new Prism<Option<any>, any>(identity, some)
 type OptionPropertyNames<S> = { [K in keyof S]-?: S[K] extends Option<any> ? K : never }[keyof S]
 type OptionPropertyType<S, K extends OptionPropertyNames<S>> = S[K] extends Option<infer A> ? A : never
 
+export interface OptionalFromPath<S> {
+  <
+    K1 extends keyof S,
+    K2 extends keyof NonNullable<S[K1]>,
+    K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>,
+    K4 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>,
+    K5 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]
+  >(
+    path: [K1, K2, K3, K4, K5]
+  ): Optional<S, NonNullable<NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>[K5]>
+
+  <
+    K1 extends keyof S,
+    K2 extends keyof NonNullable<S[K1]>,
+    K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>,
+    K4 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>
+  >(
+    path: [K1, K2, K3, K4]
+  ): Optional<S, NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>
+
+  <K1 extends keyof S, K2 extends keyof NonNullable<S[K1]>, K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>>(
+    path: [K1, K2, K3]
+  ): Optional<S, NonNullable<NonNullable<S[K1]>[K2]>[K3]>
+
+  <K1 extends keyof S, K2 extends keyof NonNullable<S[K1]>>(path: [K1, K2]): Optional<S, NonNullable<S[K1]>[K2]>
+
+  <K1 extends keyof S>(path: [K1]): Optional<S, S[K1]>
+}
+
 /**
  * Laws:
  * 1. getOption(s).fold(() => s, a => set(a)(s)) = s
@@ -718,6 +747,36 @@ type OptionPropertyType<S, K extends OptionPropertyNames<S>> = S[K] extends Opti
 export class Optional<S, A> {
   readonly _tag: 'Optional' = 'Optional'
   constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
+
+  /**
+   * @example
+   * import { Optional } from 'monocle-ts'
+   *
+   * type Person = {
+   *   name: string
+   *   age: number
+   *   address?: {
+   *     city: string
+   *   }
+   * }
+   *
+   * const city = Optional.fromNullablePath<Person>()(['address', 'city'])
+   *
+   * const person: Person = { name: 'Giulio', age: 43, address: { city: 'Milan' } }
+   * const noAddressPerson: Person = { name: 'Giulio', age: 43 }
+   *
+   * assert.strictEqual(city.getOption(person), some('Milan'))
+   * assert.strictEqual(city.getOption(noAddressPerson), none)
+   * assert.deepStrictEqual(city.set('London')(noAddressPerson), { name: 'Giulio', age: 43, address: { city: 'London' } })
+   *
+   */
+  static fromNullablePath<S>(): OptionalFromPath<S> {
+    const fromNullableProp = Optional.fromNullableProp<S>()
+    return (path: Array<any>) => {
+      const lens = fromNullableProp(path[0])
+      return path.slice(1).reduce((acc, prop) => acc.compose(fromNullableProp(prop)), lens)
+    }
+  }
 
   /**
    * @example
