@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import { Optional, Lens } from '../src'
+import { Lens, Optional } from '../src'
 import * as O from 'fp-ts/lib/Option'
 import { identity } from 'fp-ts/lib/function'
 import { pipe } from 'fp-ts/lib/pipeable'
@@ -28,21 +28,55 @@ describe('Optional', () => {
   it('set', () => {
     assert.deepStrictEqual(optional.set(2)({ a: O.some(1) }).a, O.some(2))
   })
+  interface Phone {
+    number: string
+  }
+  interface Employment {
+    phone?: Phone
+  }
+  interface Info {
+    employment?: Employment
+  }
+  interface Response {
+    info?: Info
+  }
+
+  it('fromPath', () => {
+    const response1: Response = {
+      info: {
+        employment: {
+          phone: {
+            number: '555-1234'
+          }
+        }
+      }
+    }
+    const response2: Response = {
+      info: {
+        employment: {}
+      }
+    }
+
+    const numberFromResponse = Optional.fromPath<Response>()(['info', 'employment', 'phone', 'number'])
+
+    assert.deepStrictEqual(numberFromResponse.getOption(response1), O.some('555-1234'))
+    assert.deepStrictEqual(numberFromResponse.getOption(response2), O.none)
+    assert.deepStrictEqual(numberFromResponse.set('b')(response1), {
+      info: {
+        employment: {
+          phone: {
+            number: 'b'
+          }
+        }
+      }
+    })
+    assert.deepStrictEqual(numberFromResponse.set('b')(response2), response2)
+    assert.strictEqual(numberFromResponse.set('555-1234')(response1), response1)
+    assert.strictEqual(numberFromResponse.modify(identity)(response1), response1)
+    assert.strictEqual(numberFromResponse.modify(identity)(response2), response2)
+  })
 
   it('fromNullableProp', () => {
-    interface Phone {
-      number: string
-    }
-    interface Employment {
-      phone?: Phone
-    }
-    interface Info {
-      employment?: Employment
-    }
-    interface Response {
-      info?: Info
-    }
-
     const phoneNumber = Lens.fromProp<Phone>()('number')
 
     const response1: Response = {
