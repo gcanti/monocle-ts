@@ -708,6 +708,38 @@ type OptionPropertyNames<S> = { [K in keyof S]-?: S[K] extends Option<any> ? K :
 type OptionPropertyType<S, K extends OptionPropertyNames<S>> = S[K] extends Option<infer A> ? A : never
 
 /**
+ * @since 2.0.1
+ */
+export interface OptionalFromPath<S> {
+  <
+    K1 extends keyof S,
+    K2 extends keyof NonNullable<S[K1]>,
+    K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>,
+    K4 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>,
+    K5 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]
+  >(
+    path: [K1, K2, K3, K4, K5]
+  ): Optional<S, NonNullable<NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>[K5]>
+
+  <
+    K1 extends keyof S,
+    K2 extends keyof NonNullable<S[K1]>,
+    K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>,
+    K4 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>
+  >(
+    path: [K1, K2, K3, K4]
+  ): Optional<S, NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>
+
+  <K1 extends keyof S, K2 extends keyof NonNullable<S[K1]>, K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>>(
+    path: [K1, K2, K3]
+  ): Optional<S, NonNullable<NonNullable<S[K1]>[K2]>[K3]>
+
+  <K1 extends keyof S, K2 extends keyof NonNullable<S[K1]>>(path: [K1, K2]): Optional<S, NonNullable<S[K1]>[K2]>
+
+  <K1 extends keyof S>(path: [K1]): Optional<S, S[K1]>
+}
+
+/**
  * Laws:
  * 1. getOption(s).fold(() => s, a => set(a)(s)) = s
  * 2. getOption(set(a)(s)) = getOption(s).map(_ => a)
@@ -718,6 +750,53 @@ type OptionPropertyType<S, K extends OptionPropertyNames<S>> = S[K] extends Opti
 export class Optional<S, A> {
   readonly _tag: 'Optional' = 'Optional'
   constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
+
+  /**
+   * @example
+   * import { Optional } from 'monocle-ts'
+   *
+   * interface Phone {
+   *   number: string
+   * }
+   * interface Employment {
+   *   phone?: Phone
+   * }
+   * interface Info {
+   *   employment?: Employment
+   * }
+   * interface Response {
+   *   info?: Info
+   * }
+   *
+   * const numberFromResponse = Optional.fromPath<Response>()(['info', 'employment', 'phone', 'number'])
+   *
+   * const response1: Response = {
+   *   info: {
+   *     employment: {
+   *       phone: {
+   *         number: '555-1234'
+   *       }
+   *     }
+   *   }
+   * }
+   * const response2: Response = {
+   *   info: {
+   *     employment: {}
+   *   }
+   * }
+   *
+   * numberFromResponse.getOption(response1) // some('555-1234')
+   * numberFromResponse.getOption(response2) // none
+   *
+   * @since 2.0.1
+   */
+  static fromPath<S>(): OptionalFromPath<S> {
+    const fromNullableProp = Optional.fromNullableProp<S>()
+    return (path: Array<any>) => {
+      const lens = fromNullableProp(path[0])
+      return path.slice(1).reduce((acc, prop) => acc.compose(fromNullableProp(prop)), lens)
+    }
+  }
 
   /**
    * @example

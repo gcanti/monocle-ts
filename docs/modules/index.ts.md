@@ -14,6 +14,7 @@ Added in v1.0.0
 
 - [LensFromPath (interface)](#lensfrompath-interface)
 - [ModifyF (interface)](#modifyf-interface)
+- [OptionalFromPath (interface)](#optionalfrompath-interface)
 - [At (class)](#at-class)
   - [fromIso (method)](#fromiso-method)
 - [Fold (class)](#fold-class)
@@ -80,6 +81,7 @@ Added in v1.0.0
   - [composeIso (method)](#composeiso-method-3)
   - [composePrism (method)](#composeprism-method-3)
 - [Optional (class)](#optional-class)
+  - [fromPath (static method)](#frompath-static-method-1)
   - [fromNullableProp (static method)](#fromnullableprop-static-method-1)
   - [fromOptionProp (static method)](#fromoptionprop-static-method)
   - [modify (method)](#modify-method-2)
@@ -185,6 +187,43 @@ export interface ModifyF<S, A> {
 ```
 
 Added in v1.0.0
+
+# OptionalFromPath (interface)
+
+**Signature**
+
+```ts
+export interface OptionalFromPath<S> {
+  <
+    K1 extends keyof S,
+    K2 extends keyof NonNullable<S[K1]>,
+    K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>,
+    K4 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>,
+    K5 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]
+  >(
+    path: [K1, K2, K3, K4, K5]
+  ): Optional<S, NonNullable<NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>[K5]>
+
+  <
+    K1 extends keyof S,
+    K2 extends keyof NonNullable<S[K1]>,
+    K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>,
+    K4 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>
+  >(
+    path: [K1, K2, K3, K4]
+  ): Optional<S, NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>
+
+  <K1 extends keyof S, K2 extends keyof NonNullable<S[K1]>, K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>>(
+    path: [K1, K2, K3]
+  ): Optional<S, NonNullable<NonNullable<S[K1]>[K2]>[K3]>
+
+  <K1 extends keyof S, K2 extends keyof NonNullable<S[K1]>>(path: [K1, K2]): Optional<S, NonNullable<S[K1]>[K2]>
+
+  <K1 extends keyof S>(path: [K1]): Optional<S, S[K1]>
+}
+```
+
+Added in v2.0.1
 
 # At (class)
 
@@ -1079,6 +1118,55 @@ export class Optional<S, A> {
 ```
 
 Added in v1.0.0
+
+## fromPath (static method)
+
+**Signature**
+
+```ts
+static fromPath<S>(): OptionalFromPath<S> { ... }
+```
+
+**Example**
+
+```ts
+import { Optional } from 'monocle-ts'
+
+interface Phone {
+  number: string
+}
+interface Employment {
+  phone?: Phone
+}
+interface Info {
+  employment?: Employment
+}
+interface Response {
+  info?: Info
+}
+
+const numberFromResponse = Optional.fromPath<Response>()(['info', 'employment', 'phone', 'number'])
+
+const response1: Response = {
+  info: {
+    employment: {
+      phone: {
+        number: '555-1234'
+      }
+    }
+  }
+}
+const response2: Response = {
+  info: {
+    employment: {}
+  }
+}
+
+numberFromResponse.getOption(response1) // some('555-1234')
+numberFromResponse.getOption(response2) // none
+```
+
+Added in v2.0.1
 
 ## fromNullableProp (static method)
 
