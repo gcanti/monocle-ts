@@ -13,6 +13,13 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 2.1.0
+
+- **New Feature**
+  - Add support for `Optional.fromPath`, #105 (@cybermaak)
+- **Bug Fix**
+  - handle nullable values in `fromNullableProp`, fix #106 (@gcanti)
+
 # 2.0.1
 
 - **Bug Fix**

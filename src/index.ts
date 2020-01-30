@@ -256,7 +256,7 @@ export class Lens<S, A> {
   }
 
   /**
-   * generate a lens from a type and a prop
+   * Returns a `Lens` from a type and a prop
    *
    * @example
    * import { Lens } from 'monocle-ts'
@@ -280,7 +280,7 @@ export class Lens<S, A> {
   }
 
   /**
-   * generate a `Lens` from a type and an array of props
+   * Returns a `Lens` from a type and an array of props
    *
    * @example
    * import { Lens } from 'monocle-ts'
@@ -326,7 +326,7 @@ export class Lens<S, A> {
   }
 
   /**
-   * generate a `Lens` from a type and a prop whose type is nullable
+   * Returns a `Lens` from a nullable (`A | null | undefined`) prop
    *
    * @example
    * import { Lens } from 'monocle-ts'
@@ -708,7 +708,7 @@ type OptionPropertyNames<S> = { [K in keyof S]-?: S[K] extends Option<any> ? K :
 type OptionPropertyType<S, K extends OptionPropertyNames<S>> = S[K] extends Option<infer A> ? A : never
 
 /**
- * @since 2.0.1
+ * @since 2.1.0
  */
 export interface OptionalFromPath<S> {
   <
@@ -752,6 +752,8 @@ export class Optional<S, A> {
   constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
 
   /**
+   * Returns an `Optional` from a nullable (`A | null | undefined`) prop
+   *
    * @example
    * import { Optional } from 'monocle-ts'
    *
@@ -788,92 +790,56 @@ export class Optional<S, A> {
    * numberFromResponse.getOption(response1) // some('555-1234')
    * numberFromResponse.getOption(response2) // none
    *
-   * @since 2.0.1
+   * @since 2.1.0
    */
   static fromPath<S>(): OptionalFromPath<S> {
     const fromNullableProp = Optional.fromNullableProp<S>()
     return (path: Array<any>) => {
-      const lens = fromNullableProp(path[0])
-      return path.slice(1).reduce((acc, prop) => acc.compose(fromNullableProp(prop)), lens)
+      const optional = fromNullableProp(path[0])
+      return path.slice(1).reduce((acc, prop) => acc.compose(fromNullableProp(prop)), optional)
     }
   }
 
   /**
    * @example
-   * import { Optional, Lens } from 'monocle-ts'
+   * import { Optional } from 'monocle-ts'
    *
-   * interface Phone {
-   *   number: string
-   * }
-   * interface Employment {
-   *   phone?: Phone
-   * }
-   * interface Info {
-   *   employment?: Employment
-   * }
-   * interface Response {
-   *   info?: Info
+   * interface S {
+   *   a: number | undefined | null
    * }
    *
-   * const info = Optional.fromNullableProp<Response>()('info')
-   * const employment = Optional.fromNullableProp<Info>()('employment')
-   * const phone = Optional.fromNullableProp<Employment>()('phone')
-   * const number = Lens.fromProp<Phone>()('number')
-   * const numberFromResponse = info
-   *   .compose(employment)
-   *   .compose(phone)
-   *   .composeLens(number)
+   * const optional = Optional.fromNullableProp<S>()('a')
    *
-   * const response1: Response = {
-   *   info: {
-   *     employment: {
-   *       phone: {
-   *         number: '555-1234'
-   *       }
-   *     }
-   *   }
-   * }
-   * const response2: Response = {
-   *   info: {
-   *     employment: {}
-   *   }
-   * }
+   * const s1: S = { a: undefined }
+   * const s2: S = { a: null }
+   * const s3: S = { a: 1 }
    *
-   * numberFromResponse.getOption(response1) // some('555-1234')
-   * numberFromResponse.getOption(response2) // none
+   * assert.deepStrictEqual(optional.set(2)(s1), s1)
+   * assert.deepStrictEqual(optional.set(2)(s2), s2)
+   * assert.deepStrictEqual(optional.set(2)(s3), { a: 2 })
    *
    * @since 1.0.0
    */
   static fromNullableProp<S>(): <K extends keyof S>(k: K) => Optional<S, NonNullable<S[K]>> {
-    return k => new Optional((s: any) => fromNullable(s[k]), a => s => update(s, k, a))
+    return k => new Optional((s: any) => fromNullable(s[k]), a => s => (s[k] == null ? s : update(s, k, a)))
   }
 
   /**
+   * Returns an `Optional` from an option (`Option<A>`) prop
+   *
    * @example
-   * import { Optional, Lens } from 'monocle-ts'
-   * import { Option } from 'fp-ts/lib/Option'
+   * import { Optional } from 'monocle-ts'
+   * import * as O from 'fp-ts/lib/Option'
    *
-   * interface Phone {
-   *   number: string
-   * }
-   * interface Employment {
-   *   phone: Option<Phone>
-   * }
-   * interface Info {
-   *   employment: Option<Employment>
-   * }
-   * interface Response {
-   *   info: Option<Info>
+   * interface S {
+   *   a: O.Option<number>
    * }
    *
-   * const info = Optional.fromOptionProp<Response>()('info')
-   * const employment = Optional.fromOptionProp<Info>()('employment')
-   * const phone = Optional.fromOptionProp<Employment>()('phone')
-   * const number = Lens.fromProp<Phone>()('number')
-   * export const numberFromResponse = info
-   *   .compose(employment)
-   *   .compose(phone)
-   *   .composeLens(number)
+   * const optional = Optional.fromOptionProp<S>()('a')
+   * const s1: S = { a: O.none }
+   * const s2: S = { a: O.some(1) }
+   * assert.deepStrictEqual(optional.set(2)(s1), s1)
+   * assert.deepStrictEqual(optional.set(2)(s2), { a: O.some(2) })
    *
    * @since 1.0.0
    */
