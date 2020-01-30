@@ -1,33 +1,9 @@
 import * as assert from 'assert'
-import { Lens, Optional } from '../src'
-import * as O from 'fp-ts/lib/Option'
 import { identity } from 'fp-ts/lib/function'
-import { pipe } from 'fp-ts/lib/pipeable'
-
-interface A {
-  a: O.Option<number>
-}
-
-const optional = new Optional<A, number>(
-  s => s.a,
-  a => s => {
-    if (O.isNone(s.a)) {
-      return s
-    } else {
-      return { ...s, a: O.some(a) }
-    }
-  }
-)
+import * as O from 'fp-ts/lib/Option'
+import { Optional } from '../src'
 
 describe('Optional', () => {
-  it('getOption', () => {
-    assert.deepStrictEqual(optional.getOption({ a: O.none }), O.none)
-    assert.deepStrictEqual(optional.getOption({ a: O.some(1) }), O.some(1))
-  })
-
-  it('set', () => {
-    assert.deepStrictEqual(optional.set(2)({ a: O.some(1) }).a, O.some(2))
-  })
   interface Phone {
     number: string
   }
@@ -77,124 +53,42 @@ describe('Optional', () => {
   })
 
   it('fromNullableProp', () => {
-    const phoneNumber = Lens.fromProp<Phone>()('number')
+    // --------------------------------------------------------
+    // laws
+    // --------------------------------------------------------
 
-    const response1: Response = {
-      info: {
-        employment: {
-          phone: {
-            number: '555-1234'
-          }
-        }
-      }
+    //
+    // 2.
+    //
+
+    interface S {
+      a: number | undefined | null
     }
-    const response2: Response = {
-      info: {
-        employment: {}
-      }
-    }
-
-    const info = Optional.fromNullableProp<Response>()('info')
-    const employment = Optional.fromNullableProp<Info>()('employment')
-    const phone = Optional.fromNullableProp<Employment>()('phone')
-    const numberFromResponse = info
-      .compose(employment)
-      .compose(phone)
-      .composeLens(phoneNumber)
-
-    assert.deepStrictEqual(numberFromResponse.getOption(response1), O.some('555-1234'))
-    assert.deepStrictEqual(numberFromResponse.getOption(response2), O.none)
-    assert.deepStrictEqual(numberFromResponse.set('b')(response1), {
-      info: {
-        employment: {
-          phone: {
-            number: 'b'
-          }
-        }
-      }
-    })
-    assert.deepStrictEqual(numberFromResponse.set('b')(response2), response2)
-    assert.strictEqual(numberFromResponse.set('555-1234')(response1), response1)
-    assert.strictEqual(numberFromResponse.modify(identity)(response1), response1)
-    assert.strictEqual(numberFromResponse.modify(identity)(response2), response2)
+    const optional = Optional.fromNullableProp<S>()('a')
+    const s1: S = { a: undefined }
+    const s2: S = { a: null }
+    const s3: S = { a: 1 }
+    assert.deepStrictEqual(optional.set(2)(s1), s1)
+    assert.deepStrictEqual(optional.set(2)(s2), s2)
+    assert.deepStrictEqual(optional.set(2)(s3), { a: 2 })
   })
 
   it('fromOptionProp', () => {
-    interface Phone {
-      number: string
+    interface S {
+      a: O.Option<number>
     }
-    interface Employment {
-      phone: O.Option<Phone>
-    }
-    interface Info {
-      employment: O.Option<Employment>
-    }
-    interface Response {
-      info: O.Option<Info>
-    }
-
-    const phoneNumber = Lens.fromProp<Phone>()('number')
-
-    const response1: Response = {
-      info: O.some({
-        employment: O.some({
-          phone: O.some({
-            number: '555-1234'
-          })
-        })
-      })
-    }
-    const response2: Response = {
-      info: O.some({
-        employment: O.none
-      })
-    }
-
-    const info = Optional.fromOptionProp<Response>()('info')
-    const employment = Optional.fromOptionProp<Info>()('employment')
-    const phone = Optional.fromOptionProp<Employment>()('phone')
-    const numberFromResponse = info
-      .compose(employment)
-      .compose(phone)
-      .composeLens(phoneNumber)
-
-    assert.deepStrictEqual(numberFromResponse.getOption(response1), O.some('555-1234'))
-    assert.deepStrictEqual(numberFromResponse.getOption(response2), O.none)
-
-    // Check the laws
-    const opt = numberFromResponse
-    // Law 1
-    assert.deepStrictEqual(opt.set('555-4321')(response1), {
-      info: O.some({
-        employment: O.some({
-          phone: O.some({
-            number: '555-4321'
-          })
-        })
-      })
-    })
-    assert.deepStrictEqual(opt.set('555-4321')(response2), response2)
-    // Law 2
-    assert.deepStrictEqual(
-      opt.getOption(opt.set('555-4321')(response1)),
-      pipe(
-        opt.getOption(response1),
-        O.map(() => '555-4321')
-      )
-    )
-    assert.deepStrictEqual(
-      opt.getOption(opt.set('555-4321')(response2)),
-      pipe(
-        opt.getOption(response2),
-        O.map(() => '555-4321')
-      )
-    )
-    // law 3
-    assert.deepStrictEqual(opt.set('555-4321')(opt.set('555-4321')(response1)), opt.set('555-4321')(response1))
-    assert.deepStrictEqual(opt.set('555-4321')(opt.set('555-4321')(response2)), opt.set('555-4321')(response2))
+    const optional = Optional.fromOptionProp<S>()('a')
+    const s1: S = { a: O.none }
+    const s2: S = { a: O.some(1) }
+    assert.deepStrictEqual(optional.set(2)(s1), s1)
+    assert.deepStrictEqual(optional.set(2)(s2), { a: O.some(2) })
   })
 
   it('modify', () => {
+    interface S {
+      a: O.Option<number>
+    }
+    const optional = Optional.fromOptionProp<S>()('a')
     const double = (n: number): number => n * 2
     assert.deepStrictEqual(optional.modify(double)({ a: O.some(2) }), { a: O.some(4) })
     assert.deepStrictEqual(optional.modify(double)({ a: O.none }), { a: O.none })
