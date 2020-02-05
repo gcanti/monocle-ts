@@ -12,12 +12,12 @@ Added in v1.6.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [\_left (function)](#_left-function)
-- [\_right (function)](#_right-function)
+- [\_left](#_left)
+- [\_right](#_right)
 
 ---
 
-# \_left (function)
+# \_left
 
 **Signature**
 
@@ -27,7 +27,7 @@ export const _left = <L, A>(): Prism<Either<L, A>, L> => ...
 
 Added in v1.6.0
 
-# \_right (function)
+# \_right
 
 **Signature**
 

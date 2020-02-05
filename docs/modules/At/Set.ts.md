@@ -12,11 +12,11 @@ Added in v1.2.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [atSet (function)](#atset-function)
+- [atSet](#atset)
 
 ---
 
-# atSet (function)
+# atSet
 
 **Signature**
 

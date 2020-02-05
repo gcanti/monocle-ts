@@ -12,11 +12,11 @@ Added in v1.7.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [indexRecord (function)](#indexrecord-function)
+- [indexRecord](#indexrecord)
 
 ---
 
-# indexRecord (function)
+# indexRecord
 
 **Signature**
 

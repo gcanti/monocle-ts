@@ -12,11 +12,11 @@ Added in v1.7.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [atRecord (function)](#atrecord-function)
+- [atRecord](#atrecord)
 
 ---
 
-# atRecord (function)
+# atRecord
 
 **Signature**
 

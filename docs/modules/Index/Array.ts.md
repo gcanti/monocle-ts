@@ -12,11 +12,11 @@ Added in v1.2.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [indexArray (function)](#indexarray-function)
+- [indexArray](#indexarray)
 
 ---
 
-# indexArray (function)
+# indexArray
 
 **Signature**
 

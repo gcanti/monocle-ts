@@ -141,8 +141,8 @@ Added in v1.0.0
   - [composePrism (method)](#composeprism-method-7)
   - [composeIso (method)](#composeiso-method-7)
   - [composeGetter (method)](#composegetter-method-6)
-- [fromFoldable (function)](#fromfoldable-function)
-- [fromTraversable (function)](#fromtraversable-function)
+- [fromFoldable](#fromfoldable)
+- [fromTraversable](#fromtraversable)
 
 ---
 
@@ -1931,7 +1931,7 @@ composeGetter<B>(ab: Getter<A, B>): Fold<S, B> { ... }
 
 Added in v1.0.0
 
-# fromFoldable (function)
+# fromFoldable
 
 create a `Fold` from a `Foldable`
 
@@ -1946,7 +1946,7 @@ export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> { .
 
 Added in v1.0.0
 
-# fromTraversable (function)
+# fromTraversable
 
 create a `Traversal` from a `Traversable`
 

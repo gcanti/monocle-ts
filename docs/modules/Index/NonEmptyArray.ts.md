@@ -12,11 +12,11 @@ Added in v1.5.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [indexNonEmptyArray (function)](#indexnonemptyarray-function)
+- [indexNonEmptyArray](#indexnonemptyarray)
 
 ---
 
-# indexNonEmptyArray (function)
+# indexNonEmptyArray
 
 **Signature**
 
