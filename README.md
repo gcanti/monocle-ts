@@ -49,7 +49,7 @@ const employee: Employee = {
 
 const capitalize = (s: string): string => s.substring(0, 1).toUpperCase() + s.substring(1)
 
-const employee2 = {
+const employeeCapitalized = {
   ...employee,
   company: {
     ...employee.company,
@@ -87,11 +87,16 @@ company
 function `capitalize`
 
 ```ts
-company
+const capitalizeEmployee = company
   .compose(address)
   .compose(street)
   .compose(name)
-  .modify(capitalize)(employee)
+  .modify(capitalize)
+  
+assert.deepEqual(
+  employeeCapitalized, 
+  capitalizeEmployee(employee)
+) // true
 ```
 
 You can use the `fromPath` API to avoid some boilerplate
@@ -102,6 +107,10 @@ import { Lens } from 'monocle-ts'
 const name = Lens.fromPath<Employee>()(['company', 'address', 'street', 'name'])
 
 name.modify(capitalize)(employee)
+assert.deepEqual(
+  employeeCapitalized, 
+  name.modify(capitalize)(employee)
+) // true
 ```
 
 Here `modify` lift a function `string => string` to a function `Employee => Employee`. It works but it would be clearer
