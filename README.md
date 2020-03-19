@@ -93,7 +93,7 @@ const capitalizeName = company
   .compose(name)
   .modify(capitalize)
   
-assert.deepEqual(
+assert.deepStrictEqual(
   employeeCapitalized, 
   capitalizeName(employee)
 ) // true
@@ -108,7 +108,7 @@ const name = Lens.fromPath<Employee>()(['company', 'address', 'street', 'name'])
 
 const capitalizeName = name.modify(capitalize)
 
-assert.deepEqual(
+assert.deepStrictEqual(
   employeeCapitalized, 
   capitalizeName(employee)
 ) // true
@@ -135,7 +135,7 @@ const firstLetter = company
   .asOptional()
   .compose(firstLetterLens)
   
-assert.deepEqual(
+assert.deepStrictEqual(
   employeeCapitalized,
   firstLetter.modify(s => s.toUpperCase())(employee)
 )
