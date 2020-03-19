@@ -138,7 +138,7 @@ const firstLetter = company
 assert.deepStrictEqual(
   firstLetter.modify(s => s.toUpperCase())(employee),
   employeeCapitalized
-)
+) // true
 ```
 
 Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`, one from `A` to `B` and another from
