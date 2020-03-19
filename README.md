@@ -74,11 +74,6 @@ const company = Lens.fromProp<Employee>()('company')
 const address = Lens.fromProp<Company>()('address')
 const street = Lens.fromProp<Address>()('street')
 const name = Lens.fromProp<Street>()('name')
-
-company
-  .compose(address)
-  .compose(street)
-  .compose(name)
 ```
 
 `compose` takes two `Lenses`, one from `A` to `B` and another one from `B` to `C` and creates a third `Lens` from `A` to
