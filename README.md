@@ -49,7 +49,7 @@ const employee: Employee = {
 
 const capitalize = (s: string): string => s.substring(0, 1).toUpperCase() + s.substring(1)
 
-const employee2 = {
+const employeeCapitalized = {
   ...employee,
   company: {
     ...employee.company,
@@ -74,11 +74,6 @@ const company = Lens.fromProp<Employee>()('company')
 const address = Lens.fromProp<Company>()('address')
 const street = Lens.fromProp<Address>()('street')
 const name = Lens.fromProp<Street>()('name')
-
-company
-  .compose(address)
-  .compose(street)
-  .compose(name)
 ```
 
 `compose` takes two `Lenses`, one from `A` to `B` and another one from `B` to `C` and creates a third `Lens` from `A` to
@@ -87,11 +82,16 @@ company
 function `capitalize`
 
 ```ts
-company
+const capitalizeName = company
   .compose(address)
   .compose(street)
   .compose(name)
-  .modify(capitalize)(employee)
+  .modify(capitalize)
+  
+assert.deepStrictEqual(
+  capitalizeName(employee),
+  employeeCapitalized
+) // true
 ```
 
 You can use the `fromPath` API to avoid some boilerplate
@@ -101,7 +101,12 @@ import { Lens } from 'monocle-ts'
 
 const name = Lens.fromPath<Employee>()(['company', 'address', 'street', 'name'])
 
-name.modify(capitalize)(employee)
+const capitalizeName = name.modify(capitalize)
+
+assert.deepStrictEqual(
+  capitalizeName(employee),
+  employeeCapitalized
+) // true
 ```
 
 Here `modify` lift a function `string => string` to a function `Employee => Employee`. It works but it would be clearer
@@ -114,15 +119,21 @@ optional as a `string` can be empty. So we need another abstraction that would b
 import { Optional } from 'monocle-ts'
 import { some, none } from 'fp-ts/lib/Option'
 
-const firstLetter = new Optional<string, string>(s => (s.length > 0 ? some(s[0]) : none), a => s => a + s.substring(1))
+const firstLetterLens = new Optional<string, string>(
+  s => (s.length > 0 ? some(s[0]) : none), 
+  a => s => a + s.substring(1))
 
-company
+const firstLetter = company
   .compose(address)
   .compose(street)
   .compose(name)
   .asOptional()
-  .compose(firstLetter)
-  .modify(s => s.toUpperCase())(employee)
+  .compose(firstLetterLens)
+  
+assert.deepStrictEqual(
+  firstLetter.modify(s => s.toUpperCase())(employee),
+  employeeCapitalized
+) // true
 ```
 
 Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`, one from `A` to `B` and another from
