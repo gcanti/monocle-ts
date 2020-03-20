@@ -87,11 +87,8 @@ const capitalizeName = company
   .compose(street)
   .compose(name)
   .modify(capitalize)
-  
-assert.deepStrictEqual(
-  capitalizeName(employee),
-  employeeCapitalized
-) // true
+
+assert.deepStrictEqual(capitalizeName(employee), employeeCapitalized) // true
 ```
 
 You can use the `fromPath` API to avoid some boilerplate
@@ -103,10 +100,7 @@ const name = Lens.fromPath<Employee>()(['company', 'address', 'street', 'name'])
 
 const capitalizeName = name.modify(capitalize)
 
-assert.deepStrictEqual(
-  capitalizeName(employee),
-  employeeCapitalized
-) // true
+assert.deepStrictEqual(capitalizeName(employee), employeeCapitalized) // true
 ```
 
 Here `modify` lift a function `string => string` to a function `Employee => Employee`. It works but it would be clearer
@@ -119,21 +113,19 @@ optional as a `string` can be empty. So we need another abstraction that would b
 import { Optional } from 'monocle-ts'
 import { some, none } from 'fp-ts/lib/Option'
 
-const firstLetterLens = new Optional<string, string>(
-  s => (s.length > 0 ? some(s[0]) : none), 
-  a => s => a + s.substring(1))
+const firstLetterOptional = new Optional<string, string>(
+  s => (s.length > 0 ? some(s[0]) : none),
+  a => s => (s.length > 0 ? a + s.substring(1) : s)
+)
 
 const firstLetter = company
   .compose(address)
   .compose(street)
   .compose(name)
   .asOptional()
-  .compose(firstLetterLens)
-  
-assert.deepStrictEqual(
-  firstLetter.modify(s => s.toUpperCase())(employee),
-  employeeCapitalized
-) // true
+  .compose(firstLetterOptional)
+
+assert.deepStrictEqual(firstLetter.modify(s => s.toUpperCase())(employee), employeeCapitalized) // true
 ```
 
 Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`, one from `A` to `B` and another from
