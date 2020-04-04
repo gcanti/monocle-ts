@@ -6,7 +6,10 @@ type U1 = false
 
 // This test exists to type check the optic conversion functions
 
-const anIso = new Iso<U0, U1>(() => false, () => true)
+const anIso = new Iso<U0, U1>(
+  () => false,
+  () => true
+)
 
 const hasType = <T>(_: T): void => assert(true)
 

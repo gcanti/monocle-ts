@@ -22,12 +22,7 @@ describe('Traversal', () => {
     const tweet2: Tweet = { text: 'foobar' }
     const model: Tweets = { tweets: [tweet1, tweet2] }
 
-    const newModel = composedTraversal.modify(text =>
-      text
-        .split('')
-        .reverse()
-        .join('')
-    )(model)
+    const newModel = composedTraversal.modify((text) => text.split('').reverse().join(''))(model)
     assert.deepStrictEqual(newModel, { tweets: [{ text: 'dlrow olleh' }, { text: 'raboof' }] })
   })
 
@@ -38,14 +33,14 @@ describe('Traversal', () => {
   })
 
   it('filter', () => {
-    const traversal1 = fromTraversable(array)<string>().filter(s => s.length > 2)
+    const traversal1 = fromTraversable(array)<string>().filter((s) => s.length > 2)
     assert.deepStrictEqual(traversal1.set('a')([]), [])
     assert.deepStrictEqual(traversal1.set('a')(['b', 'c']), ['b', 'c'])
     assert.deepStrictEqual(traversal1.set('a')(['b', 'foo', 'c']), ['b', 'a', 'c'])
 
     const traversal2 = fromTraversable(array)<Option<number>>()
       .filter(isSome)
-      .filter(o => o.value > 2)
+      .filter((o) => o.value > 2)
     assert.deepStrictEqual(traversal2.set(some(2) as Some<number>)([]), [])
     assert.deepStrictEqual(traversal2.set(some(4) as Some<number>)([some(1), some(2), some(3)]), [
       some(1),

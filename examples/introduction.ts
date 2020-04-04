@@ -58,7 +58,10 @@ const name = Lens.fromProp<Street, 'name'>('name')
 
 import { some, none } from 'fp-ts/lib/Option'
 
-const firstLetter = new Optional<string, string>(s => (s.length > 0 ? some(s[0]) : none), a => s => a + s.substring(1))
+const firstLetter = new Optional<string, string>(
+  (s) => (s.length > 0 ? some(s[0]) : none),
+  (a) => (s) => a + s.substring(1)
+)
 
 console.log(
   JSON.stringify(
@@ -68,7 +71,7 @@ console.log(
       .compose(name)
       .asOptional()
       .compose(firstLetter)
-      .modify(s => s.toUpperCase())(employee),
+      .modify((s) => s.toUpperCase())(employee),
     null,
     2
   )

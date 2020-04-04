@@ -10,10 +10,10 @@ import { isNone } from 'fp-ts/lib/Option'
  */
 export function indexArray<A = never>(): Index<Array<A>, number, A> {
   return new Index(
-    i =>
+    (i) =>
       new Optional(
-        as => lookup(i, as),
-        a => as => {
+        (as) => lookup(i, as),
+        (a) => (as) => {
           const oas = updateAt(i, a)(as)
           if (isNone(oas)) {
             return as

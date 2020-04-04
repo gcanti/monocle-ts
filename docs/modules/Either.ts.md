@@ -22,7 +22,7 @@ Added in v1.6.0
 **Signature**
 
 ```ts
-export const _left = <L, A>(): Prism<Either<L, A>, L> => ...
+export declare const _left: <L, A>() => Prism<Either<L, A>, L>
 ```
 
 Added in v1.6.0
@@ -32,7 +32,7 @@ Added in v1.6.0
 **Signature**
 
 ```ts
-export const _right = <L, A>(): Prism<Either<L, A>, A> => ...
+export declare const _right: <L, A>() => Prism<Either<L, A>, A>
 ```
 
 Added in v1.6.0

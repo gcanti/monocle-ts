@@ -21,7 +21,7 @@ Added in v1.7.0
 **Signature**
 
 ```ts
-export function atRecord<A = never>(): At<Record<string, A>, string, Option<A>> { ... }
+export declare function atRecord<A = never>(): At<Record<string, A>, string, Option<A>>
 ```
 
 Added in v1.7.0

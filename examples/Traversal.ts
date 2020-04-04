@@ -13,5 +13,5 @@ const fold = eachL.asFold()
 
 console.log(fold.getAll(xs))
 console.log(fold.headOption(xs))
-console.log(fold.find(n => n > 2)(xs))
+console.log(fold.find((n) => n > 2)(xs))
 console.log(fold.all((n: number) => n % 2 === 0)(xs))

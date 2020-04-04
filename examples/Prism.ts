@@ -13,25 +13,30 @@ class JObj {
 
 type Json = null | JStr | JNum | JObj
 
-const jStr = new Prism<Json, string>(s => (s instanceof JStr ? some(s.value) : none), a => new JStr(a))
+const jStr = new Prism<Json, string>(
+  (s) => (s instanceof JStr ? some(s.value) : none),
+  (a) => new JStr(a)
+)
 
 console.log(jStr.getOption(new JStr('hello')))
 console.log(jStr.getOption(new JNum(1)))
 
 // a function is applied only if there is a match
-const reverse = (s: string): string =>
-  s
-    .split('')
-    .reverse()
-    .join('')
+const reverse = (s: string): string => s.split('').reverse().join('')
 console.log(jStr.modify(reverse)(new JStr('hello')))
 console.log(jStr.modify(reverse)(new JNum(1)))
 console.log(jStr.modifyOption(reverse)(new JStr('hello')))
 console.log(jStr.modifyOption(reverse)(new JNum(1)))
 
 // composizione
-const jNum = new Prism<Json, number>(s => (s instanceof JNum ? some(s.value) : none), a => new JNum(a))
-const numberToInt = new Prism<number, number>(s => (s % 1 === 0 ? some(s) : none), a => a)
+const jNum = new Prism<Json, number>(
+  (s) => (s instanceof JNum ? some(s.value) : none),
+  (a) => new JNum(a)
+)
+const numberToInt = new Prism<number, number>(
+  (s) => (s % 1 === 0 ? some(s) : none),
+  (a) => a
+)
 
 const jInt = jNum.compose(numberToInt)
 

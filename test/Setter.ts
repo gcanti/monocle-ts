@@ -3,7 +3,7 @@ import * as assert from 'assert'
 
 type Point = { x: number; y: number }
 
-const _x = new Setter<Point, number>(f => s => ({
+const _x = new Setter<Point, number>((f) => (s) => ({
   x: f(s.x),
   y: s.y
 }))

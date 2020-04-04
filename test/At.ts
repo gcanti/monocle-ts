@@ -51,10 +51,11 @@ describe('At', () => {
   })
 
   it('fromIso', () => {
-    const iso = new Iso<Record<string, string>, Record<string, number>>(R.map(v => +v), R.map(String))
-    const at = atRecord<number>()
-      .fromIso(iso)
-      .at('a')
+    const iso = new Iso<Record<string, string>, Record<string, number>>(
+      R.map((v) => +v),
+      R.map(String)
+    )
+    const at = atRecord<number>().fromIso(iso).at('a')
     assert.deepStrictEqual(at.get({}), none)
     assert.deepStrictEqual(at.get({ a: '1' }), some(1))
 

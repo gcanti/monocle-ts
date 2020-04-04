@@ -18,7 +18,7 @@ const isB: Refinement<U, B> = (u): u is B => u.type === 'B'
 
 describe('Prism', () => {
   it('fromPredicate', () => {
-    const prism = Prism.fromPredicate<number>(n => n % 1 === 0)
+    const prism = Prism.fromPredicate<number>((n) => n % 1 === 0)
     assert.deepStrictEqual(prism.getOption(1), some(1))
     assert.deepStrictEqual(prism.getOption(1.1), none)
   })
@@ -58,7 +58,10 @@ describe('Prism', () => {
   })
 
   it('modify', () => {
-    const prism = new Prism<U, string>(s => (s.type === 'A' ? some(s.a) : none), a => ({ type: 'A', a }))
+    const prism = new Prism<U, string>(
+      (s) => (s.type === 'A' ? some(s.a) : none),
+      (a) => ({ type: 'A', a })
+    )
     const toUpperCase = (s: string): string => s.toUpperCase()
     assert.deepStrictEqual(prism.modify(toUpperCase)({ type: 'A', a: 'foo' }), { type: 'A', a: 'FOO' })
     assert.deepStrictEqual(prism.modify(toUpperCase)({ type: 'B', b: some(1) }), { type: 'B', b: some(1) })
@@ -66,7 +69,10 @@ describe('Prism', () => {
 
   it('compose', () => {
     const prismB = Prism.fromPredicate(isB)
-    const prism = new Prism<B, number>(s => s.b, b => ({ type: 'B', b: some(b) }))
+    const prism = new Prism<B, number>(
+      (s) => s.b,
+      (b) => ({ type: 'B', b: some(b) })
+    )
     const composition1 = prismB.compose(prism)
     const composition2 = prismB.composePrism(prism)
     assert.deepStrictEqual(composition1.getOption({ type: 'B', b: some(1) }), some(1))

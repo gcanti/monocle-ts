@@ -24,10 +24,25 @@ const update = <O, K extends keyof O, A extends O[K]>(o: O, k: K, a: A): O => {
  * @since 1.0.0
  */
 export class Iso<S, A> {
+  /**
+   * @since 1.0.0
+   */
   readonly _tag: 'Iso' = 'Iso'
+  /**
+   * @since 1.0.0
+   */
   readonly unwrap = this.get
+  /**
+   * @since 1.0.0
+   */
   readonly to = this.get
+  /**
+   * @since 1.0.0
+   */
   readonly wrap = this.reverseGet
+  /**
+   * @since 1.0.0
+   */
   readonly from = this.reverseGet
   constructor(readonly get: (s: S) => A, readonly reverseGet: (a: A) => S) {}
 
@@ -43,7 +58,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   modify(f: (a: A) => A): (s: S) => S {
-    return s => this.reverseGet(f(this.get(s)))
+    return (s) => this.reverseGet(f(this.get(s)))
   }
 
   /**
@@ -52,7 +67,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   asLens(): Lens<S, A> {
-    return new Lens(this.get, a => _ => this.reverseGet(a))
+    return new Lens(this.get, (a) => (_) => this.reverseGet(a))
   }
 
   /**
@@ -61,7 +76,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   asPrism(): Prism<S, A> {
-    return new Prism(s => some(this.get(s)), this.reverseGet)
+    return new Prism((s) => some(this.get(s)), this.reverseGet)
   }
 
   /**
@@ -70,7 +85,10 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   asOptional(): Optional<S, A> {
-    return new Optional(s => some(this.get(s)), a => _ => this.reverseGet(a))
+    return new Optional(
+      (s) => some(this.get(s)),
+      (a) => (_) => this.reverseGet(a)
+    )
   }
 
   /**
@@ -80,7 +98,7 @@ export class Iso<S, A> {
    */
   asTraversal(): Traversal<S, A> {
     return new Traversal(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
-      F.map(f(this.get(s)), a => this.reverseGet(a))
+      F.map(f(this.get(s)), (a) => this.reverseGet(a))
     )
   }
 
@@ -90,7 +108,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(_: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
+    return new Fold(() => (f) => (s) => f(this.get(s)))
   }
 
   /**
@@ -99,7 +117,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   asGetter(): Getter<S, A> {
-    return new Getter(s => this.get(s))
+    return new Getter((s) => this.get(s))
   }
 
   /**
@@ -108,7 +126,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   asSetter(): Setter<S, A> {
-    return new Setter(f => this.modify(f))
+    return new Setter((f) => this.modify(f))
   }
 
   /**
@@ -117,7 +135,10 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Iso<A, B>): Iso<S, B> {
-    return new Iso(s => ab.get(this.get(s)), b => this.reverseGet(ab.reverseGet(b)))
+    return new Iso(
+      (s) => ab.get(this.get(s)),
+      (b) => this.reverseGet(ab.reverseGet(b))
+    )
   }
 
   /**
@@ -223,6 +244,9 @@ export interface LensFromPath<S> {
  * @since 1.0.0
  */
 export class Lens<S, A> {
+  /**
+   * @since 1.0.0
+   */
   readonly _tag: 'Lens' = 'Lens'
   constructor(readonly get: (s: S) => A, readonly set: (a: A) => (s: S) => S) {}
 
@@ -276,7 +300,11 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   static fromProp<S>(): <P extends keyof S>(prop: P) => Lens<S, S[P]> {
-    return prop => new Lens(s => s[prop], a => s => update(s, prop, a))
+    return (prop) =>
+      new Lens(
+        (s) => s[prop],
+        (a) => (s) => update(s, prop, a)
+      )
   }
 
   /**
@@ -301,10 +329,10 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   static fromProps<S>(): <P extends keyof S>(props: Array<P>) => Lens<S, { [K in P]: S[K] }> {
-    return props => {
+    return (props) => {
       const len = props.length
       return new Lens(
-        s => {
+        (s) => {
           const r: any = {}
           for (let i = 0; i < len; i++) {
             const k = props[i]
@@ -312,7 +340,7 @@ export class Lens<S, A> {
           }
           return r
         },
-        a => s => {
+        (a) => (s) => {
           for (let i = 0; i < len; i++) {
             const k = props[i]
             if (a[k] !== s[k]) {
@@ -365,7 +393,7 @@ export class Lens<S, A> {
             return osk.value as any
           }
         },
-        a => s => update(s, k, a)
+        (a) => (s) => update(s, k, a)
       )
   }
 
@@ -373,7 +401,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   modify(f: (a: A) => A): (s: S) => S {
-    return s => {
+    return (s) => {
       const v = this.get(s)
       const n = f(v)
       return v === n ? s : this.set(n)(s)
@@ -386,7 +414,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   asOptional(): Optional<S, A> {
-    return new Optional(s => some(this.get(s)), this.set)
+    return new Optional((s) => some(this.get(s)), this.set)
   }
 
   /**
@@ -396,7 +424,7 @@ export class Lens<S, A> {
    */
   asTraversal(): Traversal<S, A> {
     return new Traversal(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
-      F.map(f(this.get(s)), a => this.set(a)(s))
+      F.map(f(this.get(s)), (a) => this.set(a)(s))
     )
   }
 
@@ -406,7 +434,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   asSetter(): Setter<S, A> {
-    return new Setter(f => this.modify(f))
+    return new Setter((f) => this.modify(f))
   }
 
   /**
@@ -415,7 +443,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   asGetter(): Getter<S, A> {
-    return new Getter(s => this.get(s))
+    return new Getter((s) => this.get(s))
   }
 
   /**
@@ -424,7 +452,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(_: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
+    return new Fold(() => (f) => (s) => f(this.get(s)))
   }
 
   /**
@@ -433,7 +461,10 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Lens<A, B>): Lens<S, B> {
-    return new Lens(s => ab.get(this.get(s)), b => s => this.set(ab.set(b)(this.get(s)))(s))
+    return new Lens(
+      (s) => ab.get(this.get(s)),
+      (b) => (s) => this.set(ab.set(b)(this.get(s)))(s)
+    )
   }
 
   /**
@@ -517,6 +548,9 @@ export class Lens<S, A> {
  * @since 1.0.0
  */
 export class Prism<S, A> {
+  /**
+   * @since 1.0.0
+   */
   readonly _tag: 'Prism' = 'Prism'
   constructor(readonly getOption: (s: S) => Option<A>, readonly reverseGet: (a: A) => S) {}
 
@@ -526,7 +560,7 @@ export class Prism<S, A> {
   static fromPredicate<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A>
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
-    return new Prism(s => (predicate(s) ? some(s) : none), identity)
+    return new Prism((s) => (predicate(s) ? some(s) : none), identity)
   }
 
   /**
@@ -540,7 +574,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   modify(f: (a: A) => A): (s: S) => S {
-    return s => {
+    return (s) => {
       const os = this.modifyOption(f)(s)
       if (isNone(os)) {
         return s
@@ -554,8 +588,8 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   modifyOption(f: (a: A) => A): (s: S) => Option<S> {
-    return s =>
-      option.map(this.getOption(s), v => {
+    return (s) =>
+      option.map(this.getOption(s), (v) => {
         const n = f(v)
         return n === v ? s : this.reverseGet(n)
       })
@@ -576,7 +610,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   asOptional(): Optional<S, A> {
-    return new Optional(this.getOption, a => this.set(a))
+    return new Optional(this.getOption, (a) => this.set(a))
   }
 
   /**
@@ -590,7 +624,7 @@ export class Prism<S, A> {
       if (isNone(oa)) {
         return F.of(s)
       } else {
-        return F.map(f(oa.value), a => this.set(a)(s))
+        return F.map(f(oa.value), (a) => this.set(a)(s))
       }
     })
   }
@@ -601,7 +635,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   asSetter(): Setter<S, A> {
-    return new Setter(f => this.modify(f))
+    return new Setter((f) => this.modify(f))
   }
 
   /**
@@ -610,13 +644,9 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => {
+    return new Fold((M) => (f) => (s) => {
       const oa = this.getOption(s)
-      if (isNone(oa)) {
-        return M.empty
-      } else {
-        return f(oa.value)
-      }
+      return isNone(oa) ? (M.empty as any) : f(oa.value)
     })
   }
 
@@ -626,7 +656,10 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Prism<A, B>): Prism<S, B> {
-    return new Prism(s => option.chain(this.getOption(s), a => ab.getOption(a)), b => this.reverseGet(ab.reverseGet(b)))
+    return new Prism(
+      (s) => option.chain(this.getOption(s), (a) => ab.getOption(a)),
+      (b) => this.reverseGet(ab.reverseGet(b))
+    )
   }
 
   /**
@@ -748,6 +781,9 @@ export interface OptionalFromPath<S> {
  * @since 1.0.0
  */
 export class Optional<S, A> {
+  /**
+   * @since 1.0.0
+   */
   readonly _tag: 'Optional' = 'Optional'
   constructor(readonly getOption: (s: S) => Option<A>, readonly set: (a: A) => (s: S) => S) {}
 
@@ -821,7 +857,11 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   static fromNullableProp<S>(): <K extends keyof S>(k: K) => Optional<S, NonNullable<S[K]>> {
-    return k => new Optional((s: any) => fromNullable(s[k]), a => s => (s[k] == null ? s : update(s, k, a)))
+    return (k) =>
+      new Optional(
+        (s: any) => fromNullable(s[k]),
+        (a) => (s) => (s[k] == null ? s : update(s, k, a))
+      )
   }
 
   /**
@@ -845,14 +885,14 @@ export class Optional<S, A> {
    */
   static fromOptionProp<S>(): <P extends OptionPropertyNames<S>>(prop: P) => Optional<S, OptionPropertyType<S, P>> {
     const formProp = Lens.fromProp<S>()
-    return prop => formProp(prop).composePrism(somePrism as any)
+    return (prop) => formProp(prop).composePrism(somePrism as any)
   }
 
   /**
    * @since 1.0.0
    */
   modify(f: (a: A) => A): (s: S) => S {
-    return s => {
+    return (s) => {
       const os = this.modifyOption(f)(s)
       if (isNone(os)) {
         return s
@@ -866,8 +906,8 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   modifyOption(f: (a: A) => A): (s: S) => Option<S> {
-    return s =>
-      option.map(this.getOption(s), a => {
+    return (s) =>
+      option.map(this.getOption(s), (a) => {
         const n = f(a)
         return n === a ? s : this.set(n)(s)
       })
@@ -895,13 +935,9 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => {
+    return new Fold((M) => (f) => (s) => {
       const oa = this.getOption(s)
-      if (isNone(oa)) {
-        return M.empty
-      } else {
-        return f(oa.value)
-      }
+      return isNone(oa) ? (M.empty as any) : f(oa.value)
     })
   }
 
@@ -911,7 +947,7 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   asSetter(): Setter<S, A> {
-    return new Setter(f => this.modify(f))
+    return new Setter((f) => this.modify(f))
   }
 
   /**
@@ -920,7 +956,10 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Optional<A, B>): Optional<S, B> {
-    return new Optional<S, B>(s => option.chain(this.getOption(s), a => ab.getOption(a)), b => this.modify(ab.set(b)))
+    return new Optional<S, B>(
+      (s) => option.chain(this.getOption(s), (a) => ab.getOption(a)),
+      (b) => this.modify(ab.set(b))
+    )
   }
 
   /**
@@ -1011,6 +1050,9 @@ export interface ModifyF<S, A> {
  * @since 1.0.0
  */
 export class Traversal<S, A> {
+  /**
+   * @since 1.0.0
+   */
   readonly _tag: 'Traversal' = 'Traversal'
   constructor(
     // Van Laarhoven representation
@@ -1066,7 +1108,7 @@ export class Traversal<S, A> {
    * @since 1.0.0
    */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => s => this.modifyF(getApplicative(M))(a => make(f(a)))(s))
+    return new Fold((M) => (f) => this.modifyF(getApplicative(M))((a) => make(f(a) as any)) as any)
   }
 
   /**
@@ -1075,7 +1117,7 @@ export class Traversal<S, A> {
    * @since 1.0.0
    */
   asSetter(): Setter<S, A> {
-    return new Setter(f => this.modify(f))
+    return new Setter((f) => this.modify(f))
   }
 
   /**
@@ -1164,6 +1206,9 @@ export class Traversal<S, A> {
  * @since 1.2.0
  */
 export class At<S, I, A> {
+  /**
+   * @since 1.0.0
+   */
   readonly _tag: 'At' = 'At'
   constructor(readonly at: (i: I) => Lens<S, A>) {}
 
@@ -1173,7 +1218,7 @@ export class At<S, I, A> {
    * @since 1.2.0
    */
   fromIso<T>(iso: Iso<T, S>): At<T, I, A> {
-    return new At(i => iso.composeLens(this.at(i)))
+    return new At((i) => iso.composeLens(this.at(i)))
   }
 }
 
@@ -1181,6 +1226,9 @@ export class At<S, I, A> {
  * @since 1.2.0
  */
 export class Index<S, I, A> {
+  /**
+   * @since 1.0.0
+   */
   readonly _tag: 'Index' = 'Index'
   constructor(readonly index: (i: I) => Optional<S, A>) {}
 
@@ -1188,7 +1236,7 @@ export class Index<S, I, A> {
    * @since 1.2.0
    */
   static fromAt<T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> {
-    return new Index(i => at.at(i).composePrism(Prism.some()))
+    return new Index((i) => at.at(i).composePrism(Prism.some()))
   }
 
   /**
@@ -1197,7 +1245,7 @@ export class Index<S, I, A> {
    * @since 1.2.0
    */
   fromIso<T>(iso: Iso<T, S>): Index<T, I, A> {
-    return new Index(i => iso.composeOptional(this.index(i)))
+    return new Index((i) => iso.composeOptional(this.index(i)))
   }
 }
 
@@ -1205,6 +1253,9 @@ export class Index<S, I, A> {
  * @since 1.0.0
  */
 export class Getter<S, A> {
+  /**
+   * @since 1.0.0
+   */
   readonly _tag: 'Getter' = 'Getter'
   constructor(readonly get: (s: S) => A) {}
 
@@ -1214,7 +1265,7 @@ export class Getter<S, A> {
    * @since 1.0.0
    */
   asFold(): Fold<S, A> {
-    return new Fold(<M>(_: Monoid<M>) => (f: (a: A) => M) => s => f(this.get(s)))
+    return new Fold(() => (f) => (s) => f(this.get(s)))
   }
 
   /**
@@ -1223,7 +1274,7 @@ export class Getter<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Getter<A, B>): Getter<S, B> {
-    return new Getter(s => ab.get(this.get(s)))
+    return new Getter((s) => ab.get(this.get(s)))
   }
 
   /**
@@ -1294,6 +1345,9 @@ export class Getter<S, A> {
  * @since 1.0.0
  */
 export class Fold<S, A> {
+  /**
+   * @since 1.0.0
+   */
   readonly _tag: 'Fold' = 'Fold'
   /**
    * get all the targets of a `Fold`
@@ -1315,7 +1369,7 @@ export class Fold<S, A> {
   readonly all: (p: Predicate<A>) => Predicate<S>
   private foldMapFirst: (f: (a: A) => Option<A>) => (s: S) => Option<A>
   constructor(readonly foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M) {
-    this.getAll = foldMap(getMonoid<A>())(a => [a])
+    this.getAll = foldMap(getMonoid<A>())((a) => [a])
     this.exist = foldMap(monoidAny)
     this.all = foldMap(monoidAll)
     this.foldMapFirst = foldMap(getFirstMonoid())
@@ -1418,6 +1472,9 @@ export class Fold<S, A> {
  * @since 1.0.0
  */
 export class Setter<S, A> {
+  /**
+   * @since 1.0.0
+   */
   readonly _tag: 'Setter' = 'Setter'
   constructor(readonly modify: (f: (a: A) => A) => (s: S) => S) {}
 
@@ -1434,7 +1491,7 @@ export class Setter<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Setter<A, B>): Setter<S, B> {
-    return new Setter(f => this.modify(ab.modify(f)))
+    return new Setter((f) => this.modify(ab.modify(f)))
   }
 
   /**
@@ -1552,6 +1609,6 @@ export function fromFoldable<F>(F: Foldable<F>): <A>() => Fold<HKT<F, A>, A> {
   return <A>() =>
     new Fold<HKT<F, A>, A>(<M>(M: Monoid<M>) => {
       const foldMapFM = F.foldMap(M)
-      return (f: (a: A) => M) => s => foldMapFM(s, f)
+      return (f: (a: A) => M) => (s) => foldMapFM(s, f)
     })
 }

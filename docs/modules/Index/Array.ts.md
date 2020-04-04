@@ -21,7 +21,7 @@ Added in v1.2.0
 **Signature**
 
 ```ts
-export function indexArray<A = never>(): Index<Array<A>, number, A> { ... }
+export declare function indexArray<A = never>(): Index<Array<A>, number, A>
 ```
 
 Added in v1.2.0

@@ -21,7 +21,7 @@ Added in v1.5.0
 **Signature**
 
 ```ts
-export function indexNonEmptyArray<A = never>(): Index<NonEmptyArray<A>, number, A> { ... }
+export declare function indexNonEmptyArray<A = never>(): Index<NonEmptyArray<A>, number, A>
 ```
 
 Added in v1.5.0

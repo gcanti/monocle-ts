@@ -43,13 +43,13 @@ describe('Index', () => {
     })
 
     it('modify', () => {
-      assert.deepStrictEqual(one.modify(v => `${v}X`)(['a']), ['a'])
-      assert.deepStrictEqual(one.modify(v => `${v}X`)(['a', 'b']), ['a', 'bX'])
+      assert.deepStrictEqual(one.modify((v) => `${v}X`)(['a']), ['a'])
+      assert.deepStrictEqual(one.modify((v) => `${v}X`)(['a', 'b']), ['a', 'bX'])
     })
 
     it('modifyOption', () => {
-      assert.deepStrictEqual(one.modifyOption(v => `${v}X`)(['a']), none)
-      assert.deepStrictEqual(one.modifyOption(v => `${v}X`)(['a', 'b']), some(['a', 'bX']))
+      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(['a']), none)
+      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(['a', 'b']), some(['a', 'bX']))
     })
   })
 
@@ -67,21 +67,22 @@ describe('Index', () => {
     })
 
     it('modify', () => {
-      assert.deepStrictEqual(one.modify(v => `${v}X`)(cons('a', [])), cons('a', []))
-      assert.deepStrictEqual(one.modify(v => `${v}X`)(cons('a', ['b'])), cons('a', ['bX']))
+      assert.deepStrictEqual(one.modify((v) => `${v}X`)(cons('a', [])), cons('a', []))
+      assert.deepStrictEqual(one.modify((v) => `${v}X`)(cons('a', ['b'])), cons('a', ['bX']))
     })
 
     it('modifyOption', () => {
-      assert.deepStrictEqual(one.modifyOption(v => `${v}X`)(cons('a', [])), none)
-      assert.deepStrictEqual(one.modifyOption(v => `${v}X`)(cons('a', ['b'])), some(cons('a', ['bX'])))
+      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(cons('a', [])), none)
+      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(cons('a', ['b'])), some(cons('a', ['bX'])))
     })
   })
 
   it('fromIso', () => {
-    const iso = new Iso<Array<string>, Array<number>>(s => s.map(v => +v), a => a.map(String))
-    const index = indexArray<number>()
-      .fromIso(iso)
-      .index(1)
+    const iso = new Iso<Array<string>, Array<number>>(
+      (s) => s.map((v) => +v),
+      (a) => a.map(String)
+    )
+    const index = indexArray<number>().fromIso(iso).index(1)
     assert.deepStrictEqual(index.getOption([]), none)
     assert.deepStrictEqual(index.getOption(['1']), none)
     assert.deepStrictEqual(index.getOption(['1', '2']), some(2))

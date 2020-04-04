@@ -42,19 +42,19 @@
   "devDependencies": {
     "@types/jest": "22.2.2",
     "@types/node": "7.0.4",
-    "docs-ts": "^0.3.4",
+    "docs-ts": "^0.4.0",
     "dtslint": "github:gcanti/dtslint",
     "fp-ts": "^2.0.0",
     "import-path-rewrite": "github:gcanti/import-path-rewrite",
     "jest": "^24.3.0",
     "mocha": "^5.2.0",
-    "prettier": "^1.15.3",
+    "prettier": "^2.0.2",
     "rimraf": "^2.6.3",
     "ts-jest": "^24.0.0",
     "ts-node": "^8.0.2",
     "tslint": "^5.12.1",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.8.3"
   },
   "tags": [
     "typescript",

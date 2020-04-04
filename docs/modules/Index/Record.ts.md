@@ -21,7 +21,7 @@ Added in v1.7.0
 **Signature**
 
 ```ts
-export function indexRecord<A = never>(): Index<Record<string, A>, string, A> { ... }
+export declare function indexRecord<A = never>(): Index<Record<string, A>, string, A>
 ```
 
 Added in v1.7.0
