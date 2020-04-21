@@ -129,6 +129,7 @@ Added in v1.0.0
     - [composeIso (method)](#composeiso-method-5)
     - [composeLens (method)](#composelens-method-5)
     - [composeGetter (method)](#composegetter-method-5)
+    - [appendPredicate (method)](#appendpredicate-method)
     - [\_tag (property)](#_tag-property-7)
   - [Setter (class)](#setter-class)
     - [set (method)](#set-method-1)
@@ -1699,6 +1700,16 @@ composeGetter<B>(ab: Getter<A, B>): Fold<S, B>
 ```
 
 Added in v1.0.0
+
+### appendPredicate (method)
+
+**Signature**
+
+```ts
+appendPredicate(p: Predicate<S>): Prism<S, A>
+```
+
+Added in v2.2.0
 
 ### \_tag (property)
 

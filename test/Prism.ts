@@ -91,4 +91,11 @@ describe('Prism', () => {
     assert.deepStrictEqual(composition2.getOption({ type: 'A', a: 'a' }), composition1.getOption({ type: 'A', a: 'a' }))
     assert.deepStrictEqual(composition2.reverseGet(1), composition1.reverseGet(1))
   })
+
+  it('appendPredicate', () => {
+    const prism = Prism.fromPredicate<number>((n) => n % 2 === 0).appendPredicate((n) => n % 3 === 0)
+    assert.deepStrictEqual(prism.getOption(2), none)
+    assert.deepStrictEqual(prism.getOption(3), none)
+    assert.deepStrictEqual(prism.getOption(6), some(6))
+  })
 })

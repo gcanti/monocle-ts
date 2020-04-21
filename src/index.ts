@@ -7,7 +7,7 @@ import { Applicative, Applicative1, Applicative2, Applicative3, Applicative2C } 
 import { Foldable, Foldable1, Foldable2, Foldable3 } from 'fp-ts/lib/Foldable'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
 import { Option, none, some, fromNullable, getFirstMonoid, fromPredicate, isNone, option } from 'fp-ts/lib/Option'
-import { identity, constant, Predicate, Refinement } from 'fp-ts/lib/function'
+import { identity, constant, flow, Predicate, Refinement } from 'fp-ts/lib/function'
 import { identity as id } from 'fp-ts/lib/Identity'
 import { getApplicative, make } from 'fp-ts/lib/Const'
 import { getMonoid } from 'fp-ts/lib/Array'
@@ -735,6 +735,13 @@ export class Prism<S, A> {
    */
   composeGetter<B>(ab: Getter<A, B>): Fold<S, B> {
     return this.asFold().compose(ab.asFold())
+  }
+
+  /**
+   * @since 2.2.0
+   */
+  appendPredicate(p: Predicate<S>): Prism<S, A> {
+    return this.compose(Prism.fromPredicate(flow(this.reverseGet, p)))
   }
 }
 
