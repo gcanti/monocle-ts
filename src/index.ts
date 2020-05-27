@@ -752,7 +752,7 @@ export interface OptionalFromPath<S> {
     K5 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]
   >(
     path: [K1, K2, K3, K4, K5]
-  ): Optional<S, NonNullable<NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>[K5]>
+  ): Optional<S, NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>[K5]>>
 
   <
     K1 extends keyof S,
@@ -761,15 +761,18 @@ export interface OptionalFromPath<S> {
     K4 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>
   >(
     path: [K1, K2, K3, K4]
-  ): Optional<S, NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>
+  ): Optional<S, NonNullable<NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>>
 
   <K1 extends keyof S, K2 extends keyof NonNullable<S[K1]>, K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>>(
     path: [K1, K2, K3]
-  ): Optional<S, NonNullable<NonNullable<S[K1]>[K2]>[K3]>
+  ): Optional<S, NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>>
 
-  <K1 extends keyof S, K2 extends keyof NonNullable<S[K1]>>(path: [K1, K2]): Optional<S, NonNullable<S[K1]>[K2]>
+  <K1 extends keyof S, K2 extends keyof NonNullable<S[K1]>>(path: [K1, K2]): Optional<
+    S,
+    NonNullable<NonNullable<S[K1]>[K2]>
+  >
 
-  <K1 extends keyof S>(path: [K1]): Optional<S, S[K1]>
+  <K1 extends keyof S>(path: [K1]): Optional<S, NonNullable<S[K1]>>
 }
 
 /**
