@@ -83,6 +83,12 @@ const getOptionalFromNullableProp = <T extends Person>(): Optional<T, NonNullabl
   Optional.fromNullableProp<T>()('bio')
 
 //
+// Optional.fromPath
+//
+
+Optional.fromPath<Person>()(['bio']) // $ExpectType Optional<Person, string>
+
+//
 // Optional.fromOptionProp
 //
 
