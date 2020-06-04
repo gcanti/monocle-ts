@@ -13,6 +13,17 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 2.2.0
+
+- **New Feature**
+  - `At`
+    - add `ReadonlyRecord` module (@gcanti)
+    - add `ReadonlySet` module (@gcanti)
+  - `Index`
+    - add `ReadonlyArray` module (@gcanti)
+    - add `ReadonlyNonEmptyArray` module (@gcanti)
+    - add `ReadonlyRecord` module (@gcanti)
+
 # 2.1.1
 
 - **Bug Fix**
