@@ -216,7 +216,6 @@ export class Iso<S, A> {
 }
 
 /**
- * @category constructor
  * @since 1.3.0
  */
 export interface LensFromPath<S> {
@@ -745,7 +744,6 @@ type OptionPropertyNames<S> = { [K in keyof S]-?: S[K] extends Option<any> ? K :
 type OptionPropertyType<S, K extends OptionPropertyNames<S>> = S[K] extends Option<infer A> ? A : never
 
 /**
- * @category signature
  * @since 2.1.0
  */
 export interface OptionalFromPath<S> {
@@ -1045,7 +1043,6 @@ export class Optional<S, A> {
 }
 
 /**
- * @category signature
  * @since 1.0.0
  */
 export interface ModifyF<S, A> {

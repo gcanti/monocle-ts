@@ -91,7 +91,6 @@ Added in v1.0.0
     - [composeIso (method)](#composeiso-method-3)
     - [composePrism (method)](#composeprism-method-3)
     - [\_tag (property)](#_tag-property-5)
-  - [LensFromPath (interface)](#lensfrompath-interface)
   - [Optional (class)](#optional-class)
     - [fromPath (static method)](#frompath-static-method-1)
     - [fromNullableProp (static method)](#fromnullableprop-static-method-1)
@@ -159,7 +158,8 @@ Added in v1.0.0
     - [\_tag (property)](#_tag-property-9)
   - [fromFoldable](#fromfoldable)
   - [fromTraversable](#fromtraversable)
-- [signature](#signature)
+- [utils](#utils)
+  - [LensFromPath (interface)](#lensfrompath-interface)
   - [ModifyF (interface)](#modifyf-interface)
   - [OptionalFromPath (interface)](#optionalfrompath-interface)
 
@@ -1172,32 +1172,6 @@ readonly _tag: "Lens"
 
 Added in v1.0.0
 
-## LensFromPath (interface)
-
-**Signature**
-
-```ts
-export interface LensFromPath<S> {
-  <
-    K1 extends keyof S,
-    K2 extends keyof S[K1],
-    K3 extends keyof S[K1][K2],
-    K4 extends keyof S[K1][K2][K3],
-    K5 extends keyof S[K1][K2][K3][K4]
-  >(
-    path: [K1, K2, K3, K4, K5]
-  ): Lens<S, S[K1][K2][K3][K4][K5]>
-  <K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof S[K1][K2], K4 extends keyof S[K1][K2][K3]>(
-    path: [K1, K2, K3, K4]
-  ): Lens<S, S[K1][K2][K3][K4]>
-  <K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof S[K1][K2]>(path: [K1, K2, K3]): Lens<S, S[K1][K2][K3]>
-  <K1 extends keyof S, K2 extends keyof S[K1]>(path: [K1, K2]): Lens<S, S[K1][K2]>
-  <K1 extends keyof S>(path: [K1]): Lens<S, S[K1]>
-}
-```
-
-Added in v1.3.0
-
 ## Optional (class)
 
 Laws:
@@ -2131,7 +2105,33 @@ assert.deepStrictEqual(actual, { tweets: [{ text: 'dlrow olleh' }, { text: 'rabo
 
 Added in v1.0.0
 
-# signature
+# utils
+
+## LensFromPath (interface)
+
+**Signature**
+
+```ts
+export interface LensFromPath<S> {
+  <
+    K1 extends keyof S,
+    K2 extends keyof S[K1],
+    K3 extends keyof S[K1][K2],
+    K4 extends keyof S[K1][K2][K3],
+    K5 extends keyof S[K1][K2][K3][K4]
+  >(
+    path: [K1, K2, K3, K4, K5]
+  ): Lens<S, S[K1][K2][K3][K4][K5]>
+  <K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof S[K1][K2], K4 extends keyof S[K1][K2][K3]>(
+    path: [K1, K2, K3, K4]
+  ): Lens<S, S[K1][K2][K3][K4]>
+  <K1 extends keyof S, K2 extends keyof S[K1], K3 extends keyof S[K1][K2]>(path: [K1, K2, K3]): Lens<S, S[K1][K2][K3]>
+  <K1 extends keyof S, K2 extends keyof S[K1]>(path: [K1, K2]): Lens<S, S[K1][K2]>
+  <K1 extends keyof S>(path: [K1]): Lens<S, S[K1]>
+}
+```
+
+Added in v1.3.0
 
 ## ModifyF (interface)
 
