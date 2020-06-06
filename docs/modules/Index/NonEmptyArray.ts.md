@@ -4,7 +4,7 @@ nav_order: 8
 parent: Modules
 ---
 
-# NonEmptyArray overview
+## NonEmptyArray overview
 
 Added in v1.5.0
 
@@ -12,11 +12,14 @@ Added in v1.5.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [indexNonEmptyArray](#indexnonemptyarray)
+- [constructor](#constructor)
+  - [indexNonEmptyArray](#indexnonemptyarray)
 
 ---
 
-# indexNonEmptyArray
+# constructor
+
+## indexNonEmptyArray
 
 **Signature**
 

@@ -6,6 +6,7 @@ import { lookup, updateAt } from 'fp-ts/lib/Array'
 import { isNone } from 'fp-ts/lib/Option'
 
 /**
+ * @category constructor
  * @since 1.2.0
  */
 export function indexArray<A = never>(): Index<Array<A>, number, A> {

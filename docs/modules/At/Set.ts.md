@@ -4,7 +4,7 @@ nav_order: 4
 parent: Modules
 ---
 
-# Set overview
+## Set overview
 
 Added in v1.2.0
 
@@ -12,11 +12,14 @@ Added in v1.2.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [atSet](#atset)
+- [constructor](#constructor)
+  - [atSet](#atset)
 
 ---
 
-# atSet
+# constructor
+
+## atSet
 
 **Signature**
 

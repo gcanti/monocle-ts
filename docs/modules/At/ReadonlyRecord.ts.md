@@ -4,7 +4,7 @@ nav_order: 1
 parent: Modules
 ---
 
-# ReadonlyRecord overview
+## ReadonlyRecord overview
 
 Added in v2.2.0
 
@@ -12,11 +12,14 @@ Added in v2.2.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [atReadonlyRecord](#atreadonlyrecord)
+- [constructor](#constructor)
+  - [atReadonlyRecord](#atreadonlyrecord)
 
 ---
 
-# atReadonlyRecord
+# constructor
+
+## atReadonlyRecord
 
 **Signature**
 

@@ -6,6 +6,7 @@ import { Eq } from 'fp-ts/lib/Eq'
 import * as S from 'fp-ts/lib/Set'
 
 /**
+ * @category constructor
  * @since 1.2.0
  */
 export function atSet<A = never>(E: Eq<A>): At<Set<A>, A, boolean> {

@@ -4,7 +4,7 @@ nav_order: 10
 parent: Modules
 ---
 
-# ReadonlyNonEmptyArray overview
+## ReadonlyNonEmptyArray overview
 
 Added in v2.2.0
 
@@ -12,12 +12,28 @@ Added in v2.2.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [ReadonlyNonEmptyArray (interface)](#readonlynonemptyarray-interface)
-- [indexReadonlyNonEmptyArray](#indexreadonlynonemptyarray)
+- [constructor](#constructor)
+  - [indexReadonlyNonEmptyArray](#indexreadonlynonemptyarray)
+- [model](#model)
+  - [ReadonlyNonEmptyArray (interface)](#readonlynonemptyarray-interface)
 
 ---
 
-# ReadonlyNonEmptyArray (interface)
+# constructor
+
+## indexReadonlyNonEmptyArray
+
+**Signature**
+
+```ts
+export declare const indexReadonlyNonEmptyArray: <A = never>() => Index<ReadonlyNonEmptyArray<A>, number, A>
+```
+
+Added in v2.2.0
+
+# model
+
+## ReadonlyNonEmptyArray (interface)
 
 **Signature**
 
@@ -25,16 +41,6 @@ Added in v2.2.0
 export interface ReadonlyNonEmptyArray<A> extends ReadonlyArray<A> {
   readonly 0: A
 }
-```
-
-Added in v2.2.0
-
-# indexReadonlyNonEmptyArray
-
-**Signature**
-
-```ts
-export declare const indexReadonlyNonEmptyArray: <A = never>() => Index<ReadonlyNonEmptyArray<A>, number, A>
 ```
 
 Added in v2.2.0

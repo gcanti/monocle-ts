@@ -6,6 +6,7 @@ import { Option, isNone } from 'fp-ts/lib/Option'
 import * as R from 'fp-ts/lib/Record'
 
 /**
+ * @category constructor
  * @since 1.7.0
  */
 export function atRecord<A = never>(): At<Record<string, A>, string, Option<A>> {

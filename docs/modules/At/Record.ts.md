@@ -4,7 +4,7 @@ nav_order: 3
 parent: Modules
 ---
 
-# Record overview
+## Record overview
 
 Added in v1.7.0
 
@@ -12,11 +12,14 @@ Added in v1.7.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [atRecord](#atrecord)
+- [constructor](#constructor)
+  - [atRecord](#atrecord)
 
 ---
 
-# atRecord
+# constructor
+
+## atRecord
 
 **Signature**
 

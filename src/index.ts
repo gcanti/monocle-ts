@@ -21,6 +21,7 @@ const update = <O, K extends keyof O, A extends O[K]>(o: O, k: K, a: A): O => {
  * 1. reverseGet(get(s)) = s
  * 2. get(reversetGet(a)) = a
  *
+ * @category constructor
  * @since 1.0.0
  */
 export class Iso<S, A> {
@@ -215,6 +216,7 @@ export class Iso<S, A> {
 }
 
 /**
+ * @category constructor
  * @since 1.3.0
  */
 export interface LensFromPath<S> {
@@ -241,6 +243,7 @@ export interface LensFromPath<S> {
  * 2. set(get(s))(s) = s
  * 3. set(a)(set(a)(s)) = set(a)(s)
  *
+ * @category constructor
  * @since 1.0.0
  */
 export class Lens<S, A> {
@@ -545,6 +548,7 @@ export class Lens<S, A> {
  * 1. getOption(s).fold(s, reverseGet) = s
  * 2. getOption(reverseGet(a)) = Some(a)
  *
+ * @category constructor
  * @since 1.0.0
  */
 export class Prism<S, A> {
@@ -741,6 +745,7 @@ type OptionPropertyNames<S> = { [K in keyof S]-?: S[K] extends Option<any> ? K :
 type OptionPropertyType<S, K extends OptionPropertyNames<S>> = S[K] extends Option<infer A> ? A : never
 
 /**
+ * @category signature
  * @since 2.1.0
  */
 export interface OptionalFromPath<S> {
@@ -781,6 +786,7 @@ export interface OptionalFromPath<S> {
  * 2. getOption(set(a)(s)) = getOption(s).map(_ => a)
  * 3. set(a)(set(a)(s)) = set(a)(s)
  *
+ * @category constructor
  * @since 1.0.0
  */
 export class Optional<S, A> {
@@ -1039,6 +1045,7 @@ export class Optional<S, A> {
 }
 
 /**
+ * @category signature
  * @since 1.0.0
  */
 export interface ModifyF<S, A> {
@@ -1050,6 +1057,7 @@ export interface ModifyF<S, A> {
 }
 
 /**
+ * @category constructor
  * @since 1.0.0
  */
 export class Traversal<S, A> {
@@ -1206,6 +1214,7 @@ export class Traversal<S, A> {
 }
 
 /**
+ * @category constructor
  * @since 1.2.0
  */
 export class At<S, I, A> {
@@ -1226,6 +1235,7 @@ export class At<S, I, A> {
 }
 
 /**
+ * @category constructor
  * @since 1.2.0
  */
 export class Index<S, I, A> {
@@ -1253,6 +1263,7 @@ export class Index<S, I, A> {
 }
 
 /**
+ * @category constructor
  * @since 1.0.0
  */
 export class Getter<S, A> {
@@ -1345,6 +1356,7 @@ export class Getter<S, A> {
 }
 
 /**
+ * @category constructor
  * @since 1.0.0
  */
 export class Fold<S, A> {
@@ -1472,6 +1484,7 @@ export class Fold<S, A> {
 }
 
 /**
+ * @category constructor
  * @since 1.0.0
  */
 export class Setter<S, A> {
@@ -1553,7 +1566,7 @@ export class Setter<S, A> {
 }
 
 /**
- * create a `Traversal` from a `Traversable`
+ * Create a `Traversal` from a `Traversable`
  *
  * @example
  * import { Lens, fromTraversable } from 'monocle-ts'
@@ -1585,6 +1598,7 @@ export class Setter<S, A> {
  *
  * assert.deepStrictEqual(actual, { tweets: [ { text: 'dlrow olleh' }, { text: 'raboof' } ] })
  *
+ * @category constructor
  * @since 1.0.0
  */
 export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <U, L, A>() => Traversal<Kind3<T, U, L, A>, A>
@@ -1600,8 +1614,9 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 }
 
 /**
- * create a `Fold` from a `Foldable`
+ * Create a `Fold` from a `Foldable`
  *
+ * @category constructor
  * @since 1.0.0
  */
 export function fromFoldable<F extends URIS3>(F: Foldable3<F>): <U, L, A>() => Fold<Kind3<F, U, L, A>, A>

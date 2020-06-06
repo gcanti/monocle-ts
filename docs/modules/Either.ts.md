@@ -4,7 +4,7 @@ nav_order: 5
 parent: Modules
 ---
 
-# Either overview
+## Either overview
 
 Added in v1.6.0
 
@@ -12,27 +12,30 @@ Added in v1.6.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [\_left](#_left)
-- [\_right](#_right)
+- [constructor](#constructor)
+  - [\_left](#_left)
+  - [\_right](#_right)
 
 ---
 
-# \_left
+# constructor
+
+## \_left
 
 **Signature**
 
 ```ts
-export declare const _left: <L, A>() => Prism<Either<L, A>, L>
+export declare const _left: <E, A>() => Prism<Either<E, A>, E>
 ```
 
 Added in v1.6.0
 
-# \_right
+## \_right
 
 **Signature**
 
 ```ts
-export declare const _right: <L, A>() => Prism<Either<L, A>, A>
+export declare const _right: <E, A>() => Prism<Either<E, A>, A>
 ```
 
 Added in v1.6.0

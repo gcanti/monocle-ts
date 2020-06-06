@@ -5,6 +5,7 @@ import { Index } from '../index'
 import * as NEA from './NonEmptyArray'
 
 /**
+ * @category model
  * @since 2.2.0
  */
 export interface ReadonlyNonEmptyArray<A> extends ReadonlyArray<A> {
@@ -12,6 +13,7 @@ export interface ReadonlyNonEmptyArray<A> extends ReadonlyArray<A> {
 }
 
 /**
+ * @category constructor
  * @since 2.2.0
  */
 export const indexReadonlyNonEmptyArray: <A = never>() => Index<
