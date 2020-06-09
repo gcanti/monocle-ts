@@ -1,16 +1,17 @@
 /**
  * @since 1.0.0
  */
-import { HKT, URIS, URIS2, URIS3, Kind3, Kind2, Kind } from 'fp-ts/lib/HKT'
+import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { Monoid, monoidAll, monoidAny } from 'fp-ts/lib/Monoid'
-import { Applicative, Applicative1, Applicative2, Applicative3, Applicative2C } from 'fp-ts/lib/Applicative'
+import { Applicative, Applicative1, Applicative2, Applicative2C, Applicative3 } from 'fp-ts/lib/Applicative'
 import { Foldable, Foldable1, Foldable2, Foldable3 } from 'fp-ts/lib/Foldable'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
-import { Option, none, some, fromNullable, getFirstMonoid, fromPredicate, isNone, option } from 'fp-ts/lib/Option'
-import { identity, constant, Predicate, Refinement } from 'fp-ts/lib/function'
+import { fromNullable, fromPredicate, getFirstMonoid, isNone, none, Option, option, some } from 'fp-ts/lib/Option'
+import { constant, identity, Predicate, Refinement } from 'fp-ts/lib/function'
 import { identity as id } from 'fp-ts/lib/Identity'
 import { getApplicative, make } from 'fp-ts/lib/Const'
 import { getMonoid } from 'fp-ts/lib/Array'
+import { indexReadonlyArray } from './Index/ReadonlyArray'
 
 const update = <O, K extends keyof O, A extends O[K]>(o: O, k: K, a: A): O => {
   return a === o[k] ? o : Object.assign({}, o, { [k]: a })
@@ -539,6 +540,16 @@ export class Lens<S, A> {
    */
   composePrism<B>(ab: Prism<A, B>): Optional<S, B> {
     return this.asOptional().compose(ab.asOptional())
+  }
+
+  traverse<T extends URIS, A>(
+    this: Lens<S, Kind<T, A>>,
+    T: Traversable1<T>
+  ): Traversal<S, this extends Lens<S, Kind<T, infer A>> ? A : never> {
+    const r: Traversal<S, A> = this.composeTraversal(fromTraversable(T)<A>())
+    // somehow TS doesn't infer `A` directly from `this: Lens<S, Kind<T, A>>`
+    // so we need `any` here
+    return r as any
   }
 }
 
@@ -1207,6 +1218,31 @@ export class Traversal<S, A> {
    */
   composeGetter<B>(ab: Getter<A, B>): Fold<S, B> {
     return this.asFold().compose(ab.asFold())
+  }
+
+  prop<A extends object, K extends keyof A>(this: Traversal<S, A>, prop: K): Traversal<S, A[K]> {
+    return this.composeLens(Lens.fromProp<A>()(prop))
+  }
+
+  traverse<T extends URIS, A>(
+    this: Traversal<S, Kind<T, A>>,
+    T: Traversable1<T>
+  ): Traversal<S, this extends Traversal<S, Kind<T, infer A>> ? A : never> {
+    const r: Traversal<S, A> = this.composeTraversal(fromTraversable(T)<A>())
+    // somehow TS doesn't infer `A` directly from `this: Lens<S, Kind<T, A>>`
+    // so we need `any` here
+    return r as any
+  }
+
+  optionProp<A extends object, K extends OptionPropertyNames<A>>(
+    this: Traversal<S, A>,
+    prop: K
+  ): Traversal<S, OptionPropertyType<A, K>> {
+    return this.composeOptional(Optional.fromOptionProp<A>()(prop))
+  }
+
+  index<A>(this: Traversal<S, ReadonlyArray<A>>, i: number): Traversal<S, A> {
+    return this.composeOptional(indexReadonlyArray<A>().index(i))
   }
 }
 
