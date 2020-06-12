@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import { Prism } from '../src'
+import { Prism } from '../../src'
 import { Refinement } from 'fp-ts/lib/function'
 import { none, some, Option } from 'fp-ts/lib/Option'
 

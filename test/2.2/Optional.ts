@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 import { identity } from 'fp-ts/lib/function'
 import * as O from 'fp-ts/lib/Option'
-import { Optional } from '../src'
+import { Optional } from '../../src'
 
 describe('Optional', () => {
   interface Phone {

@@ -1,4 +1,4 @@
-import { Getter } from '../src'
+import { Getter } from '../../src'
 import * as assert from 'assert'
 
 type Point = { x: number; y: number }

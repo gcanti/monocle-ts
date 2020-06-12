@@ -1,7 +1,7 @@
 /**
  * @since 2.2.0
  */
-import { Index } from '../index'
+import { Index } from '..'
 import * as NEA from './NonEmptyArray'
 
 /**
