@@ -13,7 +13,7 @@ title: Home
 
 # Motivation
 
-(Adapted from [monocle site](http://julien-truffaut.github.io/Monocle/))
+(Adapted from [monocle site](https://www.optics.dev/Monocle/))
 
 Modifying immutable nested object in JavaScript is verbose which makes code difficult to understand and reason about.
 
