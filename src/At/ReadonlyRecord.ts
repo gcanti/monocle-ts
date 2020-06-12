@@ -2,7 +2,7 @@
  * @since 2.2.0
  */
 import { Option } from 'fp-ts/lib/Option'
-import { At } from '../index'
+import { At } from '..'
 import * as R from './Record'
 
 /**

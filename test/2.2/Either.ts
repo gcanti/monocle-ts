@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import { _right, _left } from '../src/Either'
+import { _right, _left } from '../../src/Either'
 import { right, left } from 'fp-ts/lib/Either'
 import { some, none } from 'fp-ts/lib/Option'
 

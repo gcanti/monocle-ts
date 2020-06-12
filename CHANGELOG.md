@@ -13,6 +13,17 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 2.3.0
+
+- **New Feature**
+  - add `Iso` module (@gcanti)
+  - add `Lens` module (@gcanti)
+  - add `Prism` module (@gcanti)
+  - add `Optional` module (@gcanti)
+  - add `Traversal` module (@gcanti)
+  - add `At` module (@gcanti)
+  - add `Index` module (@gcanti)
+
 # 2.2.0
 
 - **New Feature**

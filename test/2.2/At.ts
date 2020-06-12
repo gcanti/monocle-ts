@@ -1,11 +1,11 @@
-import { atRecord } from '../src/At/Record'
-import { atSet } from '../src/At/Set'
+import { atRecord } from '../../src/At/Record'
+import { atSet } from '../../src/At/Set'
 import * as assert from 'assert'
 import { none, some } from 'fp-ts/lib/Option'
 import { eqNumber } from 'fp-ts/lib/Eq'
 import * as R from 'fp-ts/lib/Record'
 import * as S from 'fp-ts/lib/Set'
-import { Iso } from '../src'
+import { Iso } from '../../src'
 
 describe('At', () => {
   describe('atRecord', () => {

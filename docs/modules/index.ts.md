@@ -1,6 +1,6 @@
 ---
 title: index.ts
-nav_order: 6
+nav_order: 7
 parent: Modules
 ---
 
@@ -2139,9 +2139,9 @@ Added in v1.3.0
 
 ```ts
 export interface ModifyF<S, A> {
-  <F extends URIS3>(F: Applicative3<F>): <U, L>(f: (a: A) => Kind3<F, U, L, A>) => (s: S) => Kind3<F, U, L, S>
-  <F extends URIS2>(F: Applicative2<F>): <L>(f: (a: A) => Kind2<F, L, A>) => (s: S) => Kind2<F, L, S>
-  <F extends URIS2, L>(F: Applicative2C<F, L>): (f: (a: A) => Kind2<F, L, A>) => (s: S) => Kind2<F, L, S>
+  <F extends URIS3>(F: Applicative3<F>): <R, E>(f: (a: A) => Kind3<F, R, E, A>) => (s: S) => Kind3<F, R, E, S>
+  <F extends URIS2>(F: Applicative2<F>): <E>(f: (a: A) => Kind2<F, E, A>) => (s: S) => Kind2<F, E, S>
+  <F extends URIS2, E>(F: Applicative2C<F, E>): (f: (a: A) => Kind2<F, E, A>) => (s: S) => Kind2<F, E, S>
   <F extends URIS>(F: Applicative1<F>): (f: (a: A) => Kind<F, A>) => (s: S) => Kind<F, S>
   <F>(F: Applicative<F>): (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>
 }

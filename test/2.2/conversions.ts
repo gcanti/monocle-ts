@@ -1,4 +1,4 @@
-import { Iso, Lens, Prism, Optional, Traversal, Getter, Fold, Setter } from '../src'
+import { Iso, Lens, Prism, Optional, Traversal, Getter, Fold, Setter } from '../../src'
 import * as assert from 'assert'
 
 type U0 = true

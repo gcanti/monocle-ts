@@ -3,6 +3,8 @@
   "rules": {
     "space-before-function-paren": false,
     "no-unnecessary-generics": false,
-    "deprecation": true
+    "deprecation": true,
+    "variable-name": false,
+    "ter-indent": false
   }
 }

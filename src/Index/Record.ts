@@ -1,7 +1,7 @@
 /**
  * @since 1.7.0
  */
-import { Index } from '../index'
+import { Index } from '..'
 import { atRecord } from '../At/Record'
 
 /**

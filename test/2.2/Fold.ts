@@ -1,4 +1,4 @@
-import { Getter, fromFoldable } from '../src'
+import { Getter, fromFoldable } from '../../src'
 import * as assert from 'assert'
 import { some, none } from 'fp-ts/lib/Option'
 import { array } from 'fp-ts/lib/Array'
