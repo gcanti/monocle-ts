@@ -6,6 +6,17 @@ parent: Modules
 
 ## Lens overview
 
+A `Lens` is an optic used to zoom inside a product.
+
+`Lens`es have two type parameters generally called `S` and `A`: `Lens<S, A>` where `S` represents the product and `A`
+an element inside of `S`.
+
+Laws:
+
+1. get(set(a)(s)) = a
+2. set(get(s))(s) = s
+3. set(a)(set(a)(s)) = set(a)(s)
+
 Added in v2.3.0
 
 ---

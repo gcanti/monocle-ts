@@ -22,7 +22,9 @@ high state of flux, you're at risk of it changing without notice.
   - add `Optional` module (@gcanti)
   - add `Traversal` module (@gcanti)
   - add `At` module (@gcanti)
-  - add `Index` module (@gcanti)
+  - add `Ix` module (@gcanti)
+- **Internal**
+  - implement old APIs through new APIs (@gcanti)
 
 # 2.2.0
 

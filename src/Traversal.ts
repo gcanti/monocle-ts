@@ -1,4 +1,10 @@
 /**
+ * A `Traversal` is the generalisation of an `Optional` to several targets. In other word, a `Traversal` allows to focus
+ * from a type `S` into `0` to `n` values of type `A`.
+ *
+ * The most common example of a `Traversal` would be to focus into all elements inside of a container (e.g.
+ * `ReadonlyArray`, `Option`). To do this we will use the relation between the typeclass `Traversable` and `Traversal`.
+ *
  * @since 2.3.0
  */
 import { Applicative } from 'fp-ts/lib/Applicative'

@@ -33,7 +33,7 @@ const fromAt = <S, I, A>(at: A.At<S, I, A>): At<S, I, A> => new At((i) => fromLe
 const fromIndex = <S, I, A>(ix: Ix.Index<S, I, A>): Index<S, I, A> => new Index((i) => fromOptional(ix.index(i)))
 
 //
-// optics
+// old APIs
 //
 
 const update = <O, K extends keyof O, A extends O[K]>(o: O, k: K, a: A): O => {

@@ -6,6 +6,13 @@ parent: Modules
 
 ## Iso overview
 
+An `Iso` is an optic which converts elements of type `S` into elements of type `A` without loss.
+
+Laws:
+
+1. reverseGet(get(s)) = s
+2. get(reversetGet(a)) = a
+
 Added in v2.3.0
 
 ---

@@ -1,4 +1,16 @@
 /**
+ * An `Optional` is an optic used to zoom inside a product. Unlike the `Lens`, the element that the `Optional` focuses
+ * on may not exist.
+ *
+ * `Optional`s have two type parameters generally called `S` and `A`: `Optional<S, A>` where `S` represents the product
+ * and `A` an optional element inside of `S`.
+ *
+ * Laws:
+ *
+ * 1. getOption(s).fold(() => s, a => set(a)(s)) = s
+ * 2. getOption(set(a)(s)) = getOption(s).map(_ => a)
+ * 3. set(a)(set(a)(s)) = set(a)(s)
+ *
  * @since 2.3.0
  */
 import * as O from 'fp-ts/lib/Option'
