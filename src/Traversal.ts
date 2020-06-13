@@ -7,19 +7,18 @@
  *
  * @since 2.3.0
  */
-import { Applicative } from 'fp-ts/lib/Applicative'
 import { Predicate, Refinement } from 'fp-ts/lib/function'
-import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { identity } from 'fp-ts/lib/Identity'
-import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
+import { Option } from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/pipeable'
 import { ModifyF } from '.'
 import * as I from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
-import { Prism } from './Prism'
 import { Optional } from './Optional'
-import { pipe } from 'fp-ts/lib/pipeable'
-import { Option } from 'fp-ts/lib/Option'
+import { Prism } from './Prism'
+import { URIS, Kind } from 'fp-ts/lib/HKT'
+import { Traversable1 } from 'fp-ts/lib/Traversable'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -43,18 +42,7 @@ export interface Traversal<S, A> {
  * @category constructor
  * @since 2.3.0
  */
-export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <R, E, A>() => Traversal<Kind3<T, R, E, A>, A>
-export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <E, A>() => Traversal<Kind2<T, E, A>, A>
-export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Kind<T, A>, A>
-export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
-export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
-  return <A>() => ({
-    modifyF: <F>(F: Applicative<F>) => {
-      const traverseF = T.traverse(F)
-      return (f: (a: A) => HKT<F, A>) => (s: HKT<T, A>) => traverseF(s, f)
-    }
-  })
-}
+export const fromTraversable = I.fromTraversable
 
 // -------------------------------------------------------------------------------------
 // compositions
@@ -160,3 +148,22 @@ export const props = <A, P extends keyof A>(
  * @since 2.3.0
  */
 export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = composePrism(I.prismFromSome())
+
+/**
+ * Return a `Traversal` from a `Traversal` focused on a `Traversable`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const traverse = <T extends URIS>(T: Traversable1<T>) => <S, A>(
+  sta: Traversal<S, Kind<T, A>>
+): Traversal<S, A> => composeTraversal(fromTraversable(T)<A>())(sta)
+
+/**
+ * Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): Traversal<S, A> =>
+  composeOptional(I.indexReadonlyArray<A>().index(i))(sa)

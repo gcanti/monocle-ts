@@ -20,11 +20,13 @@ Added in v2.3.0
 
 - [combinators](#combinators)
   - [filter](#filter)
+  - [index](#index)
   - [modify](#modify)
   - [prop](#prop)
   - [props](#props)
   - [set](#set)
   - [some](#some)
+  - [traverse](#traverse)
 - [compositions](#compositions)
   - [composeIso](#composeiso)
   - [composeLens](#composelens)
@@ -49,6 +51,18 @@ export declare function filter<A, B extends A>(
   refinement: Refinement<A, B>
 ): <S>(traversal: Traversal<S, A>) => Traversal<S, B>
 export declare function filter<A>(predicate: Predicate<A>): <S>(traversal: Traversal<S, A>) => Traversal<S, A>
+```
+
+Added in v2.3.0
+
+## index
+
+Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`
+
+**Signature**
+
+```ts
+export declare const index: (i: number) => <S, A>(sa: Traversal<S, readonly A[]>) => Traversal<S, A>
 ```
 
 Added in v2.3.0
@@ -107,6 +121,28 @@ Return a `Traversal` from a `Traversal` focused on a `Option` type
 
 ```ts
 export declare const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A>
+```
+
+Added in v2.3.0
+
+## traverse
+
+Return a `Traversal` from a `Traversal` focused on a `Traversable`
+
+**Signature**
+
+```ts
+export declare const traverse: <T extends
+  | 'ReadonlyRecord'
+  | 'Ord'
+  | 'Eq'
+  | 'Option'
+  | 'Identity'
+  | 'NonEmptyArray'
+  | 'Array'
+  | 'Record'>(
+  T: Traversable1<T>
+) => <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
 Added in v2.3.0
@@ -182,12 +218,7 @@ Create a `Traversal` from a `Traversable`
 **Signature**
 
 ```ts
-export declare function fromTraversable<T extends URIS3>(
-  T: Traversable3<T>
-): <R, E, A>() => Traversal<Kind3<T, R, E, A>, A>
-export declare function fromTraversable<T extends URIS2>(T: Traversable2<T>): <E, A>() => Traversal<Kind2<T, E, A>, A>
-export declare function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Kind<T, A>, A>
-export declare function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
+export declare const fromTraversable: typeof I.fromTraversable
 ```
 
 Added in v2.3.0

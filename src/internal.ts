@@ -3,7 +3,7 @@
  */
 import { Applicative } from 'fp-ts/lib/Applicative'
 import { constant, flow, identity, Predicate } from 'fp-ts/lib/function'
-import { HKT } from 'fp-ts/lib/HKT'
+import { HKT, URIS, Kind, URIS3, Kind3, URIS2, Kind2 } from 'fp-ts/lib/HKT'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { Iso } from './Iso'
@@ -11,6 +11,9 @@ import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
 import { Traversal } from './Traversal'
+import { Traversable1, Traversable3, Traversable2, Traversable } from 'fp-ts/lib/Traversable'
+import { Index } from './Ix'
+import { lookup, updateAt } from 'fp-ts/lib/Array'
 
 // -------------------------------------------------------------------------------------
 // Iso
@@ -312,3 +315,37 @@ export function traversalComposeTraversal<A, B>(ab: Traversal<A, B>): <S>(sa: Tr
     modifyF: <F>(F: Applicative<F>) => (f: (a: B) => HKT<F, B>) => sa.modifyF(F)(ab.modifyF(F)(f))
   })
 }
+
+export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <R, E, A>() => Traversal<Kind3<T, R, E, A>, A>
+export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <E, A>() => Traversal<Kind2<T, E, A>, A>
+export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Kind<T, A>, A>
+export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
+/** @internal */
+export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
+  return <A>() => ({
+    modifyF: <F>(F: Applicative<F>) => {
+      const traverseF = T.traverse(F)
+      return (f: (a: A) => HKT<F, A>) => (s: HKT<T, A>) => traverseF(s, f)
+    }
+  })
+}
+
+// -------------------------------------------------------------------------------------
+// Ix
+// -------------------------------------------------------------------------------------
+
+function indexArray<A = never>(): Index<Array<A>, number, A> {
+  return {
+    index: (i) => ({
+      getOption: (as) => lookup(i, as),
+      set: (a) => (as) =>
+        pipe(
+          updateAt(i, a)(as),
+          O.getOrElse(() => as)
+        )
+    })
+  }
+}
+
+/** @internal */
+export const indexReadonlyArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = indexArray as any
