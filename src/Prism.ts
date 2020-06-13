@@ -1,4 +1,11 @@
 /**
+ * A `Prism` is an optic used to select part of a sum type.
+ *
+ * Laws:
+ *
+ * 1. getOption(s).fold(s, reverseGet) = s
+ * 2. getOption(reverseGet(a)) = Some(a)
+ *
  * @since 2.3.0
  */
 import { identity } from 'fp-ts/lib/function'
