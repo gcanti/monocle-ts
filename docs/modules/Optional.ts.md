@@ -30,9 +30,9 @@ Added in v2.3.0
   - [prop](#prop)
   - [props](#props)
 - [compositions](#compositions)
-  - [compose](#compose)
   - [composeIso](#composeiso)
   - [composeLens](#composelens)
+  - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
   - [composeTraversal](#composetraversal)
 - [converters](#converters)
@@ -92,18 +92,6 @@ Added in v2.3.0
 
 # compositions
 
-## compose
-
-Compose a `Optional` with a `Optional`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
-```
-
-Added in v2.3.0
-
 ## composeIso
 
 Compose a `Optional` with an `Iso`
@@ -124,6 +112,18 @@ Compose a `Optional` with a `Lens`
 
 ```ts
 export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
+```
+
+Added in v2.3.0
+
+## composeOptional
+
+Compose a `Optional` with a `Optional`
+
+**Signature**
+
+```ts
+export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
 ```
 
 Added in v2.3.0

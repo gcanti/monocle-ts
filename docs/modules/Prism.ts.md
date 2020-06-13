@@ -26,10 +26,10 @@ Added in v2.3.0
   - [props](#props)
   - [set](#set)
 - [compositions](#compositions)
-  - [compose](#compose)
   - [composeIso](#composeiso)
   - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
+  - [composePrism](#composeprism)
   - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
   - [fromNullable](#fromnullable)
@@ -103,18 +103,6 @@ Added in v2.3.0
 
 # compositions
 
-## compose
-
-Compose a `Prism` with a `Prism`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
-```
-
-Added in v2.3.0
-
 ## composeIso
 
 Compose a `Prism` with an `Iso`
@@ -151,6 +139,18 @@ export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Pris
 
 Added in v2.3.0
 
+## composePrism
+
+Compose a `Prism` with a `Prism`
+
+**Signature**
+
+```ts
+export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
+```
+
+Added in v2.3.0
+
 ## composeTraversal
 
 Compose a `Prism` with a `Traversal`
@@ -180,7 +180,10 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const fromPredicate: typeof I.prismFromPredicate
+export declare const fromPredicate: {
+  <S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
+  <A>(predicate: Predicate<A>): Prism<A, A>
+}
 ```
 
 Added in v2.3.0

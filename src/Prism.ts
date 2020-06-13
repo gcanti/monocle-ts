@@ -8,7 +8,6 @@
  *
  * @since 2.3.0
  */
-import { identity } from 'fp-ts/lib/function'
 import * as O from 'fp-ts/lib/Option'
 import * as I from './internal'
 
@@ -17,6 +16,11 @@ import * as I from './internal'
 // -------------------------------------------------------------------------------------
 
 import Option = O.Option
+import { Refinement, Predicate } from 'fp-ts/lib/function'
+import { Optional } from './Optional'
+import { Traversal } from './Traversal'
+import { Iso } from './Iso'
+import { Lens } from './Lens'
 
 /**
  * @category model
@@ -35,25 +39,22 @@ export interface Prism<S, A> {
  * @category constructors
  * @since 2.3.0
  */
-export const fromPredicate = I.prismFromPredicate
+export const fromPredicate: {
+  <S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
+  <A>(predicate: Predicate<A>): Prism<A, A>
+} = I.prismFromPredicate
 
 /**
  * @category constructors
  * @since 2.3.0
  */
-export const some = <A>(): Prism<Option<A>, A> => ({
-  getOption: identity,
-  reverseGet: O.some
-})
+export const some: <A>() => Prism<O.Option<A>, A> = I.prismSome
 
 /**
  * @category constructors
  * @since 2.3.0
  */
-export const fromNullable = <A>(): Prism<A, NonNullable<A>> => ({
-  getOption: O.fromNullable,
-  reverseGet: identity
-})
+export const fromNullable: <A>() => Prism<A, NonNullable<A>> = I.prismFromNullable
 
 // -------------------------------------------------------------------------------------
 // converters
@@ -65,7 +66,7 @@ export const fromNullable = <A>(): Prism<A, NonNullable<A>> => ({
  * @category converters
  * @since 2.3.0
  */
-export const asOptional = I.prismAsOptional
+export const asOptional: <S, A>(sa: Prism<S, A>) => Optional<S, A> = I.prismAsOptional
 
 /**
  * View a `Prism` as a `Traversal`
@@ -73,7 +74,7 @@ export const asOptional = I.prismAsOptional
  * @category converters
  * @since 2.3.0
  */
-export const asTraversal = I.prismAsTraversal
+export const asTraversal: <S, A>(sa: Prism<S, A>) => Traversal<S, A> = I.prismAsTraversal
 
 // -------------------------------------------------------------------------------------
 // compositions
@@ -85,7 +86,7 @@ export const asTraversal = I.prismAsTraversal
  * @category compositions
  * @since 2.3.0
  */
-export const composeIso = I.prismComposeIso
+export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B> = I.prismComposeIso
 
 /**
  * Compose a `Prism` with a `Prism`
@@ -93,7 +94,7 @@ export const composeIso = I.prismComposeIso
  * @category compositions
  * @since 2.3.0
  */
-export const compose = I.prismComposePrism
+export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B> = I.prismComposePrism
 
 /**
  * Compose a `Prism` with a `Lens`
@@ -101,7 +102,7 @@ export const compose = I.prismComposePrism
  * @category compositions
  * @since 2.3.0
  */
-export const composeLens = I.prismComposeLens
+export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B> = I.prismComposeLens
 
 /**
  * Compose a `Prism` with a `Optional`
@@ -109,7 +110,8 @@ export const composeLens = I.prismComposeLens
  * @category compositions
  * @since 2.3.0
  */
-export const composeOptional = I.prismComposeOptional
+export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B> =
+  I.prismComposeOptional
 
 /**
  * Compose a `Prism` with a `Traversal`
@@ -117,7 +119,8 @@ export const composeOptional = I.prismComposeOptional
  * @category compositions
  * @since 2.3.0
  */
-export const composeTraversal = I.prismComposeTraversal
+export const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Prism<S, A>) => Traversal<S, B> =
+  I.prismComposeTraversal
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -127,19 +130,19 @@ export const composeTraversal = I.prismComposeTraversal
  * @category combinators
  * @since 2.3.0
  */
-export const modifyOption = I.prismModifyOption
+export const modifyOption: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => O.Option<S> = I.prismModifyOption
 
 /**
  * @category combinators
  * @since 2.3.0
  */
-export const modify = I.prismModify
+export const modify: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => S = I.prismModify
 
 /**
  * @category combinators
  * @since 2.3.0
  */
-export const set = I.prismSet
+export const set: <A>(a: A) => <S>(sa: Prism<S, A>) => (s: S) => S = I.prismSet
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -151,7 +154,7 @@ export const set = I.prismSet
  * @category combinators
  * @since 2.3.0
  */
-export const prop = I.prismProp
+export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Prism<S, A>) => Optional<S, A[P]> = I.prismProp
 
 /**
  * Return a `Optional` from a `Prism` and a list of props
@@ -159,4 +162,5 @@ export const prop = I.prismProp
  * @category combinators
  * @since 2.3.0
  */
-export const props = I.prismProps
+export const props: <A, P extends keyof A>(...props: P[]) => <S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }> =
+  I.prismProps

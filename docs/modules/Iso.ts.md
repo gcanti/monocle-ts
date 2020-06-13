@@ -22,7 +22,7 @@ Added in v2.3.0
 - [combinators](#combinators)
   - [modify](#modify)
 - [compositions](#compositions)
-  - [compose](#compose)
+  - [composeIso](#composeiso)
   - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
@@ -54,14 +54,14 @@ Added in v2.3.0
 
 # compositions
 
-## compose
+## composeIso
 
 Compose an `Iso` with an `Iso`
 
 **Signature**
 
 ```ts
-export declare const compose: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B>
+export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B>
 ```
 
 Added in v2.3.0
