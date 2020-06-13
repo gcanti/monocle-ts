@@ -105,6 +105,10 @@ export const lensId = <S>(): Lens<S, S> => ({
 })
 
 /** @internal */
+export const lensFromNullable = <S, A>(sa: Lens<S, A>): Optional<S, NonNullable<A>> =>
+  lensComposePrism(prismFromNullable<A>())(sa)
+
+/** @internal */
 export const lensProp = <A, P extends keyof A>(prop: P) => <S>(lens: Lens<S, A>): Lens<S, A[P]> => ({
   get: (s) => lens.get(s)[prop],
   set: (a) => (s) => (a === lens.get(s)[prop] ? s : Object.assign({}, s, { [prop]: a }))
@@ -132,6 +136,9 @@ export const lensProps = <A, P extends keyof A>(...props: Array<P>) => <S>(
     return s
   }
 })
+
+/** @internal */
+export const lensSome = <S, A>(lens: Lens<S, O.Option<A>>): Optional<S, A> => lensComposePrism(prismSome<A>())(lens)
 
 // -------------------------------------------------------------------------------------
 // Prism
@@ -201,7 +208,7 @@ export const prismComposeTraversal = <A, B>(ab: Traversal<A, B>) => <S>(sa: Pris
   traversalComposeTraversal(ab)(prismAsTraversal(sa))
 
 /** @internal */
-export const prismfromNullable = <A>(): Prism<A, NonNullable<A>> => ({
+export const prismFromNullable = <A>(): Prism<A, NonNullable<A>> => ({
   getOption: O.fromNullable,
   reverseGet: identity
 })
@@ -224,6 +231,12 @@ export function prismFromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
     reverseGet: identity
   }
 }
+
+/** @internal */
+export const prismSome = <A>(): Prism<O.Option<A>, A> => ({
+  getOption: identity,
+  reverseGet: O.some
+})
 
 // -------------------------------------------------------------------------------------
 // Optional

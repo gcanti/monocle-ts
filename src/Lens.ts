@@ -16,6 +16,10 @@ import { Category2 } from 'fp-ts/lib/Category'
 import { Semigroupoid2 } from 'fp-ts/lib/Semigroupoid'
 import * as I from './internal'
 import { Optional } from './Optional'
+import { Option } from 'fp-ts/lib/Option'
+import { Iso } from './Iso'
+import { Prism } from './Prism'
+import { Traversal } from './Traversal'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -38,15 +42,7 @@ export interface Lens<S, A> {
  * @category constructors
  * @since 2.3.0
  */
-export const id = I.lensId
-
-/**
- * @category constructors
- * @since 2.3.0
- */
-export const fromNullable: <S, A>(sa: Lens<S, A>) => Optional<S, NonNullable<A>> =
-  /*#__PURE__*/
-  I.lensComposePrism(I.prismfromNullable())
+export const id: <S>() => Lens<S, S> = I.lensId
 
 // -------------------------------------------------------------------------------------
 // converters
@@ -58,7 +54,7 @@ export const fromNullable: <S, A>(sa: Lens<S, A>) => Optional<S, NonNullable<A>>
  * @category converters
  * @since 2.3.0
  */
-export const asOptional = I.lensAsOptional
+export const asOptional: <S, A>(sa: Lens<S, A>) => Optional<S, A> = I.lensAsOptional
 
 /**
  * View a `Lens` as a `Traversal`
@@ -66,7 +62,7 @@ export const asOptional = I.lensAsOptional
  * @category converters
  * @since 2.3.0
  */
-export const asTraversal = I.lensAsTraversal
+export const asTraversal: <S, A>(sa: Lens<S, A>) => Traversal<S, A> = I.lensAsTraversal
 
 // -------------------------------------------------------------------------------------
 // compositions
@@ -78,7 +74,7 @@ export const asTraversal = I.lensAsTraversal
  * @category compositions
  * @since 2.3.0
  */
-export const composeIso = I.lensComposeIso
+export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B> = I.lensComposeIso
 
 /**
  * Compose a `Lens` with a `Lens`
@@ -86,7 +82,7 @@ export const composeIso = I.lensComposeIso
  * @category compositions
  * @since 2.3.0
  */
-export const compose = I.lensComposeLens
+export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B> = I.lensComposeLens
 
 /**
  * Compose a `Lens` with a `Prism`
@@ -94,7 +90,7 @@ export const compose = I.lensComposeLens
  * @category compositions
  * @since 2.3.0
  */
-export const composePrism = I.lensComposePrism
+export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>) => Optional<S, B> = I.lensComposePrism
 
 /**
  * Compose a `Lens` with a `Optional`
@@ -102,7 +98,8 @@ export const composePrism = I.lensComposePrism
  * @category compositions
  * @since 2.3.0
  */
-export const composeOptional = I.lensComposeOptional
+export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Lens<S, A>) => Optional<S, B> =
+  I.lensComposeOptional
 
 /**
  * Compose a `Lens` with a `Traversal`
@@ -110,7 +107,8 @@ export const composeOptional = I.lensComposeOptional
  * @category compositions
  * @since 2.3.0
  */
-export const composeTraversal = I.lensComposeTraversal
+export const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Lens<S, A>) => Traversal<S, B> =
+  I.lensComposeTraversal
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -127,12 +125,20 @@ export const modify = <A>(f: (a: A) => A) => <S>(lens: Lens<S, A>) => (s: S): S 
 }
 
 /**
+ * Return a `Optional` from a `Lens` focused on a nullable value
+ *
+ * @category constructors
+ * @since 2.3.0
+ */
+export const fromNullable: <S, A>(sa: Lens<S, A>) => Optional<S, NonNullable<A>> = I.lensFromNullable
+
+/**
  * Return a `Lens` from a `Lens` and a prop
  *
  * @category combinators
  * @since 2.3.0
  */
-export const prop = I.lensProp
+export const prop: <A, P extends keyof A>(prop: P) => <S>(lens: Lens<S, A>) => Lens<S, A[P]> = I.lensProp
 
 /**
  * Return a `Lens` from a `Lens` and a list of props
@@ -140,7 +146,16 @@ export const prop = I.lensProp
  * @category combinators
  * @since 2.3.0
  */
-export const props = I.lensProps
+export const props: <A, P extends keyof A>(...props: P[]) => <S>(lens: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> =
+  I.lensProps
+
+/**
+ * Return a `Optional` from a `Lens` focused on a nullable type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const some: <S, A>(lens: Lens<S, Option<A>>) => Optional<S, A> = I.lensSome
 
 // -------------------------------------------------------------------------------------
 // instances
@@ -164,7 +179,7 @@ declare module 'fp-ts/lib/HKT' {
   }
 }
 
-const compose_: Semigroupoid2<URI>['compose'] = (ab, ea) => compose(ab)(ea)
+const compose_: Semigroupoid2<URI>['compose'] = (ab, ea) => composeLens(ab)(ea)
 
 /**
  * @category instances

@@ -21,6 +21,10 @@ import * as I from './internal'
 // -------------------------------------------------------------------------------------
 
 import Option = O.Option
+import { Traversal } from './Traversal'
+import { Iso } from './Iso'
+import { Lens } from './Lens'
+import { Prism } from './Prism'
 
 /**
  * @category model
@@ -41,7 +45,7 @@ export interface Optional<S, A> {
  * @category converters
  * @since 2.3.0
  */
-export const asTraversal = I.optionalAsTraversal
+export const asTraversal: <S, A>(sa: Optional<S, A>) => Traversal<S, A> = I.optionalAsTraversal
 
 // -------------------------------------------------------------------------------------
 // compositions
@@ -53,7 +57,7 @@ export const asTraversal = I.optionalAsTraversal
  * @category compositions
  * @since 2.3.0
  */
-export const composeIso = I.optionalComposeIso
+export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> = I.optionalComposeIso
 
 /**
  * Compose a `Optional` with a `Lens`
@@ -61,7 +65,7 @@ export const composeIso = I.optionalComposeIso
  * @category compositions
  * @since 2.3.0
  */
-export const composeLens = I.optionalComposeLens
+export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> = I.optionalComposeLens
 
 /**
  * Compose a `Optional` with a `Prism`
@@ -69,7 +73,7 @@ export const composeLens = I.optionalComposeLens
  * @category compositions
  * @since 2.3.0
  */
-export const composePrism = I.optionalComposePrism
+export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> = I.optionalComposePrism
 
 /**
  * Compose a `Optional` with a `Optional`
@@ -77,7 +81,8 @@ export const composePrism = I.optionalComposePrism
  * @category compositions
  * @since 2.3.0
  */
-export const compose = I.optionalComposeOptional
+export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> =
+  I.optionalComposeOptional
 
 /**
  * Compose a `Optional` with a `Traversal`
@@ -85,7 +90,8 @@ export const compose = I.optionalComposeOptional
  * @category compositions
  * @since 2.3.0
  */
-export const composeTraversal = I.optionalComposeTraversal
+export const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Optional<S, A>) => Traversal<S, B> =
+  I.optionalComposeTraversal
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -95,13 +101,14 @@ export const composeTraversal = I.optionalComposeTraversal
  * @category combinators
  * @since 2.3.0
  */
-export const modifyOption = I.optionalModifyOption
+export const modifyOption: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => O.Option<S> =
+  I.optionalModifyOption
 
 /**
  * @category combinators
  * @since 2.3.0
  */
-export const modify = I.optionalModify
+export const modify: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => S = I.optionalModify
 
 /**
  * Return a `Optional` from a `Optional` and a prop
@@ -109,7 +116,7 @@ export const modify = I.optionalModify
  * @category combinators
  * @since 2.3.0
  */
-export const prop = I.optionalProp
+export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Optional<S, A>) => Optional<S, A[P]> = I.optionalProp
 
 /**
  * Return a `Optional` from a `Optional` and a list of props
@@ -117,4 +124,6 @@ export const prop = I.optionalProp
  * @category combinators
  * @since 2.3.0
  */
-export const props = I.optionalProps
+export const props: <A, P extends keyof A>(
+  ...props: P[]
+) => <S>(sa: Optional<S, A>) => Optional<S, { [K in P]: A[K] }> = I.optionalProps

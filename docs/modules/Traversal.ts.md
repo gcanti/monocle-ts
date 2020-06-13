@@ -25,11 +25,11 @@ Added in v2.3.0
   - [props](#props)
   - [set](#set)
 - [compositions](#compositions)
-  - [compose](#compose)
   - [composeIso](#composeiso)
   - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
+  - [composeTraversal](#composetraversal)
 - [constructor](#constructor)
   - [fromTraversable](#fromtraversable)
 - [model](#model)
@@ -100,18 +100,6 @@ Added in v2.3.0
 
 # compositions
 
-## compose
-
-Compose a `Traversal` with a `Traversal`
-
-**Signature**
-
-```ts
-export declare const compose: typeof I.traversalComposeTraversal
-```
-
-Added in v2.3.0
-
 ## composeIso
 
 Compose a `Traversal` with an `Iso`
@@ -119,7 +107,7 @@ Compose a `Traversal` with an `Iso`
 **Signature**
 
 ```ts
-export declare const composeIso: typeof I.traversalComposeIso
+export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
 ```
 
 Added in v2.3.0
@@ -131,7 +119,7 @@ Compose a `Traversal` with a `Lens`
 **Signature**
 
 ```ts
-export declare const composeLens: typeof I.traversalComposeLens
+export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
 ```
 
 Added in v2.3.0
@@ -143,7 +131,7 @@ Compose a `Traversal` with a `Optional`
 **Signature**
 
 ```ts
-export declare const composeOptional: typeof I.traversalComposeOptional
+export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
 ```
 
 Added in v2.3.0
@@ -155,7 +143,19 @@ Compose a `Traversal` with a `Prism`
 **Signature**
 
 ```ts
-export declare const composePrism: typeof I.traversalComposePrism
+export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.0
+
+## composeTraversal
+
+Compose a `Traversal` with a `Traversal`
+
+**Signature**
+
+```ts
+export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
 ```
 
 Added in v2.3.0

@@ -14,6 +14,10 @@ import { identity } from 'fp-ts/lib/Identity'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
 import { ModifyF } from '.'
 import * as I from './internal'
+import { Iso } from './Iso'
+import { Lens } from './Lens'
+import { Prism } from './Prism'
+import { Optional } from './Optional'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -60,7 +64,7 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
  * @category compositions
  * @since 2.3.0
  */
-export const composeIso = I.traversalComposeIso
+export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> = I.traversalComposeIso
 
 /**
  * Compose a `Traversal` with a `Lens`
@@ -68,7 +72,7 @@ export const composeIso = I.traversalComposeIso
  * @category compositions
  * @since 2.3.0
  */
-export const composeLens = I.traversalComposeLens
+export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> = I.traversalComposeLens
 
 /**
  * Compose a `Traversal` with a `Prism`
@@ -76,7 +80,8 @@ export const composeLens = I.traversalComposeLens
  * @category compositions
  * @since 2.3.0
  */
-export const composePrism = I.traversalComposePrism
+export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
+  I.traversalComposePrism
 
 /**
  * Compose a `Traversal` with a `Optional`
@@ -84,7 +89,8 @@ export const composePrism = I.traversalComposePrism
  * @category compositions
  * @since 2.3.0
  */
-export const composeOptional = I.traversalComposeOptional
+export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
+  I.traversalComposeOptional
 
 /**
  * Compose a `Traversal` with a `Traversal`
@@ -92,7 +98,8 @@ export const composeOptional = I.traversalComposeOptional
  * @category compositions
  * @since 2.3.0
  */
-export const compose = I.traversalComposeTraversal
+export const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
+  I.traversalComposeTraversal
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -130,7 +137,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(traversal: Traversal<S, 
  * @category combinators
  * @since 2.3.0
  */
-export const prop = I.traversalProp
+export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Traversal<S, A>) => Traversal<S, A[P]> = I.traversalProp
 
 /**
  * Return a `Traversal` from a `Traversal` and a list of props
@@ -138,4 +145,6 @@ export const prop = I.traversalProp
  * @category combinators
  * @since 2.3.0
  */
-export const props = I.traversalProps
+export const props: <A, P extends keyof A>(
+  ...props: P[]
+) => <S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }> = I.traversalProps

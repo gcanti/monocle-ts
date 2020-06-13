@@ -27,9 +27,10 @@ Added in v2.3.0
   - [modify](#modify)
   - [prop](#prop)
   - [props](#props)
+  - [some](#some)
 - [compositions](#compositions)
-  - [compose](#compose)
   - [composeIso](#composeiso)
+  - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
   - [composeTraversal](#composetraversal)
@@ -87,19 +88,19 @@ export declare const props: <A, P extends keyof A>(
 
 Added in v2.3.0
 
-# compositions
+## some
 
-## compose
-
-Compose a `Lens` with a `Lens`
+Return a `Optional` from a `Lens` focused on a nullable type
 
 **Signature**
 
 ```ts
-export declare const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
+export declare const some: <S, A>(lens: Lens<S, Option<A>>) => Optional<S, A>
 ```
 
 Added in v2.3.0
+
+# compositions
 
 ## composeIso
 
@@ -109,6 +110,18 @@ Compose a `Lens` with an `Iso`
 
 ```ts
 export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
+```
+
+Added in v2.3.0
+
+## composeLens
+
+Compose a `Lens` with a `Lens`
+
+**Signature**
+
+```ts
+export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
 ```
 
 Added in v2.3.0
@@ -152,6 +165,8 @@ Added in v2.3.0
 # constructors
 
 ## fromNullable
+
+Return a `Optional` from a `Lens` focused on a nullable value
 
 **Signature**
 

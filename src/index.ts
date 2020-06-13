@@ -155,7 +155,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Iso<A, B>): Iso<S, B> {
-    return fromIso(I.compose(ab)(this))
+    return fromIso(I.composeIso(ab)(this))
   }
 
   /**
@@ -448,7 +448,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Lens<A, B>): Lens<S, B> {
-    return fromLens(L.compose(ab)(this))
+    return fromLens(L.composeLens(ab)(this))
   }
 
   /**
@@ -634,7 +634,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Prism<A, B>): Prism<S, B> {
-    return fromPrism(P.compose(ab)(this))
+    return fromPrism(P.composePrism(ab)(this))
   }
 
   /**
@@ -917,7 +917,7 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Optional<A, B>): Optional<S, B> {
-    return fromOptional(O.compose(ab)(this))
+    return fromOptional(O.composeOptional(ab)(this))
   }
 
   /**
@@ -1085,7 +1085,7 @@ export class Traversal<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return fromTraversal(T.compose(ab)(this))
+    return fromTraversal(T.composeTraversal(ab)(this))
   }
 
   /**
