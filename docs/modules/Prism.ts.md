@@ -25,6 +25,7 @@ Added in v2.3.0
   - [prop](#prop)
   - [props](#props)
   - [set](#set)
+  - [some](#some)
 - [compositions](#compositions)
   - [composeIso](#composeiso)
   - [composeLens](#composelens)
@@ -34,7 +35,8 @@ Added in v2.3.0
 - [constructors](#constructors)
   - [fromNullable](#fromnullable)
   - [fromPredicate](#frompredicate)
-  - [some](#some)
+  - [fromSome](#fromsome)
+  - [id](#id)
 - [converters](#converters)
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
@@ -97,6 +99,18 @@ Added in v2.3.0
 
 ```ts
 export declare const set: <A>(a: A) => <S>(sa: Prism<S, A>) => (s: S) => S
+```
+
+Added in v2.3.0
+
+## some
+
+Return a `Prism` from a `Prism` focused on a `Option` type
+
+**Signature**
+
+```ts
+export declare const some: <S, A>(soa: Prism<S, O.Option<A>>) => Prism<S, A>
 ```
 
 Added in v2.3.0
@@ -188,12 +202,22 @@ export declare const fromPredicate: {
 
 Added in v2.3.0
 
-## some
+## fromSome
 
 **Signature**
 
 ```ts
-export declare const some: <A>() => Prism<O.Option<A>, A>
+export declare const fromSome: <A>() => Prism<O.Option<A>, A>
+```
+
+Added in v2.3.0
+
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Prism<S, S>
 ```
 
 Added in v2.3.0

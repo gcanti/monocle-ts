@@ -25,6 +25,7 @@ import { Traversal } from './Traversal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
 import { Prism } from './Prism'
+import { pipe } from 'fp-ts/lib/pipeable'
 
 /**
  * @category model
@@ -116,7 +117,8 @@ export const modify: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s:
  * @category combinators
  * @since 2.3.0
  */
-export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Optional<S, A>) => Optional<S, A[P]> = I.optionalProp
+export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Optional<S, A>) => Optional<S, A[P]>) =>
+  composeLens(pipe(I.lensId<A>(), I.lensProp(prop)))
 
 /**
  * Return a `Optional` from a `Optional` and a list of props
@@ -124,6 +126,15 @@ export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Optional<S, A>) =>
  * @category combinators
  * @since 2.3.0
  */
-export const props: <A, P extends keyof A>(
+export const props = <A, P extends keyof A>(
   ...props: P[]
-) => <S>(sa: Optional<S, A>) => Optional<S, { [K in P]: A[K] }> = I.optionalProps
+): (<S>(sa: Optional<S, A>) => Optional<S, { [K in P]: A[K] }>) =>
+  composeLens(pipe(I.lensId<A>(), I.lensProps(...props)))
+
+/**
+ * Return a `Optional` from a `Optional` focused on a `Option` type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> = composePrism(I.prismFromSome())

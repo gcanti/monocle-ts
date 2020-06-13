@@ -24,6 +24,7 @@ Added in v2.3.0
   - [prop](#prop)
   - [props](#props)
   - [set](#set)
+  - [some](#some)
 - [compositions](#compositions)
   - [composeIso](#composeiso)
   - [composeLens](#composelens)
@@ -94,6 +95,18 @@ Added in v2.3.0
 
 ```ts
 export declare const set: <A>(a: A) => <S>(sa: Traversal<S, A>) => (s: S) => S
+```
+
+Added in v2.3.0
+
+## some
+
+Return a `Traversal` from a `Traversal` focused on a `Option` type
+
+**Signature**
+
+```ts
+export declare const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A>
 ```
 
 Added in v2.3.0

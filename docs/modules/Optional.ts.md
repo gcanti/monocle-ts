@@ -29,6 +29,7 @@ Added in v2.3.0
   - [modifyOption](#modifyoption)
   - [prop](#prop)
   - [props](#props)
+  - [some](#some)
 - [compositions](#compositions)
   - [composeIso](#composeiso)
   - [composeLens](#composelens)
@@ -86,6 +87,18 @@ Return a `Optional` from a `Optional` and a list of props
 export declare const props: <A, P extends keyof A>(
   ...props: P[]
 ) => <S>(sa: Optional<S, A>) => Optional<S, { [K in P]: A[K] }>
+```
+
+Added in v2.3.0
+
+## some
+
+Return a `Optional` from a `Optional` focused on a `Option` type
+
+**Signature**
+
+```ts
+export declare const some: <S, A>(soa: Optional<S, O.Option<A>>) => Optional<S, A>
 ```
 
 Added in v2.3.0

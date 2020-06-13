@@ -2,7 +2,7 @@
  * @since 2.3.0
  */
 import { Applicative } from 'fp-ts/lib/Applicative'
-import { constant, flow, identity, Refinement, Predicate } from 'fp-ts/lib/function'
+import { constant, flow, identity, Predicate } from 'fp-ts/lib/function'
 import { HKT } from 'fp-ts/lib/HKT'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
@@ -137,9 +137,6 @@ export const lensProps = <A, P extends keyof A>(...props: Array<P>) => <S>(
   }
 })
 
-/** @internal */
-export const lensSome = <S, A>(lens: Lens<S, O.Option<A>>): Optional<S, A> => lensComposePrism(prismSome<A>())(lens)
-
 // -------------------------------------------------------------------------------------
 // Prism
 // -------------------------------------------------------------------------------------
@@ -214,17 +211,6 @@ export const prismFromNullable = <A>(): Prism<A, NonNullable<A>> => ({
 })
 
 /** @internal */
-export const prismProp = <A, P extends keyof A>(prop: P): (<S>(sa: Prism<S, A>) => Optional<S, A[P]>) =>
-  prismComposeLens(pipe(lensId<A>(), lensProp(prop)))
-
-/** @internal */
-export const prismProps = <A, P extends keyof A>(
-  ...props: Array<P>
-): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) => prismComposeLens(pipe(lensId<A>(), lensProps(...props)))
-
-export function prismFromPredicate<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
-export function prismFromPredicate<A>(predicate: Predicate<A>): Prism<A, A>
-/** @internal */
 export function prismFromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
   return {
     getOption: (s) => (predicate(s) ? O.some(s) : O.none),
@@ -233,7 +219,7 @@ export function prismFromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
 }
 
 /** @internal */
-export const prismSome = <A>(): Prism<O.Option<A>, A> => ({
+export const prismFromSome = <A>(): Prism<O.Option<A>, A> => ({
   getOption: identity,
   reverseGet: O.some
 })
@@ -296,16 +282,6 @@ export const optionalComposeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Opt
 export const optionalComposeTraversal = <A, B>(ab: Traversal<A, B>) => <S>(sa: Optional<S, A>): Traversal<S, B> =>
   traversalComposeTraversal(ab)(optionalAsTraversal(sa))
 
-/** @internal */
-export const optionalProp = <A, P extends keyof A>(prop: P): (<S>(sa: Optional<S, A>) => Optional<S, A[P]>) =>
-  optionalComposeLens(pipe(lensId<A>(), lensProp(prop)))
-
-/** @internal */
-export const optionalProps = <A, P extends keyof A>(
-  ...props: Array<P>
-): (<S>(sa: Optional<S, A>) => Optional<S, { [K in P]: A[K] }>) =>
-  optionalComposeLens(pipe(lensId<A>(), lensProps(...props)))
-
 // -------------------------------------------------------------------------------------
 // Traversal
 // -------------------------------------------------------------------------------------
@@ -336,13 +312,3 @@ export function traversalComposeTraversal<A, B>(ab: Traversal<A, B>): <S>(sa: Tr
     modifyF: <F>(F: Applicative<F>) => (f: (a: B) => HKT<F, B>) => sa.modifyF(F)(ab.modifyF(F)(f))
   })
 }
-
-/** @internal */
-export const traversalProp = <A, P extends keyof A>(prop: P): (<S>(sa: Traversal<S, A>) => Traversal<S, A[P]>) =>
-  traversalComposeLens(pipe(lensId<A>(), lensProp(prop)))
-
-/** @internal */
-export const traversalProps = <A, P extends keyof A>(
-  ...props: Array<P>
-): (<S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }>) =>
-  traversalComposeLens(pipe(lensId<A>(), lensProps(...props)))
