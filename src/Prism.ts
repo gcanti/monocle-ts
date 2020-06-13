@@ -16,11 +16,12 @@ import * as I from './internal'
 // -------------------------------------------------------------------------------------
 
 import Option = O.Option
-import { Refinement, Predicate } from 'fp-ts/lib/function'
+import { Refinement, Predicate, identity } from 'fp-ts/lib/function'
 import { Optional } from './Optional'
 import { Traversal } from './Traversal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
+import { pipe } from 'fp-ts/lib/pipeable'
 
 /**
  * @category model
@@ -39,6 +40,15 @@ export interface Prism<S, A> {
  * @category constructors
  * @since 2.3.0
  */
+export const id = <S>(): Prism<S, S> => ({
+  getOption: O.some,
+  reverseGet: identity
+})
+
+/**
+ * @category constructors
+ * @since 2.3.0
+ */
 export const fromPredicate: {
   <S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
   <A>(predicate: Predicate<A>): Prism<A, A>
@@ -48,7 +58,7 @@ export const fromPredicate: {
  * @category constructors
  * @since 2.3.0
  */
-export const some: <A>() => Prism<O.Option<A>, A> = I.prismSome
+export const fromSome: <A>() => Prism<O.Option<A>, A> = I.prismFromSome
 
 /**
  * @category constructors
@@ -154,7 +164,8 @@ export const set: <A>(a: A) => <S>(sa: Prism<S, A>) => (s: S) => S = I.prismSet
  * @category combinators
  * @since 2.3.0
  */
-export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Prism<S, A>) => Optional<S, A[P]> = I.prismProp
+export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Prism<S, A>) => Optional<S, A[P]>) =>
+  composeLens(pipe(I.lensId<A>(), I.lensProp(prop)))
 
 /**
  * Return a `Optional` from a `Prism` and a list of props
@@ -162,5 +173,13 @@ export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Prism<S, A>) => Op
  * @category combinators
  * @since 2.3.0
  */
-export const props: <A, P extends keyof A>(...props: P[]) => <S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }> =
-  I.prismProps
+export const props = <A, P extends keyof A>(...props: P[]): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) =>
+  composeLens(pipe(I.lensId<A>(), I.lensProps(...props)))
+
+/**
+ * Return a `Prism` from a `Prism` focused on a `Option` type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> = composePrism(I.prismFromSome())

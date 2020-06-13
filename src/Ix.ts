@@ -6,7 +6,6 @@ import { At } from './At'
 import * as I from './internal'
 import { Iso } from './Iso'
 import { Optional } from './Optional'
-import * as P from './Prism'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -29,7 +28,7 @@ export interface Index<S, I, A> {
  * @since 2.3.0
  */
 export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> => ({
-  index: (i) => I.lensComposePrism(P.some<B>())(at.at(i))
+  index: (i) => I.lensComposePrism(I.prismFromSome<B>())(at.at(i))
 })
 
 /**

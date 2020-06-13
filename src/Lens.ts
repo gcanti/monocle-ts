@@ -150,12 +150,12 @@ export const props: <A, P extends keyof A>(...props: P[]) => <S>(lens: Lens<S, A
   I.lensProps
 
 /**
- * Return a `Optional` from a `Lens` focused on a nullable type
+ * Return a `Optional` from a `Lens` focused on a `Option` type
  *
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(lens: Lens<S, Option<A>>) => Optional<S, A> = I.lensSome
+export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> = composePrism(I.prismFromSome())
 
 // -------------------------------------------------------------------------------------
 // instances
