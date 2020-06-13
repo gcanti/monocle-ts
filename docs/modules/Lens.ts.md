@@ -24,10 +24,12 @@ Added in v2.3.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [combinators](#combinators)
+  - [index](#index)
   - [modify](#modify)
   - [prop](#prop)
   - [props](#props)
   - [some](#some)
+  - [traverse](#traverse)
 - [compositions](#compositions)
   - [composeIso](#composeiso)
   - [composeLens](#composelens)
@@ -51,6 +53,18 @@ Added in v2.3.0
 ---
 
 # combinators
+
+## index
+
+Return a `Optional` from a `Lens` focused on a `ReadonlyArray`
+
+**Signature**
+
+```ts
+export declare const index: (i: number) => <S, A>(sa: Lens<S, readonly A[]>) => Optional<S, A>
+```
+
+Added in v2.3.0
 
 ## modify
 
@@ -96,6 +110,28 @@ Return a `Optional` from a `Lens` focused on a `Option` type
 
 ```ts
 export declare const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A>
+```
+
+Added in v2.3.0
+
+## traverse
+
+Return a `Traversal` from a `Lens` focused on a `Traversable`
+
+**Signature**
+
+```ts
+export declare const traverse: <T extends
+  | 'ReadonlyRecord'
+  | 'Ord'
+  | 'Eq'
+  | 'Option'
+  | 'Identity'
+  | 'NonEmptyArray'
+  | 'Array'
+  | 'Record'>(
+  T: Traversable1<T>
+) => <S, A>(sta: Lens<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
 Added in v2.3.0

@@ -13,13 +13,15 @@
  * @since 2.3.0
  */
 import { Category2 } from 'fp-ts/lib/Category'
+import { Option } from 'fp-ts/lib/Option'
 import { Semigroupoid2 } from 'fp-ts/lib/Semigroupoid'
 import * as I from './internal'
-import { Optional } from './Optional'
-import { Option } from 'fp-ts/lib/Option'
 import { Iso } from './Iso'
+import { Optional } from './Optional'
 import { Prism } from './Prism'
 import { Traversal } from './Traversal'
+import { URIS, Kind } from 'fp-ts/lib/HKT'
+import { Traversable1 } from 'fp-ts/lib/Traversable'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -156,6 +158,24 @@ export const props: <A, P extends keyof A>(...props: P[]) => <S>(lens: Lens<S, A
  * @since 2.3.0
  */
 export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> = composePrism(I.prismFromSome())
+
+/**
+ * Return a `Traversal` from a `Lens` focused on a `Traversable`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const traverse = <T extends URIS>(T: Traversable1<T>) => <S, A>(sta: Lens<S, Kind<T, A>>): Traversal<S, A> =>
+  composeTraversal(I.fromTraversable(T)<A>())(sta)
+
+/**
+ * Return a `Optional` from a `Lens` focused on a `ReadonlyArray`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const index = (i: number) => <S, A>(sa: Lens<S, ReadonlyArray<A>>): Optional<S, A> =>
+  composeOptional(I.indexReadonlyArray<A>().index(i))(sa)
 
 // -------------------------------------------------------------------------------------
 // instances
