@@ -9,7 +9,7 @@
  * @since 2.3.0
  */
 import { identity } from 'fp-ts/lib/function'
-import * as I from './internal'
+import * as _ from './internal'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
@@ -51,7 +51,7 @@ export const id = <S>(): Iso<S, S> => ({
  * @category converters
  * @since 2.3.0
  */
-export const asLens: <S, A>(sa: Iso<S, A>) => Lens<S, A> = I.isoAsLens
+export const asLens: <S, A>(sa: Iso<S, A>) => Lens<S, A> = _.isoAsLens
 
 /**
  * View an `Iso` as a `Prism`
@@ -59,7 +59,7 @@ export const asLens: <S, A>(sa: Iso<S, A>) => Lens<S, A> = I.isoAsLens
  * @category converters
  * @since 2.3.0
  */
-export const asPrism: <S, A>(sa: Iso<S, A>) => Prism<S, A> = I.isoAsPrism
+export const asPrism: <S, A>(sa: Iso<S, A>) => Prism<S, A> = _.isoAsPrism
 
 /**
  * View an `Iso` as a `Optional`
@@ -67,7 +67,7 @@ export const asPrism: <S, A>(sa: Iso<S, A>) => Prism<S, A> = I.isoAsPrism
  * @category converters
  * @since 2.3.0
  */
-export const asOptional: <S, A>(sa: Iso<S, A>) => Optional<S, A> = I.isoAsOptional
+export const asOptional: <S, A>(sa: Iso<S, A>) => Optional<S, A> = _.isoAsOptional
 
 /**
  * View an `Iso` as a `Traversal`
@@ -75,7 +75,7 @@ export const asOptional: <S, A>(sa: Iso<S, A>) => Optional<S, A> = I.isoAsOption
  * @category converters
  * @since 2.3.0
  */
-export const asTraversal: <S, A>(sa: Iso<S, A>) => Traversal<S, A> = I.isoAsTraversal
+export const asTraversal: <S, A>(sa: Iso<S, A>) => Traversal<S, A> = _.isoAsTraversal
 
 // -------------------------------------------------------------------------------------
 // compositions
@@ -87,7 +87,7 @@ export const asTraversal: <S, A>(sa: Iso<S, A>) => Traversal<S, A> = I.isoAsTrav
  * @category compositions
  * @since 2.3.0
  */
-export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B> = I.isoComposeIso
+export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B> = _.isoComposeIso
 
 /**
  * Compose an `Iso` with a `Lens`
@@ -95,7 +95,7 @@ export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B
  * @category compositions
  * @since 2.3.0
  */
-export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Iso<S, A>) => Lens<S, B> = I.isoComposeLens
+export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Iso<S, A>) => Lens<S, B> = _.isoComposeLens
 
 /**
  * Compose an `Iso` with a `Prism`
@@ -103,7 +103,7 @@ export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Iso<S, A>) => Lens<S
  * @category compositions
  * @since 2.3.0
  */
-export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Iso<S, A>) => Prism<S, B> = I.isoComposePrism
+export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Iso<S, A>) => Prism<S, B> = _.isoComposePrism
 
 /**
  * Compose an `Iso` with a `Optional`
@@ -111,7 +111,7 @@ export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Iso<S, A>) => Pris
  * @category compositions
  * @since 2.3.0
  */
-export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Iso<S, A>) => Optional<S, B> = I.isoComposeOptional
+export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Iso<S, A>) => Optional<S, B> = _.isoComposeOptional
 
 /**
  * Compose an `Iso` with a `Traversal`
@@ -120,7 +120,7 @@ export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Iso<S, A>) =
  * @since 2.3.0
  */
 export const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Iso<S, A>) => Traversal<S, B> =
-  I.isoComposeTraversal
+  _.isoComposeTraversal
 
 // -------------------------------------------------------------------------------------
 // combinators

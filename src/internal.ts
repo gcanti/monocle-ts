@@ -1,19 +1,19 @@
 /**
  * @since 2.3.0
  */
-import { Applicative } from 'fp-ts/lib/Applicative'
+import { Applicative as _ } from 'fp-ts/lib/Applicative'
+import { lookup, updateAt } from 'fp-ts/lib/Array'
 import { constant, flow, identity, Predicate } from 'fp-ts/lib/function'
-import { HKT, URIS, Kind, URIS3, Kind3, URIS2, Kind2 } from 'fp-ts/lib/HKT'
+import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
+import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
 import { Iso } from './Iso'
+import { Index } from './Ix'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
 import { Traversal } from './Traversal'
-import { Traversable1, Traversable3, Traversable2, Traversable } from 'fp-ts/lib/Traversable'
-import { Index } from './Ix'
-import { lookup, updateAt } from 'fp-ts/lib/Array'
 
 // -------------------------------------------------------------------------------------
 // Iso
@@ -39,7 +39,7 @@ export const isoAsOptional = <S, A>(sa: Iso<S, A>): Optional<S, A> => ({
 
 /** @internal */
 export const isoAsTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.reverseGet(a))
+  modifyF: <F>(F: _<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.reverseGet(a))
 })
 
 /** @internal */
@@ -76,7 +76,7 @@ export const lensAsOptional = <S, A>(sa: Lens<S, A>): Optional<S, A> => ({
 
 /** @internal */
 export const lensAsTraversal = <S, A>(sa: Lens<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.set(a)(s))
+  modifyF: <F>(F: _<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.set(a)(s))
 })
 
 /** @internal */
@@ -152,7 +152,7 @@ export const prismAsOptional = <S, A>(sa: Prism<S, A>): Optional<S, A> => ({
 
 /** @internal */
 export const prismAsTraversal = <S, A>(sa: Prism<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
+  modifyF: <F>(F: _<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
     pipe(
       sa.getOption(s),
       O.fold(
@@ -216,7 +216,7 @@ export const prismFromNullable = <A>(): Prism<A, NonNullable<A>> => ({
 /** @internal */
 export function prismFromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
   return {
-    getOption: (s) => (predicate(s) ? O.some(s) : O.none),
+    getOption: O.fromPredicate(predicate),
     reverseGet: identity
   }
 }
@@ -233,7 +233,7 @@ export const prismFromSome = <A>(): Prism<O.Option<A>, A> => ({
 
 /** @internal */
 export const optionalAsTraversal = <S, A>(sa: Optional<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => {
+  modifyF: <F>(F: _<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => {
     const oa = sa.getOption(s)
     if (O.isNone(oa)) {
       return F.of(s)
@@ -312,7 +312,7 @@ export function traversalComposeOptional<A, B>(ab: Optional<A, B>): <S>(sa: Trav
 /** @internal */
 export function traversalComposeTraversal<A, B>(ab: Traversal<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B> {
   return (sa) => ({
-    modifyF: <F>(F: Applicative<F>) => (f: (a: B) => HKT<F, B>) => sa.modifyF(F)(ab.modifyF(F)(f))
+    modifyF: <F>(F: _<F>) => (f: (a: B) => HKT<F, B>) => sa.modifyF(F)(ab.modifyF(F)(f))
   })
 }
 
@@ -323,7 +323,7 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 /** @internal */
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
   return <A>() => ({
-    modifyF: <F>(F: Applicative<F>) => {
+    modifyF: <F>(F: _<F>) => {
       const traverseF = T.traverse(F)
       return (f: (a: A) => HKT<F, A>) => (s: HKT<T, A>) => traverseF(s, f)
     }

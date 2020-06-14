@@ -12,7 +12,7 @@ import { identity } from 'fp-ts/lib/Identity'
 import { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { ModifyF } from '.'
-import * as I from './internal'
+import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
@@ -42,7 +42,7 @@ export interface Traversal<S, A> {
  * @category constructor
  * @since 2.3.0
  */
-export const fromTraversable = I.fromTraversable
+export const fromTraversable = _.fromTraversable
 
 // -------------------------------------------------------------------------------------
 // compositions
@@ -54,7 +54,7 @@ export const fromTraversable = I.fromTraversable
  * @category compositions
  * @since 2.3.0
  */
-export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> = I.traversalComposeIso
+export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> = _.traversalComposeIso
 
 /**
  * Compose a `Traversal` with a `Lens`
@@ -62,7 +62,7 @@ export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Traversal<S, A>) => Tr
  * @category compositions
  * @since 2.3.0
  */
-export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> = I.traversalComposeLens
+export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> = _.traversalComposeLens
 
 /**
  * Compose a `Traversal` with a `Prism`
@@ -71,7 +71,7 @@ export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Traversal<S, A>) => 
  * @since 2.3.0
  */
 export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
-  I.traversalComposePrism
+  _.traversalComposePrism
 
 /**
  * Compose a `Traversal` with a `Optional`
@@ -80,7 +80,7 @@ export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Traversal<S, A>) =
  * @since 2.3.0
  */
 export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
-  I.traversalComposeOptional
+  _.traversalComposeOptional
 
 /**
  * Compose a `Traversal` with a `Traversal`
@@ -89,7 +89,7 @@ export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S,
  * @since 2.3.0
  */
 export const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
-  I.traversalComposeTraversal
+  _.traversalComposeTraversal
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -118,7 +118,7 @@ export const set = <A>(a: A): (<S>(sa: Traversal<S, A>) => (s: S) => S) => {
 export function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(traversal: Traversal<S, A>) => Traversal<S, B>
 export function filter<A>(predicate: Predicate<A>): <S>(traversal: Traversal<S, A>) => Traversal<S, A>
 export function filter<A>(predicate: Predicate<A>): <S>(traversal: Traversal<S, A>) => Traversal<S, A> {
-  return composePrism(I.prismFromPredicate(predicate))
+  return composePrism(_.prismFromPredicate(predicate))
 }
 
 /**
@@ -128,7 +128,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(traversal: Traversal<S, 
  * @since 2.3.0
  */
 export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Traversal<S, A>) => Traversal<S, A[P]>) =>
-  composeLens(pipe(I.lensId<A>(), I.lensProp(prop)))
+  composeLens(pipe(_.lensId<A>(), _.lensProp(prop)))
 
 /**
  * Return a `Traversal` from a `Traversal` and a list of props
@@ -139,7 +139,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Traversal<S, A>) =
 export const props = <A, P extends keyof A>(
   ...props: P[]
 ): (<S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }>) =>
-  composeLens(pipe(I.lensId<A>(), I.lensProps(...props)))
+  composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a `Option` type
@@ -147,7 +147,7 @@ export const props = <A, P extends keyof A>(
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = composePrism(I.prismFromSome())
+export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = composePrism(_.prismFromSome())
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a `Traversable`
@@ -166,4 +166,4 @@ export const traverse = <T extends URIS>(T: Traversable1<T>) => <S, A>(
  * @since 2.3.0
  */
 export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): Traversal<S, A> =>
-  composeOptional(I.indexReadonlyArray<A>().index(i))(sa)
+  composeOptional(_.indexReadonlyArray<A>().index(i))(sa)

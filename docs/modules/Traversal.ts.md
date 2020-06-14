@@ -133,13 +133,13 @@ Return a `Traversal` from a `Traversal` focused on a `Traversable`
 
 ```ts
 export declare const traverse: <T extends
+  | 'Option'
   | 'ReadonlyRecord'
   | 'Ord'
   | 'Eq'
-  | 'Option'
-  | 'Identity'
   | 'NonEmptyArray'
   | 'Array'
+  | 'Identity'
   | 'Record'>(
   T: Traversable1<T>
 ) => <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A>
@@ -218,7 +218,7 @@ Create a `Traversal` from a `Traversable`
 **Signature**
 
 ```ts
-export declare const fromTraversable: typeof I.fromTraversable
+export declare const fromTraversable: typeof _.fromTraversable
 ```
 
 Added in v2.3.0
