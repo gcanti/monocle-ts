@@ -176,9 +176,9 @@ export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = com
  * @category combinators
  * @since 2.3.0
  */
-export const traverse = <T extends URIS>(T: Traversable1<T>) => <S, A>(
-  sta: Traversal<S, Kind<T, A>>
-): Traversal<S, A> => composeTraversal(fromTraversable(T)<A>())(sta)
+export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A> {
+  return composeTraversal(fromTraversable(T)())
+}
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`

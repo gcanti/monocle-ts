@@ -167,8 +167,9 @@ export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> = composePr
  * @category combinators
  * @since 2.3.0
  */
-export const traverse = <T extends URIS>(T: Traversable1<T>) => <S, A>(sta: Lens<S, Kind<T, A>>): Traversal<S, A> =>
-  composeTraversal(_.fromTraversable(T)<A>())(sta)
+export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Lens<S, Kind<T, A>>) => Traversal<S, A> {
+  return composeTraversal(_.fromTraversable(T)())
+}
 
 /**
  * Return a `Optional` from a `Lens` focused on a `ReadonlyArray`
