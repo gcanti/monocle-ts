@@ -8,7 +8,9 @@
  *
  * @since 2.3.0
  */
-import { identity } from 'fp-ts/lib/function'
+import { Category2 } from 'fp-ts/lib/Category'
+import { flow, identity } from 'fp-ts/lib/function'
+import { Invariant2 } from 'fp-ts/lib/Invariant'
 import * as _ from './internal'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
@@ -140,3 +142,60 @@ export const reverse = <S, A>(iso: Iso<S, A>): Iso<A, S> => ({
  * @since 2.3.0
  */
 export const modify = <A>(f: (a: A) => A) => <S>(iso: Iso<S, A>) => (s: S): S => iso.reverseGet(f(iso.get(s)))
+
+// -------------------------------------------------------------------------------------
+// pipeables
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category Invariant
+ * @since 2.3.0
+ */
+export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Iso<E, A>) => Iso<E, B> = (f, g) => (ea) =>
+  imap_(ea, f, g)
+
+// -------------------------------------------------------------------------------------
+// instances
+// -------------------------------------------------------------------------------------
+
+const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => ({
+  get: flow(ea.get, ab),
+  reverseGet: flow(ba, ea.reverseGet)
+})
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const URI = 'monocle-ts/Iso'
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export type URI = typeof URI
+
+declare module 'fp-ts/lib/HKT' {
+  interface URItoKind2<E, A> {
+    readonly [URI]: Iso<E, A>
+  }
+}
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const invariantIso: Invariant2<URI> = {
+  URI,
+  imap: imap_
+}
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const categoryIso: Category2<URI> = {
+  URI,
+  compose: (ab, ea) => composeIso(ab)(ea),
+  id
+}

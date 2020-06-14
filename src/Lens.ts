@@ -13,15 +13,16 @@
  * @since 2.3.0
  */
 import { Category2 } from 'fp-ts/lib/Category'
+import { flow } from 'fp-ts/lib/function'
+import { Kind, URIS } from 'fp-ts/lib/HKT'
+import { Invariant2 } from 'fp-ts/lib/Invariant'
 import { Option } from 'fp-ts/lib/Option'
-import { Semigroupoid2 } from 'fp-ts/lib/Semigroupoid'
+import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
 import { Traversal } from './Traversal'
-import { URIS, Kind } from 'fp-ts/lib/HKT'
-import { Traversable1 } from 'fp-ts/lib/Traversable'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -178,8 +179,24 @@ export const index = (i: number) => <S, A>(sa: Lens<S, ReadonlyArray<A>>): Optio
   composeOptional(_.indexReadonlyArray<A>().index(i))(sa)
 
 // -------------------------------------------------------------------------------------
+// pipeables
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category Invariant
+ * @since 2.3.0
+ */
+export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Lens<E, A>) => Lens<E, B> = (f, g) => (ea) =>
+  imap_(ea, f, g)
+
+// -------------------------------------------------------------------------------------
 // instances
 // -------------------------------------------------------------------------------------
+
+const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => ({
+  get: flow(ea.get, ab),
+  set: flow(ba, ea.set)
+})
 
 /**
  * @category instances
@@ -199,15 +216,13 @@ declare module 'fp-ts/lib/HKT' {
   }
 }
 
-const compose_: Semigroupoid2<URI>['compose'] = (ab, ea) => composeLens(ab)(ea)
-
 /**
  * @category instances
  * @since 2.3.0
  */
-export const semigroupoidLens: Semigroupoid2<URI> = {
+export const invariantLens: Invariant2<URI> = {
   URI,
-  compose: compose_
+  imap: imap_
 }
 
 /**
@@ -216,6 +231,6 @@ export const semigroupoidLens: Semigroupoid2<URI> = {
  */
 export const categoryLens: Category2<URI> = {
   URI,
-  compose: compose_,
+  compose: (ab, ea) => composeLens(ab)(ea),
   id
 }

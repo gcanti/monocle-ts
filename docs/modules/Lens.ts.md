@@ -23,6 +23,8 @@ Added in v2.3.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [Invariant](#invariant)
+  - [imap](#imap)
 - [combinators](#combinators)
   - [index](#index)
   - [modify](#modify)
@@ -46,11 +48,23 @@ Added in v2.3.0
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
   - [categoryLens](#categorylens)
-  - [semigroupoidLens](#semigroupoidlens)
+  - [invariantLens](#invariantlens)
 - [model](#model)
   - [Lens (interface)](#lens-interface)
 
 ---
+
+# Invariant
+
+## imap
+
+**Signature**
+
+```ts
+export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Lens<E, A>) => Lens<E, B>
+```
+
+Added in v2.3.0
 
 # combinators
 
@@ -280,12 +294,12 @@ export declare const categoryLens: Category2<'monocle-ts/Lens'>
 
 Added in v2.3.0
 
-## semigroupoidLens
+## invariantLens
 
 **Signature**
 
 ```ts
-export declare const semigroupoidLens: Semigroupoid2<'monocle-ts/Lens'>
+export declare const invariantLens: Invariant2<'monocle-ts/Lens'>
 ```
 
 Added in v2.3.0

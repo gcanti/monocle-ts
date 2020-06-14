@@ -1,7 +1,7 @@
 /**
  * @since 2.3.0
  */
-import { Applicative as _ } from 'fp-ts/lib/Applicative'
+import { Applicative } from 'fp-ts/lib/Applicative'
 import { lookup, updateAt } from 'fp-ts/lib/Array'
 import { constant, flow, identity, Predicate } from 'fp-ts/lib/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
@@ -39,7 +39,7 @@ export const isoAsOptional = <S, A>(sa: Iso<S, A>): Optional<S, A> => ({
 
 /** @internal */
 export const isoAsTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: _<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.reverseGet(a))
+  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.reverseGet(a))
 })
 
 /** @internal */
@@ -76,7 +76,7 @@ export const lensAsOptional = <S, A>(sa: Lens<S, A>): Optional<S, A> => ({
 
 /** @internal */
 export const lensAsTraversal = <S, A>(sa: Lens<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: _<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.set(a)(s))
+  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.set(a)(s))
 })
 
 /** @internal */
@@ -152,7 +152,7 @@ export const prismAsOptional = <S, A>(sa: Prism<S, A>): Optional<S, A> => ({
 
 /** @internal */
 export const prismAsTraversal = <S, A>(sa: Prism<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: _<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
+  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
     pipe(
       sa.getOption(s),
       O.fold(
@@ -233,7 +233,7 @@ export const prismFromSome = <A>(): Prism<O.Option<A>, A> => ({
 
 /** @internal */
 export const optionalAsTraversal = <S, A>(sa: Optional<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: _<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => {
+  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => {
     const oa = sa.getOption(s)
     if (O.isNone(oa)) {
       return F.of(s)
@@ -312,7 +312,7 @@ export function traversalComposeOptional<A, B>(ab: Optional<A, B>): <S>(sa: Trav
 /** @internal */
 export function traversalComposeTraversal<A, B>(ab: Traversal<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B> {
   return (sa) => ({
-    modifyF: <F>(F: _<F>) => (f: (a: B) => HKT<F, B>) => sa.modifyF(F)(ab.modifyF(F)(f))
+    modifyF: <F>(F: Applicative<F>) => (f: (a: B) => HKT<F, B>) => sa.modifyF(F)(ab.modifyF(F)(f))
   })
 }
 
@@ -323,7 +323,7 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 /** @internal */
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
   return <A>() => ({
-    modifyF: <F>(F: _<F>) => {
+    modifyF: <F>(F: Applicative<F>) => {
       const traverseF = T.traverse(F)
       return (f: (a: A) => HKT<F, A>) => (s: HKT<T, A>) => traverseF(s, f)
     }

@@ -19,6 +19,8 @@ Added in v2.3.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [Invariant](#invariant)
+  - [imap](#imap)
 - [combinators](#combinators)
   - [modify](#modify)
   - [modifyOption](#modifyoption)
@@ -40,10 +42,27 @@ Added in v2.3.0
 - [converters](#converters)
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
+- [instances](#instances)
+  - [URI](#uri)
+  - [URI (type alias)](#uri-type-alias)
+  - [categoryPrism](#categoryprism)
+  - [invariantPrism](#invariantprism)
 - [model](#model)
   - [Prism (interface)](#prism-interface)
 
 ---
+
+# Invariant
+
+## imap
+
+**Signature**
+
+```ts
+export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Prism<E, A>) => Prism<E, B>
+```
+
+Added in v2.3.0
 
 # combinators
 
@@ -244,6 +263,48 @@ View a `Prism` as a `Traversal`
 
 ```ts
 export declare const asTraversal: <S, A>(sa: Prism<S, A>) => Traversal<S, A>
+```
+
+Added in v2.3.0
+
+# instances
+
+## URI
+
+**Signature**
+
+```ts
+export declare const URI: 'monocle-ts/Prism'
+```
+
+Added in v2.3.0
+
+## URI (type alias)
+
+**Signature**
+
+```ts
+export type URI = typeof URI
+```
+
+Added in v2.3.0
+
+## categoryPrism
+
+**Signature**
+
+```ts
+export declare const categoryPrism: Category2<'monocle-ts/Prism'>
+```
+
+Added in v2.3.0
+
+## invariantPrism
+
+**Signature**
+
+```ts
+export declare const invariantPrism: Invariant2<'monocle-ts/Prism'>
 ```
 
 Added in v2.3.0

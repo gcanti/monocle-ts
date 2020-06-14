@@ -26,6 +26,9 @@ import { Traversal } from './Traversal'
 // -------------------------------------------------------------------------------------
 
 import Option = O.Option
+import { Category2 } from 'fp-ts/lib/Category'
+import { constant, flow } from 'fp-ts/lib/function'
+import { Invariant2 } from 'fp-ts/lib/Invariant'
 
 /**
  * @category model
@@ -35,6 +38,19 @@ export interface Optional<S, A> {
   readonly getOption: (s: S) => Option<A>
   readonly set: (a: A) => (s: S) => S
 }
+
+// -------------------------------------------------------------------------------------
+// constructors
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category constructors
+ * @since 2.3.0
+ */
+export const id = <S>(): Optional<S, S> => ({
+  getOption: O.some,
+  set: constant
+})
 
 // -------------------------------------------------------------------------------------
 // converters
@@ -138,3 +154,61 @@ export const props = <A, P extends keyof A>(
  * @since 2.3.0
  */
 export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> = composePrism(_.prismFromSome())
+
+// -------------------------------------------------------------------------------------
+// pipeables
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category Invariant
+ * @since 2.3.0
+ */
+export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Optional<E, A>) => Optional<E, B> = (f, g) => (
+  ea
+) => imap_(ea, f, g)
+
+// -------------------------------------------------------------------------------------
+// instances
+// -------------------------------------------------------------------------------------
+
+const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => ({
+  getOption: flow(ea.getOption, O.map(ab)),
+  set: flow(ba, ea.set)
+})
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const URI = 'monocle-ts/Optional'
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export type URI = typeof URI
+
+declare module 'fp-ts/lib/HKT' {
+  interface URItoKind2<E, A> {
+    readonly [URI]: Optional<E, A>
+  }
+}
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const invariantOptional: Invariant2<URI> = {
+  URI,
+  imap: imap_
+}
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const categoryOptional: Category2<URI> = {
+  URI,
+  compose: (ab, ea) => composeOptional(ab)(ea),
+  id
+}

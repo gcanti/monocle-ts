@@ -7,22 +7,35 @@
  *
  * @since 2.3.0
  */
+import { Applicative, Applicative1, Applicative2, Applicative2C, Applicative3 } from 'fp-ts/lib/Applicative'
+import { Category2 } from 'fp-ts/lib/Category'
 import { Predicate, Refinement } from 'fp-ts/lib/function'
+import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { identity } from 'fp-ts/lib/Identity'
 import { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
-import { ModifyF } from '.'
+import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
-import { URIS, Kind } from 'fp-ts/lib/HKT'
-import { Traversable1 } from 'fp-ts/lib/Traversable'
 
 // -------------------------------------------------------------------------------------
 // model
 // -------------------------------------------------------------------------------------
+
+/**
+ * @category model
+ * @since 2.3.0
+ */
+export interface ModifyF<S, A> {
+  <F extends URIS3>(F: Applicative3<F>): <R, E>(f: (a: A) => Kind3<F, R, E, A>) => (s: S) => Kind3<F, R, E, S>
+  <F extends URIS2>(F: Applicative2<F>): <E>(f: (a: A) => Kind2<F, E, A>) => (s: S) => Kind2<F, E, S>
+  <F extends URIS2, E>(F: Applicative2C<F, E>): (f: (a: A) => Kind2<F, E, A>) => (s: S) => Kind2<F, E, S>
+  <F extends URIS>(F: Applicative1<F>): (f: (a: A) => Kind<F, A>) => (s: S) => Kind<F, S>
+  <F>(F: Applicative<F>): (f: (a: A) => HKT<F, A>) => (s: S) => HKT<F, S>
+}
 
 /**
  * @category model
@@ -35,6 +48,14 @@ export interface Traversal<S, A> {
 // -------------------------------------------------------------------------------------
 // constructors
 // -------------------------------------------------------------------------------------
+
+/**
+ * @category constructors
+ * @since 2.3.0
+ */
+export const id = <S>(): Traversal<S, S> => ({
+  modifyF: <F>(_: Applicative<F>) => (f: (s: S) => HKT<F, S>) => f
+})
 
 /**
  * Create a `Traversal` from a `Traversable`
@@ -167,3 +188,35 @@ export const traverse = <T extends URIS>(T: Traversable1<T>) => <S, A>(
  */
 export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): Traversal<S, A> =>
   composeOptional(_.indexReadonlyArray<A>().index(i))(sa)
+
+// -------------------------------------------------------------------------------------
+// instances
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const URI = 'monocle-ts/Traversal'
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export type URI = typeof URI
+
+declare module 'fp-ts/lib/HKT' {
+  interface URItoKind2<E, A> {
+    readonly [URI]: Traversal<E, A>
+  }
+}
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const categoryTraversal: Category2<URI> = {
+  URI,
+  compose: (ab, ea) => composeTraversal(ab)(ea),
+  id
+}
