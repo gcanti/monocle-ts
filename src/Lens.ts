@@ -149,8 +149,9 @@ export const prop: <A, P extends keyof A>(prop: P) => <S>(lens: Lens<S, A>) => L
  * @category combinators
  * @since 2.3.0
  */
-export const props: <A, P extends keyof A>(...props: P[]) => <S>(lens: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> =
-  _.lensProps
+export const props: <A, P extends keyof A>(
+  ...props: [P, P, ...Array<P>]
+) => <S>(lens: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> = _.lensProps
 
 /**
  * Return a `Optional` from a `Lens` focused on a `Option` type

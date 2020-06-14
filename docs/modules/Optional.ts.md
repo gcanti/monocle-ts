@@ -106,7 +106,9 @@ Return a `Optional` from a `Optional` and a list of props
 
 ```ts
 export declare const props: <A, P extends keyof A>(
-  ...props: P[]
+  props_0: P,
+  props_1: P,
+  ...props_2: P[]
 ) => <S>(sa: Optional<S, A>) => Optional<S, { [K in P]: A[K] }>
 ```
 

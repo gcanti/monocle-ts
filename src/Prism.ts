@@ -175,8 +175,9 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Prism<S, A>) => Op
  * @category combinators
  * @since 2.3.0
  */
-export const props = <A, P extends keyof A>(...props: P[]): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) =>
-  composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
+export const props = <A, P extends keyof A>(
+  ...props: [P, P, ...Array<P>]
+): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) => composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
 
 /**
  * Return a `Prism` from a `Prism` focused on a `Option` type

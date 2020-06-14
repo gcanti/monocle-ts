@@ -104,7 +104,9 @@ Return a `Traversal` from a `Traversal` and a list of props
 
 ```ts
 export declare const props: <A, P extends keyof A>(
-  ...props: P[]
+  props_0: P,
+  props_1: P,
+  ...props_2: P[]
 ) => <S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }>
 ```
 

@@ -143,7 +143,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Optional<S, A>) =>
  * @since 2.3.0
  */
 export const props = <A, P extends keyof A>(
-  ...props: P[]
+  ...props: [P, P, ...Array<P>]
 ): (<S>(sa: Optional<S, A>) => Optional<S, { [K in P]: A[K] }>) =>
   composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
 
