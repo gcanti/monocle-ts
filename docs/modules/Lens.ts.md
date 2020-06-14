@@ -122,13 +122,13 @@ Return a `Traversal` from a `Lens` focused on a `Traversable`
 
 ```ts
 export declare const traverse: <T extends
+  | 'Option'
   | 'ReadonlyRecord'
   | 'Ord'
   | 'Eq'
-  | 'Option'
-  | 'Identity'
   | 'NonEmptyArray'
   | 'Array'
+  | 'Identity'
   | 'Record'>(
   T: Traversable1<T>
 ) => <S, A>(sta: Lens<S, Kind<T, A>>) => Traversal<S, A>

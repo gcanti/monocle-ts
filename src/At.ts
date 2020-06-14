@@ -1,7 +1,7 @@
 /**
  * @since 2.3.0
  */
-import * as I from './internal'
+import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
 
@@ -28,5 +28,5 @@ export interface At<S, I, A> {
  * @since 2.3.0
  */
 export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>): At<T, I, A> => ({
-  at: (i) => I.isoComposeLens(sia.at(i))(iso)
+  at: (i) => _.isoComposeLens(sia.at(i))(iso)
 })
