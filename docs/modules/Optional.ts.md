@@ -24,6 +24,8 @@ Added in v2.3.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [Invariant](#invariant)
+  - [imap](#imap)
 - [combinators](#combinators)
   - [modify](#modify)
   - [modifyOption](#modifyoption)
@@ -36,12 +38,31 @@ Added in v2.3.0
   - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
   - [composeTraversal](#composetraversal)
+- [constructors](#constructors)
+  - [id](#id)
 - [converters](#converters)
   - [asTraversal](#astraversal)
+- [instances](#instances)
+  - [URI](#uri)
+  - [URI (type alias)](#uri-type-alias)
+  - [categoryOptional](#categoryoptional)
+  - [invariantOptional](#invariantoptional)
 - [model](#model)
   - [Optional (interface)](#optional-interface)
 
 ---
+
+# Invariant
+
+## imap
+
+**Signature**
+
+```ts
+export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Optional<E, A>) => Optional<E, B>
+```
+
+Added in v2.3.0
 
 # combinators
 
@@ -165,6 +186,18 @@ export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Op
 
 Added in v2.3.0
 
+# constructors
+
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Optional<S, S>
+```
+
+Added in v2.3.0
+
 # converters
 
 ## asTraversal
@@ -175,6 +208,48 @@ View a `Optional` as a `Traversal`
 
 ```ts
 export declare const asTraversal: <S, A>(sa: Optional<S, A>) => Traversal<S, A>
+```
+
+Added in v2.3.0
+
+# instances
+
+## URI
+
+**Signature**
+
+```ts
+export declare const URI: 'monocle-ts/Optional'
+```
+
+Added in v2.3.0
+
+## URI (type alias)
+
+**Signature**
+
+```ts
+export type URI = typeof URI
+```
+
+Added in v2.3.0
+
+## categoryOptional
+
+**Signature**
+
+```ts
+export declare const categoryOptional: Category2<'monocle-ts/Optional'>
+```
+
+Added in v2.3.0
+
+## invariantOptional
+
+**Signature**
+
+```ts
+export declare const invariantOptional: Invariant2<'monocle-ts/Optional'>
 ```
 
 Added in v2.3.0

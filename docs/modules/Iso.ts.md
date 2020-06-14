@@ -19,6 +19,8 @@ Added in v2.3.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [Invariant](#invariant)
+  - [imap](#imap)
 - [combinators](#combinators)
   - [modify](#modify)
 - [compositions](#compositions)
@@ -35,10 +37,27 @@ Added in v2.3.0
   - [asOptional](#asoptional)
   - [asPrism](#asprism)
   - [asTraversal](#astraversal)
+- [instances](#instances)
+  - [URI](#uri)
+  - [URI (type alias)](#uri-type-alias)
+  - [categoryIso](#categoryiso)
+  - [invariantIso](#invariantiso)
 - [model](#model)
   - [Iso (interface)](#iso-interface)
 
 ---
+
+# Invariant
+
+## imap
+
+**Signature**
+
+```ts
+export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Iso<E, A>) => Iso<E, B>
+```
+
+Added in v2.3.0
 
 # combinators
 
@@ -182,6 +201,48 @@ View an `Iso` as a `Traversal`
 
 ```ts
 export declare const asTraversal: <S, A>(sa: Iso<S, A>) => Traversal<S, A>
+```
+
+Added in v2.3.0
+
+# instances
+
+## URI
+
+**Signature**
+
+```ts
+export declare const URI: 'monocle-ts/Iso'
+```
+
+Added in v2.3.0
+
+## URI (type alias)
+
+**Signature**
+
+```ts
+export type URI = typeof URI
+```
+
+Added in v2.3.0
+
+## categoryIso
+
+**Signature**
+
+```ts
+export declare const categoryIso: Category2<'monocle-ts/Iso'>
+```
+
+Added in v2.3.0
+
+## invariantIso
+
+**Signature**
+
+```ts
+export declare const invariantIso: Invariant2<'monocle-ts/Iso'>
 ```
 
 Added in v2.3.0

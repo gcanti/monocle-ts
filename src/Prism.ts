@@ -8,7 +8,9 @@
  *
  * @since 2.3.0
  */
-import { identity, Predicate, Refinement } from 'fp-ts/lib/function'
+import { Category2 } from 'fp-ts/lib/Category'
+import { flow, identity, Predicate, Refinement } from 'fp-ts/lib/function'
+import { Invariant2 } from 'fp-ts/lib/Invariant'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as _ from './internal'
@@ -183,3 +185,60 @@ export const props = <A, P extends keyof A>(...props: P[]): (<S>(sa: Prism<S, A>
  * @since 2.3.0
  */
 export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> = composePrism(_.prismFromSome())
+
+// -------------------------------------------------------------------------------------
+// pipeables
+// -------------------------------------------------------------------------------------
+
+/**
+ * @category Invariant
+ * @since 2.3.0
+ */
+export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Prism<E, A>) => Prism<E, B> = (f, g) => (ea) =>
+  imap_(ea, f, g)
+
+// -------------------------------------------------------------------------------------
+// instances
+// -------------------------------------------------------------------------------------
+
+const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => ({
+  getOption: flow(ea.getOption, O.map(ab)),
+  reverseGet: flow(ba, ea.reverseGet)
+})
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const URI = 'monocle-ts/Prism'
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export type URI = typeof URI
+
+declare module 'fp-ts/lib/HKT' {
+  interface URItoKind2<E, A> {
+    readonly [URI]: Prism<E, A>
+  }
+}
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const invariantPrism: Invariant2<URI> = {
+  URI,
+  imap: imap_
+}
+
+/**
+ * @category instances
+ * @since 2.3.0
+ */
+export const categoryPrism: Category2<URI> = {
+  URI,
+  compose: (ab, ea) => composePrism(ab)(ea),
+  id
+}
