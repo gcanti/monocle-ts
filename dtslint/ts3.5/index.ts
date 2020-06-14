@@ -132,3 +132,29 @@ const s: Array<A | B> = []
 
 // Fold find method
 fold.find(isB)(s) // $ExpectType Option<B>
+
+//
+// At
+//
+
+import * as ARR from '../../src/At/ReadonlyRecord'
+import * as RS from '../../src/At/ReadonlySet'
+import { eqString } from 'fp-ts/lib/Eq'
+
+ARR.atReadonlyRecord<string>().at('a') // $ExpectType Lens<Readonly<Record<string, string>>, Option<string>>
+
+RS.atReadonlySet(eqString).at('a') // $ExpectType Lens<ReadonlySet<string>, boolean>
+
+//
+// Index
+//
+
+import * as RA from '../../src/Index/ReadonlyArray'
+import * as RNEA from '../../src/Index/ReadonlyNonEmptyArray'
+import * as IRR from '../../src/Index/ReadonlyRecord'
+
+RA.indexReadonlyArray<string>().index(0) // $ExpectType Optional<readonly string[], string>
+
+RNEA.indexReadonlyNonEmptyArray<string>().index(0) // $ExpectType Optional<ReadonlyNonEmptyArray<string>, string>
+
+IRR.indexReadonlyRecord<string>().index('a') // $ExpectType Optional<Readonly<Record<string, string>>, string>
