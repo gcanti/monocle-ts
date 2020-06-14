@@ -110,7 +110,9 @@ Return a `Lens` from a `Lens` and a list of props
 
 ```ts
 export declare const props: <A, P extends keyof A>(
-  ...props: P[]
+  props_0: P,
+  props_1: P,
+  ...props_2: P[]
 ) => <S>(lens: Lens<S, A>) => Lens<S, { [K in P]: A[K] }>
 ```
 
