@@ -43,19 +43,28 @@ describe('Lens', () => {
     interface S {
       readonly a: number
     }
+    const ss = _.id<S>()
     const s: S = { a: 1 }
-    const lens = _.id<S>()
-    assert.deepStrictEqual(lens.get(s), s)
-    assert.deepStrictEqual(lens.set(s)(s), s)
+    assert.deepStrictEqual(ss.get(s), s)
+    assert.deepStrictEqual(ss.set(s)(s), s)
+  })
+
+  it('fromNullable', () => {
+    interface S {
+      readonly a?: number
+    }
+    const ss = pipe(_.id<S>(), _.prop('a'), _.fromNullable)
+    assert.deepStrictEqual(ss.getOption({ a: 1 }), O.some(1))
+    assert.deepStrictEqual(ss.getOption({}), O.none)
   })
 
   it('modify', () => {
     interface S {
       readonly a: number
     }
-    const lens = pipe(_.id<S>(), _.prop('a'))
+    const sa = pipe(_.id<S>(), _.prop('a'))
     const f = pipe(
-      lens,
+      sa,
       _.modify((a) => a * 2)
     )
     assert.deepStrictEqual(f({ a: 1 }), { a: 2 })
@@ -65,9 +74,11 @@ describe('Lens', () => {
     interface S {
       readonly a: ReadonlyArray<string>
     }
-    const optional = pipe(_.id<S>(), _.prop('a'), _.index(0))
-    assert.deepStrictEqual(optional.getOption({ a: [] }), O.none)
-    assert.deepStrictEqual(optional.getOption({ a: ['a'] }), O.some('a'))
+    const sa = pipe(_.id<S>(), _.prop('a'), _.index(0))
+    assert.deepStrictEqual(sa.getOption({ a: [] }), O.none)
+    assert.deepStrictEqual(sa.getOption({ a: ['a'] }), O.some('a'))
+    assert.deepStrictEqual(sa.set('b')({ a: [] }), { a: [] })
+    assert.deepStrictEqual(sa.set('b')({ a: ['a'] }), { a: ['b'] })
   })
 
   it('traverse', () => {

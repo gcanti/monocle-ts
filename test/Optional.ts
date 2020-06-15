@@ -2,6 +2,7 @@ import * as assert from 'assert'
 import * as O from 'fp-ts/lib/Option'
 import * as _ from '../src/Optional'
 import { pipe } from 'fp-ts/lib/function'
+import * as Id from 'fp-ts/lib/Identity'
 
 type A = O.Option<{
   a: string
@@ -53,5 +54,18 @@ describe('Optional', () => {
     const sa = pipe(_.id<A>(), _.some, _.props('a', 'b'))
     assert.deepStrictEqual(sa.getOption(O.none), O.none)
     assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
+  })
+
+  it('asTraversal', () => {
+    const sa = pipe(_.id<A>(), _.some, _.prop('b'), _.asTraversal)
+    assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n - 1)(O.none), O.none)
+    assert.deepStrictEqual(
+      sa.modifyF(Id.identity)((n) => n - 1)(O.some({ a: 'a', b: 2, c: true })),
+      O.some({
+        a: 'a',
+        b: 1,
+        c: true
+      })
+    )
   })
 })

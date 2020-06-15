@@ -166,14 +166,14 @@ export const prismFromSome = <A>(): Prism<O.Option<A>, A> => ({
 
 /** @internal */
 export const optionalAsTraversal = <S, A>(sa: Optional<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => {
-    const oa = sa.getOption(s)
-    if (O.isNone(oa)) {
-      return F.of(s)
-    } else {
-      return F.map(f(oa.value), (a: A) => sa.set(a)(s))
-    }
-  }
+  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
+    pipe(
+      sa.getOption(s),
+      O.fold(
+        () => F.of(s),
+        (a) => F.map(f(a), (a: A) => sa.set(a)(s))
+      )
+    )
 })
 
 /** @internal */
