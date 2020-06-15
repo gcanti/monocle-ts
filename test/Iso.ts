@@ -1,6 +1,7 @@
 import * as assert from 'assert'
 import { pipe } from 'fp-ts/lib/function'
 import * as _ from '../src/Iso'
+import * as Id from 'fp-ts/lib/Identity'
 
 const numberFromString: _.Iso<number, string> = {
   get: String,
@@ -51,5 +52,10 @@ describe('Iso', () => {
     const sb = pipe(double, _.compose(numberFromString))
     assert.deepStrictEqual(sb.get(1), '2')
     assert.deepStrictEqual(sb.reverseGet('2'), 1)
+  })
+
+  it('asTraversal', () => {
+    const sa = pipe(double, _.asTraversal)
+    assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n - 1)(3), 2.5)
   })
 })
