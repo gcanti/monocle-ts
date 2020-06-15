@@ -141,17 +141,9 @@ Return a `Traversal` from a `Traversal` focused on a `Traversable`
 **Signature**
 
 ```ts
-export declare const traverse: <T extends
-  | 'Option'
-  | 'ReadonlyRecord'
-  | 'Ord'
-  | 'Eq'
-  | 'NonEmptyArray'
-  | 'Array'
-  | 'Identity'
-  | 'Record'>(
+export declare function traverse<T extends URIS>(
   T: Traversable1<T>
-) => <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A>
+): <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
 Added in v2.3.0
