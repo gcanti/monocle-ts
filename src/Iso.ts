@@ -8,9 +8,12 @@
  *
  * @since 2.3.0
  */
+import { Applicative } from 'fp-ts/lib/Applicative'
 import { Category2 } from 'fp-ts/lib/Category'
 import { flow, identity } from 'fp-ts/lib/function'
+import { HKT } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
+import * as O from 'fp-ts/lib/Option'
 import * as _ from './internal'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
@@ -61,7 +64,10 @@ export const asLens: <S, A>(sa: Iso<S, A>) => Lens<S, A> = _.isoAsLens
  * @category converters
  * @since 2.3.0
  */
-export const asPrism: <S, A>(sa: Iso<S, A>) => Prism<S, A> = _.isoAsPrism
+export const asPrism = <S, A>(sa: Iso<S, A>): Prism<S, A> => ({
+  getOption: flow(sa.get, O.some),
+  reverseGet: sa.reverseGet
+})
 
 /**
  * View an `Iso` as a `Optional`
@@ -77,7 +83,9 @@ export const asOptional: <S, A>(sa: Iso<S, A>) => Optional<S, A> = _.isoAsOption
  * @category converters
  * @since 2.3.0
  */
-export const asTraversal: <S, A>(sa: Iso<S, A>) => Traversal<S, A> = _.isoAsTraversal
+export const asTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
+  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.reverseGet(a))
+})
 
 // -------------------------------------------------------------------------------------
 // compositions
@@ -89,7 +97,10 @@ export const asTraversal: <S, A>(sa: Iso<S, A>) => Traversal<S, A> = _.isoAsTrav
  * @category compositions
  * @since 2.3.0
  */
-export const compose: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B> = _.isoComposeIso
+export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> => ({
+  get: flow(sa.get, ab.get),
+  reverseGet: flow(ab.reverseGet, sa.reverseGet)
+})
 
 // -------------------------------------------------------------------------------------
 // combinators

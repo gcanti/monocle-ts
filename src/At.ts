@@ -1,10 +1,10 @@
 /**
  * @since 2.3.0
  */
+import { pipe } from 'fp-ts/lib/pipeable'
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
-import { pipe } from 'fp-ts/lib/pipeable'
 
 // -------------------------------------------------------------------------------------
 // model

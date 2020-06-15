@@ -26,26 +26,9 @@ export const isoAsLens = <S, A>(sa: Iso<S, A>): Lens<S, A> => ({
 })
 
 /** @internal */
-export const isoAsPrism = <S, A>(sa: Iso<S, A>): Prism<S, A> => ({
-  getOption: flow(sa.get, O.some),
-  reverseGet: sa.reverseGet
-})
-
-/** @internal */
 export const isoAsOptional = <S, A>(sa: Iso<S, A>): Optional<S, A> => ({
   getOption: flow(sa.get, O.some),
   set: flow(sa.reverseGet, constant)
-})
-
-/** @internal */
-export const isoAsTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.reverseGet(a))
-})
-
-/** @internal */
-export const isoComposeIso = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> => ({
-  get: flow(sa.get, ab.get),
-  reverseGet: flow(ab.reverseGet, sa.reverseGet)
 })
 
 // -------------------------------------------------------------------------------------
@@ -78,10 +61,6 @@ export const lensId = <S>(): Lens<S, S> => ({
   get: identity,
   set: constant
 })
-
-/** @internal */
-export const lensFromNullable = <S, A>(sa: Lens<S, A>): Optional<S, NonNullable<A>> =>
-  lensComposePrism(prismFromNullable<A>())(sa)
 
 /** @internal */
 export const lensProp = <A, P extends keyof A>(prop: P) => <S>(lens: Lens<S, A>): Lens<S, A[P]> => ({
@@ -158,12 +137,6 @@ export const prismModify = <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>): ((s: S) 
 export const prismSet = <A>(a: A): (<S>(sa: Prism<S, A>) => (s: S) => S) => prismModify(() => a)
 
 /** @internal */
-export const prismComposePrism = <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>): Prism<S, B> => ({
-  getOption: flow(sa.getOption, O.chain(ab.getOption)),
-  reverseGet: flow(ab.reverseGet, sa.reverseGet)
-})
-
-/** @internal */
 export const prismComposeLens = <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>): Optional<S, B> =>
   optionalComposeOptional(lensAsOptional(ab))(prismAsOptional(sa))
 
@@ -224,26 +197,10 @@ export const optionalModify = <A>(f: (a: A) => A) => <S>(optional: Optional<S, A
 }
 
 /** @internal */
-export const optionalComposeIso = <A, B>(ab: Iso<A, B>) => <S>(sa: Optional<S, A>): Optional<S, B> =>
-  optionalComposeOptional(isoAsOptional(ab))(sa)
-
-/** @internal */
-export const optionalComposeLens = <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, A>): Optional<S, B> =>
-  optionalComposeOptional(lensAsOptional(ab))(sa)
-
-/** @internal */
-export const optionalComposePrism = <A, B>(ab: Prism<A, B>) => <S>(sa: Optional<S, A>): Optional<S, B> =>
-  optionalComposeOptional(prismAsOptional(ab))(sa)
-
-/** @internal */
 export const optionalComposeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>): Optional<S, B> => ({
   getOption: flow(sa.getOption, O.chain(ab.getOption)),
   set: (b) => optionalModify(ab.set(b))(sa)
 })
-
-/** @internal */
-export const optionalComposeTraversal = <A, B>(ab: Traversal<A, B>) => <S>(sa: Optional<S, A>): Traversal<S, B> =>
-  traversalComposeTraversal(ab)(optionalAsTraversal(sa))
 
 // -------------------------------------------------------------------------------------
 // Traversal
