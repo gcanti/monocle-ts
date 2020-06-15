@@ -4,6 +4,7 @@
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
+import { pipe } from 'fp-ts/lib/pipeable'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -28,5 +29,5 @@ export interface At<S, I, A> {
  * @since 2.3.0
  */
 export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>): At<T, I, A> => ({
-  at: (i) => _.isoComposeLens(sia.at(i))(iso)
+  at: (i) => pipe(iso, _.isoAsLens, _.lensComposeLens(sia.at(i)))
 })

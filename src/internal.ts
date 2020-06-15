@@ -48,22 +48,6 @@ export const isoComposeIso = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S,
   reverseGet: flow(ab.reverseGet, sa.reverseGet)
 })
 
-/** @internal */
-export const isoComposeLens = <A, B>(ab: Lens<A, B>) => <S>(sa: Iso<S, A>): Lens<S, B> =>
-  lensComposeLens(ab)(isoAsLens(sa))
-
-/** @internal */
-export const isoComposePrism = <A, B>(ab: Prism<A, B>) => <S>(sa: Iso<S, A>): Prism<S, B> =>
-  prismComposePrism(ab)(isoAsPrism(sa))
-
-/** @internal */
-export const isoComposeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Iso<S, A>): Optional<S, B> =>
-  optionalComposeOptional(ab)(isoAsOptional(sa))
-
-/** @internal */
-export const isoComposeTraversal = <A, B>(ab: Traversal<A, B>) => <S>(sa: Iso<S, A>): Traversal<S, B> =>
-  traversalComposeTraversal(ab)(isoAsTraversal(sa))
-
 // -------------------------------------------------------------------------------------
 // Lens
 // -------------------------------------------------------------------------------------
