@@ -89,40 +89,7 @@ export const asTraversal: <S, A>(sa: Iso<S, A>) => Traversal<S, A> = _.isoAsTrav
  * @category compositions
  * @since 2.3.0
  */
-export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B> = _.isoComposeIso
-
-/**
- * Compose an `Iso` with a `Lens`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Iso<S, A>) => Lens<S, B> = _.isoComposeLens
-
-/**
- * Compose an `Iso` with a `Prism`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Iso<S, A>) => Prism<S, B> = _.isoComposePrism
-
-/**
- * Compose an `Iso` with a `Optional`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Iso<S, A>) => Optional<S, B> = _.isoComposeOptional
-
-/**
- * Compose an `Iso` with a `Traversal`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Iso<S, A>) => Traversal<S, B> =
-  _.isoComposeTraversal
+export const compose: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B> = _.isoComposeIso
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -151,7 +118,7 @@ export const modify = <A>(f: (a: A) => A) => <S>(iso: Iso<S, A>) => (s: S): S =>
  * @category Invariant
  * @since 2.3.0
  */
-export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Iso<E, A>) => Iso<E, B> = (f, g) => (ea) =>
+export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <S>(fa: Iso<S, A>) => Iso<S, B> = (f, g) => (ea) =>
   imap_(ea, f, g)
 
 // -------------------------------------------------------------------------------------
@@ -196,6 +163,6 @@ export const invariantIso: Invariant2<URI> = {
  */
 export const categoryIso: Category2<URI> = {
   URI,
-  compose: (ab, ea) => composeIso(ab)(ea),
+  compose: (ab, ea) => compose(ab)(ea),
   id
 }
