@@ -18,7 +18,8 @@
     "fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --write \"{src,test,examples}/**/*.ts\"",
     "test": "npm run prettier && npm run lint && npm run dtslint && npm run jest && npm run docs",
     "clean": "rimraf lib/* es6/*",
-    "build": "npm run clean && tsc && tsc -p tsconfig.es6.json && npm run import-path-rewrite",
+    "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",
+    "postbuild": "prettier --write \"./{lib,es6}/**/*.ts\"",
     "prepublish": "npm run build",
     "docs-fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser markdown --write \"README.md\"",
     "dtslint": "dtslint dtslint",
@@ -69,19 +70,5 @@
     "optics",
     "lens",
     "fp-ts"
-  ],
-  "jest": {
-    "collectCoverage": true,
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "test",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "testPathIgnorePatterns": [
-      "helpers.ts"
-    ]
-  }
+  ]
 }
