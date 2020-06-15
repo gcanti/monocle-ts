@@ -29,11 +29,8 @@ Added in v2.3.0
   - [set](#set)
   - [some](#some)
 - [compositions](#compositions)
-  - [composeIso](#composeiso)
+  - [compose](#compose)
   - [composeLens](#composelens)
-  - [composeOptional](#composeoptional)
-  - [composePrism](#composeprism)
-  - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
   - [fromNullable](#fromnullable)
   - [fromPredicate](#frompredicate)
@@ -138,14 +135,14 @@ Added in v2.3.0
 
 # compositions
 
-## composeIso
+## compose
 
-Compose a `Prism` with an `Iso`
+Compose a `Prism` with a `Prism`
 
 **Signature**
 
 ```ts
-export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
+export declare const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
 ```
 
 Added in v2.3.0
@@ -158,42 +155,6 @@ Compose a `Prism` with a `Lens`
 
 ```ts
 export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B>
-```
-
-Added in v2.3.0
-
-## composeOptional
-
-Compose a `Prism` with a `Optional`
-
-**Signature**
-
-```ts
-export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B>
-```
-
-Added in v2.3.0
-
-## composePrism
-
-Compose a `Prism` with a `Prism`
-
-**Signature**
-
-```ts
-export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
-```
-
-Added in v2.3.0
-
-## composeTraversal
-
-Compose a `Prism` with a `Traversal`
-
-**Signature**
-
-```ts
-export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Prism<S, A>) => Traversal<S, B>
 ```
 
 Added in v2.3.0

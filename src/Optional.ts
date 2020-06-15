@@ -13,12 +13,12 @@
  *
  * @since 2.3.0
  */
+import { Category2 } from 'fp-ts/lib/Category'
+import { constant, flow } from 'fp-ts/lib/function'
+import { Invariant2 } from 'fp-ts/lib/Invariant'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as _ from './internal'
-import { Iso } from './Iso'
-import { Lens } from './Lens'
-import { Prism } from './Prism'
 import { Traversal } from './Traversal'
 
 // -------------------------------------------------------------------------------------
@@ -26,9 +26,6 @@ import { Traversal } from './Traversal'
 // -------------------------------------------------------------------------------------
 
 import Option = O.Option
-import { Category2 } from 'fp-ts/lib/Category'
-import { constant, flow } from 'fp-ts/lib/function'
-import { Invariant2 } from 'fp-ts/lib/Invariant'
 
 /**
  * @category model
@@ -69,46 +66,13 @@ export const asTraversal: <S, A>(sa: Optional<S, A>) => Traversal<S, A> = _.opti
 // -------------------------------------------------------------------------------------
 
 /**
- * Compose a `Optional` with an `Iso`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> = _.optionalComposeIso
-
-/**
- * Compose a `Optional` with a `Lens`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> = _.optionalComposeLens
-
-/**
- * Compose a `Optional` with a `Prism`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> = _.optionalComposePrism
-
-/**
  * Compose a `Optional` with a `Optional`
  *
  * @category compositions
  * @since 2.3.0
  */
-export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> =
+export const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> =
   _.optionalComposeOptional
-
-/**
- * Compose a `Optional` with a `Traversal`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Optional<S, A>) => Traversal<S, B> =
-  _.optionalComposeTraversal
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -134,7 +98,7 @@ export const modify: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s:
  * @since 2.3.0
  */
 export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Optional<S, A>) => Optional<S, A[P]>) =>
-  composeLens(pipe(_.lensId<A>(), _.lensProp(prop)))
+  compose(pipe(_.lensId<A>(), _.lensProp(prop), _.lensAsOptional))
 
 /**
  * Return a `Optional` from a `Optional` and a list of props
@@ -145,7 +109,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Optional<S, A>) =>
 export const props = <A, P extends keyof A>(
   ...props: [P, P, ...Array<P>]
 ): (<S>(sa: Optional<S, A>) => Optional<S, { [K in P]: A[K] }>) =>
-  composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
+  compose(pipe(_.lensId<A>(), _.lensProps(...props), _.lensAsOptional))
 
 /**
  * Return a `Optional` from a `Optional` focused on a `Option` type
@@ -153,7 +117,7 @@ export const props = <A, P extends keyof A>(
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> = composePrism(_.prismFromSome())
+export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> = compose(_.prismAsOptional(_.prismFromSome()))
 
 // -------------------------------------------------------------------------------------
 // pipeables
@@ -209,6 +173,6 @@ export const invariantOptional: Invariant2<URI> = {
  */
 export const categoryOptional: Category2<URI> = {
   URI,
-  compose: (ab, ea) => composeOptional(ab)(ea),
+  compose: (ab, ea) => compose(ab)(ea),
   id
 }

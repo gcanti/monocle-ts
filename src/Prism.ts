@@ -14,7 +14,6 @@ import { Invariant2 } from 'fp-ts/lib/Invariant'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as _ from './internal'
-import { Iso } from './Iso'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Traversal } from './Traversal'
@@ -93,20 +92,12 @@ export const asTraversal: <S, A>(sa: Prism<S, A>) => Traversal<S, A> = _.prismAs
 // -------------------------------------------------------------------------------------
 
 /**
- * Compose a `Prism` with an `Iso`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B> = _.prismComposeIso
-
-/**
  * Compose a `Prism` with a `Prism`
  *
  * @category compositions
  * @since 2.3.0
  */
-export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B> = _.prismComposePrism
+export const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B> = _.prismComposePrism
 
 /**
  * Compose a `Prism` with a `Lens`
@@ -115,24 +106,6 @@ export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Pr
  * @since 2.3.0
  */
 export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B> = _.prismComposeLens
-
-/**
- * Compose a `Prism` with a `Optional`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B> =
-  _.prismComposeOptional
-
-/**
- * Compose a `Prism` with a `Traversal`
- *
- * @category compositions
- * @since 2.3.0
- */
-export const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Prism<S, A>) => Traversal<S, B> =
-  _.prismComposeTraversal
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -185,7 +158,7 @@ export const props = <A, P extends keyof A>(
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> = composePrism(_.prismFromSome())
+export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> = compose(_.prismFromSome())
 
 // -------------------------------------------------------------------------------------
 // pipeables
@@ -240,6 +213,6 @@ export const invariantPrism: Invariant2<URI> = {
  */
 export const categoryPrism: Category2<URI> = {
   URI,
-  compose: (ab, ea) => composePrism(ab)(ea),
+  compose: (ab, ea) => compose(ab)(ea),
   id
 }

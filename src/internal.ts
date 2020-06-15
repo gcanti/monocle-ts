@@ -64,10 +64,6 @@ export const lensAsTraversal = <S, A>(sa: Lens<S, A>): Traversal<S, A> => ({
 })
 
 /** @internal */
-export const lensComposeIso = <A, B>(ab: Iso<A, B>) => <S>(sa: Lens<S, A>): Lens<S, B> =>
-  lensComposeLens(isoAsLens(ab))(sa)
-
-/** @internal */
 export const lensComposeLens = <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>): Lens<S, B> => ({
   get: (s) => ab.get(sa.get(s)),
   set: (b) => (s) => sa.set(ab.set(b)(sa.get(s)))(s)
@@ -76,14 +72,6 @@ export const lensComposeLens = <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>): Le
 /** @internal */
 export const lensComposePrism = <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>): Optional<S, B> =>
   optionalComposeOptional(prismAsOptional(ab))(lensAsOptional(sa))
-
-/** @internal */
-export const lensComposeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Lens<S, A>): Optional<S, B> =>
-  optionalComposeOptional(ab)(lensAsOptional(sa))
-
-/** @internal */
-export const lensComposeTraversal = <A, B>(ab: Traversal<A, B>) => <S>(sa: Lens<S, A>): Traversal<S, B> =>
-  traversalComposeTraversal(ab)(lensAsTraversal(sa))
 
 /** @internal */
 export const lensId = <S>(): Lens<S, S> => ({
@@ -170,10 +158,6 @@ export const prismModify = <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>): ((s: S) 
 export const prismSet = <A>(a: A): (<S>(sa: Prism<S, A>) => (s: S) => S) => prismModify(() => a)
 
 /** @internal */
-export const prismComposeIso = <A, B>(ab: Iso<A, B>) => <S>(sa: Prism<S, A>): Prism<S, B> =>
-  prismComposePrism(isoAsPrism(ab))(sa)
-
-/** @internal */
 export const prismComposePrism = <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>): Prism<S, B> => ({
   getOption: flow(sa.getOption, O.chain(ab.getOption)),
   reverseGet: flow(ab.reverseGet, sa.reverseGet)
@@ -182,14 +166,6 @@ export const prismComposePrism = <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>)
 /** @internal */
 export const prismComposeLens = <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>): Optional<S, B> =>
   optionalComposeOptional(lensAsOptional(ab))(prismAsOptional(sa))
-
-/** @internal */
-export const prismComposeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Prism<S, A>): Optional<S, B> =>
-  optionalComposeOptional(ab)(prismAsOptional(sa))
-
-/** @internal */
-export const prismComposeTraversal = <A, B>(ab: Traversal<A, B>) => <S>(sa: Prism<S, A>): Traversal<S, B> =>
-  traversalComposeTraversal(ab)(prismAsTraversal(sa))
 
 /** @internal */
 export const prismFromNullable = <A>(): Prism<A, NonNullable<A>> => ({
@@ -272,26 +248,6 @@ export const optionalComposeTraversal = <A, B>(ab: Traversal<A, B>) => <S>(sa: O
 // -------------------------------------------------------------------------------------
 // Traversal
 // -------------------------------------------------------------------------------------
-
-/** @internal */
-export function traversalComposeIso<A, B>(ab: Iso<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B> {
-  return traversalComposeTraversal(isoAsTraversal(ab))
-}
-
-/** @internal */
-export function traversalComposeLens<A, B>(ab: Lens<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B> {
-  return traversalComposeTraversal(lensAsTraversal(ab))
-}
-
-/** @internal */
-export function traversalComposePrism<A, B>(ab: Prism<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B> {
-  return traversalComposeTraversal(prismAsTraversal(ab))
-}
-
-/** @internal */
-export function traversalComposeOptional<A, B>(ab: Optional<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B> {
-  return traversalComposeTraversal(optionalAsTraversal(ab))
-}
 
 /** @internal */
 export function traversalComposeTraversal<A, B>(ab: Traversal<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B> {

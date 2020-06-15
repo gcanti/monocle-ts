@@ -95,11 +95,11 @@ describe('Prism', () => {
     assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
   })
 
-  it('composePrism', () => {
+  it('compose', () => {
     type S = O.Option<Tree>
     const sa = pipe(_.id<S>(), _.some)
     const ab = value
-    const sb = pipe(sa, _.composePrism(ab))
+    const sb = pipe(sa, _.compose(ab))
     assert.deepStrictEqual(sb.getOption(O.none), O.none)
     assert.deepStrictEqual(sb.getOption(O.some(leaf)), O.none)
     assert.deepStrictEqual(sb.getOption(O.some(node(1, leaf, leaf))), O.some(1))
