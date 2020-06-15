@@ -17,12 +17,12 @@ import { flow } from 'fp-ts/lib/function'
 import { Kind, URIS } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
 import { Option } from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/pipeable'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
 import { Traversal } from './Traversal'
-import { pipe } from 'fp-ts/lib/pipeable'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -107,7 +107,8 @@ export const modify = <A>(f: (a: A) => A) => <S>(lens: Lens<S, A>) => (s: S): S 
  * @category constructors
  * @since 2.3.0
  */
-export const fromNullable: <S, A>(sa: Lens<S, A>) => Optional<S, NonNullable<A>> = _.lensFromNullable
+export const fromNullable = <S, A>(sa: Lens<S, A>): Optional<S, NonNullable<A>> =>
+  _.lensComposePrism(_.prismFromNullable<A>())(sa)
 
 /**
  * Return a `Lens` from a `Lens` and a prop
