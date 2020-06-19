@@ -156,6 +156,24 @@ export const props = <A, P extends keyof A>(
 ): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) => composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
 
 /**
+ * Return a `Optional` from a `Prism` focused on a `ReadonlyArray`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const index = (i: number) => <S, A>(sa: Prism<S, ReadonlyArray<A>>): Optional<S, A> =>
+  pipe(sa, asOptional, _.optionalComposeOptional(_.indexArray<A>().index(i)))
+
+/**
+ * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const key = (k: string) => <S, A>(sa: Prism<S, Readonly<Record<string, A>>>): Optional<S, A> =>
+  pipe(sa, asOptional, _.optionalComposeOptional(_.indexRecord<A>().index(k)))
+
+/**
  * Return a `Prism` from a `Prism` focused on a `Option` type
  *
  * @category combinators

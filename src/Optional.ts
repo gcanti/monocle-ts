@@ -112,6 +112,24 @@ export const props = <A, P extends keyof A>(
   compose(pipe(_.lensId<A>(), _.lensProps(...props), _.lensAsOptional))
 
 /**
+ * Return a `Optional` from a `Optional` focused on a `ReadonlyArray`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): Optional<S, A> =>
+  pipe(sa, _.optionalComposeOptional(_.indexArray<A>().index(i)))
+
+/**
+ * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const key = (k: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>): Optional<S, A> =>
+  pipe(sa, _.optionalComposeOptional(_.indexRecord<A>().index(k)))
+
+/**
  * Return a `Optional` from a `Optional` focused on a `Option` type
  *
  * @category combinators

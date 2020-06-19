@@ -129,6 +129,24 @@ export const props: <A, P extends keyof A>(
 ) => <S>(lens: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> = _.lensProps
 
 /**
+ * Return a `Optional` from a `Lens` focused on a `ReadonlyArray`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const index = (i: number) => <S, A>(sa: Lens<S, ReadonlyArray<A>>): Optional<S, A> =>
+  pipe(sa, asOptional, _.optionalComposeOptional(_.indexArray<A>().index(i)))
+
+/**
+ * Return a `Optional` from a `Lens` focused on a `ReadonlyRecord`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const key = (k: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A>>>): Optional<S, A> =>
+  pipe(sa, asOptional, _.optionalComposeOptional(_.indexRecord<A>().index(k)))
+
+/**
  * Return a `Optional` from a `Lens` focused on a `Option` type
  *
  * @category combinators
@@ -145,15 +163,6 @@ export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> = composePr
 export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Lens<S, Kind<T, A>>) => Traversal<S, A> {
   return flow(asTraversal, _.traversalComposeTraversal(_.fromTraversable(T)()))
 }
-
-/**
- * Return a `Optional` from a `Lens` focused on a `ReadonlyArray`
- *
- * @category combinators
- * @since 2.3.0
- */
-export const index = (i: number) => <S, A>(sa: Lens<S, ReadonlyArray<A>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyArray<A>().index(i)))
 
 // -------------------------------------------------------------------------------------
 // pipeables

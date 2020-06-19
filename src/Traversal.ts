@@ -125,6 +125,24 @@ export const props = <A, P extends keyof A>(
   compose(_.lensAsTraversal(pipe(_.lensId<A>(), _.lensProps(...props))))
 
 /**
+ * Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): Traversal<S, A> =>
+  pipe(sa, compose(_.optionalAsTraversal(_.indexArray<A>().index(i))))
+
+/**
+ * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const key = (k: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>): Traversal<S, A> =>
+  pipe(sa, compose(_.optionalAsTraversal(_.indexRecord<A>().index(k))))
+
+/**
  * Return a `Traversal` from a `Traversal` focused on a `Option` type
  *
  * @category combinators
@@ -143,15 +161,6 @@ export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = com
 export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A> {
   return compose(fromTraversable(T)())
 }
-
-/**
- * Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`
- *
- * @category combinators
- * @since 2.3.0
- */
-export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): Traversal<S, A> =>
-  pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyArray<A>().index(i))))
 
 // -------------------------------------------------------------------------------------
 // instances

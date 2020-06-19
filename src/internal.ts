@@ -2,7 +2,8 @@
  * @since 2.3.0
  */
 import { Applicative } from 'fp-ts/lib/Applicative'
-import { lookup, updateAt } from 'fp-ts/lib/Array'
+import * as A from 'fp-ts/lib/Array'
+import * as R from 'fp-ts/lib/Record'
 import { constant, flow, identity, Predicate } from 'fp-ts/lib/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import * as O from 'fp-ts/lib/Option'
@@ -231,13 +232,13 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 // Ix
 // -------------------------------------------------------------------------------------
 
-function indexArray<A = never>(): Index<Array<A>, number, A> {
+function indexMutableArray<A = never>(): Index<Array<A>, number, A> {
   return {
     index: (i) => ({
-      getOption: (as) => lookup(i, as),
+      getOption: (as) => A.lookup(i, as),
       set: (a) => (as) =>
         pipe(
-          updateAt(i, a)(as),
+          A.updateAt(i, a)(as),
           O.getOrElse(() => as)
         )
     })
@@ -245,4 +246,19 @@ function indexArray<A = never>(): Index<Array<A>, number, A> {
 }
 
 /** @internal */
-export const indexReadonlyArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = indexArray as any
+export const indexArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = indexMutableArray as any
+
+/** @internal */
+export function indexRecord<A = never>(): Index<Readonly<Record<string, A>>, string, A> {
+  return {
+    index: (k) => ({
+      getOption: (r) => R.lookup(k, r),
+      set: (a) => (r) => {
+        if (r[k] === a || O.isNone(R.lookup(k, r))) {
+          return r
+        }
+        return R.insertAt(k, a)(r)
+      }
+    })
+  }
+}

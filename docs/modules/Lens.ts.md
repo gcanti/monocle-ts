@@ -27,6 +27,7 @@ Added in v2.3.0
   - [imap](#imap)
 - [combinators](#combinators)
   - [index](#index)
+  - [key](#key)
   - [modify](#modify)
   - [prop](#prop)
   - [props](#props)
@@ -73,6 +74,18 @@ Return a `Optional` from a `Lens` focused on a `ReadonlyArray`
 
 ```ts
 export declare const index: (i: number) => <S, A>(sa: Lens<S, readonly A[]>) => Optional<S, A>
+```
+
+Added in v2.3.0
+
+## key
+
+Return a `Optional` from a `Lens` focused on a `ReadonlyRecord`
+
+**Signature**
+
+```ts
+export declare const key: (k: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A>>>) => Optional<S, A>
 ```
 
 Added in v2.3.0

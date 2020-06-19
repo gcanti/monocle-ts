@@ -21,6 +21,7 @@ Added in v2.3.0
 - [combinators](#combinators)
   - [filter](#filter)
   - [index](#index)
+  - [key](#key)
   - [modify](#modify)
   - [prop](#prop)
   - [props](#props)
@@ -66,6 +67,18 @@ Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`
 
 ```ts
 export declare const index: (i: number) => <S, A>(sa: Traversal<S, readonly A[]>) => Traversal<S, A>
+```
+
+Added in v2.3.0
+
+## key
+
+Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord`
+
+**Signature**
+
+```ts
+export declare const key: (k: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>) => Traversal<S, A>
 ```
 
 Added in v2.3.0
