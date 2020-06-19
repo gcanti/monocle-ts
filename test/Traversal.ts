@@ -61,6 +61,11 @@ describe('Traversal', () => {
     assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 2, 3])
   })
 
+  it('key', () => {
+    const sa = pipe(_.id<Readonly<Record<string, number>>>(), _.key('k'))
+    assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)({ k: 1, j: 2 }), { k: 2, j: 2 })
+  })
+
   it('traverse', () => {
     const sa = pipe(_.id<ReadonlyArray<number>>(), _.traverse(A.readonlyArray))
     assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 4, 6])

@@ -27,6 +27,8 @@ Added in v2.3.0
 - [Invariant](#invariant)
   - [imap](#imap)
 - [combinators](#combinators)
+  - [index](#index)
+  - [key](#key)
   - [modify](#modify)
   - [modifyOption](#modifyoption)
   - [prop](#prop)
@@ -61,6 +63,30 @@ export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Opt
 Added in v2.3.0
 
 # combinators
+
+## index
+
+Return a `Optional` from a `Optional` focused on a `ReadonlyArray`
+
+**Signature**
+
+```ts
+export declare const index: (i: number) => <S, A>(sa: Optional<S, readonly A[]>) => Optional<S, A>
+```
+
+Added in v2.3.0
+
+## key
+
+Return a `Optional` from a `Optional` focused on a `ReadonlyRecord`
+
+**Signature**
+
+```ts
+export declare const key: (k: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>) => Optional<S, A>
+```
+
+Added in v2.3.0
 
 ## modify
 

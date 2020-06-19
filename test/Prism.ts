@@ -95,6 +95,16 @@ describe('Prism', () => {
     assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
   })
 
+  it('index', () => {
+    const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
+    assert.deepStrictEqual(sa.getOption([1, 2, 3]), O.some(1))
+  })
+
+  it('key', () => {
+    const sa = pipe(_.id<Readonly<Record<string, number>>>(), _.key('k'))
+    assert.deepStrictEqual(sa.getOption({ k: 1, j: 2 }), O.some(1))
+  })
+
   it('compose', () => {
     type S = O.Option<Tree>
     const sa = pipe(_.id<S>(), _.some)

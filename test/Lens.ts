@@ -53,9 +53,12 @@ describe('Lens', () => {
     interface S {
       readonly a?: number
     }
-    const ss = pipe(_.id<S>(), _.prop('a'), _.fromNullable)
-    assert.deepStrictEqual(ss.getOption({ a: 1 }), O.some(1))
-    assert.deepStrictEqual(ss.getOption({}), O.none)
+    const sa = pipe(_.id<S>(), _.prop('a'), _.fromNullable)
+    const s: S = { a: 1 }
+    assert.deepStrictEqual(sa.getOption(s), O.some(1))
+    assert.deepStrictEqual(sa.getOption({}), O.none)
+    // should return the same reference
+    assert.strictEqual(sa.set(1)(s), s)
   })
 
   it('modify', () => {
@@ -70,15 +73,55 @@ describe('Lens', () => {
     assert.deepStrictEqual(f({ a: 1 }), { a: 2 })
   })
 
+  it('prop', () => {
+    interface S {
+      readonly a: string
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'))
+    const s: S = { a: 'a' }
+    // should return the same reference
+    assert.strictEqual(sa.set('a')(s), s)
+  })
+
+  it('props', () => {
+    interface S {
+      readonly a: string
+      readonly b: number
+    }
+    const sa = pipe(_.id<S>(), _.props('a', 'b'))
+    const s: S = { a: 'a', b: 1 }
+    // should return the same reference
+    assert.strictEqual(sa.set({ a: 'a', b: 1 })(s), s)
+  })
+
   it('index', () => {
     interface S {
-      readonly a: ReadonlyArray<string>
+      readonly a: ReadonlyArray<number>
     }
     const sa = pipe(_.id<S>(), _.prop('a'), _.index(0))
-    assert.deepStrictEqual(sa.getOption({ a: [] }), O.none)
-    assert.deepStrictEqual(sa.getOption({ a: ['a'] }), O.some('a'))
-    assert.deepStrictEqual(sa.set('b')({ a: [] }), { a: [] })
-    assert.deepStrictEqual(sa.set('b')({ a: ['a'] }), { a: ['b'] })
+    const empty: S = { a: [] }
+    const full: S = { a: [1, 2] }
+    assert.deepStrictEqual(sa.getOption(empty), O.none)
+    assert.deepStrictEqual(sa.getOption(full), O.some(1))
+    assert.deepStrictEqual(sa.set(2)(full), { a: [2, 2] })
+    // should return the same reference
+    assert.strictEqual(sa.set(2)(empty), empty)
+    assert.strictEqual(sa.set(1)(full), full)
+  })
+
+  it('key', () => {
+    interface S {
+      readonly a: Readonly<Record<string, number>>
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'), _.key('k'))
+    const empty: S = { a: {} }
+    const full: S = { a: { k: 1, j: 2 } }
+    assert.deepStrictEqual(sa.getOption(empty), O.none)
+    assert.deepStrictEqual(sa.getOption(full), O.some(1))
+    assert.deepStrictEqual(sa.set(2)(full), { a: { k: 2, j: 2 } })
+    // should return the same reference
+    assert.strictEqual(sa.set(2)(empty), empty)
+    assert.strictEqual(sa.set(1)(full), full)
   })
 
   it('traverse', () => {
