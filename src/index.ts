@@ -11,26 +11,57 @@ import { Monoid, monoidAll, monoidAny } from 'fp-ts/lib/Monoid'
 import { fromNullable, fromPredicate, getFirstMonoid, isNone, Option, option, some } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
-import * as A from './At'
-import * as I from './Iso'
-import * as Ix from './Ix'
-import * as L from './Lens'
-import * as O from './Optional'
-import * as P from './Prism'
-import * as T from './Traversal'
+import * as at from './At'
+import * as iso from './Iso'
+import * as index from './Ix'
+import * as lens from './Lens'
+import * as optional from './Optional'
+import * as prism from './Prism'
+import * as traversal from './Traversal'
+
+export {
+  /**
+   * @since 2.3.0
+   */
+  at,
+  /**
+   * @since 2.3.0
+   */
+  iso,
+  /**
+   * @since 2.3.0
+   */
+  index,
+  /**
+   * @since 2.3.0
+   */
+  lens,
+  /**
+   * @since 2.3.0
+   */
+  prism,
+  /**
+   * @since 2.3.0
+   */
+  optional,
+  /**
+   * @since 2.3.0
+   */
+  traversal
+}
 
 //
 // compat
 //
 
-const fromIso = <S, A>(iso: I.Iso<S, A>): Iso<S, A> => new Iso(iso.get, iso.reverseGet)
-const fromLens = <S, A>(lens: L.Lens<S, A>): Lens<S, A> => new Lens(lens.get, lens.set)
-const fromPrism = <S, A>(prism: P.Prism<S, A>): Prism<S, A> => new Prism(prism.getOption, prism.reverseGet)
-const fromOptional = <S, A>(optional: O.Optional<S, A>): Optional<S, A> =>
+const fromIso = <S, A>(iso: iso.Iso<S, A>): Iso<S, A> => new Iso(iso.get, iso.reverseGet)
+const fromLens = <S, A>(lens: lens.Lens<S, A>): Lens<S, A> => new Lens(lens.get, lens.set)
+const fromPrism = <S, A>(prism: prism.Prism<S, A>): Prism<S, A> => new Prism(prism.getOption, prism.reverseGet)
+const fromOptional = <S, A>(optional: optional.Optional<S, A>): Optional<S, A> =>
   new Optional(optional.getOption, optional.set)
-const fromTraversal = <S, A>(traversal: T.Traversal<S, A>): Traversal<S, A> => new Traversal(traversal.modifyF)
-const fromAt = <S, I, A>(at: A.At<S, I, A>): At<S, I, A> => new At((i) => fromLens(at.at(i)))
-const fromIndex = <S, I, A>(ix: Ix.Index<S, I, A>): Index<S, I, A> => new Index((i) => fromOptional(ix.index(i)))
+const fromTraversal = <S, A>(traversal: traversal.Traversal<S, A>): Traversal<S, A> => new Traversal(traversal.modifyF)
+const fromAt = <S, I, A>(at: at.At<S, I, A>): At<S, I, A> => new At((i) => fromLens(at.at(i)))
+const fromIndex = <S, I, A>(ix: index.Index<S, I, A>): Index<S, I, A> => new Index((i) => fromOptional(ix.index(i)))
 
 //
 // old APIs
@@ -76,14 +107,14 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   reverse(): Iso<A, S> {
-    return fromIso(I.reverse(this))
+    return fromIso(iso.reverse(this))
   }
 
   /**
    * @since 1.0.0
    */
   modify(f: (a: A) => A): (s: S) => S {
-    return I.modify(f)(this)
+    return iso.modify(f)(this)
   }
 
   /**
@@ -92,7 +123,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   asLens(): Lens<S, A> {
-    return fromLens(I.asLens(this))
+    return fromLens(iso.asLens(this))
   }
 
   /**
@@ -101,7 +132,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   asPrism(): Prism<S, A> {
-    return fromPrism(I.asPrism(this))
+    return fromPrism(iso.asPrism(this))
   }
 
   /**
@@ -110,7 +141,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   asOptional(): Optional<S, A> {
-    return fromOptional(I.asOptional(this))
+    return fromOptional(iso.asOptional(this))
   }
 
   /**
@@ -119,7 +150,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   asTraversal(): Traversal<S, A> {
-    return fromTraversal(I.asTraversal(this))
+    return fromTraversal(iso.asTraversal(this))
   }
 
   /**
@@ -155,7 +186,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Iso<A, B>): Iso<S, B> {
-    return fromIso(I.compose(ab)(this))
+    return fromIso(iso.compose(ab)(this))
   }
 
   /**
@@ -173,7 +204,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   composeLens<B>(ab: Lens<A, B>): Lens<S, B> {
-    return fromLens(pipe(this, I.asLens, L.compose(ab)))
+    return fromLens(pipe(this, iso.asLens, lens.compose(ab)))
   }
 
   /**
@@ -182,7 +213,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   composePrism<B>(ab: Prism<A, B>): Prism<S, B> {
-    return fromPrism(pipe(this, I.asPrism, P.compose(ab)))
+    return fromPrism(pipe(this, iso.asPrism, prism.compose(ab)))
   }
 
   /**
@@ -191,7 +222,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   composeOptional<B>(ab: Optional<A, B>): Optional<S, B> {
-    return fromOptional(pipe(this, I.asOptional, O.compose(ab)))
+    return fromOptional(pipe(this, iso.asOptional, optional.compose(ab)))
   }
 
   /**
@@ -200,7 +231,7 @@ export class Iso<S, A> {
    * @since 1.0.0
    */
   composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return fromTraversal(pipe(this, I.asTraversal, T.compose(ab)))
+    return fromTraversal(pipe(this, iso.asTraversal, traversal.compose(ab)))
   }
 
   /**
@@ -318,7 +349,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   static fromProp<S>(): <P extends keyof S>(prop: P) => Lens<S, S[P]> {
-    return (prop) => fromLens(pipe(L.id<S>(), L.prop(prop)))
+    return (prop) => fromLens(pipe(lens.id<S>(), lens.prop(prop)))
   }
 
   /**
@@ -344,7 +375,7 @@ export class Lens<S, A> {
    */
   static fromProps<S>(): <P extends keyof S>(props: Array<P>) => Lens<S, { [K in P]: S[K] }>
   static fromProps<S>(): <P extends keyof S>(props: [P, P, ...Array<P>]) => Lens<S, { [K in P]: S[K] }> {
-    return (props) => fromLens(pipe(L.id<S>(), L.props(...props)))
+    return (props) => fromLens(pipe(lens.id<S>(), lens.props(...props)))
   }
 
   /**
@@ -395,7 +426,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   modify(f: (a: A) => A): (s: S) => S {
-    return L.modify(f)(this)
+    return lens.modify(f)(this)
   }
 
   /**
@@ -404,7 +435,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   asOptional(): Optional<S, A> {
-    return fromOptional(L.asOptional(this))
+    return fromOptional(lens.asOptional(this))
   }
 
   /**
@@ -413,7 +444,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   asTraversal(): Traversal<S, A> {
-    return fromTraversal(L.asTraversal(this))
+    return fromTraversal(lens.asTraversal(this))
   }
 
   /**
@@ -449,7 +480,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Lens<A, B>): Lens<S, B> {
-    return fromLens(L.compose(ab)(this))
+    return fromLens(lens.compose(ab)(this))
   }
 
   /**
@@ -485,7 +516,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   composeOptional<B>(ab: Optional<A, B>): Optional<S, B> {
-    return fromOptional(pipe(this, L.asOptional, O.compose(ab)))
+    return fromOptional(pipe(this, lens.asOptional, optional.compose(ab)))
   }
 
   /**
@@ -494,7 +525,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return fromTraversal(pipe(this, L.asTraversal, T.compose(ab)))
+    return fromTraversal(pipe(this, lens.asTraversal, traversal.compose(ab)))
   }
 
   /**
@@ -512,7 +543,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   composeIso<B>(ab: Iso<A, B>): Lens<S, B> {
-    return fromLens(pipe(this, L.compose(pipe(ab, I.asLens))))
+    return fromLens(pipe(this, lens.compose(pipe(ab, iso.asLens))))
   }
 
   /**
@@ -521,7 +552,7 @@ export class Lens<S, A> {
    * @since 1.0.0
    */
   composePrism<B>(ab: Prism<A, B>): Optional<S, B> {
-    return fromOptional(L.composePrism(ab)(this))
+    return fromOptional(lens.composePrism(ab)(this))
   }
 }
 
@@ -546,7 +577,7 @@ export class Prism<S, A> {
   static fromPredicate<S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A>
   static fromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
-    return fromPrism(P.fromPredicate(predicate))
+    return fromPrism(prism.fromPredicate(predicate))
   }
 
   /**
@@ -596,7 +627,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   asOptional(): Optional<S, A> {
-    return fromOptional(P.asOptional(this))
+    return fromOptional(prism.asOptional(this))
   }
 
   /**
@@ -605,7 +636,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   asTraversal(): Traversal<S, A> {
-    return fromTraversal(P.asTraversal(this))
+    return fromTraversal(prism.asTraversal(this))
   }
 
   /**
@@ -635,7 +666,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Prism<A, B>): Prism<S, B> {
-    return fromPrism(P.compose(ab)(this))
+    return fromPrism(prism.compose(ab)(this))
   }
 
   /**
@@ -653,7 +684,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   composeOptional<B>(ab: Optional<A, B>): Optional<S, B> {
-    return fromOptional(pipe(this, P.asOptional, O.compose(ab)))
+    return fromOptional(pipe(this, prism.asOptional, optional.compose(ab)))
   }
 
   /**
@@ -662,7 +693,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return fromTraversal(pipe(this, P.asTraversal, T.compose(ab)))
+    return fromTraversal(pipe(this, prism.asTraversal, traversal.compose(ab)))
   }
 
   /**
@@ -689,7 +720,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   composeIso<B>(ab: Iso<A, B>): Prism<S, B> {
-    return fromPrism(pipe(this, P.compose(pipe(ab, I.asPrism))))
+    return fromPrism(pipe(this, prism.compose(pipe(ab, iso.asPrism))))
   }
 
   /**
@@ -698,7 +729,7 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   composeLens<B>(ab: Lens<A, B>): Optional<S, B> {
-    return fromOptional(P.composeLens(ab)(this))
+    return fromOptional(prism.composeLens(ab)(this))
   }
 
   /**
@@ -872,14 +903,14 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   modify(f: (a: A) => A): (s: S) => S {
-    return O.modify(f)(this)
+    return optional.modify(f)(this)
   }
 
   /**
    * @since 1.0.0
    */
   modifyOption(f: (a: A) => A): (s: S) => Option<S> {
-    return O.modifyOption(f)(this)
+    return optional.modifyOption(f)(this)
   }
 
   /**
@@ -888,7 +919,7 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   asTraversal(): Traversal<S, A> {
-    return fromTraversal(O.asTraversal(this))
+    return fromTraversal(optional.asTraversal(this))
   }
 
   /**
@@ -918,7 +949,7 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Optional<A, B>): Optional<S, B> {
-    return fromOptional(O.compose(ab)(this))
+    return fromOptional(optional.compose(ab)(this))
   }
 
   /**
@@ -936,7 +967,7 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   composeTraversal<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return fromTraversal(pipe(this, O.asTraversal, T.compose(ab)))
+    return fromTraversal(pipe(this, optional.asTraversal, traversal.compose(ab)))
   }
 
   /**
@@ -963,7 +994,7 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   composeLens<B>(ab: Lens<A, B>): Optional<S, B> {
-    return fromOptional(pipe(this, O.compose(pipe(ab, L.asOptional))))
+    return fromOptional(pipe(this, optional.compose(pipe(ab, lens.asOptional))))
   }
 
   /**
@@ -972,7 +1003,7 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   composePrism<B>(ab: Prism<A, B>): Optional<S, B> {
-    return fromOptional(pipe(this, O.compose(pipe(ab, P.asOptional))))
+    return fromOptional(pipe(this, optional.compose(pipe(ab, prism.asOptional))))
   }
 
   /**
@@ -981,7 +1012,7 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   composeIso<B>(ab: Iso<A, B>): Optional<S, B> {
-    return fromOptional(pipe(this, O.compose(pipe(ab, I.asOptional))))
+    return fromOptional(pipe(this, optional.compose(pipe(ab, iso.asOptional))))
   }
 
   /**
@@ -997,7 +1028,7 @@ export class Optional<S, A> {
 /**
  * @since 1.0.0
  */
-export type ModifyF<S, A> = T.ModifyF<S, A>
+export type ModifyF<S, A> = traversal.ModifyF<S, A>
 
 /**
  * @category constructor
@@ -1017,14 +1048,14 @@ export class Traversal<S, A> {
    * @since 1.0.0
    */
   modify(f: (a: A) => A): (s: S) => S {
-    return T.modify(f)(this)
+    return traversal.modify(f)(this)
   }
 
   /**
    * @since 1.0.0
    */
   set(a: A): (s: S) => S {
-    return T.set(a)(this)
+    return traversal.set(a)(this)
   }
 
   /**
@@ -1053,7 +1084,7 @@ export class Traversal<S, A> {
   filter<B extends A>(refinement: Refinement<A, B>): Traversal<S, B>
   filter(predicate: Predicate<A>): Traversal<S, A>
   filter(predicate: Predicate<A>): Traversal<S, A> {
-    return fromTraversal(T.filter(predicate)(this))
+    return fromTraversal(traversal.filter(predicate)(this))
   }
 
   /**
@@ -1080,7 +1111,7 @@ export class Traversal<S, A> {
    * @since 1.0.0
    */
   compose<B>(ab: Traversal<A, B>): Traversal<S, B> {
-    return fromTraversal(T.compose(ab)(this))
+    return fromTraversal(traversal.compose(ab)(this))
   }
 
   /**
@@ -1125,7 +1156,7 @@ export class Traversal<S, A> {
    * @since 1.0.0
    */
   composeLens<B>(ab: Lens<A, B>): Traversal<S, B> {
-    return fromTraversal(pipe(this, T.compose(pipe(ab, L.asTraversal))))
+    return fromTraversal(pipe(this, traversal.compose(pipe(ab, lens.asTraversal))))
   }
 
   /**
@@ -1134,7 +1165,7 @@ export class Traversal<S, A> {
    * @since 1.0.0
    */
   composePrism<B>(ab: Prism<A, B>): Traversal<S, B> {
-    return fromTraversal(pipe(this, T.compose(pipe(ab, P.asTraversal))))
+    return fromTraversal(pipe(this, traversal.compose(pipe(ab, prism.asTraversal))))
   }
 
   /**
@@ -1143,7 +1174,7 @@ export class Traversal<S, A> {
    * @since 1.0.0
    */
   composeIso<B>(ab: Iso<A, B>): Traversal<S, B> {
-    return fromTraversal(pipe(this, T.compose(pipe(ab, I.asTraversal))))
+    return fromTraversal(pipe(this, traversal.compose(pipe(ab, iso.asTraversal))))
   }
 
   /**
@@ -1173,7 +1204,7 @@ export class At<S, I, A> {
    * @since 1.2.0
    */
   fromIso<T>(iso: Iso<T, S>): At<T, I, A> {
-    return fromAt(A.fromIso(iso)(this))
+    return fromAt(at.fromIso(iso)(this))
   }
 }
 
@@ -1192,7 +1223,7 @@ export class Index<S, I, A> {
    * @since 1.2.0
    */
   static fromAt<T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> {
-    return fromIndex(Ix.fromAt(at))
+    return fromIndex(index.fromAt(at))
   }
 
   /**
@@ -1201,7 +1232,7 @@ export class Index<S, I, A> {
    * @since 1.2.0
    */
   fromIso<T>(iso: Iso<T, S>): Index<T, I, A> {
-    return fromIndex(Ix.fromIso(iso)(this))
+    return fromIndex(index.fromIso(iso)(this))
   }
 }
 
