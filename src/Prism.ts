@@ -156,6 +156,16 @@ export const props = <A, P extends keyof A>(
 ): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) => composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
 
 /**
+ * Return a `Optional` from a `Prism` and a component
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
+  prop: P
+): (<S>(sa: Prism<S, A>) => Optional<S, A[P]>) => composeLens(pipe(_.lensId<A>(), _.lensComponent(prop)))
+
+/**
  * Return a `Optional` from a `Prism` focused on a `ReadonlyArray`
  *
  * @category combinators

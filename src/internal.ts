@@ -98,6 +98,22 @@ export const lensProps = <A, P extends keyof A>(...props: [P, P, ...Array<P>]) =
   }
 })
 
+/** @internal */
+export const lensComponent = <A extends ReadonlyArray<unknown>, P extends keyof A>(prop: P) => <S>(
+  lens: Lens<S, A>
+): Lens<S, A[P]> => ({
+  get: (s) => lens.get(s)[prop],
+  set: (ap) => (s) => {
+    const oa = lens.get(s)
+    if (ap === oa[prop]) {
+      return s
+    }
+    const copy: A = oa.slice() as any
+    copy[prop] = ap
+    return lens.set(copy)(s)
+  }
+})
+
 // -------------------------------------------------------------------------------------
 // Prism
 // -------------------------------------------------------------------------------------

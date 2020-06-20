@@ -129,6 +129,16 @@ export const props: <A, P extends keyof A>(
 ) => <S>(lens: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> = _.lensProps
 
 /**
+ * Return a `Lens` from a `Lens` and a component
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const component: <A extends ReadonlyArray<unknown>, P extends keyof A>(
+  prop: P
+) => <S>(sa: Lens<S, A>) => Lens<S, A[P]> = _.lensComponent
+
+/**
  * Return a `Optional` from a `Lens` focused on a `ReadonlyArray`
  *
  * @category combinators

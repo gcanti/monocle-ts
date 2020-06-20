@@ -103,6 +103,18 @@ describe('Lens', () => {
     assert.strictEqual(sa.set({ b: 'b', c: 1 })(s), s)
   })
 
+  it('component', () => {
+    interface S {
+      readonly a: [string, number]
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'), _.component(1))
+    const s: S = { a: ['a', 1] }
+    assert.strictEqual(sa.get(s), 1)
+    assert.deepStrictEqual(sa.set(2)(s), { a: ['a', 2] })
+    // should return the same reference
+    assert.strictEqual(sa.set(1)(s), s)
+  })
+
   it('index', () => {
     interface S {
       readonly a: ReadonlyArray<number>

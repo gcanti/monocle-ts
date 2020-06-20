@@ -19,6 +19,7 @@ Added in v2.3.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [combinators](#combinators)
+  - [component](#component)
   - [filter](#filter)
   - [index](#index)
   - [key](#key)
@@ -45,6 +46,20 @@ Added in v2.3.0
 ---
 
 # combinators
+
+## component
+
+Return a `Traversal` from a `Traversal` and a component
+
+**Signature**
+
+```ts
+export declare const component: <A extends readonly unknown[], P extends keyof A>(
+  prop: P
+) => <S>(sa: Traversal<S, A>) => Traversal<S, A[P]>
+```
+
+Added in v2.3.0
 
 ## filter
 

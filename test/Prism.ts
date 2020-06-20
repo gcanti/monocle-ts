@@ -81,11 +81,10 @@ describe('Prism', () => {
   })
 
   it('prop', () => {
-    type S = O.Option<Tree>
-    const sa = pipe(_.id<S>(), _.some, _.prop('_tag'))
+    type S = O.Option<{ a: string; b: number }>
+    const sa = pipe(_.id<S>(), _.some, _.prop('a'))
     assert.deepStrictEqual(sa.getOption(O.none), O.none)
-    assert.deepStrictEqual(sa.getOption(O.some(leaf)), O.some('Leaf'))
-    assert.deepStrictEqual(sa.getOption(O.some(node(1, leaf, leaf))), O.some('Node'))
+    assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1 })), O.some('a'))
   })
 
   it('props', () => {
@@ -93,6 +92,13 @@ describe('Prism', () => {
     const sa = pipe(_.id<S>(), _.some, _.props('a', 'b'))
     assert.deepStrictEqual(sa.getOption(O.none), O.none)
     assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
+  })
+
+  it('component', () => {
+    type S = O.Option<[string, number]>
+    const sa = pipe(_.id<S>(), _.some, _.component(1))
+    assert.deepStrictEqual(sa.getOption(O.none), O.none)
+    assert.deepStrictEqual(sa.getOption(O.some(['a', 1])), O.some(1))
   })
 
   it('index', () => {
