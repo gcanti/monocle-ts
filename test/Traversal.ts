@@ -56,6 +56,22 @@ describe('Traversal', () => {
     )
   })
 
+  it('component', () => {
+    const sa = pipe(_.fromTraversable(A.readonlyArray)<[string, number]>(), _.component(1))
+    assert.deepStrictEqual(
+      sa.modifyF(Id.identity)((n) => n * 2)([
+        ['a', 1],
+        ['b', 2],
+        ['c', 3]
+      ]),
+      [
+        ['a', 2],
+        ['b', 4],
+        ['c', 6]
+      ]
+    )
+  })
+
   it('index', () => {
     const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
     assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 2, 3])

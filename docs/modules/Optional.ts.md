@@ -27,6 +27,7 @@ Added in v2.3.0
 - [Invariant](#invariant)
   - [imap](#imap)
 - [combinators](#combinators)
+  - [component](#component)
   - [index](#index)
   - [key](#key)
   - [modify](#modify)
@@ -63,6 +64,20 @@ export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Opt
 Added in v2.3.0
 
 # combinators
+
+## component
+
+Return a `Optional` from a `Optional` and a component
+
+**Signature**
+
+```ts
+export declare const component: <A extends readonly unknown[], P extends keyof A>(
+  prop: P
+) => <S>(sa: Optional<S, A>) => Optional<S, A[P]>
+```
+
+Added in v2.3.0
 
 ## index
 

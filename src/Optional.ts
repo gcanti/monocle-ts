@@ -112,6 +112,17 @@ export const props = <A, P extends keyof A>(
   compose(pipe(_.lensId<A>(), _.lensProps(...props), _.lensAsOptional))
 
 /**
+ * Return a `Optional` from a `Optional` and a component
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
+  prop: P
+): (<S>(sa: Optional<S, A>) => Optional<S, A[P]>) =>
+  compose(pipe(_.lensId<A>(), _.lensComponent(prop), _.lensAsOptional))
+
+/**
  * Return a `Optional` from a `Optional` focused on a `ReadonlyArray`
  *
  * @category combinators

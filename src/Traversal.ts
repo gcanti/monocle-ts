@@ -111,7 +111,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(traversal: Traversal<S, 
  * @since 2.3.0
  */
 export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Traversal<S, A>) => Traversal<S, A[P]>) =>
-  compose(_.lensAsTraversal(pipe(_.lensId<A>(), _.lensProp(prop))))
+  compose(pipe(_.lensId<A>(), _.lensProp(prop), _.lensAsTraversal))
 
 /**
  * Return a `Traversal` from a `Traversal` and a list of props
@@ -122,7 +122,18 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Traversal<S, A>) =
 export const props = <A, P extends keyof A>(
   ...props: [P, P, ...Array<P>]
 ): (<S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }>) =>
-  compose(_.lensAsTraversal(pipe(_.lensId<A>(), _.lensProps(...props))))
+  compose(pipe(_.lensId<A>(), _.lensProps(...props), _.lensAsTraversal))
+
+/**
+ * Return a `Traversal` from a `Traversal` and a component
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
+  prop: P
+): (<S>(sa: Traversal<S, A>) => Traversal<S, A[P]>) =>
+  compose(pipe(_.lensId<A>(), _.lensComponent(prop), _.lensAsTraversal))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`
