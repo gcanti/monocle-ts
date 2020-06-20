@@ -75,23 +75,32 @@ describe('Lens', () => {
 
   it('prop', () => {
     interface S {
-      readonly a: string
+      readonly a: {
+        readonly b: number
+      }
     }
-    const sa = pipe(_.id<S>(), _.prop('a'))
-    const s: S = { a: 'a' }
+    const sa = pipe(_.id<S>(), _.prop('a'), _.prop('b'))
+    const s: S = { a: { b: 1 } }
+    assert.strictEqual(sa.get(s), 1)
+    assert.deepStrictEqual(sa.set(2)(s), { a: { b: 2 } })
     // should return the same reference
-    assert.strictEqual(sa.set('a')(s), s)
+    assert.strictEqual(sa.set(1)(s), s)
   })
 
   it('props', () => {
     interface S {
-      readonly a: string
-      readonly b: number
+      readonly a: {
+        readonly b: string
+        readonly c: number
+        readonly d: boolean
+      }
     }
-    const sa = pipe(_.id<S>(), _.props('a', 'b'))
-    const s: S = { a: 'a', b: 1 }
+    const sa = pipe(_.id<S>(), _.prop('a'), _.props('b', 'c'))
+    const s: S = { a: { b: 'b', c: 1, d: true } }
+    assert.deepStrictEqual(sa.get(s), { b: 'b', c: 1 })
+    assert.deepStrictEqual(sa.set({ b: 'b', c: 2 })(s), { a: { b: 'b', c: 2, d: true } })
     // should return the same reference
-    assert.strictEqual(sa.set({ a: 'a', b: 1 })(s), s)
+    assert.strictEqual(sa.set({ b: 'b', c: 1 })(s), s)
   })
 
   it('index', () => {

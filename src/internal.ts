@@ -66,7 +66,13 @@ export const lensId = <S>(): Lens<S, S> => ({
 /** @internal */
 export const lensProp = <A, P extends keyof A>(prop: P) => <S>(lens: Lens<S, A>): Lens<S, A[P]> => ({
   get: (s) => lens.get(s)[prop],
-  set: (a) => (s) => (a === lens.get(s)[prop] ? s : Object.assign({}, s, { [prop]: a }))
+  set: (ap) => (s) => {
+    const oa = lens.get(s)
+    if (ap === oa[prop]) {
+      return s
+    }
+    return lens.set(Object.assign({}, oa, { [prop]: ap }))(s)
+  }
 })
 
 /** @internal */
@@ -85,7 +91,7 @@ export const lensProps = <A, P extends keyof A>(...props: [P, P, ...Array<P>]) =
     const oa = lens.get(s)
     for (const k of props) {
       if (a[k] !== oa[k]) {
-        return Object.assign({}, s, a)
+        return lens.set(Object.assign({}, oa, a))(s)
       }
     }
     return s
