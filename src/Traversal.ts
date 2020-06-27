@@ -9,11 +9,14 @@
  */
 import { Applicative, Applicative1, Applicative2, Applicative2C, Applicative3 } from 'fp-ts/lib/Applicative'
 import { Category2 } from 'fp-ts/lib/Category'
-import { Predicate, Refinement } from 'fp-ts/lib/function'
+import * as C from 'fp-ts/lib/Const'
+import { identity, Predicate, Refinement } from 'fp-ts/lib/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
-import { identity } from 'fp-ts/lib/Identity'
+import * as I from 'fp-ts/lib/Identity'
+import { Monoid } from 'fp-ts/lib/Monoid'
 import { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
+import * as A from 'fp-ts/lib/ReadonlyArray'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 
@@ -83,7 +86,7 @@ export const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) =>
  * @since 2.3.0
  */
 export const modify = <A>(f: (a: A) => A) => <S>(sa: Traversal<S, A>): ((s: S) => S) => {
-  return sa.modifyF(identity)(f)
+  return sa.modifyF(I.identity)(f)
 }
 
 /**
@@ -172,6 +175,32 @@ export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = com
 export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A> {
   return compose(fromTraversable(T)())
 }
+
+/**
+ * Map each target to a `Monoid` and combine the results.
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const foldMap = <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => <S>(sa: Traversal<S, A>): ((s: S) => M) =>
+  sa.modifyF(C.getApplicative(M))((a) => C.make(f(a)))
+
+/**
+ * Map each target to a `Monoid` and combine the results.
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const fold = <A>(M: Monoid<A>): (<S>(sa: Traversal<S, A>) => (s: S) => A) => foldMap(M)(identity)
+
+/**
+ * Get all the targets of a `Traversal`.
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const getAll = <S>(s: S) => <A>(sa: Traversal<S, A>): ReadonlyArray<A> =>
+  foldMap(A.getMonoid<A>())((a: A) => [a])(sa)(s)
 
 // -------------------------------------------------------------------------------------
 // instances

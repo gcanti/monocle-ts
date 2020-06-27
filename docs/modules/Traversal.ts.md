@@ -21,6 +21,9 @@ Added in v2.3.0
 - [combinators](#combinators)
   - [component](#component)
   - [filter](#filter)
+  - [fold](#fold)
+  - [foldMap](#foldmap)
+  - [getAll](#getall)
   - [index](#index)
   - [key](#key)
   - [modify](#modify)
@@ -70,6 +73,42 @@ export declare function filter<A, B extends A>(
   refinement: Refinement<A, B>
 ): <S>(traversal: Traversal<S, A>) => Traversal<S, B>
 export declare function filter<A>(predicate: Predicate<A>): <S>(traversal: Traversal<S, A>) => Traversal<S, A>
+```
+
+Added in v2.3.0
+
+## fold
+
+Map each target to a `Monoid` and combine the results.
+
+**Signature**
+
+```ts
+export declare const fold: <A>(M: Monoid<A>) => <S>(sa: Traversal<S, A>) => (s: S) => A
+```
+
+Added in v2.3.0
+
+## foldMap
+
+Map each target to a `Monoid` and combine the results.
+
+**Signature**
+
+```ts
+export declare const foldMap: <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => <S>(sa: Traversal<S, A>) => (s: S) => M
+```
+
+Added in v2.3.0
+
+## getAll
+
+Get all the targets of a `Traversal`.
+
+**Signature**
+
+```ts
+export declare const getAll: <S>(s: S) => <A>(sa: Traversal<S, A>) => readonly A[]
 ```
 
 Added in v2.3.0
