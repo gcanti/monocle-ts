@@ -3,6 +3,7 @@ import * as _ from '../src/Traversal'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as Id from 'fp-ts/lib/Identity'
 import { pipe } from 'fp-ts/lib/function'
+import { monoidSum } from 'fp-ts/lib/Monoid'
 
 describe('Traversal', () => {
   describe('instances', () => {
@@ -85,5 +86,16 @@ describe('Traversal', () => {
   it('traverse', () => {
     const sa = pipe(_.id<ReadonlyArray<number>>(), _.traverse(A.readonlyArray))
     assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 4, 6])
+  })
+
+  it('fold', () => {
+    const sa = pipe(_.id<ReadonlyArray<number>>(), _.traverse(A.readonlyArray))
+    const f = pipe(sa, _.fold(monoidSum))
+    assert.deepStrictEqual(f([1, 2, 3]), 6)
+  })
+
+  it('getAll', () => {
+    const sa = pipe(_.id<ReadonlyArray<number>>(), _.traverse(A.readonlyArray))
+    assert.deepStrictEqual(pipe(sa, _.getAll([1, 2, 3])), [1, 2, 3])
   })
 })
