@@ -31,10 +31,12 @@ Added in v2.3.0
   - [component](#component)
   - [index](#index)
   - [key](#key)
+  - [left](#left)
   - [modify](#modify)
   - [modifyOption](#modifyoption)
   - [prop](#prop)
   - [props](#props)
+  - [right](#right)
   - [set](#set)
   - [some](#some)
 - [compositions](#compositions)
@@ -110,6 +112,18 @@ export declare const key: (k: string) => <S, A>(sa: Prism<S, Readonly<Record<str
 
 Added in v2.3.0
 
+## left
+
+Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type
+
+**Signature**
+
+```ts
+export declare const left: <S, E, A>(soa: Prism<S, Either<E, A>>) => Prism<S, E>
+```
+
+Added in v2.3.0
+
 ## modify
 
 **Signature**
@@ -154,6 +168,18 @@ export declare const props: <A, P extends keyof A>(
   props_1: P,
   ...props_2: P[]
 ) => <S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>
+```
+
+Added in v2.3.0
+
+## right
+
+Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type
+
+**Signature**
+
+```ts
+export declare const right: <S, E, A>(soa: Prism<S, Either<E, A>>) => Prism<S, A>
 ```
 
 Added in v2.3.0

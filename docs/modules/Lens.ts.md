@@ -35,9 +35,11 @@ Added in v2.3.0
   - [component](#component)
   - [index](#index)
   - [key](#key)
+  - [left](#left)
   - [modify](#modify)
   - [prop](#prop)
   - [props](#props)
+  - [right](#right)
   - [some](#some)
   - [traverse](#traverse)
 - [compositions](#compositions)
@@ -111,6 +113,18 @@ export declare const key: (k: string) => <S, A>(sa: Lens<S, Readonly<Record<stri
 
 Added in v2.3.0
 
+## left
+
+Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type
+
+**Signature**
+
+```ts
+export declare const left: <S, E, A>(soa: Lens<S, Either<E, A>>) => Optional<S, E>
+```
+
+Added in v2.3.0
+
 ## modify
 
 **Signature**
@@ -145,6 +159,18 @@ export declare const props: <A, P extends keyof A>(
   props_1: P,
   ...props_2: P[]
 ) => <S>(lens: Lens<S, A>) => Lens<S, { [K in P]: A[K] }>
+```
+
+Added in v2.3.0
+
+## right
+
+Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type
+
+**Signature**
+
+```ts
+export declare const right: <S, E, A>(soa: Lens<S, Either<E, A>>) => Optional<S, A>
 ```
 
 Added in v2.3.0

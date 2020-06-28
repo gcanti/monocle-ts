@@ -32,9 +32,11 @@ Added in v2.3.0
   - [getAll](#getall)
   - [index](#index)
   - [key](#key)
+  - [left](#left)
   - [modify](#modify)
   - [prop](#prop)
   - [props](#props)
+  - [right](#right)
   - [set](#set)
   - [some](#some)
   - [traverse](#traverse)
@@ -143,6 +145,18 @@ export declare const key: (k: string) => <S, A>(sa: Traversal<S, Readonly<Record
 
 Added in v2.3.0
 
+## left
+
+Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type
+
+**Signature**
+
+```ts
+export declare const left: <S, E, A>(soa: Traversal<S, Either<E, A>>) => Traversal<S, E>
+```
+
+Added in v2.3.0
+
 ## modify
 
 **Signature**
@@ -177,6 +191,18 @@ export declare const props: <A, P extends keyof A>(
   props_1: P,
   ...props_2: P[]
 ) => <S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }>
+```
+
+Added in v2.3.0
+
+## right
+
+Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type
+
+**Signature**
+
+```ts
+export declare const right: <S, E, A>(soa: Traversal<S, Either<E, A>>) => Traversal<S, A>
 ```
 
 Added in v2.3.0

@@ -13,6 +13,7 @@ import * as R from 'fp-ts/lib/Record'
 import { constant, flow, identity, Predicate } from 'fp-ts/lib/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import * as O from 'fp-ts/lib/Option'
+import * as E from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
 import { Iso } from './Iso'
@@ -184,9 +185,21 @@ export function prismFromPredicate<A>(predicate: Predicate<A>): Prism<A, A> {
 }
 
 /** @internal */
-export const prismFromSome = <A>(): Prism<O.Option<A>, A> => ({
+export const prismSome = <A>(): Prism<O.Option<A>, A> => ({
   getOption: identity,
   reverseGet: O.some
+})
+
+/** @internal */
+export const prismRight = <E, A>(): Prism<E.Either<E, A>, A> => ({
+  getOption: O.fromEither,
+  reverseGet: E.right
+})
+
+/** @internal */
+export const prismLeft = <E, A>(): Prism<E.Either<E, A>, E> => ({
+  getOption: (s) => (E.isLeft(s) ? O.some(s.left) : O.none), // TODO: replace with E.getLeft in v3
+  reverseGet: E.left
 })
 
 // -------------------------------------------------------------------------------------

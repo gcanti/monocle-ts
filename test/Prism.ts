@@ -1,6 +1,7 @@
 import * as assert from 'assert'
 import { pipe } from 'fp-ts/lib/function'
 import * as O from 'fp-ts/lib/Option'
+import * as E from 'fp-ts/lib/Either'
 import * as _ from '../src/Prism'
 
 // -------------------------------------------------------------------------------------
@@ -120,5 +121,21 @@ describe('Prism', () => {
     assert.deepStrictEqual(sb.getOption(O.some(leaf)), O.none)
     assert.deepStrictEqual(sb.getOption(O.some(node(1, leaf, leaf))), O.some(1))
     assert.deepStrictEqual(sb.reverseGet(1), O.some(node(1, leaf, leaf)))
+  })
+
+  it('right', () => {
+    type S = E.Either<string, number>
+    const sa = pipe(_.id<S>(), _.right)
+    assert.deepStrictEqual(sa.getOption(E.right(1)), O.some(1))
+    assert.deepStrictEqual(sa.getOption(E.left('a')), O.none)
+    assert.deepStrictEqual(sa.reverseGet(2), E.right(2))
+  })
+
+  it('left', () => {
+    type S = E.Either<string, number>
+    const sa = pipe(_.id<S>(), _.left)
+    assert.deepStrictEqual(sa.getOption(E.right(1)), O.none)
+    assert.deepStrictEqual(sa.getOption(E.left('a')), O.some('a'))
+    assert.deepStrictEqual(sa.reverseGet('b'), E.left('b'))
   })
 })
