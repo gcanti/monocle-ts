@@ -1,4 +1,10 @@
 /**
+ * **This module is experimental**
+ *
+ * Experimental features are published in order to get early feedback from the community.
+ *
+ * A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
+ *
  * A `Traversal` is the generalisation of an `Optional` to several targets. In other word, a `Traversal` allows to focus
  * from a type `S` into `0` to `n` values of type `A`.
  *
