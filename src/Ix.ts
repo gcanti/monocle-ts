@@ -35,7 +35,7 @@ export interface Index<S, I, A> {
  * @since 2.3.0
  */
 export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> => ({
-  index: (i) => _.lensComposePrism(_.prismFromSome<B>())(at.at(i))
+  index: (i) => _.lensComposePrism(_.prismSome<B>())(at.at(i))
 })
 
 /**

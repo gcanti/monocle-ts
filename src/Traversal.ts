@@ -25,6 +25,7 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
+import { Either } from 'fp-ts/lib/Either'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -168,8 +169,26 @@ export const key = (k: string) => <S, A>(sa: Traversal<S, Readonly<Record<string
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = compose(
-  _.prismAsTraversal(_.prismFromSome())
+export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = compose(_.prismAsTraversal(_.prismSome()))
+
+/**
+ * Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const right: <S, E, A>(soa: Traversal<S, Either<E, A>>) => Traversal<S, A> = compose(
+  _.prismAsTraversal(_.prismRight())
+)
+
+/**
+ * Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const left: <S, E, A>(soa: Traversal<S, Either<E, A>>) => Traversal<S, E> = compose(
+  _.prismAsTraversal(_.prismLeft())
 )
 
 /**

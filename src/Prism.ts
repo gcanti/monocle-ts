@@ -29,6 +29,7 @@ import { Traversal } from './Traversal'
 // -------------------------------------------------------------------------------------
 
 import Option = O.Option
+import { Either } from 'fp-ts/lib/Either'
 
 /**
  * @category model
@@ -65,7 +66,7 @@ export const fromPredicate: {
  * @category constructors
  * @since 2.3.0
  */
-export const fromSome: <A>() => Prism<Option<A>, A> = _.prismFromSome
+export const fromSome: <A>() => Prism<Option<A>, A> = _.prismSome
 
 /**
  * @category constructors
@@ -195,7 +196,23 @@ export const key = (k: string) => <S, A>(sa: Prism<S, Readonly<Record<string, A>
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> = compose(_.prismFromSome())
+export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> = compose(_.prismSome())
+
+/**
+ * Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const right: <S, E, A>(soa: Prism<S, Either<E, A>>) => Prism<S, A> = compose(_.prismRight())
+
+/**
+ * Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const left: <S, E, A>(soa: Prism<S, Either<E, A>>) => Prism<S, E> = compose(_.prismLeft())
 
 // -------------------------------------------------------------------------------------
 // pipeables

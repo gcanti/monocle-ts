@@ -32,6 +32,7 @@ import { Traversal } from './Traversal'
 // -------------------------------------------------------------------------------------
 
 import Option = O.Option
+import { Either } from 'fp-ts/lib/Either'
 
 /**
  * @category model
@@ -152,7 +153,27 @@ export const key = (k: string) => <S, A>(sa: Optional<S, Readonly<Record<string,
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> = compose(_.prismAsOptional(_.prismFromSome()))
+export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> = compose(_.prismAsOptional(_.prismSome()))
+
+/**
+ * Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const right: <S, E, A>(soa: Optional<S, Either<E, A>>) => Optional<S, A> = compose(
+  _.prismAsOptional(_.prismRight())
+)
+
+/**
+ * Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const left: <S, E, A>(soa: Optional<S, Either<E, A>>) => Optional<S, E> = compose(
+  _.prismAsOptional(_.prismLeft())
+)
 
 // -------------------------------------------------------------------------------------
 // pipeables

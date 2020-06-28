@@ -23,6 +23,7 @@ import { flow } from 'fp-ts/lib/function'
 import { Kind, URIS } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
 import { Option } from 'fp-ts/lib/Option'
+import { Either } from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
@@ -168,7 +169,23 @@ export const key = (k: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A>>
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> = composePrism(_.prismFromSome())
+export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> = composePrism(_.prismSome())
+
+/**
+ * Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const right: <S, E, A>(soa: Lens<S, Either<E, A>>) => Optional<S, A> = composePrism(_.prismRight())
+
+/**
+ * Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const left: <S, E, A>(soa: Lens<S, Either<E, A>>) => Optional<S, E> = composePrism(_.prismLeft())
 
 /**
  * Return a `Traversal` from a `Lens` focused on a `Traversable`
