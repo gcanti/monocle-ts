@@ -73,6 +73,15 @@ describe('Optional', () => {
     assert.deepStrictEqual(sa.getOption({ k: 1, j: 2 }), O.some(1))
   })
 
+  it('atKey', () => {
+    type S = Readonly<Record<string, number>>
+    const sa = pipe(_.id<S>(), _.atKey('a'))
+    assert.deepStrictEqual(sa.getOption({ a: 1 }), O.some(O.some(1)))
+    assert.deepStrictEqual(sa.set(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
+    assert.deepStrictEqual(sa.set(O.some(1))({ b: 2 }), { a: 1, b: 2 })
+    assert.deepStrictEqual(sa.set(O.none)({ a: 1, b: 2 }), { b: 2 })
+  })
+
   it('asTraversal', () => {
     const sa = pipe(_.id<S>(), _.some, _.prop('b'), _.asTraversal)
     assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n - 1)(O.none), O.none)

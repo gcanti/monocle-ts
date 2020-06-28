@@ -170,4 +170,13 @@ describe('Lens', () => {
     assert.deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
     assert.deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
   })
+
+  it('atKey', () => {
+    type S = Readonly<Record<string, number>>
+    const sa = pipe(_.id<S>(), _.atKey('a'))
+    assert.deepStrictEqual(sa.get({ a: 1 }), O.some(1))
+    assert.deepStrictEqual(sa.set(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
+    assert.deepStrictEqual(sa.set(O.some(1))({ b: 2 }), { a: 1, b: 2 })
+    assert.deepStrictEqual(sa.set(O.none)({ a: 1, b: 2 }), { b: 2 })
+  })
 })

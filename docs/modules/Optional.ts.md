@@ -33,6 +33,7 @@ Added in v2.3.0
 - [Invariant](#invariant)
   - [imap](#imap)
 - [combinators](#combinators)
+  - [atKey](#atkey)
   - [component](#component)
   - [index](#index)
   - [key](#key)
@@ -73,6 +74,20 @@ Added in v2.3.0
 
 # combinators
 
+## atKey
+
+Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key
+
+**Signature**
+
+```ts
+export declare const atKey: (
+  key: string
+) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>) => Optional<S, O.Option<A>>
+```
+
+Added in v2.3.0
+
 ## component
 
 Return a `Optional` from a `Optional` and a component
@@ -101,12 +116,12 @@ Added in v2.3.0
 
 ## key
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyRecord`
+Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key
 
 **Signature**
 
 ```ts
-export declare const key: (k: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>) => Optional<S, A>
+export declare const key: (key: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>) => Optional<S, A>
 ```
 
 Added in v2.3.0
@@ -185,7 +200,7 @@ Added in v2.3.0
 
 ## some
 
-Return a `Optional` from a `Optional` focused on a `Option` type
+Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type
 
 **Signature**
 

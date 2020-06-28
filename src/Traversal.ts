@@ -155,16 +155,25 @@ export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): 
   pipe(sa, compose(_.optionalAsTraversal(_.indexArray<A>().index(i))))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord`
+ * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key
  *
  * @category combinators
  * @since 2.3.0
  */
-export const key = (k: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>): Traversal<S, A> =>
-  pipe(sa, compose(_.optionalAsTraversal(_.indexRecord<A>().index(k))))
+export const key = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>): Traversal<S, A> =>
+  pipe(sa, compose(_.optionalAsTraversal(_.indexRecord<A>().index(key))))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on a `Option` type
+ * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const atKey = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>): Traversal<S, Option<A>> =>
+  pipe(sa, compose(_.lensAsTraversal(_.atRecord<A>().at(key))))
+
+/**
+ * Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type
  *
  * @category combinators
  * @since 2.3.0
