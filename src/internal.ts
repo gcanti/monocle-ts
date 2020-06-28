@@ -8,8 +8,8 @@
  * @since 2.3.0
  */
 import { Applicative } from 'fp-ts/lib/Applicative'
-import * as A from 'fp-ts/lib/Array'
-import * as R from 'fp-ts/lib/Record'
+import * as A from 'fp-ts/lib/Array' // TODO: replace with ReadonlyArray in v3
+import * as R from 'fp-ts/lib/Record' // TODO: replace with ReadonlyRecord in v3
 import { constant, flow, identity, Predicate } from 'fp-ts/lib/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import * as O from 'fp-ts/lib/Option'
@@ -22,6 +22,7 @@ import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
 import { Traversal } from './Traversal'
+import { At } from './At'
 
 // -------------------------------------------------------------------------------------
 // Iso
@@ -300,6 +301,19 @@ export function indexRecord<A = never>(): Index<Readonly<Record<string, A>>, str
         }
         return R.insertAt(k, a)(r)
       }
+    })
+  }
+}
+
+/** @internal */
+export function atRecord<A = never>(): At<Readonly<Record<string, A>>, string, O.Option<A>> {
+  return {
+    at: (key) => ({
+      get: (r) => R.lookup(key, r),
+      set: O.fold(
+        () => R.deleteAt(key),
+        (a) => R.insertAt(key, a)
+      )
     })
   }
 }

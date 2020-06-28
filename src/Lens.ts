@@ -155,16 +155,25 @@ export const index = (i: number) => <S, A>(sa: Lens<S, ReadonlyArray<A>>): Optio
   pipe(sa, asOptional, _.optionalComposeOptional(_.indexArray<A>().index(i)))
 
 /**
- * Return a `Optional` from a `Lens` focused on a `ReadonlyRecord`
+ * Return a `Optional` from a `Lens` focused on a `ReadonlyRecord` and a key
  *
  * @category combinators
  * @since 2.3.0
  */
-export const key = (k: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A>>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.indexRecord<A>().index(k)))
+export const key = (key: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A>>>): Optional<S, A> =>
+  pipe(sa, asOptional, _.optionalComposeOptional(_.indexRecord<A>().index(key)))
 
 /**
- * Return a `Optional` from a `Lens` focused on a `Option` type
+ * Return a `Lens` from a `Lens` focused on a `ReadonlyRecord` and a required key
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const atKey = (key: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A>>>): Lens<S, Option<A>> =>
+  pipe(sa, compose(_.atRecord<A>().at(key)))
+
+/**
+ * Return a `Optional` from a `Lens` focused on the `Some` of a `Option` type
  *
  * @category combinators
  * @since 2.3.0

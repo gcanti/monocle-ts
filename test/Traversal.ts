@@ -2,6 +2,7 @@ import * as assert from 'assert'
 import * as _ from '../src/Traversal'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as Id from 'fp-ts/lib/Identity'
+import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function'
 import { monoidSum } from 'fp-ts/lib/Monoid'
 
@@ -81,6 +82,19 @@ describe('Traversal', () => {
   it('key', () => {
     const sa = pipe(_.id<Readonly<Record<string, number>>>(), _.key('k'))
     assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)({ k: 1, j: 2 }), { k: 2, j: 2 })
+  })
+
+  it('atKey', () => {
+    const sa = pipe(_.id<Readonly<Record<string, number>>>(), _.atKey('k'))
+    const f = sa.modifyF(Id.identity)((on) =>
+      pipe(
+        on,
+        O.filter((n) => n > 0),
+        O.map((n) => n * 2)
+      )
+    )
+    assert.deepStrictEqual(f({ k: 1, j: 2 }), { k: 2, j: 2 })
+    assert.deepStrictEqual(f({ k: 0, j: 2 }), { j: 2 })
   })
 
   it('traverse', () => {

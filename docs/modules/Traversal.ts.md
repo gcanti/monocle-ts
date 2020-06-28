@@ -25,6 +25,7 @@ Added in v2.3.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [combinators](#combinators)
+  - [atKey](#atkey)
   - [component](#component)
   - [filter](#filter)
   - [fold](#fold)
@@ -57,6 +58,20 @@ Added in v2.3.0
 ---
 
 # combinators
+
+## atKey
+
+Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key
+
+**Signature**
+
+```ts
+export declare const atKey: (
+  key: string
+) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>) => Traversal<S, Option<A>>
+```
+
+Added in v2.3.0
 
 ## component
 
@@ -135,12 +150,12 @@ Added in v2.3.0
 
 ## key
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord`
+Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key
 
 **Signature**
 
 ```ts
-export declare const key: (k: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>) => Traversal<S, A>
+export declare const key: (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>) => Traversal<S, A>
 ```
 
 Added in v2.3.0
@@ -219,7 +234,7 @@ Added in v2.3.0
 
 ## some
 
-Return a `Traversal` from a `Traversal` focused on a `Option` type
+Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type
 
 **Signature**
 
