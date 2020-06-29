@@ -15,7 +15,7 @@ high state of flux, you're at risk of it changing without notice.
 
 # 2.3.0
 
-- **New Feature**
+- **Experimental**
   - add `Iso` module (@gcanti)
   - add `Lens` module (@gcanti)
   - add `Prism` module (@gcanti)
