@@ -94,4 +94,21 @@ describe('Optional', () => {
       })
     )
   })
+
+  it('filter', () => {
+    type S = O.Option<{ a: number }>
+    const sa = pipe(
+      _.id<S>(),
+      _.some,
+      _.prop('a'),
+      _.filter((n) => n > 0)
+    )
+    assert.deepStrictEqual(sa.getOption(O.some({ a: 1 })), O.some(1))
+    assert.deepStrictEqual(sa.getOption(O.some({ a: -1 })), O.none)
+    assert.deepStrictEqual(sa.getOption(O.none), O.none)
+    assert.deepStrictEqual(sa.set(2)(O.none), O.none)
+    assert.deepStrictEqual(sa.set(2)(O.some({ a: 1 })), O.some({ a: 2 }))
+    assert.deepStrictEqual(sa.set(-1)(O.some({ a: 1 })), O.some({ a: -1 }))
+    assert.deepStrictEqual(sa.set(-1)(O.some({ a: -2 })), O.some({ a: -2 }))
+  })
 })

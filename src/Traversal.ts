@@ -16,6 +16,7 @@
 import { Applicative, Applicative1, Applicative2, Applicative2C, Applicative3 } from 'fp-ts/lib/Applicative'
 import { Category2 } from 'fp-ts/lib/Category'
 import * as C from 'fp-ts/lib/Const'
+import { Either } from 'fp-ts/lib/Either'
 import { identity, Predicate, Refinement } from 'fp-ts/lib/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import * as I from 'fp-ts/lib/Identity'
@@ -25,7 +26,6 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
-import { Either } from 'fp-ts/lib/Either'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -108,9 +108,9 @@ export const set = <A>(a: A): (<S>(sa: Traversal<S, A>) => (s: S) => S) => {
  * @category combinators
  * @since 2.3.0
  */
-export function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(traversal: Traversal<S, A>) => Traversal<S, B>
-export function filter<A>(predicate: Predicate<A>): <S>(traversal: Traversal<S, A>) => Traversal<S, A>
-export function filter<A>(predicate: Predicate<A>): <S>(traversal: Traversal<S, A>) => Traversal<S, A> {
+export function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B>
+export function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, A>) => Traversal<S, A>
+export function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, A>) => Traversal<S, A> {
   return compose(_.prismAsTraversal(_.prismFromPredicate(predicate)))
 }
 
@@ -186,7 +186,7 @@ export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = com
  * @category combinators
  * @since 2.3.0
  */
-export const right: <S, E, A>(soa: Traversal<S, Either<E, A>>) => Traversal<S, A> = compose(
+export const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A> = compose(
   _.prismAsTraversal(_.prismRight())
 )
 
@@ -196,7 +196,7 @@ export const right: <S, E, A>(soa: Traversal<S, Either<E, A>>) => Traversal<S, A
  * @category combinators
  * @since 2.3.0
  */
-export const left: <S, E, A>(soa: Traversal<S, Either<E, A>>) => Traversal<S, E> = compose(
+export const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E> = compose(
   _.prismAsTraversal(_.prismLeft())
 )
 

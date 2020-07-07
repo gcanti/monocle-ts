@@ -94,8 +94,8 @@ Added in v2.3.0
 ```ts
 export declare function filter<A, B extends A>(
   refinement: Refinement<A, B>
-): <S>(traversal: Traversal<S, A>) => Traversal<S, B>
-export declare function filter<A>(predicate: Predicate<A>): <S>(traversal: Traversal<S, A>) => Traversal<S, A>
+): <S>(sa: Traversal<S, A>) => Traversal<S, B>
+export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, A>) => Traversal<S, A>
 ```
 
 Added in v2.3.0
@@ -167,7 +167,7 @@ Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type
 **Signature**
 
 ```ts
-export declare const left: <S, E, A>(soa: Traversal<S, Either<E, A>>) => Traversal<S, E>
+export declare const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E>
 ```
 
 Added in v2.3.0
@@ -217,7 +217,7 @@ Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` typ
 **Signature**
 
 ```ts
-export declare const right: <S, E, A>(soa: Traversal<S, Either<E, A>>) => Traversal<S, A>
+export declare const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A>
 ```
 
 Added in v2.3.0

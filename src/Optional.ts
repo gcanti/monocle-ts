@@ -20,7 +20,8 @@
  * @since 2.3.0
  */
 import { Category2 } from 'fp-ts/lib/Category'
-import { constant, flow } from 'fp-ts/lib/function'
+import { Either } from 'fp-ts/lib/Either'
+import { constant, flow, Predicate, Refinement } from 'fp-ts/lib/function'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
@@ -32,7 +33,6 @@ import { Traversal } from './Traversal'
 // -------------------------------------------------------------------------------------
 
 import Option = O.Option
-import { Either } from 'fp-ts/lib/Either'
 
 /**
  * @category model
@@ -97,6 +97,16 @@ export const modifyOption: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) 
  * @since 2.3.0
  */
 export const modify: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => S = _.optionalModify
+
+/**
+ * @category combinators
+ * @since 2.3.0
+ */
+export function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Optional<S, A>) => Optional<S, B>
+export function filter<A>(predicate: Predicate<A>): <S>(sa: Optional<S, A>) => Optional<S, A>
+export function filter<A>(predicate: Predicate<A>): <S>(sa: Optional<S, A>) => Optional<S, A> {
+  return compose(_.prismAsOptional(_.prismFromPredicate(predicate)))
+}
 
 /**
  * Return a `Optional` from a `Optional` and a prop
@@ -170,7 +180,7 @@ export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> = compo
  * @category combinators
  * @since 2.3.0
  */
-export const right: <S, E, A>(soa: Optional<S, Either<E, A>>) => Optional<S, A> = compose(
+export const right: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, A> = compose(
   _.prismAsOptional(_.prismRight())
 )
 
@@ -180,7 +190,7 @@ export const right: <S, E, A>(soa: Optional<S, Either<E, A>>) => Optional<S, A> 
  * @category combinators
  * @since 2.3.0
  */
-export const left: <S, E, A>(soa: Optional<S, Either<E, A>>) => Optional<S, E> = compose(
+export const left: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, E> = compose(
   _.prismAsOptional(_.prismLeft())
 )
 

@@ -35,6 +35,7 @@ Added in v2.3.0
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
+  - [filter](#filter)
   - [index](#index)
   - [key](#key)
   - [left](#left)
@@ -102,6 +103,17 @@ export declare const component: <A extends readonly unknown[], P extends keyof A
 
 Added in v2.3.0
 
+## filter
+
+**Signature**
+
+```ts
+export declare function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Optional<S, A>) => Optional<S, B>
+export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Optional<S, A>) => Optional<S, A>
+```
+
+Added in v2.3.0
+
 ## index
 
 Return a `Optional` from a `Optional` focused on a `ReadonlyArray`
@@ -133,7 +145,7 @@ Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type
 **Signature**
 
 ```ts
-export declare const left: <S, E, A>(soa: Optional<S, Either<E, A>>) => Optional<S, E>
+export declare const left: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, E>
 ```
 
 Added in v2.3.0
@@ -193,7 +205,7 @@ Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type
 **Signature**
 
 ```ts
-export declare const right: <S, E, A>(soa: Optional<S, Either<E, A>>) => Optional<S, A>
+export declare const right: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, A>
 ```
 
 Added in v2.3.0

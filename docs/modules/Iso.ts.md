@@ -56,7 +56,7 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <S>(fa: Iso<S, A>) => Iso<S, B>
+export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <S>(sa: Iso<S, A>) => Iso<S, B>
 ```
 
 Added in v2.3.0
@@ -68,7 +68,7 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const modify: <A>(f: (a: A) => A) => <S>(iso: Iso<S, A>) => (s: S) => S
+export declare const modify: <A>(f: (a: A) => A) => <S>(sa: Iso<S, A>) => (s: S) => S
 ```
 
 Added in v2.3.0
@@ -104,7 +104,7 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const reverse: <S, A>(iso: Iso<S, A>) => Iso<A, S>
+export declare const reverse: <S, A>(sa: Iso<S, A>) => Iso<A, S>
 ```
 
 Added in v2.3.0
