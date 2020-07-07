@@ -30,6 +30,7 @@ Added in v2.3.0
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
+  - [filter](#filter)
   - [index](#index)
   - [key](#key)
   - [left](#left)
@@ -68,7 +69,7 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Prism<E, A>) => Prism<E, B>
+export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(sa: Prism<E, A>) => Prism<E, B>
 ```
 
 Added in v2.3.0
@@ -99,6 +100,17 @@ Return a `Optional` from a `Prism` and a component
 export declare const component: <A extends readonly unknown[], P extends keyof A>(
   prop: P
 ) => <S>(sa: Prism<S, A>) => Optional<S, A[P]>
+```
+
+Added in v2.3.0
+
+## filter
+
+**Signature**
+
+```ts
+export declare function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Prism<S, A>) => Prism<S, B>
+export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Prism<S, A>) => Prism<S, A>
 ```
 
 Added in v2.3.0
@@ -134,7 +146,7 @@ Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type
 **Signature**
 
 ```ts
-export declare const left: <S, E, A>(soa: Prism<S, Either<E, A>>) => Prism<S, E>
+export declare const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E>
 ```
 
 Added in v2.3.0
@@ -194,7 +206,7 @@ Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type
 **Signature**
 
 ```ts
-export declare const right: <S, E, A>(soa: Prism<S, Either<E, A>>) => Prism<S, A>
+export declare const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A>
 ```
 
 Added in v2.3.0

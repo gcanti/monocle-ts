@@ -15,6 +15,7 @@
  * @since 2.3.0
  */
 import { Category2 } from 'fp-ts/lib/Category'
+import { Either } from 'fp-ts/lib/Either'
 import { flow, identity, Predicate, Refinement } from 'fp-ts/lib/function'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
 import * as O from 'fp-ts/lib/Option'
@@ -29,7 +30,6 @@ import { Traversal } from './Traversal'
 // -------------------------------------------------------------------------------------
 
 import Option = O.Option
-import { Either } from 'fp-ts/lib/Either'
 
 /**
  * @category model
@@ -144,6 +144,16 @@ export const set: <A>(a: A) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismSet
 // -------------------------------------------------------------------------------------
 
 /**
+ * @category combinators
+ * @since 2.3.0
+ */
+export function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Prism<S, A>) => Prism<S, B>
+export function filter<A>(predicate: Predicate<A>): <S>(sa: Prism<S, A>) => Prism<S, A>
+export function filter<A>(predicate: Predicate<A>): <S>(sa: Prism<S, A>) => Prism<S, A> {
+  return compose(_.prismFromPredicate(predicate))
+}
+
+/**
  * Return a `Optional` from a `Prism` and a prop
  *
  * @category combinators
@@ -213,7 +223,7 @@ export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> = compose(_.p
  * @category combinators
  * @since 2.3.0
  */
-export const right: <S, E, A>(soa: Prism<S, Either<E, A>>) => Prism<S, A> = compose(_.prismRight())
+export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> = compose(_.prismRight())
 
 /**
  * Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type
@@ -221,7 +231,7 @@ export const right: <S, E, A>(soa: Prism<S, Either<E, A>>) => Prism<S, A> = comp
  * @category combinators
  * @since 2.3.0
  */
-export const left: <S, E, A>(soa: Prism<S, Either<E, A>>) => Prism<S, E> = compose(_.prismLeft())
+export const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E> = compose(_.prismLeft())
 
 // -------------------------------------------------------------------------------------
 // pipeables
@@ -231,7 +241,7 @@ export const left: <S, E, A>(soa: Prism<S, Either<E, A>>) => Prism<S, E> = compo
  * @category Invariant
  * @since 2.3.0
  */
-export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Prism<E, A>) => Prism<E, B> = (f, g) => (ea) =>
+export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(sa: Prism<E, A>) => Prism<E, B> = (f, g) => (ea) =>
   imap_(ea, f, g)
 
 // -------------------------------------------------------------------------------------

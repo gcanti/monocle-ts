@@ -34,6 +34,7 @@ Added in v2.3.0
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
+  - [filter](#filter)
   - [index](#index)
   - [key](#key)
   - [left](#left)
@@ -69,7 +70,7 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Lens<E, A>) => Lens<E, B>
+export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(sa: Lens<E, A>) => Lens<E, B>
 ```
 
 Added in v2.3.0
@@ -98,6 +99,17 @@ Return a `Lens` from a `Lens` and a component
 export declare const component: <A extends readonly unknown[], P extends keyof A>(
   prop: P
 ) => <S>(sa: Lens<S, A>) => Lens<S, A[P]>
+```
+
+Added in v2.3.0
+
+## filter
+
+**Signature**
+
+```ts
+export declare function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Lens<S, A>) => Optional<S, B>
+export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Lens<S, A>) => Optional<S, A>
 ```
 
 Added in v2.3.0
@@ -133,7 +145,7 @@ Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type
 **Signature**
 
 ```ts
-export declare const left: <S, E, A>(soa: Lens<S, Either<E, A>>) => Optional<S, E>
+export declare const left: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, E>
 ```
 
 Added in v2.3.0
@@ -143,7 +155,7 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const modify: <A>(f: (a: A) => A) => <S>(lens: Lens<S, A>) => (s: S) => S
+export declare const modify: <A>(f: (a: A) => A) => <S>(sa: Lens<S, A>) => (s: S) => S
 ```
 
 Added in v2.3.0
@@ -155,7 +167,7 @@ Return a `Lens` from a `Lens` and a prop
 **Signature**
 
 ```ts
-export declare const prop: <A, P extends keyof A>(prop: P) => <S>(lens: Lens<S, A>) => Lens<S, A[P]>
+export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Lens<S, A>) => Lens<S, A[P]>
 ```
 
 Added in v2.3.0
@@ -171,7 +183,7 @@ export declare const props: <A, P extends keyof A>(
   props_0: P,
   props_1: P,
   ...props_2: P[]
-) => <S>(lens: Lens<S, A>) => Lens<S, { [K in P]: A[K] }>
+) => <S>(sa: Lens<S, A>) => Lens<S, { [K in P]: A[K] }>
 ```
 
 Added in v2.3.0
@@ -183,7 +195,7 @@ Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type
 **Signature**
 
 ```ts
-export declare const right: <S, E, A>(soa: Lens<S, Either<E, A>>) => Optional<S, A>
+export declare const right: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, A>
 ```
 
 Added in v2.3.0

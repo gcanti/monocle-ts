@@ -179,4 +179,19 @@ describe('Lens', () => {
     assert.deepStrictEqual(sa.set(O.some(1))({ b: 2 }), { a: 1, b: 2 })
     assert.deepStrictEqual(sa.set(O.none)({ a: 1, b: 2 }), { b: 2 })
   })
+
+  it('filter', () => {
+    interface S {
+      readonly a: number
+    }
+    const sa = pipe(
+      _.id<S>(),
+      _.prop('a'),
+      _.filter((n) => n > 0)
+    )
+    assert.deepStrictEqual(sa.getOption({ a: 1 }), O.some(1))
+    assert.deepStrictEqual(sa.getOption({ a: -1 }), O.none)
+    assert.deepStrictEqual(sa.set(2)({ a: 1 }), { a: 2 })
+    assert.deepStrictEqual(sa.set(2)({ a: -1 }), { a: -1 })
+  })
 })

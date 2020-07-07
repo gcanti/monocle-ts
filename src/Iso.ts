@@ -116,16 +116,16 @@ export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> =>
  * @category constructors
  * @since 2.3.0
  */
-export const reverse = <S, A>(iso: Iso<S, A>): Iso<A, S> => ({
-  get: iso.reverseGet,
-  reverseGet: iso.get
+export const reverse = <S, A>(sa: Iso<S, A>): Iso<A, S> => ({
+  get: sa.reverseGet,
+  reverseGet: sa.get
 })
 
 /**
  * @category combinators
  * @since 2.3.0
  */
-export const modify = <A>(f: (a: A) => A) => <S>(iso: Iso<S, A>) => (s: S): S => iso.reverseGet(f(iso.get(s)))
+export const modify = <A>(f: (a: A) => A) => <S>(sa: Iso<S, A>) => (s: S): S => sa.reverseGet(f(sa.get(s)))
 
 // -------------------------------------------------------------------------------------
 // pipeables
@@ -135,7 +135,7 @@ export const modify = <A>(f: (a: A) => A) => <S>(iso: Iso<S, A>) => (s: S): S =>
  * @category Invariant
  * @since 2.3.0
  */
-export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <S>(fa: Iso<S, A>) => Iso<S, B> = (f, g) => (ea) =>
+export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <S>(sa: Iso<S, A>) => Iso<S, B> = (f, g) => (ea) =>
   imap_(ea, f, g)
 
 // -------------------------------------------------------------------------------------

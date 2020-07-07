@@ -19,11 +19,11 @@
  * @since 2.3.0
  */
 import { Category2 } from 'fp-ts/lib/Category'
-import { flow } from 'fp-ts/lib/function'
+import { Either } from 'fp-ts/lib/Either'
+import { flow, Predicate, Refinement } from 'fp-ts/lib/function'
 import { Kind, URIS } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
 import { Option } from 'fp-ts/lib/Option'
-import { Either } from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
@@ -102,10 +102,10 @@ export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>) => Opt
  * @category combinators
  * @since 2.3.0
  */
-export const modify = <A>(f: (a: A) => A) => <S>(lens: Lens<S, A>) => (s: S): S => {
-  const o = lens.get(s)
+export const modify = <A>(f: (a: A) => A) => <S>(sa: Lens<S, A>) => (s: S): S => {
+  const o = sa.get(s)
   const n = f(o)
-  return o === n ? s : lens.set(n)(s)
+  return o === n ? s : sa.set(n)(s)
 }
 
 /**
@@ -118,12 +118,22 @@ export const fromNullable = <S, A>(sa: Lens<S, A>): Optional<S, NonNullable<A>> 
   _.lensComposePrism(_.prismFromNullable<A>())(sa)
 
 /**
+ * @category combinators
+ * @since 2.3.0
+ */
+export function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Lens<S, A>) => Optional<S, B>
+export function filter<A>(predicate: Predicate<A>): <S>(sa: Lens<S, A>) => Optional<S, A>
+export function filter<A>(predicate: Predicate<A>): <S>(sa: Lens<S, A>) => Optional<S, A> {
+  return composePrism(_.prismFromPredicate(predicate))
+}
+
+/**
  * Return a `Lens` from a `Lens` and a prop
  *
  * @category combinators
  * @since 2.3.0
  */
-export const prop: <A, P extends keyof A>(prop: P) => <S>(lens: Lens<S, A>) => Lens<S, A[P]> = _.lensProp
+export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Lens<S, A>) => Lens<S, A[P]> = _.lensProp
 
 /**
  * Return a `Lens` from a `Lens` and a list of props
@@ -133,7 +143,7 @@ export const prop: <A, P extends keyof A>(prop: P) => <S>(lens: Lens<S, A>) => L
  */
 export const props: <A, P extends keyof A>(
   ...props: [P, P, ...Array<P>]
-) => <S>(lens: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> = _.lensProps
+) => <S>(sa: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> = _.lensProps
 
 /**
  * Return a `Lens` from a `Lens` and a component
@@ -186,7 +196,7 @@ export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> = composePr
  * @category combinators
  * @since 2.3.0
  */
-export const right: <S, E, A>(soa: Lens<S, Either<E, A>>) => Optional<S, A> = composePrism(_.prismRight())
+export const right: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, A> = composePrism(_.prismRight())
 
 /**
  * Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type
@@ -194,7 +204,7 @@ export const right: <S, E, A>(soa: Lens<S, Either<E, A>>) => Optional<S, A> = co
  * @category combinators
  * @since 2.3.0
  */
-export const left: <S, E, A>(soa: Lens<S, Either<E, A>>) => Optional<S, E> = composePrism(_.prismLeft())
+export const left: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, E> = composePrism(_.prismLeft())
 
 /**
  * Return a `Traversal` from a `Lens` focused on a `Traversable`
@@ -214,7 +224,7 @@ export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Lens<S
  * @category Invariant
  * @since 2.3.0
  */
-export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Lens<E, A>) => Lens<E, B> = (f, g) => (ea) =>
+export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(sa: Lens<E, A>) => Lens<E, B> = (f, g) => (ea) =>
   imap_(ea, f, g)
 
 // -------------------------------------------------------------------------------------
