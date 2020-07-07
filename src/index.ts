@@ -1,7 +1,6 @@
 /**
  * @since 1.0.0
  */
-import { Applicative } from 'fp-ts/lib/Applicative'
 import { getMonoid } from 'fp-ts/lib/Array'
 import { getApplicative, make } from 'fp-ts/lib/Const'
 import { Foldable, Foldable1, Foldable2, Foldable3 } from 'fp-ts/lib/Foldable'
@@ -1580,11 +1579,8 @@ export function fromTraversable<T extends URIS2>(T: Traversable2<T>): <L, A>() =
 export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Kind<T, A>, A>
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
-  return <A>() =>
-    new Traversal(<F>(F: Applicative<F>) => {
-      const traverseF = T.traverse(F)
-      return (f: (a: A) => HKT<F, A>) => (s: HKT<T, A>) => traverseF(s, f)
-    })
+  const f = traversal.fromTraversable(T)
+  return <A>() => fromTraversal(f<A>())
 }
 
 /**
