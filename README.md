@@ -82,13 +82,9 @@ const name = Lens.fromProp<Street>()('name')
 function `capitalize`
 
 ```ts
-const capitalizeName = company
-  .compose(address)
-  .compose(street)
-  .compose(name)
-  .modify(capitalize)
+const capitalizeName = company.compose(address).compose(street).compose(name).modify(capitalize)
 
-assert.deepStrictEqual(capitalizeName(employee), employeeCapitalized) // true
+assert.deepStrictEqual(capitalizeName(employee), employeeCapitalized)
 ```
 
 You can use the `fromPath` API to avoid some boilerplate
@@ -114,18 +110,13 @@ import { Optional } from 'monocle-ts'
 import { some, none } from 'fp-ts/lib/Option'
 
 const firstLetterOptional = new Optional<string, string>(
-  s => (s.length > 0 ? some(s[0]) : none),
-  a => s => (s.length > 0 ? a + s.substring(1) : s)
+  (s) => (s.length > 0 ? some(s[0]) : none),
+  (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
 )
 
-const firstLetter = company
-  .compose(address)
-  .compose(street)
-  .compose(name)
-  .asOptional()
-  .compose(firstLetterOptional)
+const firstLetter = company.compose(address).compose(street).compose(name).asOptional().compose(firstLetterOptional)
 
-assert.deepStrictEqual(firstLetter.modify(s => s.toUpperCase())(employee), employeeCapitalized) // true
+assert.deepStrictEqual(firstLetter.modify((s) => s.toUpperCase())(employee), employeeCapitalized)
 ```
 
 Similarly to `compose` for lenses, `compose` for optionals takes two `Optionals`, one from `A` to `B` and another from
@@ -148,3 +139,108 @@ You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
 # Documentation
 
 - [API Reference](https://gcanti.github.io/monocle-ts/)
+
+# Experimental modules
+
+From `monocle@2.3+` you can use the following experimental modules
+
+- `Iso`
+- `Lens`
+- `Prism`
+- `Optional`
+- `Traversal`
+- `At`
+- `Ix`
+
+which implement the same features contained in `index.ts` but are `pipe`-based instead of `class`-based.
+
+Here's the same examples with the new API
+
+```ts
+interface Street {
+  num: number
+  name: string
+}
+interface Address {
+  city: string
+  street: Street
+}
+interface Company {
+  name: string
+  address: Address
+}
+interface Employee {
+  name: string
+  company: Company
+}
+
+const employee: Employee = {
+  name: 'john',
+  company: {
+    name: 'awesome inc',
+    address: {
+      city: 'london',
+      street: {
+        num: 23,
+        name: 'high street'
+      }
+    }
+  }
+}
+
+const capitalize = (s: string): string => s.substring(0, 1).toUpperCase() + s.substring(1)
+
+const employeeCapitalized = {
+  ...employee,
+  company: {
+    ...employee.company,
+    address: {
+      ...employee.company.address,
+      street: {
+        ...employee.company.address.street,
+        name: capitalize(employee.company.address.street.name)
+      }
+    }
+  }
+}
+
+import * as assert from 'assert'
+import * as L from 'monocle-ts/lib/Lens'
+import { pipe } from 'fp-ts/lib/function'
+
+const capitalizeName = pipe(
+  L.id<Employee>(),
+  L.prop('company'),
+  L.prop('address'),
+  L.prop('street'),
+  L.prop('name'),
+  L.modify(capitalize)
+)
+
+assert.deepStrictEqual(capitalizeName(employee), employeeCapitalized)
+
+import * as O from 'monocle-ts/lib/Optional'
+import { some, none } from 'fp-ts/lib/Option'
+
+const firstLetterOptional: O.Optional<string, string> = {
+  getOption: (s) => (s.length > 0 ? some(s[0]) : none),
+  set: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
+}
+
+const firstLetter = pipe(
+  L.id<Employee>(),
+  L.prop('company'),
+  L.prop('address'),
+  L.prop('street'),
+  L.prop('name'),
+  L.composeOptional(firstLetterOptional)
+)
+
+assert.deepStrictEqual(
+  pipe(
+    firstLetter,
+    O.modify((s) => s.toUpperCase())
+  )(employee),
+  employeeCapitalized
+)
+```

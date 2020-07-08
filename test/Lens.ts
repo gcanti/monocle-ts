@@ -4,6 +4,7 @@ import { pipe } from 'fp-ts/lib/function'
 import * as O from 'fp-ts/lib/Option'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as T from '../src/Traversal'
+import { Optional } from '../src/Optional'
 
 describe('Lens', () => {
   describe('pipeables', () => {
@@ -169,6 +170,22 @@ describe('Lens', () => {
     const sb = pipe(sa, _.compose(ab))
     assert.deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
     assert.deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
+  })
+
+  it('composeOptional', () => {
+    interface S {
+      readonly a: string
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'))
+    const ab: Optional<string, string> = {
+      getOption: (s) => (s.length > 0 ? O.some(s[0]) : O.none),
+      set: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
+    }
+    const sb = pipe(sa, _.composeOptional(ab))
+    assert.deepStrictEqual(sb.getOption({ a: '' }), O.none)
+    assert.deepStrictEqual(sb.getOption({ a: 'ab' }), O.some('a'))
+    assert.deepStrictEqual(sb.set('c')({ a: '' }), { a: '' })
+    assert.deepStrictEqual(sb.set('c')({ a: 'ab' }), { a: 'cb' })
   })
 
   it('atKey', () => {

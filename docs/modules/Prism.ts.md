@@ -44,6 +44,7 @@ Added in v2.3.0
 - [compositions](#compositions)
   - [compose](#compose)
   - [composeLens](#composelens)
+  - [composeOptional](#composeoptional)
 - [constructors](#constructors)
   - [fromNullable](#fromnullable)
   - [fromPredicate](#frompredicate)
@@ -255,6 +256,18 @@ Compose a `Prism` with a `Lens`
 
 ```ts
 export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B>
+```
+
+Added in v2.3.0
+
+## composeOptional
+
+Compose a `Prism` with an `Optional`
+
+**Signature**
+
+```ts
+export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B>
 ```
 
 Added in v2.3.0
