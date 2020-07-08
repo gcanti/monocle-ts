@@ -94,6 +94,15 @@ export const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B
  */
 export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>) => Optional<S, B> = _.lensComposePrism
 
+/**
+ * Compose a `Lens` with an `Optional`
+ *
+ * @category compositions
+ * @since 2.3.0
+ */
+export const composeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Lens<S, A>): Optional<S, B> =>
+  _.optionalComposeOptional(ab)(asOptional(sa))
+
 // -------------------------------------------------------------------------------------
 // combinators
 // -------------------------------------------------------------------------------------

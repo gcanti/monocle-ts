@@ -3,6 +3,7 @@ import { pipe } from 'fp-ts/lib/function'
 import * as O from 'fp-ts/lib/Option'
 import * as E from 'fp-ts/lib/Either'
 import * as _ from '../src/Prism'
+import { Optional } from '../src/Optional'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -121,6 +122,22 @@ describe('Prism', () => {
     assert.deepStrictEqual(sb.getOption(O.some(leaf)), O.none)
     assert.deepStrictEqual(sb.getOption(O.some(node(1, leaf, leaf))), O.some(1))
     assert.deepStrictEqual(sb.reverseGet(1), O.some(node(1, leaf, leaf)))
+  })
+
+  it('composeOptional', () => {
+    type S = O.Option<string>
+    const sa = pipe(_.id<S>(), _.some)
+    const ab: Optional<string, string> = {
+      getOption: (s) => (s.length > 0 ? O.some(s[0]) : O.none),
+      set: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
+    }
+    const sb = pipe(sa, _.composeOptional(ab))
+    assert.deepStrictEqual(sb.getOption(O.none), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some('')), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some('ab')), O.some('a'))
+    assert.deepStrictEqual(sb.set('c')(O.none), O.none)
+    assert.deepStrictEqual(sb.set('c')(O.some('')), O.some(''))
+    assert.deepStrictEqual(sb.set('c')(O.some('ab')), O.some('cb'))
   })
 
   it('right', () => {
