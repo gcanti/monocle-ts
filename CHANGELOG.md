@@ -13,6 +13,15 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 2.3.2
+
+- **Experimental**
+  - `At`
+    - add `atRecord` (@gcanti)
+  - `Ix`
+    - add `indexArray` (@gcanti)
+    - add `indexRecord` (@gcanti)
+
 # 2.3.1
 
 - **Experimental**
