@@ -19,6 +19,7 @@ Added in v2.3.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
+  - [atRecord](#atrecord)
   - [fromIso](#fromiso)
 - [model](#model)
   - [At (interface)](#at-interface)
@@ -26,6 +27,16 @@ Added in v2.3.0
 ---
 
 # constructors
+
+## atRecord
+
+**Signature**
+
+```ts
+export declare const atRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>>
+```
+
+Added in v2.3.2
 
 ## fromIso
 

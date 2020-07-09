@@ -7,6 +7,7 @@
  *
  * @since 2.3.0
  */
+import { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as _ from './internal'
 import { Iso } from './Iso'
@@ -37,3 +38,9 @@ export interface At<S, I, A> {
 export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>): At<T, I, A> => ({
   at: (i) => pipe(iso, _.isoAsLens, _.lensComposeLens(sia.at(i)))
 })
+
+/**
+ * @category constructors
+ * @since 2.3.2
+ */
+export const atRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>> = _.atRecord
