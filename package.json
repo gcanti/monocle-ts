@@ -1,6 +1,6 @@
 {
   "name": "monocle-ts",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "A porting of scala monocle library to TypeScript",
   "files": [
     "lib",
@@ -18,14 +18,13 @@
     "fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser typescript --write \"{src,test,examples}/**/*.ts\"",
     "test": "npm run prettier && npm run lint && npm run dtslint && npm run jest && npm run docs",
     "clean": "rimraf lib/* es6/*",
-    "build": "tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",
-    "postbuild": "prettier --write \"./{lib,es6}/**/*.ts\"",
+    "build": "npm run clean && tsc -p ./tsconfig.build.json && tsc -p ./tsconfig.build-es6.json",
+    "postbuild": "import-path-rewrite && prettier --write \"./{lib,es6}/**/*.ts\"",
     "prepublish": "npm run build",
     "docs-fix-prettier": "prettier --no-semi --single-quote --print-width 120 --parser markdown --write \"README.md\"",
     "dtslint": "dtslint dtslint",
     "mocha": "TS_NODE_CACHE=false mocha -r ts-node/register test/*.ts",
-    "docs": "docs-ts",
-    "import-path-rewrite": "import-path-rewrite"
+    "docs": "docs-ts"
   },
   "repository": {
     "type": "git",
