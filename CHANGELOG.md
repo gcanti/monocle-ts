@@ -25,8 +25,10 @@ high state of flux, you're at risk of it changing without notice.
     - add `findFirst` combinator, closes #131 (@gcanti)
   - `Prism`
     - add `findFirst` combinator (@gcanti)
+    - add `traverse` combinator (@gcanti)
   - `Optional`
     - add `findFirst` combinator (@gcanti)
+    - add `traverse` combinator (@gcanti)
 
 # 2.3.1
 

@@ -17,9 +17,11 @@
 import { Category2 } from 'fp-ts/lib/Category'
 import { Either } from 'fp-ts/lib/Either'
 import { flow, identity, Predicate, Refinement } from 'fp-ts/lib/function'
+import { Kind, URIS } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
+import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
@@ -247,6 +249,16 @@ export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> =
 export const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E> =
   /*#__PURE__*/
   compose(_.prismLeft())
+
+/**
+ * Return a `Traversal` from a `Prism` focused on a `Traversable`
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Prism<S, Kind<T, A>>) => Traversal<S, A> {
+  return flow(asTraversal, _.traversalComposeTraversal(_.fromTraversable(T)()))
+}
 
 /**
  * @category combinators

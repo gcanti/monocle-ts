@@ -42,6 +42,7 @@ Added in v2.3.0
   - [right](#right)
   - [set](#set)
   - [some](#some)
+  - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
   - [composeLens](#composelens)
@@ -241,6 +242,20 @@ Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type
 
 ```ts
 export declare const some: <S, A>(soa: Prism<S, O.Option<A>>) => Prism<S, A>
+```
+
+Added in v2.3.0
+
+## traverse
+
+Return a `Traversal` from a `Prism` focused on a `Traversable`
+
+**Signature**
+
+```ts
+export declare function traverse<T extends URIS>(
+  T: Traversable1<T>
+): <S, A>(sta: Prism<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
 Added in v2.3.0

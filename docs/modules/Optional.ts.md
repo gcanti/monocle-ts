@@ -46,6 +46,7 @@ Added in v2.3.0
   - [props](#props)
   - [right](#right)
   - [some](#some)
+  - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
 - [constructors](#constructors)
@@ -229,6 +230,20 @@ Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type
 
 ```ts
 export declare const some: <S, A>(soa: Optional<S, O.Option<A>>) => Optional<S, A>
+```
+
+Added in v2.3.0
+
+## traverse
+
+Return a `Traversal` from a `Optional` focused on a `Traversable`
+
+**Signature**
+
+```ts
+export declare function traverse<T extends URIS>(
+  T: Traversable1<T>
+): <S, A>(sta: Optional<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
 Added in v2.3.0
