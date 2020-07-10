@@ -35,6 +35,7 @@ Added in v2.3.0
   - [atKey](#atkey)
   - [component](#component)
   - [filter](#filter)
+  - [findFirst](#findfirst)
   - [index](#index)
   - [key](#key)
   - [left](#left)
@@ -114,6 +115,16 @@ export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Lens<S, A>) 
 ```
 
 Added in v2.3.0
+
+## findFirst
+
+**Signature**
+
+```ts
+export declare const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Lens<S, readonly A[]>) => Optional<S, A>
+```
+
+Added in v2.3.2
 
 ## index
 

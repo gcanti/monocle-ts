@@ -111,4 +111,23 @@ describe('Optional', () => {
     assert.deepStrictEqual(sa.set(-1)(O.some({ a: 1 })), O.some({ a: -1 }))
     assert.deepStrictEqual(sa.set(-1)(O.some({ a: -2 })), O.some({ a: -2 }))
   })
+
+  it('findFirst', () => {
+    type S = O.Option<{ a: ReadonlyArray<number> }>
+    const sa = pipe(
+      _.id<S>(),
+      _.some,
+      _.prop('a'),
+      _.findFirst((n) => n > 0)
+    )
+    assert.deepStrictEqual(sa.getOption(O.none), O.none)
+    assert.deepStrictEqual(sa.getOption(O.some({ a: [] })), O.none)
+    assert.deepStrictEqual(sa.getOption(O.some({ a: [-1, -2, -3] })), O.none)
+    assert.deepStrictEqual(sa.getOption(O.some({ a: [-1, 2, -3] })), O.some(2))
+    assert.deepStrictEqual(sa.set(3)(O.none), O.none)
+    assert.deepStrictEqual(sa.set(3)(O.some({ a: [] })), O.some({ a: [] }))
+    assert.deepStrictEqual(sa.set(3)(O.some({ a: [-1, -2, -3] })), O.some({ a: [-1, -2, -3] }))
+    assert.deepStrictEqual(sa.set(3)(O.some({ a: [-1, 2, -3] })), O.some({ a: [-1, 3, -3] }))
+    assert.deepStrictEqual(sa.set(4)(O.some({ a: [-1, -2, 3] })), O.some({ a: [-1, -2, 4] }))
+  })
 })
