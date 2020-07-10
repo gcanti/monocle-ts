@@ -4,6 +4,8 @@ import * as O from 'fp-ts/lib/Option'
 import * as E from 'fp-ts/lib/Either'
 import * as _ from '../src/Prism'
 import { Optional } from '../src/Optional'
+import * as A from 'fp-ts/lib/ReadonlyArray'
+import * as T from '../src/Traversal'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -195,5 +197,15 @@ describe('Prism', () => {
     assert.deepStrictEqual(sa.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3]))
     assert.deepStrictEqual(sa.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3]))
     assert.deepStrictEqual(sa.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4]))
+  })
+
+  it('traverse', () => {
+    type S = O.Option<ReadonlyArray<string>>
+    const sa = pipe(_.id<S>(), _.some, _.traverse(A.readonlyArray))
+    const modify = pipe(
+      sa,
+      T.modify((s) => s.toUpperCase())
+    )
+    assert.deepStrictEqual(modify(O.some(['a'])), O.some(['A']))
   })
 })

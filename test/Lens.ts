@@ -147,15 +147,13 @@ describe('Lens', () => {
   })
 
   it('traverse', () => {
-    interface S {
-      readonly a: ReadonlyArray<string>
-    }
-    const traversal = pipe(_.id<S>(), _.prop('a'), _.traverse(A.readonlyArray))
+    type S = ReadonlyArray<string>
+    const sa = pipe(_.id<S>(), _.traverse(A.readonlyArray))
     const modify = pipe(
-      traversal,
+      sa,
       T.modify((s) => s.toUpperCase())
     )
-    assert.deepStrictEqual(modify({ a: ['a'] }), { a: ['A'] })
+    assert.deepStrictEqual(modify(['a']), ['A'])
   })
 
   it('compose', () => {

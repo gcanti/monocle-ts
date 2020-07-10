@@ -3,6 +3,8 @@ import * as O from 'fp-ts/lib/Option'
 import * as _ from '../src/Optional'
 import { pipe } from 'fp-ts/lib/function'
 import * as Id from 'fp-ts/lib/Identity'
+import * as A from 'fp-ts/lib/ReadonlyArray'
+import * as T from '../src/Traversal'
 
 type S = O.Option<{
   a: string
@@ -129,5 +131,15 @@ describe('Optional', () => {
     assert.deepStrictEqual(sa.set(3)(O.some({ a: [-1, -2, -3] })), O.some({ a: [-1, -2, -3] }))
     assert.deepStrictEqual(sa.set(3)(O.some({ a: [-1, 2, -3] })), O.some({ a: [-1, 3, -3] }))
     assert.deepStrictEqual(sa.set(4)(O.some({ a: [-1, -2, 3] })), O.some({ a: [-1, -2, 4] }))
+  })
+
+  it('traverse', () => {
+    type S = O.Option<{ a: ReadonlyArray<string> }>
+    const sa = pipe(_.id<S>(), _.some, _.prop('a'), _.traverse(A.readonlyArray))
+    const modify = pipe(
+      sa,
+      T.modify((s) => s.toUpperCase())
+    )
+    assert.deepStrictEqual(modify(O.some({ a: ['a'] })), O.some({ a: ['A'] }))
   })
 })
