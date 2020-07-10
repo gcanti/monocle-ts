@@ -197,7 +197,9 @@ export const atKey = (key: string) => <S, A>(sa: Lens<S, Readonly<Record<string,
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> = composePrism(_.prismSome())
+export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> =
+  /*#__PURE__*/
+  composePrism(_.prismSome())
 
 /**
  * Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type
@@ -205,7 +207,9 @@ export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> = composePr
  * @category combinators
  * @since 2.3.0
  */
-export const right: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, A> = composePrism(_.prismRight())
+export const right: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, A> =
+  /*#__PURE__*/
+  composePrism(_.prismRight())
 
 /**
  * Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type
@@ -213,7 +217,9 @@ export const right: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, A> = co
  * @category combinators
  * @since 2.3.0
  */
-export const left: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, E> = composePrism(_.prismLeft())
+export const left: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, E> =
+  /*#__PURE__*/
+  composePrism(_.prismLeft())
 
 /**
  * Return a `Traversal` from a `Lens` focused on a `Traversable`
@@ -229,10 +235,9 @@ export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Lens<S
  * @category combinators
  * @since 2.3.2
  */
-export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A> = flow(
-  _.findFirst,
-  composeOptional
-)
+export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A> =
+  /*#__PURE__*/
+  flow(_.findFirst, composeOptional)
 
 // -------------------------------------------------------------------------------------
 // pipeables
