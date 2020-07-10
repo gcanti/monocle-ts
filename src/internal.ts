@@ -245,6 +245,21 @@ export const optionalComposeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Opt
   set: (b) => optionalModify(ab.set(b))(sa)
 })
 
+const findFirstMutable = <A>(predicate: Predicate<A>): Optional<Array<A>, A> => ({
+  getOption: A.findFirst(predicate),
+  set: (a) => (s) =>
+    pipe(
+      A.findIndex(predicate)(s),
+      O.fold(
+        () => s,
+        (i) => A.unsafeUpdateAt(i, a, s)
+      )
+    )
+})
+
+/** @internal */
+export const findFirst: <A>(predicate: Predicate<A>) => Optional<ReadonlyArray<A>, A> = findFirstMutable as any
+
 // -------------------------------------------------------------------------------------
 // Traversal
 // -------------------------------------------------------------------------------------
@@ -305,6 +320,10 @@ export function indexRecord<A = never>(): Index<Readonly<Record<string, A>>, str
     })
   }
 }
+
+// -------------------------------------------------------------------------------------
+// At
+// -------------------------------------------------------------------------------------
 
 /** @internal */
 export function atRecord<A = never>(): At<Readonly<Record<string, A>>, string, O.Option<A>> {

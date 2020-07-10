@@ -242,6 +242,15 @@ export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> = comp
  */
 export const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E> = compose(_.prismLeft())
 
+/**
+ * @category combinators
+ * @since 2.3.2
+ */
+export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A> = flow(
+  _.findFirst,
+  composeOptional
+)
+
 // -------------------------------------------------------------------------------------
 // pipeables
 // -------------------------------------------------------------------------------------

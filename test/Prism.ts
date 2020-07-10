@@ -178,4 +178,22 @@ describe('Prism', () => {
     assert.deepStrictEqual(sa.reverseGet(2), O.some(2))
     assert.deepStrictEqual(sa.reverseGet(-1), O.some(-1))
   })
+
+  it('findFirst', () => {
+    type S = O.Option<ReadonlyArray<number>>
+    const sa = pipe(
+      _.id<S>(),
+      _.some,
+      _.findFirst((n) => n > 0)
+    )
+    assert.deepStrictEqual(sa.getOption(O.none), O.none)
+    assert.deepStrictEqual(sa.getOption(O.some([])), O.none)
+    assert.deepStrictEqual(sa.getOption(O.some([-1, -2, -3])), O.none)
+    assert.deepStrictEqual(sa.getOption(O.some([-1, 2, -3])), O.some(2))
+    assert.deepStrictEqual(sa.set(3)(O.none), O.none)
+    assert.deepStrictEqual(sa.set(3)(O.some([])), O.some([]))
+    assert.deepStrictEqual(sa.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3]))
+    assert.deepStrictEqual(sa.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3]))
+    assert.deepStrictEqual(sa.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4]))
+  })
 })

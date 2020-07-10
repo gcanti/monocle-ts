@@ -225,6 +225,15 @@ export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Lens<S
   return flow(asTraversal, _.traversalComposeTraversal(_.fromTraversable(T)()))
 }
 
+/**
+ * @category combinators
+ * @since 2.3.2
+ */
+export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A> = flow(
+  _.findFirst,
+  composeOptional
+)
+
 // -------------------------------------------------------------------------------------
 // pipeables
 // -------------------------------------------------------------------------------------

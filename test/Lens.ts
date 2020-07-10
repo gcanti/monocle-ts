@@ -211,4 +211,19 @@ describe('Lens', () => {
     assert.deepStrictEqual(sa.set(2)({ a: 1 }), { a: 2 })
     assert.deepStrictEqual(sa.set(2)({ a: -1 }), { a: -1 })
   })
+
+  it('findFirst', () => {
+    type S = ReadonlyArray<number>
+    const sa = pipe(
+      _.id<S>(),
+      _.findFirst((n) => n > 0)
+    )
+    assert.deepStrictEqual(sa.getOption([]), O.none)
+    assert.deepStrictEqual(sa.getOption([-1, -2, -3]), O.none)
+    assert.deepStrictEqual(sa.getOption([-1, 2, -3]), O.some(2))
+    assert.deepStrictEqual(sa.set(3)([]), [])
+    assert.deepStrictEqual(sa.set(3)([-1, -2, -3]), [-1, -2, -3])
+    assert.deepStrictEqual(sa.set(3)([-1, 2, -3]), [-1, 3, -3])
+    assert.deepStrictEqual(sa.set(4)([-1, -2, 3]), [-1, -2, 4])
+  })
 })

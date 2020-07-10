@@ -21,6 +21,12 @@ high state of flux, you're at risk of it changing without notice.
   - `Ix`
     - add `indexArray` (@gcanti)
     - add `indexRecord` (@gcanti)
+  - `Lens`
+    - add `findFirst` combinator, closes #131 (@gcanti)
+  - `Prism`
+    - add `findFirst` combinator (@gcanti)
+  - `Optional`
+    - add `findFirst` combinator (@gcanti)
 
 # 2.3.1
 
