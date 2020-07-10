@@ -224,7 +224,9 @@ export const atKey = (key: string) => <S, A>(sa: Prism<S, Readonly<Record<string
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> = compose(_.prismSome())
+export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> =
+  /*#__PURE__*/
+  compose(_.prismSome())
 
 /**
  * Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type
@@ -232,7 +234,9 @@ export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> = compose(_.p
  * @category combinators
  * @since 2.3.0
  */
-export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> = compose(_.prismRight())
+export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> =
+  /*#__PURE__*/
+  compose(_.prismRight())
 
 /**
  * Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type
@@ -240,16 +244,17 @@ export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> = comp
  * @category combinators
  * @since 2.3.0
  */
-export const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E> = compose(_.prismLeft())
+export const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E> =
+  /*#__PURE__*/
+  compose(_.prismLeft())
 
 /**
  * @category combinators
  * @since 2.3.2
  */
-export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A> = flow(
-  _.findFirst,
-  composeOptional
-)
+export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A> =
+  /*#__PURE__*/
+  flow(_.findFirst, composeOptional)
 
 // -------------------------------------------------------------------------------------
 // pipeables

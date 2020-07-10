@@ -178,7 +178,9 @@ export const atKey = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<st
  * @category combinators
  * @since 2.3.0
  */
-export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = compose(_.prismAsTraversal(_.prismSome()))
+export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> =
+  /*#__PURE__*/
+  compose(_.prismAsTraversal(_.prismSome()))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type
@@ -186,9 +188,9 @@ export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> = com
  * @category combinators
  * @since 2.3.0
  */
-export const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A> = compose(
-  _.prismAsTraversal(_.prismRight())
-)
+export const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A> =
+  /*#__PURE__*/
+  compose(_.prismAsTraversal(_.prismRight()))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type
@@ -196,9 +198,9 @@ export const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A
  * @category combinators
  * @since 2.3.0
  */
-export const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E> = compose(
-  _.prismAsTraversal(_.prismLeft())
-)
+export const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E> =
+  /*#__PURE__*/
+  compose(_.prismAsTraversal(_.prismLeft()))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a `Traversable`
