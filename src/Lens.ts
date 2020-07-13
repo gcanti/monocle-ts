@@ -120,7 +120,7 @@ export const modify = <A>(f: (a: A) => A) => <S>(sa: Lens<S, A>) => (s: S): S =>
 /**
  * Return a `Optional` from a `Lens` focused on a nullable value
  *
- * @category constructors
+ * @category combinators
  * @since 2.3.0
  */
 export const fromNullable = <S, A>(sa: Lens<S, A>): Optional<S, NonNullable<A>> =>
