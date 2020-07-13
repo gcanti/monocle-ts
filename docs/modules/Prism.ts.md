@@ -32,6 +32,7 @@ Added in v2.3.0
   - [component](#component)
   - [filter](#filter)
   - [findFirst](#findfirst)
+  - [fromNullable](#fromnullable)
   - [index](#index)
   - [key](#key)
   - [left](#left)
@@ -48,7 +49,6 @@ Added in v2.3.0
   - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
 - [constructors](#constructors)
-  - [fromNullable](#fromnullable)
   - [fromPredicate](#frompredicate)
   - [id](#id)
 - [converters](#converters)
@@ -126,6 +126,18 @@ export declare const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Prism<S,
 ```
 
 Added in v2.3.2
+
+## fromNullable
+
+Return a `Prism` from a `Prism` focused on a nullable value
+
+**Signature**
+
+```ts
+export declare const fromNullable: <S, A>(sa: Prism<S, A>) => Prism<S, NonNullable<A>>
+```
+
+Added in v2.3.3
 
 ## index
 
@@ -298,16 +310,6 @@ export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Pris
 Added in v2.3.0
 
 # constructors
-
-## fromNullable
-
-**Signature**
-
-```ts
-export declare const fromNullable: <A>() => Prism<A, NonNullable<A>>
-```
-
-Added in v2.3.0
 
 ## fromPredicate
 

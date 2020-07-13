@@ -64,12 +64,6 @@ export const fromPredicate: {
   <A>(predicate: Predicate<A>): Prism<A, A>
 } = _.prismFromPredicate
 
-/**
- * @category constructors
- * @since 2.3.0
- */
-export const fromNullable: <A>() => Prism<A, NonNullable<A>> = _.prismFromNullable
-
 // -------------------------------------------------------------------------------------
 // converters
 // -------------------------------------------------------------------------------------
@@ -137,6 +131,16 @@ export const modifyOption: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S)
  * @since 2.3.0
  */
 export const modify: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismModify
+
+/**
+ * Return a `Prism` from a `Prism` focused on a nullable value
+ *
+ * @category combinators
+ * @since 2.3.3
+ */
+export const fromNullable: <S, A>(sa: Prism<S, A>) => Prism<S, NonNullable<A>> =
+  /*#__PURE__*/
+  compose(_.prismFromNullable())
 
 /**
  * @category combinators

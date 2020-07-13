@@ -36,6 +36,7 @@ Added in v2.3.0
   - [component](#component)
   - [filter](#filter)
   - [findFirst](#findfirst)
+  - [fromNullable](#fromnullable)
   - [index](#index)
   - [key](#key)
   - [left](#left)
@@ -50,7 +51,6 @@ Added in v2.3.0
   - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
 - [constructors](#constructors)
-  - [fromNullable](#fromnullable)
   - [id](#id)
 - [converters](#converters)
   - [asOptional](#asoptional)
@@ -125,6 +125,18 @@ export declare const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Lens<S, 
 ```
 
 Added in v2.3.2
+
+## fromNullable
+
+Return a `Optional` from a `Lens` focused on a nullable value
+
+**Signature**
+
+```ts
+export declare const fromNullable: <S, A>(sa: Lens<S, A>) => Optional<S, NonNullable<A>>
+```
+
+Added in v2.3.0
 
 ## index
 
@@ -277,18 +289,6 @@ export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>
 Added in v2.3.0
 
 # constructors
-
-## fromNullable
-
-Return a `Optional` from a `Lens` focused on a nullable value
-
-**Signature**
-
-```ts
-export declare const fromNullable: <S, A>(sa: Lens<S, A>) => Optional<S, NonNullable<A>>
-```
-
-Added in v2.3.0
 
 ## id
 

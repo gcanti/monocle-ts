@@ -17,7 +17,10 @@ high state of flux, you're at risk of it changing without notice.
 
 - **Experimental**
   - `Prism`
-    - remove `fromSome` constructor (@gcanti)
+    - (\*) remove `fromSome` constructor (@gcanti)
+    - (\*) change `fromNullable` signature (@gcanti)
+
+(\*) breaking change
 
 # 2.3.2
 

@@ -208,4 +208,13 @@ describe('Prism', () => {
     )
     assert.deepStrictEqual(modify(O.some(['a'])), O.some(['A']))
   })
+
+  it('fromNullable', () => {
+    type S = O.Option<number | undefined>
+    const sa = pipe(_.id<S>(), _.some, _.fromNullable)
+    assert.deepStrictEqual(sa.getOption(O.none), O.none)
+    assert.deepStrictEqual(sa.getOption(O.some(undefined)), O.none)
+    assert.deepStrictEqual(sa.getOption(O.some(1)), O.some(1))
+    assert.deepStrictEqual(sa.reverseGet(1), O.some(1))
+  })
 })
