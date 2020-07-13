@@ -50,7 +50,6 @@ Added in v2.3.0
 - [constructors](#constructors)
   - [fromNullable](#fromnullable)
   - [fromPredicate](#frompredicate)
-  - [fromSome](#fromsome)
   - [id](#id)
 - [converters](#converters)
   - [asOptional](#asoptional)
@@ -319,16 +318,6 @@ export declare const fromPredicate: {
   <S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
   <A>(predicate: Predicate<A>): Prism<A, A>
 }
-```
-
-Added in v2.3.0
-
-## fromSome
-
-**Signature**
-
-```ts
-export declare const fromSome: <A>() => Prism<O.Option<A>, A>
 ```
 
 Added in v2.3.0

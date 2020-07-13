@@ -68,12 +68,6 @@ export const fromPredicate: {
  * @category constructors
  * @since 2.3.0
  */
-export const fromSome: <A>() => Prism<Option<A>, A> = _.prismSome
-
-/**
- * @category constructors
- * @since 2.3.0
- */
 export const fromNullable: <A>() => Prism<A, NonNullable<A>> = _.prismFromNullable
 
 // -------------------------------------------------------------------------------------
