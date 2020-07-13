@@ -124,6 +124,12 @@ export const composeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Prism<S, A>
  * @category combinators
  * @since 2.3.0
  */
+export const set: <A>(a: A) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismSet
+
+/**
+ * @category combinators
+ * @since 2.3.0
+ */
 export const modifyOption: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => Option<S> = _.prismModifyOption
 
 /**
@@ -141,16 +147,6 @@ export const modify: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => S 
 export const fromNullable: <S, A>(sa: Prism<S, A>) => Prism<S, NonNullable<A>> =
   /*#__PURE__*/
   compose(_.prismFromNullable())
-
-/**
- * @category combinators
- * @since 2.3.0
- */
-export const set: <A>(a: A) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismSet
-
-// -------------------------------------------------------------------------------------
-// combinators
-// -------------------------------------------------------------------------------------
 
 /**
  * @category combinators

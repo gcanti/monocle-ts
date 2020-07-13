@@ -19,6 +19,8 @@ high state of flux, you're at risk of it changing without notice.
   - `Prism`
     - (\*) remove `fromSome` constructor (@gcanti)
     - (\*) change `fromNullable` signature (@gcanti)
+  - `Optional`
+    - add missing `fromNullable` combinator, closes #133 (@gcanti)
 
 (\*) breaking change
 
