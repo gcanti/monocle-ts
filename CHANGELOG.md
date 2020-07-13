@@ -13,6 +13,12 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 2.3.3
+
+- **Experimental**
+  - `Prism`
+    - remove `fromSome` constructor (@gcanti)
+
 # 2.3.2
 
 - **Experimental**
