@@ -37,6 +37,7 @@ Added in v2.3.0
   - [component](#component)
   - [filter](#filter)
   - [findFirst](#findfirst)
+  - [fromNullable](#fromnullable)
   - [index](#index)
   - [key](#key)
   - [left](#left)
@@ -125,6 +126,18 @@ export declare const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Optional
 ```
 
 Added in v2.3.2
+
+## fromNullable
+
+Return an `Optional` from a `Optional` focused on a nullable value
+
+**Signature**
+
+```ts
+export declare const fromNullable: <S, A>(sa: Optional<S, A>) => Optional<S, NonNullable<A>>
+```
+
+Added in v2.3.3
 
 ## index
 

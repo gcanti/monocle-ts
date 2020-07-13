@@ -142,4 +142,17 @@ describe('Optional', () => {
     )
     assert.deepStrictEqual(modify(O.some({ a: ['a'] })), O.some({ a: ['A'] }))
   })
+
+  it('fromNullable', () => {
+    interface S {
+      a?: number
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'), _.fromNullable)
+    assert.deepStrictEqual(sa.getOption({}), O.none)
+    assert.deepStrictEqual(sa.getOption({ a: undefined }), O.none)
+    assert.deepStrictEqual(sa.getOption({ a: 1 }), O.some(1))
+    assert.deepStrictEqual(sa.set(2)({}), {})
+    assert.deepStrictEqual(sa.set(2)({ a: undefined }), { a: undefined })
+    assert.deepStrictEqual(sa.set(2)({ a: 1 }), { a: 2 })
+  })
 })

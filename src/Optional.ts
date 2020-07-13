@@ -101,6 +101,16 @@ export const modifyOption: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) 
 export const modify: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => S = _.optionalModify
 
 /**
+ * Return an `Optional` from a `Optional` focused on a nullable value
+ *
+ * @category combinators
+ * @since 2.3.3
+ */
+export const fromNullable: <S, A>(sa: Optional<S, A>) => Optional<S, NonNullable<A>> =
+  /*#__PURE__*/
+  compose(_.prismAsOptional(_.prismFromNullable()))
+
+/**
  * @category combinators
  * @since 2.3.0
  */
