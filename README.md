@@ -139,6 +139,7 @@ You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
 # Documentation
 
 - [API Reference](https://gcanti.github.io/monocle-ts/)
+- [非官方中文入门教程](https://jituanlin.github.io/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/2020-08-09-monocle-ts-%E8%A1%A5%E5%85%85%E6%96%87%E6%A1%A3/)
 
 # Experimental modules
 
