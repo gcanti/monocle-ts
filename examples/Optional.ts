@@ -21,7 +21,7 @@ interface Person {
   surname: Option<string>
 }
 
-const surname = Lens.fromProp<Person, 'surname'>('surname').composePrism(Prism.some<string>())
+const surname = Lens.fromProp<Person>()('surname').composePrism(Prism.some<string>())
 
 const p: Person = { name: 'Giulio', surname: none }
 
