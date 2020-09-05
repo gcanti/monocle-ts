@@ -51,10 +51,10 @@ console.log(JSON.stringify(employee2, null, 2))
 
 import { Lens, Optional } from '../src'
 
-const company = Lens.fromProp<Employee, 'company'>('company')
-const address = Lens.fromProp<Company, 'address'>('address')
-const street = Lens.fromProp<Address, 'street'>('street')
-const name = Lens.fromProp<Street, 'name'>('name')
+const company = Lens.fromProp<Employee>()('company')
+const address = Lens.fromProp<Company>()('address')
+const street = Lens.fromProp<Address>()('street')
+const name = Lens.fromProp<Street>()('name')
 
 import { some, none } from 'fp-ts/lib/Option'
 

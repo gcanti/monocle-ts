@@ -82,6 +82,6 @@ type PersonType = {
 
 const person: PersonType = { name: 'Giulio', age: 42 }
 
-const age = Lens.fromProp<PersonType, 'age'>('age')
+const age = Lens.fromProp<PersonType>()('age')
 
 console.log(age.set(43)(person)) // => { name: 'Giulio', age: 43 }
