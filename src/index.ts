@@ -1361,6 +1361,7 @@ export class Fold<S, A> {
     this.exist = foldMap(monoidAny)
     this.all = foldMap(monoidAll)
     this.foldMapFirst = foldMap(getFirstMonoid())
+    this.headOption = this.headOption.bind(this)
   }
 
   /**
