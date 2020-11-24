@@ -25,5 +25,5 @@ const surname = Lens.fromProp<Person>()('surname').composePrism(Prism.some<strin
 
 const p: Person = { name: 'Giulio', surname: none }
 
-console.log(surname.getOption(p)) // => None
-console.log(surname.set('Canti')(p)) // => { name: 'Giulio', surname: Some("Canti") }
+console.log(surname.getOption(p)) // => none
+console.log(surname.set('Canti')(p)) // => { name: 'Giulio', surname: none }
