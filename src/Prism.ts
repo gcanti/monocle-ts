@@ -9,8 +9,8 @@
  *
  * Laws:
  *
- * 1. getOption(s).fold(s, reverseGet) = s
- * 2. getOption(reverseGet(a)) = Some(a)
+ * 1. pipe(getOption(s), fold(() => s, reverseGet)) = s
+ * 2. getOption(reverseGet(a)) = some(a)
  *
  * @since 2.3.0
  */

@@ -20,8 +20,8 @@ and `A` an optional element inside of `S`.
 
 Laws:
 
-1. getOption(s).fold(() => s, a => set(a)(s)) = s
-2. getOption(set(a)(s)) = getOption(s).map(\_ => a)
+1. pipe(getOption(s), fold(() => s, a => set(a)(s))) = s
+2. getOption(set(a)(s)) = pipe(getOption(s), map(\_ => a))
 3. set(a)(set(a)(s)) = set(a)(s)
 
 Added in v2.3.0
