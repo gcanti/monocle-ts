@@ -16,7 +16,7 @@ import * as O from 'fp-ts/Option'
 import * as E from 'fp-ts/Either'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/Traversable'
 import { Iso } from './Iso'
-import { Index } from './Ix'
+import { Ix } from './Ix'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
@@ -87,7 +87,7 @@ export const lensProp = <A, P extends keyof A>(prop: P) => <S>(lens: Lens<S, A>)
 })
 
 /** @internal */
-export const lensProps = <A, P extends keyof A>(...props: [P, P, ...Array<P>]) => <S>(
+export const lensProps = <A, P extends keyof A>(...props: readonly [P, P, ...ReadonlyArray<P>]) => <S>(
   lens: Lens<S, A>
 ): Lens<S, { [K in P]: A[K] }> => ({
   get: (s) => {
@@ -264,11 +264,14 @@ export const findFirst = <A>(predicate: Predicate<A>): Optional<ReadonlyArray<A>
       A.findIndex(predicate)(s),
       O.fold(
         () => s,
-        (i) =>
-          pipe(
-            A.updateAt(i, a)(s),
-            O.getOrElse(() => s)
-          )
+        (i) => {
+          if (s[i] === a) {
+            return s
+          }
+          const as = s.slice()
+          as[i] = a
+          return as
+        }
       )
     )
 })
@@ -301,8 +304,8 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 // -------------------------------------------------------------------------------------
 
 /** @internal */
-export const indexArray = <A = never>(): Index<ReadonlyArray<A>, number, A> => ({
-  index: (i) => ({
+export const ixReadonlyArray = <A = never>(): Ix<ReadonlyArray<A>, number, A> => ({
+  ix: (i) => ({
     getOption: A.lookup(i),
     set: (a) => (as) =>
       pipe(
@@ -313,9 +316,9 @@ export const indexArray = <A = never>(): Index<ReadonlyArray<A>, number, A> => (
 })
 
 /** @internal */
-export function indexRecord<A = never>(): Index<Readonly<Record<string, A>>, string, A> {
+export function ixReadonlyRecord<A = never>(): Ix<Readonly<Record<string, A>>, string, A> {
   return {
-    index: (k) => ({
+    ix: (k) => ({
       getOption: R.lookup(k),
       set: (a) => (r) => {
         if (r[k] === a || O.isNone(R.lookup(k)(r))) {

@@ -135,7 +135,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Optional<S, A>) =>
  * @since 2.3.0
  */
 export const props = <A, P extends keyof A>(
-  ...props: [P, P, ...Array<P>]
+  ...props: readonly [P, P, ...ReadonlyArray<P>]
 ): (<S>(sa: Optional<S, A>) => Optional<S, { [K in P]: A[K] }>) =>
   compose(pipe(_.lensId<A>(), _.lensProps(...props), _.lensAsOptional))
 
@@ -157,7 +157,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * @since 2.3.0
  */
 export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): Optional<S, A> =>
-  pipe(sa, _.optionalComposeOptional(_.indexArray<A>().index(i)))
+  pipe(sa, _.optionalComposeOptional(_.ixReadonlyArray<A>().ix(i)))
 
 /**
  * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key
@@ -166,7 +166,7 @@ export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): O
  * @since 2.3.0
  */
 export const key = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>): Optional<S, A> =>
-  pipe(sa, _.optionalComposeOptional(_.indexRecord<A>().index(key)))
+  pipe(sa, _.optionalComposeOptional(_.ixReadonlyRecord<A>().ix(key)))
 
 /**
  * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key

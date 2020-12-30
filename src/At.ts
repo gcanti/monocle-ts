@@ -43,4 +43,4 @@ export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>): At<T,
  * @category constructors
  * @since 2.3.2
  */
-export const atRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>> = _.atRecord
+export const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>> = _.atRecord

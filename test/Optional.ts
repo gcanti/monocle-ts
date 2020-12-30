@@ -1,15 +1,15 @@
 import * as assert from 'assert'
-import * as O from 'fp-ts/lib/Option'
+import * as O from 'fp-ts/Option'
 import * as _ from '../src/Optional'
-import { pipe } from 'fp-ts/lib/function'
-import * as Id from 'fp-ts/lib/Identity'
-import * as A from 'fp-ts/lib/ReadonlyArray'
+import { pipe } from 'fp-ts/function'
+import * as Id from 'fp-ts/Identity'
+import * as A from 'fp-ts/ReadonlyArray'
 import * as T from '../src/Traversal'
 
 type S = O.Option<{
-  a: string
-  b: number
-  c: boolean
+  readonly a: string
+  readonly b: number
+  readonly c: boolean
 }>
 
 describe('Optional', () => {
@@ -57,7 +57,7 @@ describe('Optional', () => {
   })
 
   it('component', () => {
-    type S = O.Option<[string, number]>
+    type S = O.Option<readonly [string, number]>
     const sa = pipe(_.id<S>(), _.some, _.component(1))
     assert.deepStrictEqual(sa.getOption(O.none), O.none)
     assert.deepStrictEqual(sa.getOption(O.some(['a', 1])), O.some(1))
@@ -96,7 +96,7 @@ describe('Optional', () => {
   })
 
   it('filter', () => {
-    type S = O.Option<{ a: number }>
+    type S = O.Option<{ readonly a: number }>
     const sa = pipe(
       _.id<S>(),
       _.some,
@@ -113,7 +113,7 @@ describe('Optional', () => {
   })
 
   it('findFirst', () => {
-    type S = O.Option<{ a: ReadonlyArray<number> }>
+    type S = O.Option<{ readonly a: ReadonlyArray<number> }>
     const sa = pipe(
       _.id<S>(),
       _.some,
@@ -132,7 +132,7 @@ describe('Optional', () => {
   })
 
   it('traverse', () => {
-    type S = O.Option<{ a: ReadonlyArray<string> }>
+    type S = O.Option<{ readonly a: ReadonlyArray<string> }>
     const sa = pipe(_.id<S>(), _.some, _.prop('a'), _.traverse(A.Traversable))
     const modify = pipe(
       sa,
@@ -143,7 +143,7 @@ describe('Optional', () => {
 
   it('fromNullable', () => {
     interface S {
-      a?: number
+      readonly a?: number
     }
     const sa = pipe(_.id<S>(), _.prop('a'), _.fromNullable)
     assert.deepStrictEqual(sa.getOption({}), O.none)

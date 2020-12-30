@@ -1,18 +1,25 @@
 import * as assert from 'assert'
-import { pipe } from 'fp-ts/lib/function'
-import * as O from 'fp-ts/lib/Option'
-import * as E from 'fp-ts/lib/Either'
+import { pipe } from 'fp-ts/function'
+import * as O from 'fp-ts/Option'
+import * as E from 'fp-ts/Either'
 import * as _ from '../src/Prism'
 import { Optional } from '../src/Optional'
-import * as A from 'fp-ts/lib/ReadonlyArray'
+import * as A from 'fp-ts/ReadonlyArray'
 import * as T from '../src/Traversal'
 
 // -------------------------------------------------------------------------------------
 // model
 // -------------------------------------------------------------------------------------
 
-type Leaf = { _tag: 'Leaf' }
-type Node = { _tag: 'Node'; value: number; left: Tree; right: Tree }
+type Leaf = {
+  readonly _tag: 'Leaf'
+}
+type Node = {
+  readonly _tag: 'Node'
+  readonly value: number
+  readonly left: Tree
+  readonly right: Tree
+}
 type Tree = Leaf | Node
 
 // -------------------------------------------------------------------------------------
@@ -83,21 +90,21 @@ describe('Prism', () => {
   })
 
   it('prop', () => {
-    type S = O.Option<{ a: string; b: number }>
+    type S = O.Option<{ readonly a: string; readonly b: number }>
     const sa = pipe(_.id<S>(), _.some, _.prop('a'))
     assert.deepStrictEqual(sa.getOption(O.none), O.none)
     assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1 })), O.some('a'))
   })
 
   it('props', () => {
-    type S = O.Option<{ a: string; b: number; c: boolean }>
+    type S = O.Option<{ readonly a: string; readonly b: number; readonly c: boolean }>
     const sa = pipe(_.id<S>(), _.some, _.props('a', 'b'))
     assert.deepStrictEqual(sa.getOption(O.none), O.none)
     assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
   })
 
   it('component', () => {
-    type S = O.Option<[string, number]>
+    type S = O.Option<readonly [string, number]>
     const sa = pipe(_.id<S>(), _.some, _.component(1))
     assert.deepStrictEqual(sa.getOption(O.none), O.none)
     assert.deepStrictEqual(sa.getOption(O.some(['a', 1])), O.some(1))

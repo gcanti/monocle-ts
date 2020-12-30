@@ -1,7 +1,8 @@
 import * as assert from 'assert'
-import { pipe } from 'fp-ts/lib/function'
+import { increment, pipe } from 'fp-ts/function'
 import * as _ from '../src/Iso'
-import * as Id from 'fp-ts/lib/Identity'
+import * as Id from 'fp-ts/Identity'
+import * as O from 'fp-ts/Option'
 
 const numberFromString: _.Iso<number, string> = {
   get: String,
@@ -14,18 +15,24 @@ const double: _.Iso<number, number> = {
 }
 
 describe('Iso', () => {
-  describe('pipeables', () => {
-    it('imap', () => {
-      const sb = pipe(
-        numberFromString,
-        _.imap(
-          (s) => '+' + s,
-          (s) => s.substring(1)
-        )
+  // -------------------------------------------------------------------------------------
+  // type class members
+  // -------------------------------------------------------------------------------------
+
+  it('imap', () => {
+    const sb = pipe(
+      numberFromString,
+      _.imap(
+        (s) => '+' + s,
+        (s) => s.substring(1)
       )
-      assert.deepStrictEqual(sb.get(1), '+1')
-      assert.deepStrictEqual(sb.reverseGet('+1'), 1)
-    })
+    )
+    assert.deepStrictEqual(sb.get(1), '+1')
+    assert.deepStrictEqual(sb.reverseGet('+1'), 1)
+  })
+
+  it('modify', () => {
+    assert.strictEqual(pipe(double, _.modify(increment))(1000), 1000.5)
   })
 
   it('id', () => {
@@ -44,6 +51,12 @@ describe('Iso', () => {
     const sb = pipe(double, _.compose(numberFromString))
     assert.deepStrictEqual(sb.get(1), '2')
     assert.deepStrictEqual(sb.reverseGet('2'), 1)
+  })
+
+  it('asPrism', () => {
+    const sa = pipe(double, _.asPrism)
+    assert.deepStrictEqual(sa.getOption(1), O.some(2))
+    assert.deepStrictEqual(sa.reverseGet(2), 1)
   })
 
   it('asTraversal', () => {

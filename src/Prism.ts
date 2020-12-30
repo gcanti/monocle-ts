@@ -173,7 +173,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Prism<S, A>) => Op
  * @since 2.3.0
  */
 export const props = <A, P extends keyof A>(
-  ...props: [P, P, ...Array<P>]
+  ...props: readonly [P, P, ...ReadonlyArray<P>]
 ): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) => composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
 
 /**
@@ -193,7 +193,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * @since 2.3.0
  */
 export const index = (i: number) => <S, A>(sa: Prism<S, ReadonlyArray<A>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.indexArray<A>().index(i)))
+  pipe(sa, asOptional, _.optionalComposeOptional(_.ixReadonlyArray<A>().ix(i)))
 
 /**
  * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key
@@ -202,7 +202,7 @@ export const index = (i: number) => <S, A>(sa: Prism<S, ReadonlyArray<A>>): Opti
  * @since 2.3.0
  */
 export const key = (key: string) => <S, A>(sa: Prism<S, Readonly<Record<string, A>>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.indexRecord<A>().index(key)))
+  pipe(sa, asOptional, _.optionalComposeOptional(_.ixReadonlyRecord<A>().ix(key)))
 
 /**
  * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key

@@ -1,8 +1,8 @@
 import * as assert from 'assert'
 import * as _ from '../src/Lens'
-import { pipe } from 'fp-ts/lib/function'
-import * as O from 'fp-ts/lib/Option'
-import * as A from 'fp-ts/lib/ReadonlyArray'
+import { pipe, identity } from 'fp-ts/function'
+import * as O from 'fp-ts/Option'
+import * as A from 'fp-ts/ReadonlyArray'
 import * as T from '../src/Traversal'
 import { Optional } from '../src/Optional'
 
@@ -65,11 +65,14 @@ describe('Lens', () => {
       readonly a: number
     }
     const sa = pipe(_.id<S>(), _.prop('a'))
-    const f = pipe(
-      sa,
-      _.modify((a) => a * 2)
+    assert.deepStrictEqual(
+      pipe(
+        sa,
+        _.modify((a) => a * 2)
+      )({ a: 1 }),
+      { a: 2 }
     )
-    assert.deepStrictEqual(f({ a: 1 }), { a: 2 })
+    assert.deepStrictEqual(pipe(sa, _.modify(identity))({ a: 1 }), { a: 1 })
   })
 
   it('prop', () => {
@@ -104,7 +107,7 @@ describe('Lens', () => {
 
   it('component', () => {
     interface S {
-      readonly a: [string, number]
+      readonly a: readonly [string, number]
     }
     const sa = pipe(_.id<S>(), _.prop('a'), _.component(1))
     const s: S = { a: ['a', 1] }
@@ -221,5 +224,8 @@ describe('Lens', () => {
     assert.deepStrictEqual(sa.set(3)([-1, -2, -3]), [-1, -2, -3])
     assert.deepStrictEqual(sa.set(3)([-1, 2, -3]), [-1, 3, -3])
     assert.deepStrictEqual(sa.set(4)([-1, -2, 3]), [-1, -2, 4])
+    // should return the same reference if nothing changed
+    const as: ReadonlyArray<number> = [-1, 2, -3]
+    assert.strictEqual(sa.set(2)(as), as)
   })
 })

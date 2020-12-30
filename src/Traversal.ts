@@ -129,7 +129,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Traversal<S, A>) =
  * @since 2.3.0
  */
 export const props = <A, P extends keyof A>(
-  ...props: [P, P, ...Array<P>]
+  ...props: readonly [P, P, ...ReadonlyArray<P>]
 ): (<S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }>) =>
   compose(pipe(_.lensId<A>(), _.lensProps(...props), _.lensAsTraversal))
 
@@ -151,7 +151,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * @since 2.3.0
  */
 export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): Traversal<S, A> =>
-  pipe(sa, compose(_.optionalAsTraversal(_.indexArray<A>().index(i))))
+  pipe(sa, compose(_.optionalAsTraversal(_.ixReadonlyArray<A>().ix(i))))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key
@@ -160,7 +160,7 @@ export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): 
  * @since 2.3.0
  */
 export const key = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>): Traversal<S, A> =>
-  pipe(sa, compose(_.optionalAsTraversal(_.indexRecord<A>().index(key))))
+  pipe(sa, compose(_.optionalAsTraversal(_.ixReadonlyRecord<A>().ix(key))))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key
