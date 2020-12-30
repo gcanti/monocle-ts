@@ -1,6 +1,6 @@
 ---
 title: Lens.ts
-nav_order: 17
+nav_order: 6
 parent: Modules
 ---
 
@@ -29,8 +29,12 @@ Added in v2.3.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [Category](#category)
+  - [id](#id)
 - [Invariant](#invariant)
   - [imap](#imap)
+- [Semigroupoid](#semigroupoid)
+  - [compose](#compose)
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
@@ -47,23 +51,32 @@ Added in v2.3.0
   - [some](#some)
   - [traverse](#traverse)
 - [compositions](#compositions)
-  - [compose](#compose)
   - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
-- [constructors](#constructors)
-  - [id](#id)
 - [converters](#converters)
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
 - [instances](#instances)
+  - [Category](#category-1)
+  - [Invariant](#invariant-1)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryLens](#categorylens)
-  - [invariantLens](#invariantlens)
 - [model](#model)
   - [Lens (interface)](#lens-interface)
 
 ---
+
+# Category
+
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Lens<S, S>
+```
+
+Added in v2.3.0
 
 # Invariant
 
@@ -72,7 +85,21 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(sa: Lens<E, A>) => Lens<E, B>
+export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Lens<E, A>) => Lens<E, B>
+```
+
+Added in v2.3.0
+
+# Semigroupoid
+
+## compose
+
+Compose a `Lens` with a `Lens`
+
+**Signature**
+
+```ts
+export declare const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
 ```
 
 Added in v2.3.0
@@ -252,18 +279,6 @@ Added in v2.3.0
 
 # compositions
 
-## compose
-
-Compose a `Lens` with a `Lens`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
-```
-
-Added in v2.3.0
-
 ## composeOptional
 
 Compose a `Lens` with an `Optional`
@@ -284,18 +299,6 @@ Compose a `Lens` with a `Prism`
 
 ```ts
 export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>) => Optional<S, B>
-```
-
-Added in v2.3.0
-
-# constructors
-
-## id
-
-**Signature**
-
-```ts
-export declare const id: <S>() => Lens<S, S>
 ```
 
 Added in v2.3.0
@@ -328,6 +331,26 @@ Added in v2.3.0
 
 # instances
 
+## Category
+
+**Signature**
+
+```ts
+export declare const Category: Category2<'monocle-ts/Lens'>
+```
+
+Added in v2.3.0
+
+## Invariant
+
+**Signature**
+
+```ts
+export declare const Invariant: Invariant2<'monocle-ts/Lens'>
+```
+
+Added in v2.3.0
+
 ## URI
 
 **Signature**
@@ -344,26 +367,6 @@ Added in v2.3.0
 
 ```ts
 export type URI = typeof URI
-```
-
-Added in v2.3.0
-
-## categoryLens
-
-**Signature**
-
-```ts
-export declare const categoryLens: Category2<'monocle-ts/Lens'>
-```
-
-Added in v2.3.0
-
-## invariantLens
-
-**Signature**
-
-```ts
-export declare const invariantLens: Invariant2<'monocle-ts/Lens'>
 ```
 
 Added in v2.3.0

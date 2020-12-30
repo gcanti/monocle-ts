@@ -18,14 +18,13 @@
  *
  * @since 2.3.0
  */
-import { Category2 } from 'fp-ts/lib/Category'
-import { Either } from 'fp-ts/lib/Either'
-import { flow, Predicate, Refinement } from 'fp-ts/lib/function'
-import { Kind, URIS } from 'fp-ts/lib/HKT'
-import { Invariant2 } from 'fp-ts/lib/Invariant'
-import { Option } from 'fp-ts/lib/Option'
-import { pipe } from 'fp-ts/lib/pipeable'
-import { Traversable1 } from 'fp-ts/lib/Traversable'
+import { Category2 } from 'fp-ts/Category'
+import { Either } from 'fp-ts/Either'
+import { flow, pipe, Predicate, Refinement } from 'fp-ts/function'
+import { Kind, URIS } from 'fp-ts/HKT'
+import { Invariant2 } from 'fp-ts/Invariant'
+import { Option } from 'fp-ts/Option'
+import { Traversable1 } from 'fp-ts/Traversable'
 import * as _ from './internal'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
@@ -49,7 +48,7 @@ export interface Lens<S, A> {
 // -------------------------------------------------------------------------------------
 
 /**
- * @category constructors
+ * @category Category
  * @since 2.3.0
  */
 export const id: <S>() => Lens<S, S> = _.lensId
@@ -81,7 +80,7 @@ export const asTraversal: <S, A>(sa: Lens<S, A>) => Traversal<S, A> = _.lensAsTr
 /**
  * Compose a `Lens` with a `Lens`
  *
- * @category compositions
+ * @category Semigroupoid
  * @since 2.3.0
  */
 export const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B> = _.lensComposeLens
@@ -247,17 +246,14 @@ export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Lens<S, Readonly
  * @category Invariant
  * @since 2.3.0
  */
-export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(sa: Lens<E, A>) => Lens<E, B> = (f, g) => (ea) =>
-  imap_(ea, f, g)
+export const imap: Invariant2<URI>['imap'] = (f, g) => (ea) => ({
+  get: flow(ea.get, f),
+  set: flow(g, ea.set)
+})
 
 // -------------------------------------------------------------------------------------
 // instances
 // -------------------------------------------------------------------------------------
-
-const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => ({
-  get: flow(ea.get, ab),
-  set: flow(ba, ea.set)
-})
 
 /**
  * @category instances
@@ -271,7 +267,7 @@ export const URI = 'monocle-ts/Lens'
  */
 export type URI = typeof URI
 
-declare module 'fp-ts/lib/HKT' {
+declare module 'fp-ts/HKT' {
   interface URItoKind2<E, A> {
     readonly [URI]: Lens<E, A>
   }
@@ -281,17 +277,17 @@ declare module 'fp-ts/lib/HKT' {
  * @category instances
  * @since 2.3.0
  */
-export const invariantLens: Invariant2<URI> = {
+export const Invariant: Invariant2<URI> = {
   URI,
-  imap: imap_
+  imap
 }
 
 /**
  * @category instances
  * @since 2.3.0
  */
-export const categoryLens: Category2<URI> = {
+export const Category: Category2<URI> = {
   URI,
-  compose: (ab, ea) => compose(ab)(ea),
+  compose,
   id
 }

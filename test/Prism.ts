@@ -47,17 +47,15 @@ describe('Prism', () => {
     })
   })
 
-  describe('instances', () => {
-    it('compose', () => {
-      type S = O.Option<Tree>
-      const sa = pipe(_.id<S>(), _.some)
-      const ab = value
-      const sb = _.categoryPrism.compose(ab, sa)
-      assert.deepStrictEqual(sb.getOption(O.none), O.none)
-      assert.deepStrictEqual(sb.getOption(O.some(leaf)), O.none)
-      assert.deepStrictEqual(sb.getOption(O.some(node(1, leaf, leaf))), O.some(1))
-      assert.deepStrictEqual(sb.reverseGet(1), O.some(node(1, leaf, leaf)))
-    })
+  it('compose', () => {
+    type S = O.Option<Tree>
+    const sa = pipe(_.id<S>(), _.some)
+    const ab = value
+    const sb = pipe(sa, _.compose(ab))
+    assert.deepStrictEqual(sb.getOption(O.none), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some(leaf)), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some(node(1, leaf, leaf))), O.some(1))
+    assert.deepStrictEqual(sb.reverseGet(1), O.some(node(1, leaf, leaf)))
   })
 
   it('id', () => {
@@ -201,7 +199,7 @@ describe('Prism', () => {
 
   it('traverse', () => {
     type S = O.Option<ReadonlyArray<string>>
-    const sa = pipe(_.id<S>(), _.some, _.traverse(A.readonlyArray))
+    const sa = pipe(_.id<S>(), _.some, _.traverse(A.Traversable))
     const modify = pipe(
       sa,
       T.modify((s) => s.toUpperCase())

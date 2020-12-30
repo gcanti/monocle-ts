@@ -1,6 +1,6 @@
 ---
 title: Prism.ts
-nav_order: 19
+nav_order: 8
 parent: Modules
 ---
 
@@ -25,8 +25,12 @@ Added in v2.3.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [Category](#category)
+  - [id](#id)
 - [Invariant](#invariant)
   - [imap](#imap)
+- [Semigroupoid](#semigroupoid)
+  - [compose](#compose)
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
@@ -45,24 +49,34 @@ Added in v2.3.0
   - [some](#some)
   - [traverse](#traverse)
 - [compositions](#compositions)
-  - [compose](#compose)
   - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
 - [constructors](#constructors)
   - [fromPredicate](#frompredicate)
-  - [id](#id)
 - [converters](#converters)
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
 - [instances](#instances)
+  - [Category](#category-1)
+  - [Invariant](#invariant-1)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryPrism](#categoryprism)
-  - [invariantPrism](#invariantprism)
 - [model](#model)
   - [Prism (interface)](#prism-interface)
 
 ---
+
+# Category
+
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Prism<S, S>
+```
+
+Added in v2.3.0
 
 # Invariant
 
@@ -71,7 +85,21 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(sa: Prism<E, A>) => Prism<E, B>
+export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Prism<E, A>) => Prism<E, B>
+```
+
+Added in v2.3.0
+
+# Semigroupoid
+
+## compose
+
+Compose a `Prism` with a `Prism`
+
+**Signature**
+
+```ts
+export declare const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
 ```
 
 Added in v2.3.0
@@ -273,18 +301,6 @@ Added in v2.3.0
 
 # compositions
 
-## compose
-
-Compose a `Prism` with a `Prism`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
-```
-
-Added in v2.3.0
-
 ## composeLens
 
 Compose a `Prism` with a `Lens`
@@ -324,16 +340,6 @@ export declare const fromPredicate: {
 
 Added in v2.3.0
 
-## id
-
-**Signature**
-
-```ts
-export declare const id: <S>() => Prism<S, S>
-```
-
-Added in v2.3.0
-
 # converters
 
 ## asOptional
@@ -362,6 +368,26 @@ Added in v2.3.0
 
 # instances
 
+## Category
+
+**Signature**
+
+```ts
+export declare const Category: Category2<'monocle-ts/Prism'>
+```
+
+Added in v2.3.0
+
+## Invariant
+
+**Signature**
+
+```ts
+export declare const Invariant: Invariant2<'monocle-ts/Prism'>
+```
+
+Added in v2.3.0
+
 ## URI
 
 **Signature**
@@ -378,26 +404,6 @@ Added in v2.3.0
 
 ```ts
 export type URI = typeof URI
-```
-
-Added in v2.3.0
-
-## categoryPrism
-
-**Signature**
-
-```ts
-export declare const categoryPrism: Category2<'monocle-ts/Prism'>
-```
-
-Added in v2.3.0
-
-## invariantPrism
-
-**Signature**
-
-```ts
-export declare const invariantPrism: Invariant2<'monocle-ts/Prism'>
 ```
 
 Added in v2.3.0

@@ -24,20 +24,18 @@ describe('Lens', () => {
     })
   })
 
-  describe('instances', () => {
-    it('compose', () => {
-      interface S {
-        readonly a: A
-      }
-      interface A {
-        readonly b: number
-      }
-      const sa = pipe(_.id<S>(), _.prop('a'))
-      const ab = pipe(_.id<A>(), _.prop('b'))
-      const sb = _.categoryLens.compose(ab, sa)
-      assert.deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
-      assert.deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
-    })
+  it('compose', () => {
+    interface S {
+      readonly a: A
+    }
+    interface A {
+      readonly b: number
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'))
+    const ab = pipe(_.id<A>(), _.prop('b'))
+    const sb = pipe(sa, _.compose(ab))
+    assert.deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
+    assert.deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
   })
 
   it('id', () => {
@@ -148,7 +146,7 @@ describe('Lens', () => {
 
   it('traverse', () => {
     type S = ReadonlyArray<string>
-    const sa = pipe(_.id<S>(), _.traverse(A.readonlyArray))
+    const sa = pipe(_.id<S>(), _.traverse(A.Traversable))
     const modify = pipe(
       sa,
       T.modify((s) => s.toUpperCase())

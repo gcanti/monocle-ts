@@ -1,6 +1,6 @@
 ---
 title: Ix.ts
-nav_order: 16
+nav_order: 5
 parent: Modules
 ---
 

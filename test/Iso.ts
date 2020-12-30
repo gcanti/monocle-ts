@@ -28,14 +28,6 @@ describe('Iso', () => {
     })
   })
 
-  describe('instances', () => {
-    it('compose', () => {
-      const sb = _.categoryIso.compose(numberFromString, double)
-      assert.deepStrictEqual(sb.get(1), '2')
-      assert.deepStrictEqual(sb.reverseGet('2'), 1)
-    })
-  })
-
   it('id', () => {
     const ss = _.id<number>()
     assert.deepStrictEqual(ss.get(1), 1)
@@ -56,6 +48,6 @@ describe('Iso', () => {
 
   it('asTraversal', () => {
     const sa = pipe(double, _.asTraversal)
-    assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n - 1)(3), 2.5)
+    assert.deepStrictEqual(sa.modifyF(Id.Applicative)((n) => n - 1)(3), 2.5)
   })
 })

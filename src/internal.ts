@@ -7,15 +7,14 @@
  *
  * @since 2.3.0
  */
-import { Applicative } from 'fp-ts/lib/Applicative'
-import * as A from 'fp-ts/lib/Array' // TODO: replace with ReadonlyArray in v3
-import * as R from 'fp-ts/lib/Record' // TODO: replace with ReadonlyRecord in v3
-import { constant, flow, identity, Predicate } from 'fp-ts/lib/function'
-import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
-import * as O from 'fp-ts/lib/Option'
-import * as E from 'fp-ts/lib/Either'
-import { pipe } from 'fp-ts/lib/pipeable'
-import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
+import { Applicative } from 'fp-ts/Applicative'
+import * as A from 'fp-ts/ReadonlyArray'
+import * as R from 'fp-ts/ReadonlyRecord'
+import { constant, flow, identity, Predicate, pipe } from 'fp-ts/function'
+import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/HKT'
+import * as O from 'fp-ts/Option'
+import * as E from 'fp-ts/Either'
+import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/Traversable'
 import { Iso } from './Iso'
 import { Index } from './Ix'
 import { Lens } from './Lens'
@@ -52,7 +51,11 @@ export const lensAsOptional = <S, A>(sa: Lens<S, A>): Optional<S, A> => ({
 
 /** @internal */
 export const lensAsTraversal = <S, A>(sa: Lens<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.set(a)(s))
+  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
+    pipe(
+      f(sa.get(s)),
+      F.map((a) => sa.set(a)(s))
+    )
 })
 
 /** @internal */
@@ -139,7 +142,11 @@ export const prismAsTraversal = <S, A>(sa: Prism<S, A>): Traversal<S, A> => ({
       sa.getOption(s),
       O.fold(
         () => F.of(s),
-        (a) => F.map(f(a), (a) => prismSet(a)(sa)(s))
+        (a) =>
+          pipe(
+            f(a),
+            F.map((a) => prismSet(a)(sa)(s))
+          )
       )
     )
 })
@@ -214,7 +221,11 @@ export const optionalAsTraversal = <S, A>(sa: Optional<S, A>): Traversal<S, A> =
       sa.getOption(s),
       O.fold(
         () => F.of(s),
-        (a) => F.map(f(a), (a: A) => sa.set(a)(s))
+        (a) =>
+          pipe(
+            f(a),
+            F.map((a) => sa.set(a)(s))
+          )
       )
     )
 })
@@ -245,20 +256,22 @@ export const optionalComposeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Opt
   set: (b) => optionalModify(ab.set(b))(sa)
 })
 
-const findFirstMutable = <A>(predicate: Predicate<A>): Optional<Array<A>, A> => ({
+/** @internal */
+export const findFirst = <A>(predicate: Predicate<A>): Optional<ReadonlyArray<A>, A> => ({
   getOption: A.findFirst(predicate),
   set: (a) => (s) =>
     pipe(
       A.findIndex(predicate)(s),
       O.fold(
         () => s,
-        (i) => A.unsafeUpdateAt(i, a, s)
+        (i) =>
+          pipe(
+            A.updateAt(i, a)(s),
+            O.getOrElse(() => s)
+          )
       )
     )
 })
-
-/** @internal */
-export const findFirst: <A>(predicate: Predicate<A>) => Optional<ReadonlyArray<A>, A> = findFirstMutable as any
 
 // -------------------------------------------------------------------------------------
 // Traversal
@@ -278,11 +291,8 @@ export function fromTraversable<T extends URIS>(T: Traversable1<T>): <A>() => Tr
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
 /** @internal */
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
-  return <A>() => ({
-    modifyF: <F>(F: Applicative<F>) => {
-      const traverseF = T.traverse(F)
-      return (f: (a: A) => HKT<F, A>) => (s: HKT<T, A>) => traverseF(s, f)
-    }
+  return () => ({
+    modifyF: <F>(F: Applicative<F>) => T.traverse(F)
   })
 }
 
@@ -290,32 +300,28 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 // Ix
 // -------------------------------------------------------------------------------------
 
-function indexMutableArray<A = never>(): Index<Array<A>, number, A> {
-  return {
-    index: (i) => ({
-      getOption: (as) => A.lookup(i, as),
-      set: (a) => (as) =>
-        pipe(
-          A.updateAt(i, a)(as),
-          O.getOrElse(() => as)
-        )
-    })
-  }
-}
-
 /** @internal */
-export const indexArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = indexMutableArray as any
+export const indexArray = <A = never>(): Index<ReadonlyArray<A>, number, A> => ({
+  index: (i) => ({
+    getOption: A.lookup(i),
+    set: (a) => (as) =>
+      pipe(
+        A.updateAt(i, a)(as),
+        O.getOrElse(() => as)
+      )
+  })
+})
 
 /** @internal */
 export function indexRecord<A = never>(): Index<Readonly<Record<string, A>>, string, A> {
   return {
     index: (k) => ({
-      getOption: (r) => R.lookup(k, r),
+      getOption: R.lookup(k),
       set: (a) => (r) => {
-        if (r[k] === a || O.isNone(R.lookup(k, r))) {
+        if (r[k] === a || O.isNone(R.lookup(k)(r))) {
           return r
         }
-        return R.insertAt(k, a)(r)
+        return R.upsertAt(k, a)(r)
       }
     })
   }
@@ -329,10 +335,10 @@ export function indexRecord<A = never>(): Index<Readonly<Record<string, A>>, str
 export function atRecord<A = never>(): At<Readonly<Record<string, A>>, string, O.Option<A>> {
   return {
     at: (key) => ({
-      get: (r) => R.lookup(key, r),
+      get: R.lookup(key),
       set: O.fold(
         () => R.deleteAt(key),
-        (a) => R.insertAt(key, a)
+        (a) => R.upsertAt(key, a)
       )
     })
   }

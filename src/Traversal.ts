@@ -13,18 +13,17 @@
  *
  * @since 2.3.0
  */
-import { Applicative, Applicative1, Applicative2, Applicative2C, Applicative3 } from 'fp-ts/lib/Applicative'
-import { Category2 } from 'fp-ts/lib/Category'
-import * as C from 'fp-ts/lib/Const'
-import { Either } from 'fp-ts/lib/Either'
-import { identity, Predicate, Refinement } from 'fp-ts/lib/function'
-import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
-import * as I from 'fp-ts/lib/Identity'
-import { Monoid } from 'fp-ts/lib/Monoid'
-import { Option } from 'fp-ts/lib/Option'
-import { pipe } from 'fp-ts/lib/pipeable'
-import * as A from 'fp-ts/lib/ReadonlyArray'
-import { Traversable1 } from 'fp-ts/lib/Traversable'
+import { Applicative, Applicative1, Applicative2, Applicative2C, Applicative3 } from 'fp-ts/Applicative'
+import { Category2 } from 'fp-ts/Category'
+import * as C from 'fp-ts/Const'
+import { Either } from 'fp-ts/Either'
+import { identity, Predicate, Refinement, pipe } from 'fp-ts/function'
+import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/HKT'
+import * as I from 'fp-ts/Identity'
+import { Monoid } from 'fp-ts/Monoid'
+import { Option } from 'fp-ts/Option'
+import * as A from 'fp-ts/ReadonlyArray'
+import { Traversable1 } from 'fp-ts/Traversable'
 import * as _ from './internal'
 
 // -------------------------------------------------------------------------------------
@@ -56,7 +55,7 @@ export interface Traversal<S, A> {
 // -------------------------------------------------------------------------------------
 
 /**
- * @category constructors
+ * @category Category
  * @since 2.3.0
  */
 export const id = <S>(): Traversal<S, S> => ({
@@ -78,7 +77,7 @@ export const fromTraversable = _.fromTraversable
 /**
  * Compose a `Traversal` with a `Traversal`
  *
- * @category compositions
+ * @category Semigroupoid
  * @since 2.3.0
  */
 export const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
@@ -93,7 +92,7 @@ export const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) =>
  * @since 2.3.0
  */
 export const modify = <A>(f: (a: A) => A) => <S>(sa: Traversal<S, A>): ((s: S) => S) => {
-  return sa.modifyF(I.identity)(f)
+  return sa.modifyF(I.Applicative)(f)
 }
 
 /**
@@ -254,7 +253,7 @@ export const URI = 'monocle-ts/Traversal'
  */
 export type URI = typeof URI
 
-declare module 'fp-ts/lib/HKT' {
+declare module 'fp-ts/HKT' {
   interface URItoKind2<E, A> {
     readonly [URI]: Traversal<E, A>
   }
@@ -264,8 +263,8 @@ declare module 'fp-ts/lib/HKT' {
  * @category instances
  * @since 2.3.0
  */
-export const categoryTraversal: Category2<URI> = {
+export const Category: Category2<URI> = {
   URI,
-  compose: (ab, ea) => compose(ab)(ea),
+  compose,
   id
 }

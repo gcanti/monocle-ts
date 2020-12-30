@@ -14,12 +14,12 @@
  *
  * @since 2.3.0
  */
-import { Applicative } from 'fp-ts/lib/Applicative'
-import { Category2 } from 'fp-ts/lib/Category'
-import { flow, identity } from 'fp-ts/lib/function'
-import { HKT } from 'fp-ts/lib/HKT'
-import { Invariant2 } from 'fp-ts/lib/Invariant'
-import * as O from 'fp-ts/lib/Option'
+import { Applicative } from 'fp-ts/Applicative'
+import { Category2 } from 'fp-ts/Category'
+import { flow, identity, pipe } from 'fp-ts/function'
+import { HKT } from 'fp-ts/HKT'
+import { Invariant2 } from 'fp-ts/Invariant'
+import * as O from 'fp-ts/Option'
 import * as _ from './internal'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
@@ -44,7 +44,7 @@ export interface Iso<S, A> {
 // -------------------------------------------------------------------------------------
 
 /**
- * @category constructors
+ * @category Category
  * @since 2.3.0
  */
 export const id = <S>(): Iso<S, S> => ({
@@ -90,7 +90,11 @@ export const asOptional: <S, A>(sa: Iso<S, A>) => Optional<S, A> = _.isoAsOption
  * @since 2.3.0
  */
 export const asTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.reverseGet(a))
+  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
+    pipe(
+      f(sa.get(s)),
+      F.map((a) => sa.reverseGet(a))
+    )
 })
 
 // -------------------------------------------------------------------------------------
@@ -100,7 +104,7 @@ export const asTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
 /**
  * Compose an `Iso` with an `Iso`
  *
- * @category compositions
+ * @category Semigroupoid
  * @since 2.3.0
  */
 export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> => ({
@@ -135,17 +139,14 @@ export const modify = <A>(f: (a: A) => A) => <S>(sa: Iso<S, A>) => (s: S): S => 
  * @category Invariant
  * @since 2.3.0
  */
-export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <S>(sa: Iso<S, A>) => Iso<S, B> = (f, g) => (ea) =>
-  imap_(ea, f, g)
+export const imap: Invariant2<URI>['imap'] = (f, g) => (ea) => ({
+  get: flow(ea.get, f),
+  reverseGet: flow(g, ea.reverseGet)
+})
 
 // -------------------------------------------------------------------------------------
 // instances
 // -------------------------------------------------------------------------------------
-
-const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => ({
-  get: flow(ea.get, ab),
-  reverseGet: flow(ba, ea.reverseGet)
-})
 
 /**
  * @category instances
@@ -159,7 +160,7 @@ export const URI = 'monocle-ts/Iso'
  */
 export type URI = typeof URI
 
-declare module 'fp-ts/lib/HKT' {
+declare module 'fp-ts/HKT' {
   interface URItoKind2<E, A> {
     readonly [URI]: Iso<E, A>
   }
@@ -169,17 +170,17 @@ declare module 'fp-ts/lib/HKT' {
  * @category instances
  * @since 2.3.0
  */
-export const invariantIso: Invariant2<URI> = {
+export const Invariant: Invariant2<URI> = {
   URI,
-  imap: imap_
+  imap
 }
 
 /**
  * @category instances
  * @since 2.3.0
  */
-export const categoryIso: Category2<URI> = {
+export const Category: Category2<URI> = {
   URI,
-  compose: (ab, ea) => compose(ab)(ea),
+  compose,
   id
 }

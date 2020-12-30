@@ -1,6 +1,6 @@
 ---
 title: Optional.ts
-nav_order: 18
+nav_order: 7
 parent: Modules
 ---
 
@@ -30,8 +30,12 @@ Added in v2.3.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [Category](#category)
+  - [id](#id)
 - [Invariant](#invariant)
   - [imap](#imap)
+- [Semigroupoid](#semigroupoid)
+  - [compose](#compose)
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
@@ -48,21 +52,29 @@ Added in v2.3.0
   - [right](#right)
   - [some](#some)
   - [traverse](#traverse)
-- [compositions](#compositions)
-  - [compose](#compose)
-- [constructors](#constructors)
-  - [id](#id)
 - [converters](#converters)
   - [asTraversal](#astraversal)
 - [instances](#instances)
+  - [Category](#category-1)
+  - [Invariant](#invariant-1)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryOptional](#categoryoptional)
-  - [invariantOptional](#invariantoptional)
 - [model](#model)
   - [Optional (interface)](#optional-interface)
 
 ---
+
+# Category
+
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Optional<S, S>
+```
+
+Added in v2.3.0
 
 # Invariant
 
@@ -72,6 +84,20 @@ Added in v2.3.0
 
 ```ts
 export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Optional<E, A>) => Optional<E, B>
+```
+
+Added in v2.3.0
+
+# Semigroupoid
+
+## compose
+
+Compose a `Optional` with a `Optional`
+
+**Signature**
+
+```ts
+export declare const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
 ```
 
 Added in v2.3.0
@@ -261,32 +287,6 @@ export declare function traverse<T extends URIS>(
 
 Added in v2.3.0
 
-# compositions
-
-## compose
-
-Compose a `Optional` with a `Optional`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
-```
-
-Added in v2.3.0
-
-# constructors
-
-## id
-
-**Signature**
-
-```ts
-export declare const id: <S>() => Optional<S, S>
-```
-
-Added in v2.3.0
-
 # converters
 
 ## asTraversal
@@ -302,6 +302,26 @@ export declare const asTraversal: <S, A>(sa: Optional<S, A>) => Traversal<S, A>
 Added in v2.3.0
 
 # instances
+
+## Category
+
+**Signature**
+
+```ts
+export declare const Category: Category2<'monocle-ts/Optional'>
+```
+
+Added in v2.3.0
+
+## Invariant
+
+**Signature**
+
+```ts
+export declare const Invariant: Invariant2<'monocle-ts/Optional'>
+```
+
+Added in v2.3.0
 
 ## URI
 
@@ -319,26 +339,6 @@ Added in v2.3.0
 
 ```ts
 export type URI = typeof URI
-```
-
-Added in v2.3.0
-
-## categoryOptional
-
-**Signature**
-
-```ts
-export declare const categoryOptional: Category2<'monocle-ts/Optional'>
-```
-
-Added in v2.3.0
-
-## invariantOptional
-
-**Signature**
-
-```ts
-export declare const invariantOptional: Invariant2<'monocle-ts/Optional'>
 ```
 
 Added in v2.3.0

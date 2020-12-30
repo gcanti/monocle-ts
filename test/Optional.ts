@@ -28,16 +28,14 @@ describe('Optional', () => {
     })
   })
 
-  describe('instances', () => {
-    it('compose', () => {
-      type S = O.Option<O.Option<number>>
-      const sa = pipe(_.id<S>(), _.some)
-      const ab = pipe(_.id<O.Option<number>>(), _.some)
-      const sb = _.categoryOptional.compose(ab, sa)
-      assert.deepStrictEqual(sb.getOption(O.none), O.none)
-      assert.deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
-      assert.deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
-    })
+  it('compose', () => {
+    type S = O.Option<O.Option<number>>
+    const sa = pipe(_.id<S>(), _.some)
+    const ab = pipe(_.id<O.Option<number>>(), _.some)
+    const sb = pipe(sa, _.compose(ab))
+    assert.deepStrictEqual(sb.getOption(O.none), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
   })
 
   it('id', () => {
@@ -86,9 +84,9 @@ describe('Optional', () => {
 
   it('asTraversal', () => {
     const sa = pipe(_.id<S>(), _.some, _.prop('b'), _.asTraversal)
-    assert.deepStrictEqual(sa.modifyF(Id.identity)((n) => n - 1)(O.none), O.none)
+    assert.deepStrictEqual(sa.modifyF(Id.Applicative)((n) => n - 1)(O.none), O.none)
     assert.deepStrictEqual(
-      sa.modifyF(Id.identity)((n) => n - 1)(O.some({ a: 'a', b: 2, c: true })),
+      sa.modifyF(Id.Applicative)((n) => n - 1)(O.some({ a: 'a', b: 2, c: true })),
       O.some({
         a: 'a',
         b: 1,
@@ -135,7 +133,7 @@ describe('Optional', () => {
 
   it('traverse', () => {
     type S = O.Option<{ a: ReadonlyArray<string> }>
-    const sa = pipe(_.id<S>(), _.some, _.prop('a'), _.traverse(A.readonlyArray))
+    const sa = pipe(_.id<S>(), _.some, _.prop('a'), _.traverse(A.Traversable))
     const modify = pipe(
       sa,
       T.modify((s) => s.toUpperCase())

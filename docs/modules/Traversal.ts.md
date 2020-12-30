@@ -1,6 +1,6 @@
 ---
 title: Traversal.ts
-nav_order: 20
+nav_order: 9
 parent: Modules
 ---
 
@@ -24,6 +24,10 @@ Added in v2.3.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [Category](#category)
+  - [id](#id)
+- [Semigroupoid](#semigroupoid)
+  - [compose](#compose)
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
@@ -41,21 +45,43 @@ Added in v2.3.0
   - [set](#set)
   - [some](#some)
   - [traverse](#traverse)
-- [compositions](#compositions)
-  - [compose](#compose)
 - [constructor](#constructor)
   - [fromTraversable](#fromtraversable)
-- [constructors](#constructors)
-  - [id](#id)
 - [instances](#instances)
+  - [Category](#category-1)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryTraversal](#categorytraversal)
 - [model](#model)
   - [ModifyF (interface)](#modifyf-interface)
   - [Traversal (interface)](#traversal-interface)
 
 ---
+
+# Category
+
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Traversal<S, S>
+```
+
+Added in v2.3.0
+
+# Semigroupoid
+
+## compose
+
+Compose a `Traversal` with a `Traversal`
+
+**Signature**
+
+```ts
+export declare const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.0
 
 # combinators
 
@@ -258,20 +284,6 @@ export declare function traverse<T extends URIS>(
 
 Added in v2.3.0
 
-# compositions
-
-## compose
-
-Compose a `Traversal` with a `Traversal`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
-```
-
-Added in v2.3.0
-
 # constructor
 
 ## fromTraversable
@@ -286,19 +298,17 @@ export declare const fromTraversable: typeof _.fromTraversable
 
 Added in v2.3.0
 
-# constructors
+# instances
 
-## id
+## Category
 
 **Signature**
 
 ```ts
-export declare const id: <S>() => Traversal<S, S>
+export declare const Category: Category2<'monocle-ts/Traversal'>
 ```
 
 Added in v2.3.0
-
-# instances
 
 ## URI
 
@@ -316,16 +326,6 @@ Added in v2.3.0
 
 ```ts
 export type URI = typeof URI
-```
-
-Added in v2.3.0
-
-## categoryTraversal
-
-**Signature**
-
-```ts
-export declare const categoryTraversal: Category2<'monocle-ts/Traversal'>
 ```
 
 Added in v2.3.0

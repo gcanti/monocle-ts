@@ -1,6 +1,6 @@
 ---
 title: Iso.ts
-nav_order: 15
+nav_order: 4
 parent: Modules
 ---
 
@@ -25,14 +25,15 @@ Added in v2.3.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [Category](#category)
+  - [id](#id)
 - [Invariant](#invariant)
   - [imap](#imap)
+- [Semigroupoid](#semigroupoid)
+  - [compose](#compose)
 - [combinators](#combinators)
   - [modify](#modify)
-- [compositions](#compositions)
-  - [compose](#compose)
 - [constructors](#constructors)
-  - [id](#id)
   - [reverse](#reverse)
 - [converters](#converters)
   - [asLens](#aslens)
@@ -40,14 +41,26 @@ Added in v2.3.0
   - [asPrism](#asprism)
   - [asTraversal](#astraversal)
 - [instances](#instances)
+  - [Category](#category-1)
+  - [Invariant](#invariant-1)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryIso](#categoryiso)
-  - [invariantIso](#invariantiso)
 - [model](#model)
   - [Iso (interface)](#iso-interface)
 
 ---
+
+# Category
+
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Iso<S, S>
+```
+
+Added in v2.3.0
 
 # Invariant
 
@@ -56,7 +69,21 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <S>(sa: Iso<S, A>) => Iso<S, B>
+export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Iso<E, A>) => Iso<E, B>
+```
+
+Added in v2.3.0
+
+# Semigroupoid
+
+## compose
+
+Compose an `Iso` with an `Iso`
+
+**Signature**
+
+```ts
+export declare const compose: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B>
 ```
 
 Added in v2.3.0
@@ -73,31 +100,7 @@ export declare const modify: <A>(f: (a: A) => A) => <S>(sa: Iso<S, A>) => (s: S)
 
 Added in v2.3.0
 
-# compositions
-
-## compose
-
-Compose an `Iso` with an `Iso`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B>
-```
-
-Added in v2.3.0
-
 # constructors
-
-## id
-
-**Signature**
-
-```ts
-export declare const id: <S>() => Iso<S, S>
-```
-
-Added in v2.3.0
 
 ## reverse
 
@@ -161,6 +164,26 @@ Added in v2.3.0
 
 # instances
 
+## Category
+
+**Signature**
+
+```ts
+export declare const Category: Category2<'monocle-ts/Iso'>
+```
+
+Added in v2.3.0
+
+## Invariant
+
+**Signature**
+
+```ts
+export declare const Invariant: Invariant2<'monocle-ts/Iso'>
+```
+
+Added in v2.3.0
+
 ## URI
 
 **Signature**
@@ -177,26 +200,6 @@ Added in v2.3.0
 
 ```ts
 export type URI = typeof URI
-```
-
-Added in v2.3.0
-
-## categoryIso
-
-**Signature**
-
-```ts
-export declare const categoryIso: Category2<'monocle-ts/Iso'>
-```
-
-Added in v2.3.0
-
-## invariantIso
-
-**Signature**
-
-```ts
-export declare const invariantIso: Invariant2<'monocle-ts/Iso'>
 ```
 
 Added in v2.3.0

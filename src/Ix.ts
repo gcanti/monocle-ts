@@ -7,8 +7,8 @@
  *
  * @since 2.3.0
  */
-import { Option } from 'fp-ts/lib/Option'
-import { pipe } from 'fp-ts/lib/pipeable'
+import { Option } from 'fp-ts/Option'
+import { pipe } from 'fp-ts/function'
 import { At } from './At'
 import * as _ from './internal'
 import { Iso } from './Iso'
