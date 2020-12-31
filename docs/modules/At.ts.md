@@ -12,7 +12,7 @@ Experimental features are published in order to get early feedback from the comm
 
 A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
 
-Added in v2.3.0
+Added in v3.0.0
 
 ---
 
@@ -36,7 +36,7 @@ Added in v2.3.0
 export declare const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>>
 ```
 
-Added in v2.3.2
+Added in v3.0.0
 
 ## fromIso
 
@@ -48,7 +48,7 @@ Lift an instance of `At` using an `Iso`
 export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>) => At<T, I, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # model
 
@@ -62,4 +62,4 @@ export interface At<S, I, A> {
 }
 ```
 
-Added in v2.3.0
+Added in v3.0.0

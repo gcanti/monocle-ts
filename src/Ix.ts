@@ -5,7 +5,7 @@
  *
  * A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
  *
- * @since 2.3.0
+ * @since 3.0.0
  */
 import { Option } from 'fp-ts/Option'
 import { pipe } from 'fp-ts/function'
@@ -20,7 +20,7 @@ import { Optional } from './Optional'
 
 /**
  * @category model
- * @since 2.3.0
+ * @since 3.0.0
  */
 export interface Ix<S, I, A> {
   readonly ix: (i: I) => Optional<S, A>
@@ -32,7 +32,7 @@ export interface Ix<S, I, A> {
 
 /**
  * @category constructors
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Ix<T, J, B> => ({
   ix: (i) => _.lensComposePrism(_.prismSome<B>())(at.at(i))
@@ -42,7 +42,7 @@ export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Ix<T, J, B> => ({
  * Lift an instance of `Index` using an `Iso`
  *
  * @category constructors
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: Ix<S, I, A>): Ix<T, I, A> => ({
   ix: (i) => pipe(iso, _.isoAsOptional, _.optionalComposeOptional(sia.ix(i)))
@@ -50,12 +50,12 @@ export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: Ix<S, I, A>): Ix<T,
 
 /**
  * @category constructors
- * @since 2.3.2
+ * @since 3.0.0
  */
 export const ixReadonlyArray: <A = never>() => Ix<ReadonlyArray<A>, number, A> = _.ixReadonlyArray
 
 /**
  * @category constructors
- * @since 2.3.2
+ * @since 3.0.0
  */
 export const ixReadonlyRecord: <A = never>() => Ix<Readonly<Record<string, A>>, string, A> = _.ixReadonlyRecord

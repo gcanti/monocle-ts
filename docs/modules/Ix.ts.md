@@ -12,7 +12,7 @@ Experimental features are published in order to get early feedback from the comm
 
 A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
 
-Added in v2.3.0
+Added in v3.0.0
 
 ---
 
@@ -38,7 +38,7 @@ Added in v2.3.0
 export declare const fromAt: <T, J, B>(at: At<T, J, Option<B>>) => Ix<T, J, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## fromIso
 
@@ -50,7 +50,7 @@ Lift an instance of `Index` using an `Iso`
 export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: Ix<S, I, A>) => Ix<T, I, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## ixReadonlyArray
 
@@ -60,7 +60,7 @@ Added in v2.3.0
 export declare const ixReadonlyArray: <A = never>() => Ix<readonly A[], number, A>
 ```
 
-Added in v2.3.2
+Added in v3.0.0
 
 ## ixReadonlyRecord
 
@@ -70,7 +70,7 @@ Added in v2.3.2
 export declare const ixReadonlyRecord: <A = never>() => Ix<Readonly<Record<string, A>>, string, A>
 ```
 
-Added in v2.3.2
+Added in v3.0.0
 
 # model
 
@@ -84,4 +84,4 @@ export interface Ix<S, I, A> {
 }
 ```
 
-Added in v2.3.0
+Added in v3.0.0

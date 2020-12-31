@@ -12,7 +12,7 @@
  * 1. reverseGet(get(s)) = s
  * 2. get(reversetGet(a)) = a
  *
- * @since 2.3.0
+ * @since 3.0.0
  */
 import { Applicative } from 'fp-ts/Applicative'
 import { Category2 } from 'fp-ts/Category'
@@ -32,7 +32,7 @@ import { Traversal } from './Traversal'
 
 /**
  * @category model
- * @since 2.3.0
+ * @since 3.0.0
  */
 export interface Iso<S, A> {
   readonly get: (s: S) => A
@@ -45,7 +45,7 @@ export interface Iso<S, A> {
 
 /**
  * @category Category
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const id = <S>(): Iso<S, S> => ({
   get: identity,
@@ -60,7 +60,7 @@ export const id = <S>(): Iso<S, S> => ({
  * View an `Iso` as a `Lens`
  *
  * @category converters
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const asLens: <S, A>(sa: Iso<S, A>) => Lens<S, A> = _.isoAsLens
 
@@ -68,7 +68,7 @@ export const asLens: <S, A>(sa: Iso<S, A>) => Lens<S, A> = _.isoAsLens
  * View an `Iso` as a `Prism`
  *
  * @category converters
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const asPrism = <S, A>(sa: Iso<S, A>): Prism<S, A> => ({
   getOption: flow(sa.get, O.some),
@@ -79,7 +79,7 @@ export const asPrism = <S, A>(sa: Iso<S, A>): Prism<S, A> => ({
  * View an `Iso` as a `Optional`
  *
  * @category converters
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const asOptional: <S, A>(sa: Iso<S, A>) => Optional<S, A> = _.isoAsOptional
 
@@ -87,7 +87,7 @@ export const asOptional: <S, A>(sa: Iso<S, A>) => Optional<S, A> = _.isoAsOption
  * View an `Iso` as a `Traversal`
  *
  * @category converters
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const asTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
   modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
@@ -105,7 +105,7 @@ export const asTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
  * Compose an `Iso` with an `Iso`
  *
  * @category Semigroupoid
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> => ({
   get: flow(sa.get, ab.get),
@@ -118,7 +118,7 @@ export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> =>
 
 /**
  * @category constructors
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const reverse = <S, A>(sa: Iso<S, A>): Iso<A, S> => ({
   get: sa.reverseGet,
@@ -127,7 +127,7 @@ export const reverse = <S, A>(sa: Iso<S, A>): Iso<A, S> => ({
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const modify = <A>(f: (a: A) => A) => <S>(sa: Iso<S, A>) => (s: S): S => sa.reverseGet(f(sa.get(s)))
 
@@ -137,7 +137,7 @@ export const modify = <A>(f: (a: A) => A) => <S>(sa: Iso<S, A>) => (s: S): S => 
 
 /**
  * @category Invariant
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const imap: Invariant2<URI>['imap'] = (f, g) => (ea) => ({
   get: flow(ea.get, f),
@@ -150,13 +150,13 @@ export const imap: Invariant2<URI>['imap'] = (f, g) => (ea) => ({
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const URI = 'monocle-ts/Iso'
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export type URI = typeof URI
 
@@ -168,7 +168,7 @@ declare module 'fp-ts/HKT' {
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const Invariant: Invariant2<URI> = {
   URI,
@@ -177,7 +177,7 @@ export const Invariant: Invariant2<URI> = {
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const Category: Category2<URI> = {
   URI,

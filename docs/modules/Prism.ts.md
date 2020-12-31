@@ -19,7 +19,7 @@ Laws:
 1. pipe(getOption(s), fold(() => s, reverseGet)) = s
 2. getOption(reverseGet(a)) = some(a)
 
-Added in v2.3.0
+Added in v3.0.0
 
 ---
 
@@ -76,7 +76,7 @@ Added in v2.3.0
 export declare const id: <S>() => Prism<S, S>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # Invariant
 
@@ -88,7 +88,7 @@ Added in v2.3.0
 export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Prism<E, A>) => Prism<E, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # Semigroupoid
 
@@ -102,7 +102,7 @@ Compose a `Prism` with a `Prism`
 export declare const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # combinators
 
@@ -118,7 +118,7 @@ export declare const atKey: (
 ) => <S, A>(sa: Prism<S, Readonly<Record<string, A>>>) => Optional<S, O.Option<A>>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## component
 
@@ -132,7 +132,7 @@ export declare const component: <A extends readonly unknown[], P extends keyof A
 ) => <S>(sa: Prism<S, A>) => Optional<S, A[P]>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## filter
 
@@ -143,7 +143,7 @@ export declare function filter<A, B extends A>(refinement: Refinement<A, B>): <S
 export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Prism<S, A>) => Prism<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## findFirst
 
@@ -153,7 +153,7 @@ Added in v2.3.0
 export declare const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Prism<S, readonly A[]>) => Optional<S, A>
 ```
 
-Added in v2.3.2
+Added in v3.0.0
 
 ## fromNullable
 
@@ -165,7 +165,7 @@ Return a `Prism` from a `Prism` focused on a nullable value
 export declare const fromNullable: <S, A>(sa: Prism<S, A>) => Prism<S, NonNullable<A>>
 ```
 
-Added in v2.3.3
+Added in v3.0.0
 
 ## index
 
@@ -177,7 +177,7 @@ Return a `Optional` from a `Prism` focused on a `ReadonlyArray`
 export declare const index: (i: number) => <S, A>(sa: Prism<S, readonly A[]>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## key
 
@@ -189,7 +189,7 @@ Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key
 export declare const key: (key: string) => <S, A>(sa: Prism<S, Readonly<Record<string, A>>>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## left
 
@@ -201,7 +201,7 @@ Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type
 export declare const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## modify
 
@@ -211,7 +211,7 @@ Added in v2.3.0
 export declare const modify: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => S
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## modifyOption
 
@@ -221,7 +221,7 @@ Added in v2.3.0
 export declare const modifyOption: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => O.Option<S>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## prop
 
@@ -233,7 +233,7 @@ Return a `Optional` from a `Prism` and a prop
 export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Prism<S, A>) => Optional<S, A[P]>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## props
 
@@ -249,7 +249,7 @@ export declare const props: <A, P extends keyof A>(
 ) => <S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## right
 
@@ -261,7 +261,7 @@ Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type
 export declare const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## set
 
@@ -271,7 +271,7 @@ Added in v2.3.0
 export declare const set: <A>(a: A) => <S>(sa: Prism<S, A>) => (s: S) => S
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## some
 
@@ -283,7 +283,7 @@ Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type
 export declare const some: <S, A>(soa: Prism<S, O.Option<A>>) => Prism<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## traverse
 
@@ -297,7 +297,7 @@ export declare function traverse<T extends URIS>(
 ): <S, A>(sta: Prism<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # compositions
 
@@ -311,7 +311,7 @@ Compose a `Prism` with a `Lens`
 export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## composeOptional
 
@@ -323,7 +323,7 @@ Compose a `Prism` with an `Optional`
 export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # constructors
 
@@ -338,7 +338,7 @@ export declare const fromPredicate: {
 }
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # converters
 
@@ -352,7 +352,7 @@ View a `Prism` as a `Optional`
 export declare const asOptional: <S, A>(sa: Prism<S, A>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## asTraversal
 
@@ -364,7 +364,7 @@ View a `Prism` as a `Traversal`
 export declare const asTraversal: <S, A>(sa: Prism<S, A>) => Traversal<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # instances
 
@@ -376,7 +376,7 @@ Added in v2.3.0
 export declare const Category: Category2<'monocle-ts/Prism'>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## Invariant
 
@@ -386,7 +386,7 @@ Added in v2.3.0
 export declare const Invariant: Invariant2<'monocle-ts/Prism'>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## URI
 
@@ -396,7 +396,7 @@ Added in v2.3.0
 export declare const URI: 'monocle-ts/Prism'
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## URI (type alias)
 
@@ -406,7 +406,7 @@ Added in v2.3.0
 export type URI = typeof URI
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # model
 
@@ -421,4 +421,4 @@ export interface Prism<S, A> {
 }
 ```
 
-Added in v2.3.0
+Added in v3.0.0

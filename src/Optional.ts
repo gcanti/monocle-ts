@@ -17,7 +17,7 @@
  * 2. getOption(set(a)(s)) = pipe(getOption(s), map(_ => a))
  * 3. set(a)(set(a)(s)) = set(a)(s)
  *
- * @since 2.3.0
+ * @since 3.0.0
  */
 import { Category2 } from 'fp-ts/Category'
 import { Either } from 'fp-ts/Either'
@@ -37,7 +37,7 @@ import Option = O.Option
 
 /**
  * @category model
- * @since 2.3.0
+ * @since 3.0.0
  */
 export interface Optional<S, A> {
   readonly getOption: (s: S) => Option<A>
@@ -50,7 +50,7 @@ export interface Optional<S, A> {
 
 /**
  * @category Category
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const id = <S>(): Optional<S, S> => ({
   getOption: O.some,
@@ -65,7 +65,7 @@ export const id = <S>(): Optional<S, S> => ({
  * View a `Optional` as a `Traversal`
  *
  * @category converters
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const asTraversal: <S, A>(sa: Optional<S, A>) => Traversal<S, A> = _.optionalAsTraversal
 
@@ -77,7 +77,7 @@ export const asTraversal: <S, A>(sa: Optional<S, A>) => Traversal<S, A> = _.opti
  * Compose a `Optional` with a `Optional`
  *
  * @category Semigroupoid
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> =
   _.optionalComposeOptional
@@ -88,14 +88,14 @@ export const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => O
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const modifyOption: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => Option<S> =
   _.optionalModifyOption
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const modify: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => S = _.optionalModify
 
@@ -103,7 +103,7 @@ export const modify: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s:
  * Return an `Optional` from a `Optional` focused on a nullable value
  *
  * @category combinators
- * @since 2.3.3
+ * @since 3.0.0
  */
 export const fromNullable: <S, A>(sa: Optional<S, A>) => Optional<S, NonNullable<A>> =
   /*#__PURE__*/
@@ -111,7 +111,7 @@ export const fromNullable: <S, A>(sa: Optional<S, A>) => Optional<S, NonNullable
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Optional<S, A>) => Optional<S, B>
 export function filter<A>(predicate: Predicate<A>): <S>(sa: Optional<S, A>) => Optional<S, A>
@@ -123,7 +123,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Optional<S, A>) => O
  * Return a `Optional` from a `Optional` and a prop
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Optional<S, A>) => Optional<S, A[P]>) =>
   compose(pipe(_.lensId<A>(), _.lensProp(prop), _.lensAsOptional))
@@ -132,7 +132,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Optional<S, A>) =>
  * Return a `Optional` from a `Optional` and a list of props
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const props = <A, P extends keyof A>(
   ...props: readonly [P, P, ...ReadonlyArray<P>]
@@ -143,7 +143,7 @@ export const props = <A, P extends keyof A>(
  * Return a `Optional` from a `Optional` and a component
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
   prop: P
@@ -154,7 +154,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * Return a `Optional` from a `Optional` focused on a `ReadonlyArray`
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): Optional<S, A> =>
   pipe(sa, _.optionalComposeOptional(_.ixReadonlyArray<A>().ix(i)))
@@ -163,7 +163,7 @@ export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): O
  * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const key = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>): Optional<S, A> =>
   pipe(sa, _.optionalComposeOptional(_.ixReadonlyRecord<A>().ix(key)))
@@ -172,7 +172,7 @@ export const key = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<strin
  * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const atKey = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>): Optional<S, Option<A>> =>
   pipe(sa, compose(_.lensAsOptional(_.atRecord<A>().at(key))))
@@ -181,7 +181,7 @@ export const atKey = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<str
  * Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> =
   /*#__PURE__*/
@@ -191,7 +191,7 @@ export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> =
  * Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const right: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, A> =
   /*#__PURE__*/
@@ -201,7 +201,7 @@ export const right: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, A> 
  * Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const left: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, E> =
   /*#__PURE__*/
@@ -211,7 +211,7 @@ export const left: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, E> =
  * Return a `Traversal` from a `Optional` focused on a `Traversable`
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Optional<S, Kind<T, A>>) => Traversal<S, A> {
   return flow(asTraversal, _.traversalComposeTraversal(_.fromTraversable(T)()))
@@ -219,7 +219,7 @@ export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Option
 
 /**
  * @category combinators
- * @since 2.3.2
+ * @since 3.0.0
  */
 export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Optional<S, ReadonlyArray<A>>) => Optional<S, A> =
   /*#__PURE__*/
@@ -231,7 +231,7 @@ export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Optional<S, Read
 
 /**
  * @category Invariant
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const imap: Invariant2<URI>['imap'] = (f, g) => (ea) => ({
   getOption: flow(ea.getOption, O.map(f)),
@@ -244,13 +244,13 @@ export const imap: Invariant2<URI>['imap'] = (f, g) => (ea) => ({
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const URI = 'monocle-ts/Optional'
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export type URI = typeof URI
 
@@ -262,7 +262,7 @@ declare module 'fp-ts/HKT' {
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const Invariant: Invariant2<URI> = {
   URI,
@@ -271,7 +271,7 @@ export const Invariant: Invariant2<URI> = {
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const Category: Category2<URI> = {
   URI,

@@ -5,7 +5,7 @@
  *
  * A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
  *
- * @since 2.3.0
+ * @since 3.0.0
  */
 import { Applicative } from 'fp-ts/Applicative'
 import * as A from 'fp-ts/ReadonlyArray'
