@@ -1,10 +1,4 @@
 /**
- * **This module is experimental**
- *
- * Experimental features are published in order to get early feedback from the community.
- *
- * A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
- *
  * A `Lens` is an optic used to zoom inside a product.
  *
  * `Lens`es have two type parameters generally called `S` and `A`: `Lens<S, A>` where `S` represents the product and `A`

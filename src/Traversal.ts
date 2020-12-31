@@ -1,10 +1,4 @@
 /**
- * **This module is experimental**
- *
- * Experimental features are published in order to get early feedback from the community.
- *
- * A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
- *
  * A `Traversal` is the generalisation of an `Optional` to several targets. In other word, a `Traversal` allows to focus
  * from a type `S` into `0` to `n` values of type `A`.
  *
@@ -17,7 +11,7 @@ import { Applicative, Applicative1, Applicative2, Applicative2C, Applicative3 } 
 import { Category2 } from 'fp-ts/Category'
 import * as C from 'fp-ts/Const'
 import { Either } from 'fp-ts/Either'
-import { identity, Predicate, Refinement, pipe } from 'fp-ts/function'
+import { identity, pipe, Predicate, Refinement } from 'fp-ts/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/HKT'
 import * as I from 'fp-ts/Identity'
 import { Monoid } from 'fp-ts/Monoid'

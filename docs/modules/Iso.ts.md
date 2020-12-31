@@ -6,12 +6,6 @@ parent: Modules
 
 ## Iso overview
 
-**This module is experimental**
-
-Experimental features are published in order to get early feedback from the community.
-
-A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
-
 An `Iso` is an optic which converts elements of type `S` into elements of type `A` without loss.
 
 Laws:

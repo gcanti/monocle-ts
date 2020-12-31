@@ -1,10 +1,4 @@
 /**
- * **This module is experimental**
- *
- * Experimental features are published in order to get early feedback from the community.
- *
- * A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
- *
  * An `Optional` is an optic used to zoom inside a product. Unlike the `Lens`, the element that the `Optional` focuses
  * on may not exist.
  *
@@ -21,7 +15,7 @@
  */
 import { Category2 } from 'fp-ts/Category'
 import { Either } from 'fp-ts/Either'
-import { constant, flow, Predicate, Refinement, pipe } from 'fp-ts/function'
+import { constant, flow, pipe, Predicate, Refinement } from 'fp-ts/function'
 import { Kind, URIS } from 'fp-ts/HKT'
 import { Invariant2 } from 'fp-ts/Invariant'
 import * as O from 'fp-ts/Option'

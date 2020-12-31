@@ -1,14 +1,8 @@
 /**
- * **This module is experimental**
- *
- * Experimental features are published in order to get early feedback from the community.
- *
- * A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
- *
  * @since 3.0.0
  */
-import { Option } from 'fp-ts/Option'
 import { pipe } from 'fp-ts/function'
+import { Option } from 'fp-ts/Option'
 import { At } from './At'
 import * as _ from './internal'
 import { Iso } from './Iso'

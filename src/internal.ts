@@ -1,27 +1,21 @@
 /**
- * **This module is experimental**
- *
- * Experimental features are published in order to get early feedback from the community.
- *
- * A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
- *
  * @since 3.0.0
  */
 import { Applicative } from 'fp-ts/Applicative'
-import * as A from 'fp-ts/ReadonlyArray'
-import * as R from 'fp-ts/ReadonlyRecord'
-import { constant, flow, identity, Predicate, pipe } from 'fp-ts/function'
+import * as E from 'fp-ts/Either'
+import { constant, flow, identity, pipe, Predicate } from 'fp-ts/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/HKT'
 import * as O from 'fp-ts/Option'
-import * as E from 'fp-ts/Either'
+import * as A from 'fp-ts/ReadonlyArray'
+import * as R from 'fp-ts/ReadonlyRecord'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/Traversable'
+import { At } from './At'
 import { Iso } from './Iso'
 import { Ix } from './Ix'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
 import { Traversal } from './Traversal'
-import { At } from './At'
 
 // -------------------------------------------------------------------------------------
 // Iso
