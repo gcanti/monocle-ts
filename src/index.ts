@@ -3,7 +3,7 @@
  */
 import * as at from './At'
 import * as iso from './Iso'
-import * as ix from './Ix'
+import * as index from './Ix'
 import * as lens from './Lens'
 import * as optional from './Optional'
 import * as prism from './Prism'
@@ -21,7 +21,7 @@ export {
   /**
    * @since 3.0.0
    */
-  ix,
+  index,
   /**
    * @since 3.0.0
    */

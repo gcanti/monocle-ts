@@ -15,10 +15,10 @@ Added in v3.0.0
 - [constructors](#constructors)
   - [fromAt](#fromat)
   - [fromIso](#fromiso)
-  - [ixReadonlyArray](#ixreadonlyarray)
-  - [ixReadonlyRecord](#ixreadonlyrecord)
+  - [indexReadonlyArray](#indexreadonlyarray)
+  - [indexReadonlyRecord](#indexreadonlyrecord)
 - [model](#model)
-  - [Ix (interface)](#ix-interface)
+  - [Index (interface)](#index-interface)
 
 ---
 
@@ -29,7 +29,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const fromAt: <T, J, B>(at: At<T, J, Option<B>>) => Ix<T, J, B>
+export declare const fromAt: <T, J, B>(at: At<T, J, Option<B>>) => Index<T, J, B>
 ```
 
 Added in v3.0.0
@@ -41,40 +41,40 @@ Lift an instance of `Index` using an `Iso`
 **Signature**
 
 ```ts
-export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: Ix<S, I, A>) => Ix<T, I, A>
+export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: Index<S, I, A>) => Index<T, I, A>
 ```
 
 Added in v3.0.0
 
-## ixReadonlyArray
+## indexReadonlyArray
 
 **Signature**
 
 ```ts
-export declare const ixReadonlyArray: <A = never>() => Ix<readonly A[], number, A>
+export declare const indexReadonlyArray: <A = never>() => Index<readonly A[], number, A>
 ```
 
 Added in v3.0.0
 
-## ixReadonlyRecord
+## indexReadonlyRecord
 
 **Signature**
 
 ```ts
-export declare const ixReadonlyRecord: <A = never>() => Ix<Readonly<Record<string, A>>, string, A>
+export declare const indexReadonlyRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A>
 ```
 
 Added in v3.0.0
 
 # model
 
-## Ix (interface)
+## Index (interface)
 
 **Signature**
 
 ```ts
-export interface Ix<S, I, A> {
-  readonly ix: (i: I) => Optional<S, A>
+export interface Index<S, I, A> {
+  readonly index: (i: I) => Optional<S, A>
 }
 ```
 

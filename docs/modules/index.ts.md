@@ -14,8 +14,8 @@ Added in v3.0.0
 
 - [utils](#utils)
   - [at](#at)
+  - [index](#index)
   - [iso](#iso)
-  - [ix](#ix)
   - [lens](#lens)
   - [optional](#optional)
   - [prism](#prism)
@@ -35,22 +35,22 @@ export declare const at: typeof at
 
 Added in v3.0.0
 
+## index
+
+**Signature**
+
+```ts
+export declare const index: typeof index
+```
+
+Added in v3.0.0
+
 ## iso
 
 **Signature**
 
 ```ts
 export declare const iso: typeof iso
-```
-
-Added in v3.0.0
-
-## ix
-
-**Signature**
-
-```ts
-export declare const ix: typeof ix
 ```
 
 Added in v3.0.0

@@ -187,7 +187,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * @since 3.0.0
  */
 export const index = (i: number) => <S, A>(sa: Prism<S, ReadonlyArray<A>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.ixReadonlyArray<A>().ix(i)))
+  pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyArray<A>().index(i)))
 
 /**
  * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key
@@ -196,7 +196,7 @@ export const index = (i: number) => <S, A>(sa: Prism<S, ReadonlyArray<A>>): Opti
  * @since 3.0.0
  */
 export const key = (key: string) => <S, A>(sa: Prism<S, Readonly<Record<string, A>>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.ixReadonlyRecord<A>().ix(key)))
+  pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyRecord<A>().index(key)))
 
 /**
  * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key

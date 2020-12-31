@@ -145,7 +145,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * @since 3.0.0
  */
 export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): Traversal<S, A> =>
-  pipe(sa, compose(_.optionalAsTraversal(_.ixReadonlyArray<A>().ix(i))))
+  pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyArray<A>().index(i))))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key
@@ -154,7 +154,7 @@ export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): 
  * @since 3.0.0
  */
 export const key = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>): Traversal<S, A> =>
-  pipe(sa, compose(_.optionalAsTraversal(_.ixReadonlyRecord<A>().ix(key))))
+  pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyRecord<A>().index(key))))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key

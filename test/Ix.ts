@@ -5,13 +5,13 @@ import { Iso } from '../src/Iso'
 import * as _ from '../src/Ix'
 import * as At from '../src/At'
 
-describe('Ix', () => {
+describe('Index', () => {
   it('fromIso', () => {
     const iso: Iso<ReadonlyArray<string>, ReadonlyArray<number>> = {
       get: (s) => s.map((v) => +v),
       reverseGet: (a) => a.map(String)
     }
-    const ix = pipe(_.ixReadonlyArray<number>(), _.fromIso(iso)).ix(1)
+    const ix = pipe(_.indexReadonlyArray<number>(), _.fromIso(iso)).index(1)
     assert.deepStrictEqual(ix.getOption([]), O.none)
     assert.deepStrictEqual(ix.getOption(['1']), O.none)
     assert.deepStrictEqual(ix.getOption(['1', '2']), O.some(2))
@@ -22,7 +22,7 @@ describe('Ix', () => {
   })
 
   it('fromAt', () => {
-    const ix = pipe(At.atReadonlyRecord<number>(), _.fromAt).ix('a')
+    const ix = pipe(At.atReadonlyRecord<number>(), _.fromAt).index('a')
 
     assert.deepStrictEqual(ix.getOption({}), O.none)
     assert.deepStrictEqual(ix.getOption({ a: 1 }), O.some(1))

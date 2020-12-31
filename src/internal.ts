@@ -11,7 +11,7 @@ import * as R from 'fp-ts/ReadonlyRecord'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/Traversable'
 import { At } from './At'
 import { Iso } from './Iso'
-import { Ix } from './Ix'
+import { Index } from './Ix'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
@@ -298,8 +298,8 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 // -------------------------------------------------------------------------------------
 
 /** @internal */
-export const ixReadonlyArray = <A = never>(): Ix<ReadonlyArray<A>, number, A> => ({
-  ix: (i) => ({
+export const indexReadonlyArray = <A = never>(): Index<ReadonlyArray<A>, number, A> => ({
+  index: (i) => ({
     getOption: A.lookup(i),
     set: (a) => (as) =>
       pipe(
@@ -310,9 +310,9 @@ export const ixReadonlyArray = <A = never>(): Ix<ReadonlyArray<A>, number, A> =>
 })
 
 /** @internal */
-export function ixReadonlyRecord<A = never>(): Ix<Readonly<Record<string, A>>, string, A> {
+export function indexReadonlyRecord<A = never>(): Index<Readonly<Record<string, A>>, string, A> {
   return {
-    ix: (k) => ({
+    index: (k) => ({
       getOption: R.lookup(k),
       set: (a) => (r) => {
         if (r[k] === a || O.isNone(R.lookup(k)(r))) {

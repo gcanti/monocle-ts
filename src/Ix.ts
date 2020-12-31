@@ -16,8 +16,8 @@ import { Optional } from './Optional'
  * @category model
  * @since 3.0.0
  */
-export interface Ix<S, I, A> {
-  readonly ix: (i: I) => Optional<S, A>
+export interface Index<S, I, A> {
+  readonly index: (i: I) => Optional<S, A>
 }
 
 // -------------------------------------------------------------------------------------
@@ -28,8 +28,8 @@ export interface Ix<S, I, A> {
  * @category constructors
  * @since 3.0.0
  */
-export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Ix<T, J, B> => ({
-  ix: (i) => _.lensComposePrism(_.prismSome<B>())(at.at(i))
+export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> => ({
+  index: (i) => _.lensComposePrism(_.prismSome<B>())(at.at(i))
 })
 
 /**
@@ -38,18 +38,18 @@ export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Ix<T, J, B> => ({
  * @category constructors
  * @since 3.0.0
  */
-export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: Ix<S, I, A>): Ix<T, I, A> => ({
-  ix: (i) => pipe(iso, _.isoAsOptional, _.optionalComposeOptional(sia.ix(i)))
+export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: Index<S, I, A>): Index<T, I, A> => ({
+  index: (i) => pipe(iso, _.isoAsOptional, _.optionalComposeOptional(sia.index(i)))
 })
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const ixReadonlyArray: <A = never>() => Ix<ReadonlyArray<A>, number, A> = _.ixReadonlyArray
+export const indexReadonlyArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = _.indexReadonlyArray
 
 /**
  * @category constructors
  * @since 3.0.0
  */
-export const ixReadonlyRecord: <A = never>() => Ix<Readonly<Record<string, A>>, string, A> = _.ixReadonlyRecord
+export const indexReadonlyRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A> = _.indexReadonlyRecord
