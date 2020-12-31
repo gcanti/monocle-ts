@@ -38,7 +38,7 @@ export interface Iso<S, A> {
 // -------------------------------------------------------------------------------------
 
 /**
- * @category Category
+ * @category constructors
  * @since 3.0.0
  */
 export const id = <S>(): Iso<S, S> => ({
@@ -51,7 +51,7 @@ export const id = <S>(): Iso<S, S> => ({
 // -------------------------------------------------------------------------------------
 
 /**
- * View an `Iso` as a `Lens`
+ * View an `Iso` as a `Lens`.
  *
  * @category converters
  * @since 3.0.0
@@ -59,7 +59,7 @@ export const id = <S>(): Iso<S, S> => ({
 export const asLens: <S, A>(sa: Iso<S, A>) => Lens<S, A> = _.isoAsLens
 
 /**
- * View an `Iso` as a `Prism`
+ * View an `Iso` as a `Prism`.
  *
  * @category converters
  * @since 3.0.0
@@ -70,7 +70,7 @@ export const asPrism = <S, A>(sa: Iso<S, A>): Prism<S, A> => ({
 })
 
 /**
- * View an `Iso` as a `Optional`
+ * View an `Iso` as a `Optional`.
  *
  * @category converters
  * @since 3.0.0
@@ -78,7 +78,7 @@ export const asPrism = <S, A>(sa: Iso<S, A>): Prism<S, A> => ({
 export const asOptional: <S, A>(sa: Iso<S, A>) => Optional<S, A> = _.isoAsOptional
 
 /**
- * View an `Iso` as a `Traversal`
+ * View an `Iso` as a `Traversal`.
  *
  * @category converters
  * @since 3.0.0
@@ -96,9 +96,9 @@ export const asTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
 // -------------------------------------------------------------------------------------
 
 /**
- * Compose an `Iso` with an `Iso`
+ * Compose an `Iso` with an `Iso`.
  *
- * @category Semigroupoid
+ * @category compositions
  * @since 3.0.0
  */
 export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> => ({
@@ -111,7 +111,7 @@ export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> =>
 // -------------------------------------------------------------------------------------
 
 /**
- * @category constructors
+ * @category combinators
  * @since 3.0.0
  */
 export const reverse = <S, A>(sa: Iso<S, A>): Iso<A, S> => ({

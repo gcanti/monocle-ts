@@ -18,10 +18,6 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [Category](#category)
-  - [id](#id)
-- [Semigroupoid](#semigroupoid)
-  - [compose](#compose)
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
@@ -39,10 +35,14 @@ Added in v3.0.0
   - [set](#set)
   - [some](#some)
   - [traverse](#traverse)
+- [compositions](#compositions)
+  - [compose](#compose)
 - [constructor](#constructor)
   - [fromTraversable](#fromtraversable)
+- [constructors](#constructors)
+  - [id](#id)
 - [instances](#instances)
-  - [Category](#category-1)
+  - [Category](#category)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
 - [model](#model)
@@ -51,37 +51,11 @@ Added in v3.0.0
 
 ---
 
-# Category
-
-## id
-
-**Signature**
-
-```ts
-export declare const id: <S>() => Traversal<S, S>
-```
-
-Added in v3.0.0
-
-# Semigroupoid
-
-## compose
-
-Compose a `Traversal` with a `Traversal`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
-```
-
-Added in v3.0.0
-
 # combinators
 
 ## atKey
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key
+Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key.
 
 **Signature**
 
@@ -95,7 +69,7 @@ Added in v3.0.0
 
 ## component
 
-Return a `Traversal` from a `Traversal` and a component
+Return a `Traversal` from a `Traversal` and a component.
 
 **Signature**
 
@@ -122,7 +96,7 @@ Added in v3.0.0
 
 ## fold
 
-Map each target to a `Monoid` and combine the results.
+Combine all targets using a target's Monoid.
 
 **Signature**
 
@@ -158,7 +132,7 @@ Added in v3.0.0
 
 ## index
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`
+Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`.
 
 **Signature**
 
@@ -170,7 +144,7 @@ Added in v3.0.0
 
 ## key
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key
+Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key.
 
 **Signature**
 
@@ -182,7 +156,7 @@ Added in v3.0.0
 
 ## left
 
-Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type
+Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type.
 
 **Signature**
 
@@ -204,7 +178,7 @@ Added in v3.0.0
 
 ## prop
 
-Return a `Traversal` from a `Traversal` and a prop
+Return a `Traversal` from a `Traversal` and a prop.
 
 **Signature**
 
@@ -216,7 +190,7 @@ Added in v3.0.0
 
 ## props
 
-Return a `Traversal` from a `Traversal` and a list of props
+Return a `Traversal` from a `Traversal` and a list of props.
 
 **Signature**
 
@@ -232,7 +206,7 @@ Added in v3.0.0
 
 ## right
 
-Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type
+Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type.
 
 **Signature**
 
@@ -254,7 +228,7 @@ Added in v3.0.0
 
 ## some
 
-Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type
+Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type.
 
 **Signature**
 
@@ -266,7 +240,7 @@ Added in v3.0.0
 
 ## traverse
 
-Return a `Traversal` from a `Traversal` focused on a `Traversable`
+Return a `Traversal` from a `Traversal` focused on a `Traversable`.
 
 **Signature**
 
@@ -278,16 +252,42 @@ export declare function traverse<T extends URIS>(
 
 Added in v3.0.0
 
+# compositions
+
+## compose
+
+Compose a `Traversal` with a `Traversal`.
+
+**Signature**
+
+```ts
+export declare const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v3.0.0
+
 # constructor
 
 ## fromTraversable
 
-Create a `Traversal` from a `Traversable`
+Create a `Traversal` from a `Traversable`.
 
 **Signature**
 
 ```ts
 export declare const fromTraversable: typeof _.fromTraversable
+```
+
+Added in v3.0.0
+
+# constructors
+
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Traversal<S, S>
 ```
 
 Added in v3.0.0

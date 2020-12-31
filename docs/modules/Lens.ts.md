@@ -23,12 +23,8 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [Category](#category)
-  - [id](#id)
 - [Invariant](#invariant)
   - [imap](#imap)
-- [Semigroupoid](#semigroupoid)
-  - [compose](#compose)
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
@@ -45,13 +41,16 @@ Added in v3.0.0
   - [some](#some)
   - [traverse](#traverse)
 - [compositions](#compositions)
+  - [compose](#compose)
   - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
+- [constructors](#constructors)
+  - [id](#id)
 - [converters](#converters)
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
 - [instances](#instances)
-  - [Category](#category-1)
+  - [Category](#category)
   - [Invariant](#invariant-1)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
@@ -59,18 +58,6 @@ Added in v3.0.0
   - [Lens (interface)](#lens-interface)
 
 ---
-
-# Category
-
-## id
-
-**Signature**
-
-```ts
-export declare const id: <S>() => Lens<S, S>
-```
-
-Added in v3.0.0
 
 # Invariant
 
@@ -84,25 +71,11 @@ export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Len
 
 Added in v3.0.0
 
-# Semigroupoid
-
-## compose
-
-Compose a `Lens` with a `Lens`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
-```
-
-Added in v3.0.0
-
 # combinators
 
 ## atKey
 
-Return a `Lens` from a `Lens` focused on a `ReadonlyRecord` and a required key
+Return a `Lens` from a `Lens` focused on a `ReadonlyRecord` and a required key.
 
 **Signature**
 
@@ -114,7 +87,7 @@ Added in v3.0.0
 
 ## component
 
-Return a `Lens` from a `Lens` and a component
+Return a `Lens` from a `Lens` and a component.
 
 **Signature**
 
@@ -149,7 +122,7 @@ Added in v3.0.0
 
 ## fromNullable
 
-Return a `Optional` from a `Lens` focused on a nullable value
+Return a `Optional` from a `Lens` focused on a nullable value.
 
 **Signature**
 
@@ -161,7 +134,7 @@ Added in v3.0.0
 
 ## index
 
-Return a `Optional` from a `Lens` focused on a `ReadonlyArray`
+Return a `Optional` from a `Lens` focused on a `ReadonlyArray`.
 
 **Signature**
 
@@ -173,7 +146,7 @@ Added in v3.0.0
 
 ## key
 
-Return a `Optional` from a `Lens` focused on a `ReadonlyRecord` and a key
+Return a `Optional` from a `Lens` focused on a `ReadonlyRecord` and a key.
 
 **Signature**
 
@@ -185,7 +158,7 @@ Added in v3.0.0
 
 ## left
 
-Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type
+Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type.
 
 **Signature**
 
@@ -207,7 +180,7 @@ Added in v3.0.0
 
 ## prop
 
-Return a `Lens` from a `Lens` and a prop
+Return a `Lens` from a `Lens` and a prop.
 
 **Signature**
 
@@ -219,7 +192,7 @@ Added in v3.0.0
 
 ## props
 
-Return a `Lens` from a `Lens` and a list of props
+Return a `Lens` from a `Lens` and a list of props.
 
 **Signature**
 
@@ -235,7 +208,7 @@ Added in v3.0.0
 
 ## right
 
-Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type
+Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type.
 
 **Signature**
 
@@ -247,7 +220,7 @@ Added in v3.0.0
 
 ## some
 
-Return a `Optional` from a `Lens` focused on the `Some` of a `Option` type
+Return a `Optional` from a `Lens` focused on the `Some` of a `Option` type.
 
 **Signature**
 
@@ -259,7 +232,7 @@ Added in v3.0.0
 
 ## traverse
 
-Return a `Traversal` from a `Lens` focused on a `Traversable`
+Return a `Traversal` from a `Lens` focused on a `Traversable`.
 
 **Signature**
 
@@ -273,9 +246,21 @@ Added in v3.0.0
 
 # compositions
 
+## compose
+
+Compose a `Lens` with a `Lens`.
+
+**Signature**
+
+```ts
+export declare const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
+```
+
+Added in v3.0.0
+
 ## composeOptional
 
-Compose a `Lens` with an `Optional`
+Compose a `Lens` with an `Optional`.
 
 **Signature**
 
@@ -287,7 +272,7 @@ Added in v3.0.0
 
 ## composePrism
 
-Compose a `Lens` with a `Prism`
+Compose a `Lens` with a `Prism`.
 
 **Signature**
 
@@ -297,11 +282,23 @@ export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>
 
 Added in v3.0.0
 
+# constructors
+
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Lens<S, S>
+```
+
+Added in v3.0.0
+
 # converters
 
 ## asOptional
 
-View a `Lens` as a `Optional`
+View a `Lens` as a `Optional`.
 
 **Signature**
 
@@ -313,7 +310,7 @@ Added in v3.0.0
 
 ## asTraversal
 
-View a `Lens` as a `Traversal`
+View a `Lens` as a `Traversal`.
 
 **Signature**
 

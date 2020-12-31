@@ -19,12 +19,8 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [Category](#category)
-  - [id](#id)
 - [Invariant](#invariant)
   - [imap](#imap)
-- [Semigroupoid](#semigroupoid)
-  - [compose](#compose)
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
@@ -43,15 +39,17 @@ Added in v3.0.0
   - [some](#some)
   - [traverse](#traverse)
 - [compositions](#compositions)
+  - [compose](#compose)
   - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
 - [constructors](#constructors)
   - [fromPredicate](#frompredicate)
+  - [id](#id)
 - [converters](#converters)
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
 - [instances](#instances)
-  - [Category](#category-1)
+  - [Category](#category)
   - [Invariant](#invariant-1)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
@@ -59,18 +57,6 @@ Added in v3.0.0
   - [Prism (interface)](#prism-interface)
 
 ---
-
-# Category
-
-## id
-
-**Signature**
-
-```ts
-export declare const id: <S>() => Prism<S, S>
-```
-
-Added in v3.0.0
 
 # Invariant
 
@@ -84,25 +70,11 @@ export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Pri
 
 Added in v3.0.0
 
-# Semigroupoid
-
-## compose
-
-Compose a `Prism` with a `Prism`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
-```
-
-Added in v3.0.0
-
 # combinators
 
 ## atKey
 
-Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key
+Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key.
 
 **Signature**
 
@@ -116,7 +88,7 @@ Added in v3.0.0
 
 ## component
 
-Return a `Optional` from a `Prism` and a component
+Return a `Optional` from a `Prism` and a component.
 
 **Signature**
 
@@ -151,7 +123,7 @@ Added in v3.0.0
 
 ## fromNullable
 
-Return a `Prism` from a `Prism` focused on a nullable value
+Return a `Prism` from a `Prism` focused on a nullable value.
 
 **Signature**
 
@@ -163,7 +135,7 @@ Added in v3.0.0
 
 ## index
 
-Return a `Optional` from a `Prism` focused on a `ReadonlyArray`
+Return a `Optional` from a `Prism` focused on a `ReadonlyArray`.
 
 **Signature**
 
@@ -175,7 +147,7 @@ Added in v3.0.0
 
 ## key
 
-Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key
+Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key.
 
 **Signature**
 
@@ -187,7 +159,7 @@ Added in v3.0.0
 
 ## left
 
-Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type
+Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type.
 
 **Signature**
 
@@ -219,7 +191,7 @@ Added in v3.0.0
 
 ## prop
 
-Return a `Optional` from a `Prism` and a prop
+Return a `Optional` from a `Prism` and a prop.
 
 **Signature**
 
@@ -231,7 +203,7 @@ Added in v3.0.0
 
 ## props
 
-Return a `Optional` from a `Prism` and a list of props
+Return a `Optional` from a `Prism` and a list of props.
 
 **Signature**
 
@@ -247,7 +219,7 @@ Added in v3.0.0
 
 ## right
 
-Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type
+Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type.
 
 **Signature**
 
@@ -269,7 +241,7 @@ Added in v3.0.0
 
 ## some
 
-Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type
+Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type.
 
 **Signature**
 
@@ -281,7 +253,7 @@ Added in v3.0.0
 
 ## traverse
 
-Return a `Traversal` from a `Prism` focused on a `Traversable`
+Return a `Traversal` from a `Prism` focused on a `Traversable`.
 
 **Signature**
 
@@ -295,9 +267,21 @@ Added in v3.0.0
 
 # compositions
 
+## compose
+
+Compose a `Prism` with a `Prism`.
+
+**Signature**
+
+```ts
+export declare const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
+```
+
+Added in v3.0.0
+
 ## composeLens
 
-Compose a `Prism` with a `Lens`
+Compose a `Prism` with a `Lens`.
 
 **Signature**
 
@@ -309,7 +293,7 @@ Added in v3.0.0
 
 ## composeOptional
 
-Compose a `Prism` with an `Optional`
+Compose a `Prism` with an `Optional`.
 
 **Signature**
 
@@ -334,11 +318,21 @@ export declare const fromPredicate: {
 
 Added in v3.0.0
 
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Prism<S, S>
+```
+
+Added in v3.0.0
+
 # converters
 
 ## asOptional
 
-View a `Prism` as a `Optional`
+View a `Prism` as a `Optional`.
 
 **Signature**
 
@@ -350,7 +344,7 @@ Added in v3.0.0
 
 ## asTraversal
 
-View a `Prism` as a `Traversal`
+View a `Prism` as a `Traversal`.
 
 **Signature**
 

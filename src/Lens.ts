@@ -42,7 +42,7 @@ export interface Lens<S, A> {
 // -------------------------------------------------------------------------------------
 
 /**
- * @category Category
+ * @category constructors
  * @since 3.0.0
  */
 export const id: <S>() => Lens<S, S> = _.lensId
@@ -52,7 +52,7 @@ export const id: <S>() => Lens<S, S> = _.lensId
 // -------------------------------------------------------------------------------------
 
 /**
- * View a `Lens` as a `Optional`
+ * View a `Lens` as a `Optional`.
  *
  * @category converters
  * @since 3.0.0
@@ -60,7 +60,7 @@ export const id: <S>() => Lens<S, S> = _.lensId
 export const asOptional: <S, A>(sa: Lens<S, A>) => Optional<S, A> = _.lensAsOptional
 
 /**
- * View a `Lens` as a `Traversal`
+ * View a `Lens` as a `Traversal`.
  *
  * @category converters
  * @since 3.0.0
@@ -72,15 +72,15 @@ export const asTraversal: <S, A>(sa: Lens<S, A>) => Traversal<S, A> = _.lensAsTr
 // -------------------------------------------------------------------------------------
 
 /**
- * Compose a `Lens` with a `Lens`
+ * Compose a `Lens` with a `Lens`.
  *
- * @category Semigroupoid
+ * @category compositions
  * @since 3.0.0
  */
 export const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B> = _.lensComposeLens
 
 /**
- * Compose a `Lens` with a `Prism`
+ * Compose a `Lens` with a `Prism`.
  *
  * @category compositions
  * @since 3.0.0
@@ -88,7 +88,7 @@ export const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B
 export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>) => Optional<S, B> = _.lensComposePrism
 
 /**
- * Compose a `Lens` with an `Optional`
+ * Compose a `Lens` with an `Optional`.
  *
  * @category compositions
  * @since 3.0.0
@@ -111,7 +111,7 @@ export const modify = <A>(f: (a: A) => A) => <S>(sa: Lens<S, A>) => (s: S): S =>
 }
 
 /**
- * Return a `Optional` from a `Lens` focused on a nullable value
+ * Return a `Optional` from a `Lens` focused on a nullable value.
  *
  * @category combinators
  * @since 3.0.0
@@ -130,7 +130,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Lens<S, A>) => Optio
 }
 
 /**
- * Return a `Lens` from a `Lens` and a prop
+ * Return a `Lens` from a `Lens` and a prop.
  *
  * @category combinators
  * @since 3.0.0
@@ -138,7 +138,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Lens<S, A>) => Optio
 export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Lens<S, A>) => Lens<S, A[P]> = _.lensProp
 
 /**
- * Return a `Lens` from a `Lens` and a list of props
+ * Return a `Lens` from a `Lens` and a list of props.
  *
  * @category combinators
  * @since 3.0.0
@@ -148,7 +148,7 @@ export const props: <A, P extends keyof A>(
 ) => <S>(sa: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> = _.lensProps
 
 /**
- * Return a `Lens` from a `Lens` and a component
+ * Return a `Lens` from a `Lens` and a component.
  *
  * @category combinators
  * @since 3.0.0
@@ -158,7 +158,7 @@ export const component: <A extends ReadonlyArray<unknown>, P extends keyof A>(
 ) => <S>(sa: Lens<S, A>) => Lens<S, A[P]> = _.lensComponent
 
 /**
- * Return a `Optional` from a `Lens` focused on a `ReadonlyArray`
+ * Return a `Optional` from a `Lens` focused on a `ReadonlyArray`.
  *
  * @category combinators
  * @since 3.0.0
@@ -167,7 +167,7 @@ export const index = (i: number) => <S, A>(sa: Lens<S, ReadonlyArray<A>>): Optio
   pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyArray<A>().index(i)))
 
 /**
- * Return a `Optional` from a `Lens` focused on a `ReadonlyRecord` and a key
+ * Return a `Optional` from a `Lens` focused on a `ReadonlyRecord` and a key.
  *
  * @category combinators
  * @since 3.0.0
@@ -176,7 +176,7 @@ export const key = (key: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A
   pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyRecord<A>().index(key)))
 
 /**
- * Return a `Lens` from a `Lens` focused on a `ReadonlyRecord` and a required key
+ * Return a `Lens` from a `Lens` focused on a `ReadonlyRecord` and a required key.
  *
  * @category combinators
  * @since 3.0.0
@@ -185,7 +185,7 @@ export const atKey = (key: string) => <S, A>(sa: Lens<S, Readonly<Record<string,
   pipe(sa, compose(_.atRecord<A>().at(key)))
 
 /**
- * Return a `Optional` from a `Lens` focused on the `Some` of a `Option` type
+ * Return a `Optional` from a `Lens` focused on the `Some` of a `Option` type.
  *
  * @category combinators
  * @since 3.0.0
@@ -195,7 +195,7 @@ export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> =
   composePrism(_.prismSome())
 
 /**
- * Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type
+ * Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type.
  *
  * @category combinators
  * @since 3.0.0
@@ -205,7 +205,7 @@ export const right: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, A> =
   composePrism(_.prismRight())
 
 /**
- * Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type
+ * Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type.
  *
  * @category combinators
  * @since 3.0.0
@@ -215,7 +215,7 @@ export const left: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, E> =
   composePrism(_.prismLeft())
 
 /**
- * Return a `Traversal` from a `Lens` focused on a `Traversable`
+ * Return a `Traversal` from a `Lens` focused on a `Traversable`.
  *
  * @category combinators
  * @since 3.0.0
@@ -233,7 +233,7 @@ export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Lens<S, Readonly
   flow(_.findFirst, composeOptional)
 
 // -------------------------------------------------------------------------------------
-// pipeables
+// type class members
 // -------------------------------------------------------------------------------------
 
 /**

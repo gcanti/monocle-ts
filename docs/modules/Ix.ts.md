@@ -36,7 +36,7 @@ Added in v3.0.0
 
 ## fromIso
 
-Lift an instance of `Index` using an `Iso`
+Lift an instance of `Index` using an `Iso`.
 
 **Signature**
 

@@ -20,11 +20,11 @@ import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Traversal } from './Traversal'
 
+import Option = O.Option
+
 // -------------------------------------------------------------------------------------
 // model
 // -------------------------------------------------------------------------------------
-
-import Option = O.Option
 
 /**
  * @category model
@@ -40,7 +40,7 @@ export interface Prism<S, A> {
 // -------------------------------------------------------------------------------------
 
 /**
- * @category Category
+ * @category constructors
  * @since 3.0.0
  */
 export const id = <S>(): Prism<S, S> => ({
@@ -62,7 +62,7 @@ export const fromPredicate: {
 // -------------------------------------------------------------------------------------
 
 /**
- * View a `Prism` as a `Optional`
+ * View a `Prism` as a `Optional`.
  *
  * @category converters
  * @since 3.0.0
@@ -70,7 +70,7 @@ export const fromPredicate: {
 export const asOptional: <S, A>(sa: Prism<S, A>) => Optional<S, A> = _.prismAsOptional
 
 /**
- * View a `Prism` as a `Traversal`
+ * View a `Prism` as a `Traversal`.
  *
  * @category converters
  * @since 3.0.0
@@ -82,9 +82,9 @@ export const asTraversal: <S, A>(sa: Prism<S, A>) => Traversal<S, A> = _.prismAs
 // -------------------------------------------------------------------------------------
 
 /**
- * Compose a `Prism` with a `Prism`
+ * Compose a `Prism` with a `Prism`.
  *
- * @category Semigroupoid
+ * @category compositions
  * @since 3.0.0
  */
 export const compose = <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>): Prism<S, B> => ({
@@ -93,7 +93,7 @@ export const compose = <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>): Prism<S,
 })
 
 /**
- * Compose a `Prism` with a `Lens`
+ * Compose a `Prism` with a `Lens`.
  *
  * @category compositions
  * @since 3.0.0
@@ -101,7 +101,7 @@ export const compose = <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>): Prism<S,
 export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B> = _.prismComposeLens
 
 /**
- * Compose a `Prism` with an `Optional`
+ * Compose a `Prism` with an `Optional`.
  *
  * @category compositions
  * @since 3.0.0
@@ -132,7 +132,7 @@ export const modifyOption: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S)
 export const modify: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismModify
 
 /**
- * Return a `Prism` from a `Prism` focused on a nullable value
+ * Return a `Prism` from a `Prism` focused on a nullable value.
  *
  * @category combinators
  * @since 3.0.0
@@ -152,7 +152,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Prism<S, A>) => Pris
 }
 
 /**
- * Return a `Optional` from a `Prism` and a prop
+ * Return a `Optional` from a `Prism` and a prop.
  *
  * @category combinators
  * @since 3.0.0
@@ -161,7 +161,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Prism<S, A>) => Op
   composeLens(pipe(_.lensId<A>(), _.lensProp(prop)))
 
 /**
- * Return a `Optional` from a `Prism` and a list of props
+ * Return a `Optional` from a `Prism` and a list of props.
  *
  * @category combinators
  * @since 3.0.0
@@ -171,7 +171,7 @@ export const props = <A, P extends keyof A>(
 ): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) => composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
 
 /**
- * Return a `Optional` from a `Prism` and a component
+ * Return a `Optional` from a `Prism` and a component.
  *
  * @category combinators
  * @since 3.0.0
@@ -181,7 +181,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
 ): (<S>(sa: Prism<S, A>) => Optional<S, A[P]>) => composeLens(pipe(_.lensId<A>(), _.lensComponent(prop)))
 
 /**
- * Return a `Optional` from a `Prism` focused on a `ReadonlyArray`
+ * Return a `Optional` from a `Prism` focused on a `ReadonlyArray`.
  *
  * @category combinators
  * @since 3.0.0
@@ -190,7 +190,7 @@ export const index = (i: number) => <S, A>(sa: Prism<S, ReadonlyArray<A>>): Opti
   pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyArray<A>().index(i)))
 
 /**
- * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key
+ * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key.
  *
  * @category combinators
  * @since 3.0.0
@@ -199,7 +199,7 @@ export const key = (key: string) => <S, A>(sa: Prism<S, Readonly<Record<string, 
   pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyRecord<A>().index(key)))
 
 /**
- * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key
+ * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key.
  *
  * @category combinators
  * @since 3.0.0
@@ -208,7 +208,7 @@ export const atKey = (key: string) => <S, A>(sa: Prism<S, Readonly<Record<string
   _.prismComposeLens(_.atRecord<A>().at(key))(sa)
 
 /**
- * Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type
+ * Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type.
  *
  * @category combinators
  * @since 3.0.0
@@ -218,7 +218,7 @@ export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> =
   compose(_.prismSome())
 
 /**
- * Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type
+ * Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type.
  *
  * @category combinators
  * @since 3.0.0
@@ -228,7 +228,7 @@ export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> =
   compose(_.prismRight())
 
 /**
- * Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type
+ * Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type.
  *
  * @category combinators
  * @since 3.0.0
@@ -238,7 +238,7 @@ export const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E> =
   compose(_.prismLeft())
 
 /**
- * Return a `Traversal` from a `Prism` focused on a `Traversable`
+ * Return a `Traversal` from a `Prism` focused on a `Traversable`.
  *
  * @category combinators
  * @since 3.0.0
@@ -256,7 +256,7 @@ export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Prism<S, Readonl
   flow(_.findFirst, composeOptional)
 
 // -------------------------------------------------------------------------------------
-// pipeables
+// type class members
 // -------------------------------------------------------------------------------------
 
 /**

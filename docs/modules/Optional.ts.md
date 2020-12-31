@@ -24,12 +24,8 @@ Added in v3.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [Category](#category)
-  - [id](#id)
 - [Invariant](#invariant)
   - [imap](#imap)
-- [Semigroupoid](#semigroupoid)
-  - [compose](#compose)
 - [combinators](#combinators)
   - [atKey](#atkey)
   - [component](#component)
@@ -46,10 +42,14 @@ Added in v3.0.0
   - [right](#right)
   - [some](#some)
   - [traverse](#traverse)
+- [compositions](#compositions)
+  - [compose](#compose)
+- [constructors](#constructors)
+  - [id](#id)
 - [converters](#converters)
   - [asTraversal](#astraversal)
 - [instances](#instances)
-  - [Category](#category-1)
+  - [Category](#category)
   - [Invariant](#invariant-1)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
@@ -57,18 +57,6 @@ Added in v3.0.0
   - [Optional (interface)](#optional-interface)
 
 ---
-
-# Category
-
-## id
-
-**Signature**
-
-```ts
-export declare const id: <S>() => Optional<S, S>
-```
-
-Added in v3.0.0
 
 # Invariant
 
@@ -82,25 +70,11 @@ export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Opt
 
 Added in v3.0.0
 
-# Semigroupoid
-
-## compose
-
-Compose a `Optional` with a `Optional`
-
-**Signature**
-
-```ts
-export declare const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
-```
-
-Added in v3.0.0
-
 # combinators
 
 ## atKey
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key
+Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key.
 
 **Signature**
 
@@ -114,7 +88,7 @@ Added in v3.0.0
 
 ## component
 
-Return a `Optional` from a `Optional` and a component
+Return a `Optional` from a `Optional` and a component.
 
 **Signature**
 
@@ -161,7 +135,7 @@ Added in v3.0.0
 
 ## index
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyArray`
+Return a `Optional` from a `Optional` focused on a `ReadonlyArray`.
 
 **Signature**
 
@@ -173,7 +147,7 @@ Added in v3.0.0
 
 ## key
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key
+Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key.
 
 **Signature**
 
@@ -185,7 +159,7 @@ Added in v3.0.0
 
 ## left
 
-Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type
+Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type.
 
 **Signature**
 
@@ -217,7 +191,7 @@ Added in v3.0.0
 
 ## prop
 
-Return a `Optional` from a `Optional` and a prop
+Return a `Optional` from a `Optional` and a prop.
 
 **Signature**
 
@@ -229,7 +203,7 @@ Added in v3.0.0
 
 ## props
 
-Return a `Optional` from a `Optional` and a list of props
+Return a `Optional` from a `Optional` and a list of props.
 
 **Signature**
 
@@ -245,7 +219,7 @@ Added in v3.0.0
 
 ## right
 
-Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type
+Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type.
 
 **Signature**
 
@@ -257,7 +231,7 @@ Added in v3.0.0
 
 ## some
 
-Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type
+Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type.
 
 **Signature**
 
@@ -269,7 +243,7 @@ Added in v3.0.0
 
 ## traverse
 
-Return a `Traversal` from a `Optional` focused on a `Traversable`
+Return a `Traversal` from a `Optional` focused on a `Traversable`.
 
 **Signature**
 
@@ -281,11 +255,37 @@ export declare function traverse<T extends URIS>(
 
 Added in v3.0.0
 
+# compositions
+
+## compose
+
+Compose a `Optional` with a `Optional`.
+
+**Signature**
+
+```ts
+export declare const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
+```
+
+Added in v3.0.0
+
+# constructors
+
+## id
+
+**Signature**
+
+```ts
+export declare const id: <S>() => Optional<S, S>
+```
+
+Added in v3.0.0
+
 # converters
 
 ## asTraversal
 
-View a `Optional` as a `Traversal`
+View a `Optional` as a `Traversal`.
 
 **Signature**
 
