@@ -1,6 +1,7 @@
 import * as assert from 'assert'
 import * as glob from 'glob'
 import * as path from 'path'
+import * as fp from '../src'
 
 const getExportName = (name: string): string => {
   if (name === 'Ix') {
@@ -16,12 +17,11 @@ function getModuleNames(): ReadonlyArray<string> {
 describe('index', () => {
   it('check exported modules', () => {
     const moduleNames = getModuleNames()
-    const fp = require('../src')
     moduleNames.forEach((name) => {
       if (name !== 'index' && name !== 'internal') {
         const exportName = getExportName(name)
         assert.deepStrictEqual(
-          fp[exportName] !== undefined,
+          (fp as Record<string, unknown>)[exportName] !== undefined,
           true,
           `The "${name}" module is not exported in src/index.ts as ${exportName}`
         )

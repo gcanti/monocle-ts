@@ -90,7 +90,7 @@ export const lensProps = <A, P extends keyof A>(...props: readonly [P, P, ...Rea
     for (const k of props) {
       r[k] = a[k]
     }
-    return r as any
+    return r as { [K in P]: A[K] }
   },
   set: (a) => (s) => {
     const oa = lens.get(s)
@@ -113,7 +113,7 @@ export const lensComponent = <A extends ReadonlyArray<unknown>, P extends keyof 
     if (ap === oa[prop]) {
       return s
     }
-    const copy: A = oa.slice() as any
+    const copy = (oa.slice() as unknown) as A
     copy[prop] = ap
     return lens.set(copy)(s)
   }

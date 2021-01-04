@@ -1,0 +1,19 @@
+{
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["fp-ts"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/member-delimiter-style": 0,
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "fp-ts/no-lib-imports": "error",
+    "fp-ts/prefer-traverse": "error",
+    "fp-ts/no-redundant-flow": "error"
+  }
+}
