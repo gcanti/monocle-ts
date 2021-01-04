@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 import * as glob from 'glob'
 import * as path from 'path'
-import * as fp from '../src'
+import * as _ from '../src'
 
 const getExportName = (name: string): string => {
   if (name === 'Ix') {
@@ -21,7 +21,7 @@ describe('index', () => {
       if (name !== 'index' && name !== 'internal') {
         const exportName = getExportName(name)
         assert.deepStrictEqual(
-          (fp as Record<string, unknown>)[exportName] !== undefined,
+          (_ as Record<string, unknown>)[exportName] !== undefined,
           true,
           `The "${name}" module is not exported in src/index.ts as ${exportName}`
         )

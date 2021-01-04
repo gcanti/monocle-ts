@@ -14,6 +14,7 @@
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "fp-ts/no-lib-imports": "error",
     "fp-ts/prefer-traverse": "error",
-    "fp-ts/no-redundant-flow": "error"
+    "fp-ts/no-redundant-flow": "error",
+    "fp-ts/prefer-chain": "error"
   }
 }
