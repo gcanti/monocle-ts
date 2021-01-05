@@ -48,7 +48,7 @@
     "docs-ts": "^0.5.0",
     "dtslint": "github:gcanti/dtslint",
     "eslint": "^7.17.0",
-    "eslint-plugin-fp-ts": "^0.1.7",
+    "eslint-plugin-fp-ts": "^0.1.8",
     "fp-ts": "^3.0.0-alpha.4",
     "import-path-rewrite": "github:gcanti/import-path-rewrite",
     "jest": "^26.6.3",

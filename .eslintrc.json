@@ -6,15 +6,12 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:fp-ts/all"
   ],
   "rules": {
     "@typescript-eslint/member-delimiter-style": 0,
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-    "fp-ts/no-lib-imports": "error",
-    "fp-ts/prefer-traverse": "error",
-    "fp-ts/no-redundant-flow": "error",
-    "fp-ts/prefer-chain": "error"
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
   }
 }
