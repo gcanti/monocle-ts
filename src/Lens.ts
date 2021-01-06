@@ -228,9 +228,13 @@ export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Lens<S
  * @category combinators
  * @since 3.0.0
  */
-export const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A> =
-  /*#__PURE__*/
-  flow(_.findFirst, composeOptional)
+export function findFirst<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, B>
+export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A>
+export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A> {
+  return composeOptional(_.findFirst(predicate))
+}
 
 // -------------------------------------------------------------------------------------
 // type class members

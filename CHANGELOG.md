@@ -18,6 +18,11 @@ high state of flux, you're at risk of it changing without notice.
 - **Breaking Change**
   - remove `2.x` stable APIs (@gcanti)
 
+# 2.3.4
+
+- **Experimental**
+  - `Lens`, `Prism`, `Optional`: add `Refinement` overload to `findFirst`, #148 (@wmaurer)
+
 # 2.3.3
 
 - **Experimental**
