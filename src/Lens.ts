@@ -240,7 +240,7 @@ export function findFirst<A, B extends A>(
 ): <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, B>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A> {
-  return flow(_.findFirst, composeOptional)(predicate)
+  return composeOptional(_.findFirst(predicate))
 }
 
 // -------------------------------------------------------------------------------------

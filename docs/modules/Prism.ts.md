@@ -122,7 +122,10 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Prism<S, readonly A[]>) => Optional<S, A>
+export declare function findFirst<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, B>
+export declare function findFirst<A>(predicate: Predicate<A>): <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A>
 ```
 
 Added in v2.3.2
