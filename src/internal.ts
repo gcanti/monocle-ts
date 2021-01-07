@@ -329,7 +329,7 @@ export function indexReadonlyRecord<A = never>(): Index<Readonly<Record<string, 
 // -------------------------------------------------------------------------------------
 
 /** @internal */
-export function atRecord<A = never>(): At<Readonly<Record<string, A>>, string, O.Option<A>> {
+export function atReadonlyRecord<A = never>(): At<Readonly<Record<string, A>>, string, O.Option<A>> {
   return {
     at: (key) => ({
       get: R.lookup(key),

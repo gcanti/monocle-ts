@@ -169,7 +169,7 @@ export const key = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<strin
  * @since 3.0.0
  */
 export const atKey = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>): Optional<S, Option<A>> =>
-  pipe(sa, compose(_.lensAsOptional(_.atRecord<A>().at(key))))
+  pipe(sa, compose(_.lensAsOptional(_.atReadonlyRecord<A>().at(key))))
 
 /**
  * Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type.

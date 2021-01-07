@@ -182,7 +182,7 @@ export const key = (key: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A
  * @since 3.0.0
  */
 export const atKey = (key: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A>>>): Lens<S, Option<A>> =>
-  pipe(sa, compose(_.atRecord<A>().at(key)))
+  pipe(sa, compose(_.atReadonlyRecord<A>().at(key)))
 
 /**
  * Return a `Optional` from a `Lens` focused on the `Some` of a `Option` type.

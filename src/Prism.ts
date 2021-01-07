@@ -205,7 +205,7 @@ export const key = (key: string) => <S, A>(sa: Prism<S, Readonly<Record<string, 
  * @since 3.0.0
  */
 export const atKey = (key: string) => <S, A>(sa: Prism<S, Readonly<Record<string, A>>>): Optional<S, Option<A>> =>
-  _.prismComposeLens(_.atRecord<A>().at(key))(sa)
+  _.prismComposeLens(_.atReadonlyRecord<A>().at(key))(sa)
 
 /**
  * Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type.
