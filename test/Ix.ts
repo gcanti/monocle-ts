@@ -16,9 +16,9 @@ describe('Index', () => {
     assert.deepStrictEqual(ix.getOption(['1']), O.none)
     assert.deepStrictEqual(ix.getOption(['1', '2']), O.some(2))
 
-    assert.deepStrictEqual(ix.set(3)([]), [])
-    assert.deepStrictEqual(ix.set(3)(['1']), ['1'])
-    assert.deepStrictEqual(ix.set(3)(['1', '2']), ['1', '3'])
+    assert.deepStrictEqual(ix.replace(3)([]), [])
+    assert.deepStrictEqual(ix.replace(3)(['1']), ['1'])
+    assert.deepStrictEqual(ix.replace(3)(['1', '2']), ['1', '3'])
   })
 
   it('fromAt', () => {
@@ -27,7 +27,7 @@ describe('Index', () => {
     assert.deepStrictEqual(ix.getOption({}), O.none)
     assert.deepStrictEqual(ix.getOption({ a: 1 }), O.some(1))
 
-    assert.deepStrictEqual(ix.set(2)({}), {})
-    assert.deepStrictEqual(ix.set(2)({ a: 1 }), { a: 2 })
+    assert.deepStrictEqual(ix.replace(2)({}), {})
+    assert.deepStrictEqual(ix.replace(2)({ a: 1 }), { a: 2 })
   })
 })

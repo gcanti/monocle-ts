@@ -136,15 +136,15 @@ describe('Prism', () => {
     const sa = pipe(_.id<S>(), _.some)
     const ab: Optional<string, string> = {
       getOption: (s) => (s.length > 0 ? O.some(s[0]) : O.none),
-      set: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
+      replace: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
     }
     const sb = pipe(sa, _.composeOptional(ab))
     assert.deepStrictEqual(sb.getOption(O.none), O.none)
     assert.deepStrictEqual(sb.getOption(O.some('')), O.none)
     assert.deepStrictEqual(sb.getOption(O.some('ab')), O.some('a'))
-    assert.deepStrictEqual(sb.set('c')(O.none), O.none)
-    assert.deepStrictEqual(sb.set('c')(O.some('')), O.some(''))
-    assert.deepStrictEqual(sb.set('c')(O.some('ab')), O.some('cb'))
+    assert.deepStrictEqual(sb.replace('c')(O.none), O.none)
+    assert.deepStrictEqual(sb.replace('c')(O.some('')), O.some(''))
+    assert.deepStrictEqual(sb.replace('c')(O.some('ab')), O.some('cb'))
   })
 
   it('right', () => {
@@ -167,9 +167,9 @@ describe('Prism', () => {
     type S = Readonly<Record<string, number>>
     const sa = pipe(_.id<S>(), _.atKey('a'))
     assert.deepStrictEqual(sa.getOption({ a: 1 }), O.some(O.some(1)))
-    assert.deepStrictEqual(sa.set(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
-    assert.deepStrictEqual(sa.set(O.some(1))({ b: 2 }), { a: 1, b: 2 })
-    assert.deepStrictEqual(sa.set(O.none)({ a: 1, b: 2 }), { b: 2 })
+    assert.deepStrictEqual(sa.replace(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
+    assert.deepStrictEqual(sa.replace(O.some(1))({ b: 2 }), { a: 1, b: 2 })
+    assert.deepStrictEqual(sa.replace(O.none)({ a: 1, b: 2 }), { b: 2 })
   })
 
   it('filter', () => {
@@ -197,11 +197,11 @@ describe('Prism', () => {
     assert.deepStrictEqual(sa.getOption(O.some([])), O.none)
     assert.deepStrictEqual(sa.getOption(O.some([-1, -2, -3])), O.none)
     assert.deepStrictEqual(sa.getOption(O.some([-1, 2, -3])), O.some(2))
-    assert.deepStrictEqual(sa.set(3)(O.none), O.none)
-    assert.deepStrictEqual(sa.set(3)(O.some([])), O.some([]))
-    assert.deepStrictEqual(sa.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3]))
-    assert.deepStrictEqual(sa.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3]))
-    assert.deepStrictEqual(sa.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4]))
+    assert.deepStrictEqual(sa.replace(3)(O.none), O.none)
+    assert.deepStrictEqual(sa.replace(3)(O.some([])), O.some([]))
+    assert.deepStrictEqual(sa.replace(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3]))
+    assert.deepStrictEqual(sa.replace(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3]))
+    assert.deepStrictEqual(sa.replace(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4]))
   })
 
   it('traverse', () => {

@@ -360,7 +360,7 @@ Added in v3.0.0
 ```ts
 export interface Optional<S, A> {
   readonly getOption: (s: S) => Option<A>
-  readonly set: (a: A) => (s: S) => S
+  readonly replace: (a: A) => (s: S) => S
 }
 ```
 

@@ -57,7 +57,7 @@ describe('Lens', () => {
     assert.deepStrictEqual(sa.getOption(s), O.some(1))
     assert.deepStrictEqual(sa.getOption({}), O.none)
     // should return the same reference
-    assert.strictEqual(sa.set(1)(s), s)
+    assert.strictEqual(sa.replace(1)(s), s)
   })
 
   it('modify', () => {
@@ -126,10 +126,10 @@ describe('Lens', () => {
     const full: S = { a: [1, 2] }
     assert.deepStrictEqual(sa.getOption(empty), O.none)
     assert.deepStrictEqual(sa.getOption(full), O.some(1))
-    assert.deepStrictEqual(sa.set(2)(full), { a: [2, 2] })
+    assert.deepStrictEqual(sa.replace(2)(full), { a: [2, 2] })
     // should return the same reference
-    assert.strictEqual(sa.set(2)(empty), empty)
-    assert.strictEqual(sa.set(1)(full), full)
+    assert.strictEqual(sa.replace(2)(empty), empty)
+    assert.strictEqual(sa.replace(1)(full), full)
   })
 
   it('key', () => {
@@ -141,10 +141,10 @@ describe('Lens', () => {
     const full: S = { a: { k: 1, j: 2 } }
     assert.deepStrictEqual(sa.getOption(empty), O.none)
     assert.deepStrictEqual(sa.getOption(full), O.some(1))
-    assert.deepStrictEqual(sa.set(2)(full), { a: { k: 2, j: 2 } })
+    assert.deepStrictEqual(sa.replace(2)(full), { a: { k: 2, j: 2 } })
     // should return the same reference
-    assert.strictEqual(sa.set(2)(empty), empty)
-    assert.strictEqual(sa.set(1)(full), full)
+    assert.strictEqual(sa.replace(2)(empty), empty)
+    assert.strictEqual(sa.replace(1)(full), full)
   })
 
   it('traverse', () => {
@@ -178,13 +178,13 @@ describe('Lens', () => {
     const sa = pipe(_.id<S>(), _.prop('a'))
     const ab: Optional<string, string> = {
       getOption: (s) => (s.length > 0 ? O.some(s[0]) : O.none),
-      set: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
+      replace: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
     }
     const sb = pipe(sa, _.composeOptional(ab))
     assert.deepStrictEqual(sb.getOption({ a: '' }), O.none)
     assert.deepStrictEqual(sb.getOption({ a: 'ab' }), O.some('a'))
-    assert.deepStrictEqual(sb.set('c')({ a: '' }), { a: '' })
-    assert.deepStrictEqual(sb.set('c')({ a: 'ab' }), { a: 'cb' })
+    assert.deepStrictEqual(sb.replace('c')({ a: '' }), { a: '' })
+    assert.deepStrictEqual(sb.replace('c')({ a: 'ab' }), { a: 'cb' })
   })
 
   it('atKey', () => {
@@ -207,8 +207,8 @@ describe('Lens', () => {
     )
     assert.deepStrictEqual(sa.getOption({ a: 1 }), O.some(1))
     assert.deepStrictEqual(sa.getOption({ a: -1 }), O.none)
-    assert.deepStrictEqual(sa.set(2)({ a: 1 }), { a: 2 })
-    assert.deepStrictEqual(sa.set(2)({ a: -1 }), { a: -1 })
+    assert.deepStrictEqual(sa.replace(2)({ a: 1 }), { a: 2 })
+    assert.deepStrictEqual(sa.replace(2)({ a: -1 }), { a: -1 })
   })
 
   it('findFirst', () => {
@@ -220,13 +220,13 @@ describe('Lens', () => {
     assert.deepStrictEqual(sa.getOption([]), O.none)
     assert.deepStrictEqual(sa.getOption([-1, -2, -3]), O.none)
     assert.deepStrictEqual(sa.getOption([-1, 2, -3]), O.some(2))
-    assert.deepStrictEqual(sa.set(3)([]), [])
-    assert.deepStrictEqual(sa.set(3)([-1, -2, -3]), [-1, -2, -3])
-    assert.deepStrictEqual(sa.set(3)([-1, 2, -3]), [-1, 3, -3])
-    assert.deepStrictEqual(sa.set(4)([-1, -2, 3]), [-1, -2, 4])
+    assert.deepStrictEqual(sa.replace(3)([]), [])
+    assert.deepStrictEqual(sa.replace(3)([-1, -2, -3]), [-1, -2, -3])
+    assert.deepStrictEqual(sa.replace(3)([-1, 2, -3]), [-1, 3, -3])
+    assert.deepStrictEqual(sa.replace(4)([-1, -2, 3]), [-1, -2, 4])
     // should return the same reference if nothing changed
     const as: ReadonlyArray<number> = [-1, 2, -3]
-    assert.strictEqual(sa.set(2)(as), as)
+    assert.strictEqual(sa.replace(2)(as), as)
   })
 
   it('modifyF', () => {

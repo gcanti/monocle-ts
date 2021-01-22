@@ -24,7 +24,7 @@ describe('Optional', () => {
       )
       assert.deepStrictEqual(sa.getOption(O.none), O.none)
       assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some('1'))
-      assert.deepStrictEqual(sa.set('2')(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 2, c: true }))
+      assert.deepStrictEqual(sa.replace('2')(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 2, c: true }))
     })
   })
 
@@ -77,9 +77,9 @@ describe('Optional', () => {
     type S = Readonly<Record<string, number>>
     const sa = pipe(_.id<S>(), _.atKey('a'))
     assert.deepStrictEqual(sa.getOption({ a: 1 }), O.some(O.some(1)))
-    assert.deepStrictEqual(sa.set(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
-    assert.deepStrictEqual(sa.set(O.some(1))({ b: 2 }), { a: 1, b: 2 })
-    assert.deepStrictEqual(sa.set(O.none)({ a: 1, b: 2 }), { b: 2 })
+    assert.deepStrictEqual(sa.replace(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
+    assert.deepStrictEqual(sa.replace(O.some(1))({ b: 2 }), { a: 1, b: 2 })
+    assert.deepStrictEqual(sa.replace(O.none)({ a: 1, b: 2 }), { b: 2 })
   })
 
   it('asTraversal', () => {
@@ -106,10 +106,10 @@ describe('Optional', () => {
     assert.deepStrictEqual(sa.getOption(O.some({ a: 1 })), O.some(1))
     assert.deepStrictEqual(sa.getOption(O.some({ a: -1 })), O.none)
     assert.deepStrictEqual(sa.getOption(O.none), O.none)
-    assert.deepStrictEqual(sa.set(2)(O.none), O.none)
-    assert.deepStrictEqual(sa.set(2)(O.some({ a: 1 })), O.some({ a: 2 }))
-    assert.deepStrictEqual(sa.set(-1)(O.some({ a: 1 })), O.some({ a: -1 }))
-    assert.deepStrictEqual(sa.set(-1)(O.some({ a: -2 })), O.some({ a: -2 }))
+    assert.deepStrictEqual(sa.replace(2)(O.none), O.none)
+    assert.deepStrictEqual(sa.replace(2)(O.some({ a: 1 })), O.some({ a: 2 }))
+    assert.deepStrictEqual(sa.replace(-1)(O.some({ a: 1 })), O.some({ a: -1 }))
+    assert.deepStrictEqual(sa.replace(-1)(O.some({ a: -2 })), O.some({ a: -2 }))
   })
 
   it('findFirst', () => {
@@ -124,11 +124,11 @@ describe('Optional', () => {
     assert.deepStrictEqual(sa.getOption(O.some({ a: [] })), O.none)
     assert.deepStrictEqual(sa.getOption(O.some({ a: [-1, -2, -3] })), O.none)
     assert.deepStrictEqual(sa.getOption(O.some({ a: [-1, 2, -3] })), O.some(2))
-    assert.deepStrictEqual(sa.set(3)(O.none), O.none)
-    assert.deepStrictEqual(sa.set(3)(O.some({ a: [] })), O.some({ a: [] }))
-    assert.deepStrictEqual(sa.set(3)(O.some({ a: [-1, -2, -3] })), O.some({ a: [-1, -2, -3] }))
-    assert.deepStrictEqual(sa.set(3)(O.some({ a: [-1, 2, -3] })), O.some({ a: [-1, 3, -3] }))
-    assert.deepStrictEqual(sa.set(4)(O.some({ a: [-1, -2, 3] })), O.some({ a: [-1, -2, 4] }))
+    assert.deepStrictEqual(sa.replace(3)(O.none), O.none)
+    assert.deepStrictEqual(sa.replace(3)(O.some({ a: [] })), O.some({ a: [] }))
+    assert.deepStrictEqual(sa.replace(3)(O.some({ a: [-1, -2, -3] })), O.some({ a: [-1, -2, -3] }))
+    assert.deepStrictEqual(sa.replace(3)(O.some({ a: [-1, 2, -3] })), O.some({ a: [-1, 3, -3] }))
+    assert.deepStrictEqual(sa.replace(4)(O.some({ a: [-1, -2, 3] })), O.some({ a: [-1, -2, 4] }))
   })
 
   it('traverse', () => {
@@ -149,9 +149,9 @@ describe('Optional', () => {
     assert.deepStrictEqual(sa.getOption({}), O.none)
     assert.deepStrictEqual(sa.getOption({ a: undefined }), O.none)
     assert.deepStrictEqual(sa.getOption({ a: 1 }), O.some(1))
-    assert.deepStrictEqual(sa.set(2)({}), {})
-    assert.deepStrictEqual(sa.set(2)({ a: undefined }), { a: undefined })
-    assert.deepStrictEqual(sa.set(2)({ a: 1 }), { a: 2 })
+    assert.deepStrictEqual(sa.replace(2)({}), {})
+    assert.deepStrictEqual(sa.replace(2)({ a: undefined }), { a: undefined })
+    assert.deepStrictEqual(sa.replace(2)({ a: 1 }), { a: 2 })
   })
 
   it('modifyF', () => {

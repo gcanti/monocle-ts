@@ -36,7 +36,7 @@ import Option = O.Option
  */
 export interface Optional<S, A> {
   readonly getOption: (s: S) => Option<A>
-  readonly set: (a: A) => (s: S) => S
+  readonly replace: (a: A) => (s: S) => S
 }
 
 // -------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ export interface Optional<S, A> {
  */
 export const id = <S>(): Optional<S, S> => ({
   getOption: O.some,
-  set: constant
+  replace: constant
 })
 
 // -------------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ export function modifyF<F>(
         () => F.of(s),
         flow(
           f,
-          F.map((a) => sa.set(a)(s))
+          F.map((a) => sa.replace(a)(s))
         )
       )
     )
@@ -266,7 +266,7 @@ export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Optional<S, Reado
  */
 export const imap: Invariant2<URI>['imap'] = (f, g) => (ea) => ({
   getOption: flow(ea.getOption, O.map(f)),
-  set: flow(g, ea.set)
+  replace: flow(g, ea.replace)
 })
 
 // -------------------------------------------------------------------------------------

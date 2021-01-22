@@ -30,7 +30,7 @@ export const isoAsLens = <S, A>(sa: Iso<S, A>): Lens<S, A> => ({
 /** @internal */
 export const isoAsOptional = <S, A>(sa: Iso<S, A>): Optional<S, A> => ({
   getOption: flow(sa.get, O.some),
-  set: flow(sa.reverseGet, constant)
+  replace: flow(sa.reverseGet, constant)
 })
 
 // -------------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ export const isoAsOptional = <S, A>(sa: Iso<S, A>): Optional<S, A> => ({
 /** @internal */
 export const lensAsOptional = <S, A>(sa: Lens<S, A>): Optional<S, A> => ({
   getOption: flow(sa.get, O.some),
-  set: sa.set
+  replace: sa.set
 })
 
 /** @internal */
@@ -126,7 +126,7 @@ export const lensComponent = <A extends ReadonlyArray<unknown>, P extends keyof 
 /** @internal */
 export const prismAsOptional = <S, A>(sa: Prism<S, A>): Optional<S, A> => ({
   getOption: sa.getOption,
-  set: (a) => prismSet(a)(sa)
+  replace: (a) => prismSet(a)(sa)
 })
 
 /** @internal */
@@ -218,7 +218,7 @@ export const optionalAsTraversal = <S, A>(sa: Optional<S, A>): Traversal<S, A> =
         (a) =>
           pipe(
             f(a),
-            F.map((a) => sa.set(a)(s))
+            F.map((a) => sa.replace(a)(s))
           )
       )
     )
@@ -230,7 +230,7 @@ export const optionalModifyOption = <A>(f: (a: A) => A) => <S>(optional: Optiona
     optional.getOption(s),
     O.map((a) => {
       const n = f(a)
-      return n === a ? s : optional.set(n)(s)
+      return n === a ? s : optional.replace(n)(s)
     })
   )
 
@@ -247,13 +247,13 @@ export const optionalModify = <A>(f: (a: A) => A) => <S>(optional: Optional<S, A
 /** @internal */
 export const optionalComposeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>): Optional<S, B> => ({
   getOption: flow(sa.getOption, O.chain(ab.getOption)),
-  set: (b) => optionalModify(ab.set(b))(sa)
+  replace: (b) => optionalModify(ab.replace(b))(sa)
 })
 
 /** @internal */
 export const findFirst = <A>(predicate: Predicate<A>): Optional<ReadonlyArray<A>, A> => ({
   getOption: A.findFirst(predicate),
-  set: (a) => (s) =>
+  replace: (a) => (s) =>
     pipe(
       A.findIndex(predicate)(s),
       O.fold(
@@ -301,7 +301,7 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 export const indexReadonlyArray = <A = never>(): Index<ReadonlyArray<A>, number, A> => ({
   index: (i) => ({
     getOption: A.lookup(i),
-    set: (a) => (as) =>
+    replace: (a) => (as) =>
       pipe(
         A.updateAt(i, a)(as),
         O.getOrElse(() => as)
@@ -314,7 +314,7 @@ export function indexReadonlyRecord<A = never>(): Index<Readonly<Record<string, 
   return {
     index: (k) => ({
       getOption: R.lookup(k),
-      set: (a) => (r) => {
+      replace: (a) => (r) => {
         if (r[k] === a || O.isNone(R.lookup(k)(r))) {
           return r
         }
