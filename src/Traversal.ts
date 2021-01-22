@@ -239,17 +239,11 @@ export const getAll = <S>(s: S) => <A>(sa: Traversal<S, A>): ReadonlyArray<A> =>
  * @category instances
  * @since 3.0.0
  */
-export const URI = 'monocle-ts/Traversal'
-
-/**
- * @category instances
- * @since 3.0.0
- */
-export type URI = typeof URI
+export type URI = 'monocle-ts/Traversal'
 
 declare module 'fp-ts/HKT' {
   interface URItoKind2<E, A> {
-    readonly [URI]: Traversal<E, A>
+    readonly 'monocle-ts/Traversal': Traversal<E, A>
   }
 }
 
@@ -258,7 +252,6 @@ declare module 'fp-ts/HKT' {
  * @since 3.0.0
  */
 export const Category: Category2<URI> = {
-  URI,
   compose,
   id
 }

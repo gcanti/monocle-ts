@@ -36,7 +36,6 @@ Added in v3.0.0
 - [instances](#instances)
   - [Category](#category)
   - [Invariant](#invariant-1)
-  - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
 - [model](#model)
   - [Iso (interface)](#iso-interface)
@@ -175,22 +174,12 @@ export declare const Invariant: Invariant2<'monocle-ts/Iso'>
 
 Added in v3.0.0
 
-## URI
-
-**Signature**
-
-```ts
-export declare const URI: 'monocle-ts/Iso'
-```
-
-Added in v3.0.0
-
 ## URI (type alias)
 
 **Signature**
 
 ```ts
-export type URI = typeof URI
+export type URI = 'monocle-ts/Iso'
 ```
 
 Added in v3.0.0

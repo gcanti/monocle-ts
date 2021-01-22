@@ -43,7 +43,6 @@ Added in v3.0.0
   - [id](#id)
 - [instances](#instances)
   - [Category](#category)
-  - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
 - [model](#model)
   - [ModifyF (interface)](#modifyf-interface)
@@ -304,22 +303,12 @@ export declare const Category: Category2<'monocle-ts/Traversal'>
 
 Added in v3.0.0
 
-## URI
-
-**Signature**
-
-```ts
-export declare const URI: 'monocle-ts/Traversal'
-```
-
-Added in v3.0.0
-
 ## URI (type alias)
 
 **Signature**
 
 ```ts
-export type URI = typeof URI
+export type URI = 'monocle-ts/Traversal'
 ```
 
 Added in v3.0.0

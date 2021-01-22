@@ -244,17 +244,11 @@ export const imap: Invariant2<URI>['imap'] = (f, g) => (ea) => ({
  * @category instances
  * @since 3.0.0
  */
-export const URI = 'monocle-ts/Optional'
-
-/**
- * @category instances
- * @since 3.0.0
- */
-export type URI = typeof URI
+export type URI = 'monocle-ts/Optional'
 
 declare module 'fp-ts/HKT' {
   interface URItoKind2<E, A> {
-    readonly [URI]: Optional<E, A>
+    readonly 'monocle-ts/Optional': Optional<E, A>
   }
 }
 
@@ -263,7 +257,6 @@ declare module 'fp-ts/HKT' {
  * @since 3.0.0
  */
 export const Invariant: Invariant2<URI> = {
-  URI,
   imap
 }
 
@@ -272,7 +265,6 @@ export const Invariant: Invariant2<URI> = {
  * @since 3.0.0
  */
 export const Category: Category2<URI> = {
-  URI,
   compose,
   id
 }

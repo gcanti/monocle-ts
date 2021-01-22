@@ -51,7 +51,6 @@ Added in v3.0.0
 - [instances](#instances)
   - [Category](#category)
   - [Invariant](#invariant-1)
-  - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
 - [model](#model)
   - [Prism (interface)](#prism-interface)
@@ -116,7 +115,10 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const findFirst: <A>(predicate: Predicate<A>) => <S>(sa: Prism<S, readonly A[]>) => Optional<S, A>
+export declare function findFirst<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, B>
+export declare function findFirst<A>(predicate: Predicate<A>): <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A>
 ```
 
 Added in v3.0.0
@@ -376,22 +378,12 @@ export declare const Invariant: Invariant2<'monocle-ts/Prism'>
 
 Added in v3.0.0
 
-## URI
-
-**Signature**
-
-```ts
-export declare const URI: 'monocle-ts/Prism'
-```
-
-Added in v3.0.0
-
 ## URI (type alias)
 
 **Signature**
 
 ```ts
-export type URI = typeof URI
+export type URI = 'monocle-ts/Prism'
 ```
 
 Added in v3.0.0
