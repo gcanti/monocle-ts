@@ -217,4 +217,14 @@ describe('Prism', () => {
     assert.deepStrictEqual(sa.getOption(O.some(1)), O.some(1))
     assert.deepStrictEqual(sa.reverseGet(1), O.some(1))
   })
+
+  it('modifyF', () => {
+    const f = pipe(
+      value,
+      _.modifyF(O.Applicative)((n) => (n > 0 ? O.some(n * 2) : O.none))
+    )
+    assert.deepStrictEqual(f(node(1, leaf, leaf)), O.some(node(2, leaf, leaf)))
+    assert.deepStrictEqual(f(leaf), O.some(leaf))
+    assert.deepStrictEqual(f(node(-1, leaf, leaf)), O.none)
+  })
 })

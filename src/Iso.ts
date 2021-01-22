@@ -16,8 +16,9 @@
  */
 import { Applicative } from 'fp-ts/lib/Applicative'
 import { Category2 } from 'fp-ts/lib/Category'
-import { flow, identity } from 'fp-ts/lib/function'
-import { HKT } from 'fp-ts/lib/HKT'
+import { flow, identity, pipe } from 'fp-ts/lib/function'
+import { Functor, Functor1, Functor2, Functor3 } from 'fp-ts/lib/Functor'
+import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
 import * as O from 'fp-ts/lib/Option'
 import * as _ from './internal'
@@ -126,6 +127,24 @@ export const reverse = <S, A>(sa: Iso<S, A>): Iso<A, S> => ({
  * @since 2.3.0
  */
 export const modify = <A>(f: (a: A) => A) => <S>(sa: Iso<S, A>) => (s: S): S => sa.reverseGet(f(sa.get(s)))
+
+/**
+ * @category combinators
+ * @since 2.3.5
+ */
+export function modifyF<F extends URIS3>(
+  F: Functor3<F>
+): <A, R, E>(f: (a: A) => Kind3<F, R, E, A>) => <S>(sa: Iso<S, A>) => (s: S) => Kind3<F, R, E, S>
+export function modifyF<F extends URIS2>(
+  F: Functor2<F>
+): <A, E>(f: (a: A) => Kind2<F, E, A>) => <S>(sa: Iso<S, A>) => (s: S) => Kind2<F, E, S>
+export function modifyF<F extends URIS>(
+  F: Functor1<F>
+): <A>(f: (a: A) => Kind<F, A>) => <S>(sa: Iso<S, A>) => (s: S) => Kind<F, S>
+export function modifyF<F>(F: Functor<F>): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Iso<S, A>) => (s: S) => HKT<F, S>
+export function modifyF<F>(F: Functor<F>): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Iso<S, A>) => (s: S) => HKT<F, S> {
+  return (f) => (sa) => (s) => pipe(sa.get(s), f, (fa) => F.map(fa, sa.reverseGet))
+}
 
 // -------------------------------------------------------------------------------------
 // pipeables

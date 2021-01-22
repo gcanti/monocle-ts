@@ -13,6 +13,15 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 2.3.5
+
+- **Experimental**
+  - add `modifyF`, closes #149 (@gcanti)
+    - `Iso`
+    - `Lens`
+    - `Prism`
+    - `Optional`
+
 # 2.3.4
 
 - **Experimental**

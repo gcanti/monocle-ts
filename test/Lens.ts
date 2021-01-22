@@ -224,4 +224,17 @@ describe('Lens', () => {
     assert.deepStrictEqual(sa.set(3)([-1, 2, -3]), [-1, 3, -3])
     assert.deepStrictEqual(sa.set(4)([-1, -2, 3]), [-1, -2, 4])
   })
+
+  it('modifyF', () => {
+    interface S {
+      readonly a: number
+    }
+    const sa: _.Lens<S, number> = pipe(_.id<S>(), _.prop('a'))
+    const f = pipe(
+      sa,
+      _.modifyF(O.Functor)((n) => (n > 0 ? O.some(n * 2) : O.none))
+    )
+    assert.deepStrictEqual(f({ a: 1 }), O.some({ a: 2 }))
+    assert.deepStrictEqual(f({ a: -1 }), O.none)
+  })
 })
