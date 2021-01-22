@@ -63,4 +63,13 @@ describe('Iso', () => {
     const sa = pipe(double, _.asTraversal)
     assert.deepStrictEqual(sa.modifyF(Id.Applicative)((n) => n - 1)(3), 2.5)
   })
+
+  it('modifyF', () => {
+    const f = pipe(
+      double,
+      _.modifyF(O.Functor)((n) => (n > 0 ? O.some(n * 2) : O.none))
+    )
+    assert.deepStrictEqual(f(1), O.some(2))
+    assert.deepStrictEqual(f(-1), O.none)
+  })
 })

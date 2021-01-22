@@ -228,4 +228,17 @@ describe('Lens', () => {
     const as: ReadonlyArray<number> = [-1, 2, -3]
     assert.strictEqual(sa.set(2)(as), as)
   })
+
+  it('modifyF', () => {
+    interface S {
+      readonly a: number
+    }
+    const sa: _.Lens<S, number> = pipe(_.id<S>(), _.prop('a'))
+    const f = pipe(
+      sa,
+      _.modifyF(O.Functor)((n) => (n > 0 ? O.some(n * 2) : O.none))
+    )
+    assert.deepStrictEqual(f({ a: 1 }), O.some({ a: 2 }))
+    assert.deepStrictEqual(f({ a: -1 }), O.none)
+  })
 })

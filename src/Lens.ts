@@ -15,8 +15,9 @@
 import { Category2 } from 'fp-ts/Category'
 import { Either } from 'fp-ts/Either'
 import { flow, pipe, Predicate, Refinement } from 'fp-ts/function'
-import { Kind, URIS } from 'fp-ts/HKT'
+import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/HKT'
 import { Invariant2 } from 'fp-ts/Invariant'
+import { Functor, Functor1, Functor2, Functor3 } from 'fp-ts/lib/Functor'
 import { Option } from 'fp-ts/Option'
 import { Traversable1 } from 'fp-ts/Traversable'
 import * as _ from './internal'
@@ -108,6 +109,29 @@ export const modify = <A>(f: (a: A) => A) => <S>(sa: Lens<S, A>) => (s: S): S =>
   const o = sa.get(s)
   const n = f(o)
   return o === n ? s : sa.set(n)(s)
+}
+
+/**
+ * @category combinators
+ * @since 3.0.0
+ */
+export function modifyF<F extends URIS3>(
+  F: Functor3<F>
+): <A, R, E>(f: (a: A) => Kind3<F, R, E, A>) => <S>(sa: Lens<S, A>) => (s: S) => Kind3<F, R, E, S>
+export function modifyF<F extends URIS2>(
+  F: Functor2<F>
+): <A, E>(f: (a: A) => Kind2<F, E, A>) => <S>(sa: Lens<S, A>) => (s: S) => Kind2<F, E, S>
+export function modifyF<F extends URIS>(
+  F: Functor1<F>
+): <A>(f: (a: A) => Kind<F, A>) => <S>(sa: Lens<S, A>) => (s: S) => Kind<F, S>
+export function modifyF<F>(F: Functor<F>): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Lens<S, A>) => (s: S) => HKT<F, S>
+export function modifyF<F>(F: Functor<F>): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Lens<S, A>) => (s: S) => HKT<F, S> {
+  return (f) => (sa) => (s) =>
+    pipe(
+      sa.get(s),
+      f,
+      F.map((a) => sa.set(a)(s))
+    )
 }
 
 /**

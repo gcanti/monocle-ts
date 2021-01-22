@@ -35,6 +35,7 @@ Added in v3.0.0
   - [key](#key)
   - [left](#left)
   - [modify](#modify)
+  - [modifyF](#modifyf)
   - [prop](#prop)
   - [props](#props)
   - [right](#right)
@@ -176,6 +177,27 @@ Added in v3.0.0
 
 ```ts
 export declare const modify: <A>(f: (a: A) => A) => <S>(sa: Lens<S, A>) => (s: S) => S
+```
+
+Added in v3.0.0
+
+## modifyF
+
+**Signature**
+
+```ts
+export declare function modifyF<F extends URIS3>(
+  F: Functor3<F>
+): <A, R, E>(f: (a: A) => Kind3<F, R, E, A>) => <S>(sa: Lens<S, A>) => (s: S) => Kind3<F, R, E, S>
+export declare function modifyF<F extends URIS2>(
+  F: Functor2<F>
+): <A, E>(f: (a: A) => Kind2<F, E, A>) => <S>(sa: Lens<S, A>) => (s: S) => Kind2<F, E, S>
+export declare function modifyF<F extends URIS>(
+  F: Functor1<F>
+): <A>(f: (a: A) => Kind<F, A>) => <S>(sa: Lens<S, A>) => (s: S) => Kind<F, S>
+export declare function modifyF<F>(
+  F: Functor<F>
+): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Lens<S, A>) => (s: S) => HKT<F, S>
 ```
 
 Added in v3.0.0

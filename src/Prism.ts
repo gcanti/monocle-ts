@@ -11,8 +11,9 @@
 import { Category2 } from 'fp-ts/Category'
 import { Either } from 'fp-ts/Either'
 import { flow, identity, pipe, Predicate, Refinement } from 'fp-ts/function'
-import { Kind, URIS } from 'fp-ts/HKT'
+import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/HKT'
 import { Invariant2 } from 'fp-ts/Invariant'
+import { Applicative, Applicative1, Applicative2, Applicative3 } from 'fp-ts/lib/Applicative'
 import * as O from 'fp-ts/Option'
 import { Traversable1 } from 'fp-ts/Traversable'
 import * as _ from './internal'
@@ -131,6 +132,31 @@ export const modifyOption: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S)
  */
 export const modify: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismModify
 
+/**
+ * @category combinators
+ * @since 3.0.0
+ */
+export function modifyF<F extends URIS3>(
+  F: Applicative3<F>
+): <A, R, E>(f: (a: A) => Kind3<F, R, E, A>) => <S>(sa: Prism<S, A>) => (s: S) => Kind3<F, R, E, S>
+export function modifyF<F extends URIS2>(
+  F: Applicative2<F>
+): <A, E>(f: (a: A) => Kind2<F, E, A>) => <S>(sa: Prism<S, A>) => (s: S) => Kind2<F, E, S>
+export function modifyF<F extends URIS>(
+  F: Applicative1<F>
+): <A>(f: (a: A) => Kind<F, A>) => <S>(sa: Prism<S, A>) => (s: S) => Kind<F, S>
+export function modifyF<F>(
+  F: Applicative<F>
+): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Prism<S, A>) => (s: S) => HKT<F, S>
+export function modifyF<F>(
+  F: Applicative<F>
+): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Prism<S, A>) => (s: S) => HKT<F, S> {
+  return (f) => (sa) => (s) =>
+    pipe(
+      sa.getOption(s),
+      O.fold(() => F.of(s), flow(f, F.map(sa.reverseGet)))
+    )
+}
 /**
  * Return a `Prism` from a `Prism` focused on a nullable value.
  *

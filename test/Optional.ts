@@ -153,4 +153,15 @@ describe('Optional', () => {
     assert.deepStrictEqual(sa.set(2)({ a: undefined }), { a: undefined })
     assert.deepStrictEqual(sa.set(2)({ a: 1 }), { a: 2 })
   })
+
+  it('modifyF', () => {
+    const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
+    const f = pipe(
+      sa,
+      _.modifyF(O.Applicative)((n) => (n > 0 ? O.some(n * 2) : O.none))
+    )
+    assert.deepStrictEqual(f([]), O.some([]))
+    assert.deepStrictEqual(f([1, 2, 3]), O.some([2, 2, 3]))
+    assert.deepStrictEqual(f([-1, 2, 3]), O.none)
+  })
 })
