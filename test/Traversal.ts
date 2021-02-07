@@ -1,6 +1,6 @@
 import { pipe } from 'fp-ts/function'
 import * as Id from 'fp-ts/Identity'
-import { monoidSum } from 'fp-ts/Monoid'
+import * as N from 'fp-ts/number'
 import * as O from 'fp-ts/Option'
 import * as A from 'fp-ts/ReadonlyArray'
 import * as _ from '../src/Traversal'
@@ -108,7 +108,7 @@ describe('Traversal', () => {
 
   it('fold', () => {
     const sa = pipe(_.id<ReadonlyArray<number>>(), _.traverse(A.Traversable))
-    const f = pipe(sa, _.fold(monoidSum))
+    const f = pipe(sa, _.fold(N.MonoidSum))
     deepStrictEqual(f([1, 2, 3]), 6)
   })
 

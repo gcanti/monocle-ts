@@ -1,5 +1,5 @@
 import * as O from '../../src/Optional'
-import { pipe } from 'fp-ts/lib/function'
+import { pipe } from 'fp-ts/function'
 
 interface A {
   a: string
