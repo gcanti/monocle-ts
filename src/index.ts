@@ -396,10 +396,10 @@ export class Lens<S, A> {
    * const value = Lens.fromProp<Inner>()('value')
    * const lens = inner.compose(value)
    *
-   * assert.deepStrictEqual(lens.set(1)({})), { inner: { value: 1, foo: 'foo' } })
-   * assert.strictEqual(lens.get({})), 0)
-   * assert.deepStrictEqual(lens.set(1)({ inner: { value: 1, foo: 'bar' } })), { inner: { value: 1, foo: 'bar' } })
-   * assert.strictEqual(lens.get({ inner: { value: 1, foo: 'bar' } })), 1)
+   * assert.deepStrictEqual(lens.set(1)({}), { inner: { value: 1, foo: 'foo' } })
+   * assert.strictEqual(lens.get({}), 0)
+   * assert.deepStrictEqual(lens.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
+   * assert.strictEqual(lens.get({ inner: { value: 1, foo: 'bar' } }), 1)
    *
    * @since 1.0.0
    */

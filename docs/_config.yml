@@ -6,4 +6,4 @@ search_enabled: true
 # Aux links for the upper right navigation
 aux_links:
   'monocle-ts on GitHub':
-    - '//github.com/gcanti/monocle-ts'
+    - 'https://github.com/gcanti/monocle-ts'

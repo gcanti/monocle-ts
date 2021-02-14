@@ -358,7 +358,7 @@ get all the targets of a `Fold`
 **Signature**
 
 ```ts
-readonly getAll: (s: S) => A[]
+readonly getAll: (s: S) => Array<A>
 ```
 
 Added in v1.0.0
@@ -983,10 +983,10 @@ const inner = Lens.fromNullableProp<Outer>()('inner', { value: 0, foo: 'foo' })
 const value = Lens.fromProp<Inner>()('value')
 const lens = inner.compose(value)
 
-assert.deepStrictEqual(lens.set(1)({})), { inner: { value: 1, foo: 'foo' } })
-assert.strictEqual(lens.get({})), 0)
-assert.deepStrictEqual(lens.set(1)({ inner: { value: 1, foo: 'bar' } })), { inner: { value: 1, foo: 'bar' } })
-assert.strictEqual(lens.get({ inner: { value: 1, foo: 'bar' } })), 1)
+assert.deepStrictEqual(lens.set(1)({}), { inner: { value: 1, foo: 'foo' } })
+assert.strictEqual(lens.get({}), 0)
+assert.deepStrictEqual(lens.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
+assert.strictEqual(lens.get({ inner: { value: 1, foo: 'bar' } }), 1)
 ```
 
 Added in v1.0.0
