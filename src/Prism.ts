@@ -154,7 +154,7 @@ export function modifyF<F>(
   return (f) => (sa) => (s) =>
     pipe(
       sa.getOption(s),
-      O.fold(() => F.of(s), flow(f, F.map(sa.reverseGet)))
+      O.match(() => F.of(s), flow(f, F.map(sa.reverseGet)))
     )
 }
 /**

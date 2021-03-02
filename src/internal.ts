@@ -134,7 +134,7 @@ export const prismAsTraversal = <S, A>(sa: Prism<S, A>): Traversal<S, A> => ({
   modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
     pipe(
       sa.getOption(s),
-      O.fold(
+      O.match(
         () => F.of(s),
         (a) =>
           pipe(
@@ -213,7 +213,7 @@ export const optionalAsTraversal = <S, A>(sa: Optional<S, A>): Traversal<S, A> =
   modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
     pipe(
       sa.getOption(s),
-      O.fold(
+      O.match(
         () => F.of(s),
         (a) =>
           pipe(
@@ -256,7 +256,7 @@ export const findFirst = <A>(predicate: Predicate<A>): Optional<ReadonlyArray<A>
   replace: (a) => (s) =>
     pipe(
       A.findIndex(predicate)(s),
-      O.fold(
+      O.match(
         () => s,
         (i) => {
           if (s[i] === a) {
@@ -328,13 +328,20 @@ export function indexReadonlyRecord<A = never>(): Index<Readonly<Record<string, 
 // At
 // -------------------------------------------------------------------------------------
 
+const deleteAt = (k: string) => <A>(r: Readonly<Record<string, A>>): Readonly<Record<string, A>> =>
+  pipe(
+    r,
+    R.deleteAt(k),
+    O.getOrElse(() => r)
+  )
+
 /** @internal */
 export function atReadonlyRecord<A = never>(): At<Readonly<Record<string, A>>, string, O.Option<A>> {
   return {
     at: (key) => ({
       get: R.lookup(key),
-      set: O.fold(
-        () => R.deleteAt(key),
+      set: O.match(
+        () => deleteAt(key),
         (a) => R.upsertAt(key, a)
       )
     })

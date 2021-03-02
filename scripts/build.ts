@@ -1,5 +1,5 @@
 import * as path from 'path'
-import * as E from 'fp-ts/Either'
+import * as J from 'fp-ts/Json'
 import { pipe } from 'fp-ts/function'
 import * as RTE from 'fp-ts/ReaderTaskEither'
 import * as A from 'fp-ts/ReadonlyArray'
@@ -19,7 +19,7 @@ export function toError(e: unknown): Error {
 export const copyPackageJson: Build<void> = (C) =>
   pipe(
     C.readFile(PKG),
-    TE.chain((s) => TE.fromEither(E.parseJSON(s))),
+    TE.chain((s) => TE.fromEither(J.parse(s))),
     TE.mapLeft(toError),
     TE.map((v) => {
       const clone = Object.assign({}, v as any)

@@ -116,7 +116,7 @@ export function modifyF<F>(
   return (f) => (sa) => (s) =>
     pipe(
       sa.getOption(s),
-      O.fold(
+      O.match(
         () => F.of(s),
         flow(
           f,
