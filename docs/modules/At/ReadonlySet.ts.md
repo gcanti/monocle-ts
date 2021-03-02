@@ -24,7 +24,7 @@ Added in v2.2.0
 **Signature**
 
 ```ts
-export declare const atReadonlySet: <A = never>(E: Eq<A>) => At<any, A, boolean>
+export declare const atReadonlySet: <A = never>(E: Eq<A>) => At<ReadonlySet<A>, A, boolean>
 ```
 
 Added in v2.2.0
