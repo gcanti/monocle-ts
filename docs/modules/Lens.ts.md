@@ -13,9 +13,9 @@ an element inside of `S`.
 
 Laws:
 
-1. get(set(a)(s)) = a
-2. set(get(s))(s) = s
-3. set(a)(set(a)(s)) = set(a)(s)
+1. `get(set(a)(s)) = a`
+2. `set(get(s))(s) = s`
+3. `set(a)(set(a)(s)) = set(a)(s)`
 
 Added in v3.0.0
 
@@ -212,6 +212,25 @@ Return a `Lens` from a `Lens` and a prop.
 export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Lens<S, A>) => Lens<S, A[P]>
 ```
 
+**Example**
+
+```ts
+import { pipe } from 'fp-ts/function'
+import * as L from 'monocle-ts/Lens'
+
+type S = {
+  readonly a: string
+  readonly b: number
+}
+
+const lens = pipe(L.id<S>(), L.prop('a'))
+
+const s: S = { a: 'a', b: 1 }
+
+assert.deepStrictEqual(lens.get(s), 'a')
+assert.deepStrictEqual(lens.set('c')(s), { a: 'c', b: 1 })
+```
+
 Added in v3.0.0
 
 ## props
@@ -226,6 +245,26 @@ export declare const props: <A, P extends keyof A>(
   props_1: P,
   ...props_2: P[]
 ) => <S>(sa: Lens<S, A>) => Lens<S, { [K in P]: A[K] }>
+```
+
+**Example**
+
+```ts
+import { pipe } from 'fp-ts/function'
+import * as L from 'monocle-ts/Lens'
+
+type S = {
+  readonly a: string
+  readonly b: number
+  readonly c: boolean
+}
+
+const lens = pipe(L.id<S>(), L.props('a', 'b'))
+
+const s: S = { a: 'a', b: 1, c: true }
+
+assert.deepStrictEqual(lens.get(s), { a: 'a', b: 1 })
+assert.deepStrictEqual(lens.set({ a: 'c', b: 2 })(s), { a: 'c', b: 2, c: true })
 ```
 
 Added in v3.0.0
