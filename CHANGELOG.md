@@ -23,6 +23,7 @@ high state of flux, you're at risk of it changing without notice.
   - `Ix`
     - add `indexReadonlyRecord` (@gcanti)
     - add `indexReadonlyArray` (@gcanti)
+    - add `indexReadonlyMap` (@gcanti)
     - deprecate `indexRecord` (@gcanti)
     - deprecate `indexArray` (@gcanti)
   - `Optional`

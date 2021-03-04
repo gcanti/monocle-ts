@@ -7,12 +7,16 @@
  *
  * @since 2.3.0
  */
-import { Option } from 'fp-ts/lib/Option'
+import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { At } from './At'
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Optional } from './Optional'
+import * as RM from 'fp-ts/lib/ReadonlyMap'
+import { Eq } from 'fp-ts/lib/Eq'
+
+import Option = O.Option
 
 // -------------------------------------------------------------------------------------
 // model
@@ -59,6 +63,34 @@ export const indexReadonlyArray: <A = never>() => Index<ReadonlyArray<A>, number
  * @since 2.3.7
  */
 export const indexReadonlyRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A> = _.indexReadonlyRecord
+
+/**
+ * @category constructors
+ * @since 2.3.7
+ */
+export const indexReadonlyMap = <K>(E: Eq<K>) => <A = never>(): Index<ReadonlyMap<K, A>, K, A> => {
+  const lookupE = RM.lookup(E)
+  const insertAtE = RM.insertAt(E)
+  return {
+    index: (key) => {
+      const lookup = lookupE(key)
+      return {
+        getOption: lookup,
+        set: (next) => {
+          const insert = insertAtE(key, next)
+          return (s) =>
+            pipe(
+              lookup(s),
+              O.fold(
+                () => s,
+                (prev) => (next === prev ? s : insert(s))
+              )
+            )
+        }
+      }
+    }
+  }
+}
 
 // -------------------------------------------------------------------------------------
 // deprecated
