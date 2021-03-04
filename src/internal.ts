@@ -304,10 +304,10 @@ function indexMutableArray<A = never>(): Index<Array<A>, number, A> {
 }
 
 /** @internal */
-export const indexArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = indexMutableArray as any
+export const indexReadonlyArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = indexMutableArray as any
 
 /** @internal */
-export function indexRecord<A = never>(): Index<Readonly<Record<string, A>>, string, A> {
+export function indexReadonlyRecord<A = never>(): Index<Readonly<Record<string, A>>, string, A> {
   return {
     index: (k) => ({
       getOption: (r) => R.lookup(k, r),

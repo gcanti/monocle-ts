@@ -19,6 +19,11 @@ high state of flux, you're at risk of it changing without notice.
   - `At`
     - add `atReadonlyRecord` (@gcanti)
     - deprecate `atRecord` (@gcanti)
+  - `Ix`
+    - add `indexReadonlyRecord` (@gcanti)
+    - add `indexReadonlyArray` (@gcanti)
+    - deprecate `indexRecord` (@gcanti)
+    - deprecate `indexArray` (@gcanti)
   - `Optional`
     - add `composeLens` (@gcanti)
 
