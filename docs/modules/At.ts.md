@@ -21,6 +21,7 @@ Added in v2.3.0
 - [constructors](#constructors)
   - [atReadonlyMap](#atreadonlymap)
   - [atReadonlyRecord](#atreadonlyrecord)
+  - [atReadonlySet](#atreadonlyset)
   - [fromIso](#fromiso)
   - [~~atRecord~~](#atrecord)
 - [model](#model)
@@ -46,6 +47,16 @@ Added in v2.3.7
 
 ```ts
 export declare const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, string, O.Option<A>>
+```
+
+Added in v2.3.7
+
+## atReadonlySet
+
+**Signature**
+
+```ts
+export declare const atReadonlySet: <A>(E: Eq<A>) => At<ReadonlySet<A>, A, boolean>
 ```
 
 Added in v2.3.7

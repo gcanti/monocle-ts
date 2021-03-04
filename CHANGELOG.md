@@ -19,6 +19,7 @@ high state of flux, you're at risk of it changing without notice.
   - `At`
     - add `atReadonlyRecord` (@gcanti)
     - add `atReadonlyMap` (@gcanti)
+    - add `atReadonlySet` (@gcanti)
     - deprecate `atRecord` (@gcanti)
   - `Ix`
     - add `indexReadonlyRecord` (@gcanti)

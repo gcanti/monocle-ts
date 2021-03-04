@@ -45,4 +45,13 @@ describe('At', () => {
     ])
     assert.strictEqual(at.set(O.some(1))(x), x)
   })
+
+  it('atReadonlySet', () => {
+    const at = _.atReadonlySet(eqString).at('a')
+    assert.deepStrictEqual(at.get(new Set()), false)
+    assert.deepStrictEqual(at.get(new Set(['a'])), true)
+    assert.deepStrictEqual(at.set(true)(new Set()), new Set(['a']))
+    assert.deepStrictEqual(at.set(true)(new Set(['a', 'b'])), new Set(['a', 'b']))
+    assert.deepStrictEqual(at.set(false)(new Set(['a', 'b'])), new Set(['b']))
+  })
 })

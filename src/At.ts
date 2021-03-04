@@ -11,6 +11,7 @@ import { Eq } from 'fp-ts/lib/Eq'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as RM from 'fp-ts/lib/ReadonlyMap'
+import * as RS from 'fp-ts/lib/ReadonlySet'
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
@@ -65,6 +66,26 @@ export const atReadonlyMap = <K>(E: Eq<K>) => <A = never>(): At<ReadonlyMap<K, A
         (a) => insertAtE(key, a)
       )
     })
+  }
+}
+
+/**
+ * @category constructors
+ * @since 2.3.7
+ */
+export const atReadonlySet = <A>(E: Eq<A>): At<ReadonlySet<A>, A, boolean> => {
+  const elemE = RS.elem(E)
+  const insertE = RS.insert(E)
+  const removeE = RS.remove(E)
+  return {
+    at: (a) => {
+      const insert = insertE(a)
+      const remove = removeE(a)
+      return {
+        get: elemE(a),
+        set: (b) => (s) => (b ? insert(s) : remove(s))
+      }
+    }
   }
 }
 
