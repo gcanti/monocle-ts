@@ -50,12 +50,34 @@ export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: Index<S, I, A>): In
 
 /**
  * @category constructors
- * @since 2.3.2
+ * @since 2.3.7
  */
-export const indexArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = _.indexArray
+export const indexReadonlyArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = _.indexReadonlyArray
 
 /**
  * @category constructors
- * @since 2.3.2
+ * @since 2.3.7
  */
-export const indexRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A> = _.indexRecord
+export const indexReadonlyRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A> = _.indexReadonlyRecord
+
+// -------------------------------------------------------------------------------------
+// deprecated
+// -------------------------------------------------------------------------------------
+
+/**
+ * Use `indexReadonlyArray` instead.
+ *
+ * @category constructors
+ * @since 2.3.2
+ * @deprecated
+ */
+export const indexArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = _.indexReadonlyArray
+
+/**
+ * Use `indexReadonlyRecord` instead.
+ *
+ * @category constructors
+ * @since 2.3.2
+ * @deprecated
+ */
+export const indexRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A> = _.indexReadonlyRecord

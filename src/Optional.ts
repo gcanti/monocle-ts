@@ -198,7 +198,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * @since 2.3.0
  */
 export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): Optional<S, A> =>
-  pipe(sa, _.optionalComposeOptional(_.indexArray<A>().index(i)))
+  pipe(sa, _.optionalComposeOptional(_.indexReadonlyArray<A>().index(i)))
 
 /**
  * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key.
@@ -207,7 +207,7 @@ export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): O
  * @since 2.3.0
  */
 export const key = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>): Optional<S, A> =>
-  pipe(sa, _.optionalComposeOptional(_.indexRecord<A>().index(key)))
+  pipe(sa, _.optionalComposeOptional(_.indexReadonlyRecord<A>().index(key)))
 
 /**
  * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key.
