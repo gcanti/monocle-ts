@@ -10,8 +10,8 @@ A `Prism` is an optic used to select part of a sum type.
 
 Laws:
 
-1. pipe(getOption(s), fold(() => s, reverseGet)) = s
-2. getOption(reverseGet(a)) = some(a)
+1. `pipe(getOption(s), match(() => s, reverseGet)) = s`
+2. `getOption(reverseGet(a)) = some(a)`
 
 Added in v3.0.0
 

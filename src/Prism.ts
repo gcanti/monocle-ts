@@ -3,8 +3,8 @@
  *
  * Laws:
  *
- * 1. pipe(getOption(s), fold(() => s, reverseGet)) = s
- * 2. getOption(reverseGet(a)) = some(a)
+ * 1. `pipe(getOption(s), match(() => s, reverseGet)) = s`
+ * 2. `getOption(reverseGet(a)) = some(a)`
  *
  * @since 3.0.0
  */

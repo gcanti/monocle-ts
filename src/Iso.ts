@@ -3,8 +3,8 @@
  *
  * Laws:
  *
- * 1. reverseGet(get(s)) = s
- * 2. get(reversetGet(a)) = a
+ * 1. `reverseGet(get(s)) = s`
+ * 2. `get(reversetGet(a)) = a`
  *
  * @since 3.0.0
  */

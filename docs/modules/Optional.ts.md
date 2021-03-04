@@ -14,9 +14,9 @@ and `A` an optional element inside of `S`.
 
 Laws:
 
-1. pipe(getOption(s), fold(() => s, a => set(a)(s))) = s
-2. getOption(set(a)(s)) = pipe(getOption(s), map(\_ => a))
-3. set(a)(set(a)(s)) = set(a)(s)
+1. `pipe(getOption(s), match(() => s, a => replace(a)(s))) = s`
+2. `getOption(replace(a)(s)) = pipe(getOption(s), map(_ => a))`
+3. `replace(a)(replace(a)(s)) = replace(a)(s)`
 
 Added in v3.0.0
 

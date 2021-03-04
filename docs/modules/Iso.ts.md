@@ -10,8 +10,8 @@ An `Iso` is an optic which converts elements of type `S` into elements of type `
 
 Laws:
 
-1. reverseGet(get(s)) = s
-2. get(reversetGet(a)) = a
+1. `reverseGet(get(s)) = s`
+2. `get(reversetGet(a)) = a`
 
 Added in v3.0.0
 
