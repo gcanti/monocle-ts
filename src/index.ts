@@ -72,8 +72,8 @@ const update = <O, K extends keyof O, A extends O[K]>(o: O, k: K, a: A): O => {
 
 /**
  * Laws:
- * 1. reverseGet(get(s)) = s
- * 2. get(reversetGet(a)) = a
+ * 1. `reverseGet(get(s)) = s`
+ * 2. `get(reversetGet(a)) = a`
  *
  * @category constructor
  * @since 1.0.0
@@ -284,9 +284,9 @@ export interface LensFromPath<S> {
 
 /**
  * Laws:
- * 1. get(set(a)(s)) = a
- * 2. set(get(s))(s) = s
- * 3. set(a)(set(a)(s)) = set(a)(s)
+ * 1. `get(set(a)(s)) = a`
+ * 2. `set(get(s))(s) = s`
+ * 3. `set(a)(set(a)(s)) = set(a)(s)`
  *
  * @category constructor
  * @since 1.0.0
@@ -557,8 +557,8 @@ export class Lens<S, A> {
 
 /**
  * Laws:
- * 1. pipe(getOption(s), fold(() => s, reverseGet)) = s
- * 2. getOption(reverseGet(a)) = some(a)
+ * 1. `pipe(getOption(s), fold(() => s, reverseGet)) = s`
+ * 2. `getOption(reverseGet(a)) = some(a)`
  *
  * @category constructor
  * @since 1.0.0
@@ -783,9 +783,9 @@ export interface OptionalFromPath<S> {
 
 /**
  * Laws:
- * 1. pipe(getOption(s), fold(() => s, a => set(a)(s))) = s
- * 2. getOption(set(a)(s)) = pipe(getOption(s), map(_ => a))
- * 3. set(a)(set(a)(s)) = set(a)(s)
+ * 1. `pipe(getOption(s), fold(() => s, a => set(a)(s))) = s`
+ * 2. `getOption(set(a)(s)) = pipe(getOption(s), map(_ => a))`
+ * 3. `set(a)(set(a)(s)) = set(a)(s)`
  *
  * @category constructor
  * @since 1.0.0
