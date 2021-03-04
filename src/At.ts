@@ -54,15 +54,15 @@ export const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, 
  * @since 2.3.7
  */
 export const atReadonlyMap = <K>(E: Eq<K>) => <A = never>(): At<ReadonlyMap<K, A>, K, Option<A>> => {
-  const lookup = RM.lookup(E)
-  const deleteAt = RM.deleteAt(E)
-  const insertAt = RM.insertAt(E)
+  const lookupE = RM.lookup(E)
+  const deleteAtE = RM.deleteAt(E)
+  const insertAtE = RM.insertAt(E)
   return {
     at: (key) => ({
-      get: lookup(key),
+      get: lookupE(key),
       set: O.fold(
-        () => deleteAt(key),
-        (a) => insertAt(key, a)
+        () => deleteAtE(key),
+        (a) => insertAtE(key, a)
       )
     })
   }

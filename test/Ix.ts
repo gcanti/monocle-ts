@@ -1,14 +1,14 @@
 import * as assert from 'assert'
-import * as _ from '../src/At'
+import * as _ from '../src/Ix'
 import * as O from 'fp-ts/lib/Option'
 import { eqString } from 'fp-ts/lib/Eq'
 
-describe('At', () => {
-  it('atReadonlyMap', () => {
-    const at = _.atReadonlyMap(eqString)<number>().at('a')
-    assert.deepStrictEqual(at.get(new Map([])), O.none)
+describe('Ix', () => {
+  it('indexReadonlyMap', () => {
+    const index = _.indexReadonlyMap(eqString)<number>().index('a')
+    assert.deepStrictEqual(index.getOption(new Map([])), O.none)
     assert.deepStrictEqual(
-      at.get(
+      index.getOption(
         new Map([
           ['a', 1],
           ['b', 2]
@@ -16,18 +16,9 @@ describe('At', () => {
       ),
       O.some(1)
     )
-    assert.deepStrictEqual(at.set(O.none)(new Map()), new Map())
+    assert.deepStrictEqual(index.set(3)(new Map([['b', 2]])), new Map([['b', 2]]))
     assert.deepStrictEqual(
-      at.set(O.none)(
-        new Map([
-          ['a', 1],
-          ['b', 2]
-        ])
-      ),
-      new Map([['b', 2]])
-    )
-    assert.deepStrictEqual(
-      at.set(O.some(3))(
+      index.set(3)(
         new Map([
           ['a', 1],
           ['b', 2]
@@ -43,6 +34,6 @@ describe('At', () => {
       ['a', 1],
       ['b', 2]
     ])
-    assert.strictEqual(at.set(O.some(1))(x), x)
+    assert.strictEqual(index.set(1)(x), x)
   })
 })
