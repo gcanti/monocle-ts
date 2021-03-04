@@ -191,4 +191,10 @@ describe('Optional', () => {
     assert.deepStrictEqual(f([1, 2, 3]), O.some([2, 2, 3]))
     assert.deepStrictEqual(f([-1, 2, 3]), O.none)
   })
+
+  it('setOption', () => {
+    const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
+    assert.deepStrictEqual(pipe(sa, _.setOption(2))([]), O.none)
+    assert.deepStrictEqual(pipe(sa, _.setOption(2))([1, 3]), O.some([2, 3]))
+  })
 })
