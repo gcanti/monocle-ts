@@ -16,6 +16,9 @@ high state of flux, you're at risk of it changing without notice.
 # 2.3.7
 
 - **Experimental**
+  - `At`
+    - add `atReadonlyRecord` (@gcanti)
+    - deprecate `atRecord` (@gcanti)
   - `Optional`
     - add `composeLens` (@gcanti)
 

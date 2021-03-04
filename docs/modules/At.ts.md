@@ -19,8 +19,9 @@ Added in v2.3.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
-  - [atRecord](#atrecord)
+  - [atReadonlyRecord](#atreadonlyrecord)
   - [fromIso](#fromiso)
+  - [~~atRecord~~](#atrecord)
 - [model](#model)
   - [At (interface)](#at-interface)
 
@@ -28,15 +29,15 @@ Added in v2.3.0
 
 # constructors
 
-## atRecord
+## atReadonlyRecord
 
 **Signature**
 
 ```ts
-export declare const atRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>>
+export declare const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>>
 ```
 
-Added in v2.3.2
+Added in v2.3.7
 
 ## fromIso
 
@@ -49,6 +50,18 @@ export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>)
 ```
 
 Added in v2.3.0
+
+## ~~atRecord~~
+
+Use `atReadonlyRecord` instead.
+
+**Signature**
+
+```ts
+export declare const atRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>>
+```
+
+Added in v2.3.2
 
 # model
 

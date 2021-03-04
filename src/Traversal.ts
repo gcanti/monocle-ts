@@ -170,7 +170,7 @@ export const key = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<stri
  * @since 2.3.0
  */
 export const atKey = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>): Traversal<S, Option<A>> =>
-  pipe(sa, compose(_.lensAsTraversal(_.atRecord<A>().at(key))))
+  pipe(sa, compose(_.lensAsTraversal(_.atReadonlyRecord<A>().at(key))))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type
