@@ -28,6 +28,7 @@ high state of flux, you're at risk of it changing without notice.
     - deprecate `indexArray` (@gcanti)
   - `Optional`
     - add `composeLens` (@gcanti)
+    - add `composePrism` (@gcanti)
 
 # 2.3.6
 

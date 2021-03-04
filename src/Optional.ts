@@ -30,6 +30,7 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Lens } from './Lens'
+import { Prism } from './Prism'
 import { Traversal } from './Traversal'
 
 // -------------------------------------------------------------------------------------
@@ -93,6 +94,15 @@ export const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => O
  */
 export const composeLens = <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, A>): Optional<S, B> =>
   _.optionalComposeOptional(_.lensAsOptional(ab))(sa)
+
+/**
+ * Compose a `Optional` with a `Prism`.
+ *
+ * @category compositions
+ * @since 2.3.7
+ */
+export const composePrism = <A, B>(ab: Prism<A, B>) => <S>(sa: Optional<S, A>): Optional<S, B> =>
+  _.optionalComposeOptional(_.prismAsOptional(ab))(sa)
 
 // -------------------------------------------------------------------------------------
 // combinators

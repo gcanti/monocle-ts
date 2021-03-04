@@ -6,6 +6,7 @@ import * as Id from 'fp-ts/lib/Identity'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as T from '../src/Traversal'
 import * as L from '../src/Lens'
+import * as P from '../src/Prism'
 
 type S = O.Option<{
   a: string
@@ -49,6 +50,19 @@ describe('Optional', () => {
     assert.deepStrictEqual(sb.getOption(O.some({ a: 1 })), O.some(1))
     assert.deepStrictEqual(sb.set(2)(O.some({ a: 1 })), O.some({ a: 2 }))
     assert.deepStrictEqual(sb.set(2)(O.none), O.none)
+  })
+
+  it('composePrism', () => {
+    type S = O.Option<O.Option<number>>
+    const sa = pipe(_.id<S>(), _.some)
+    const ab = pipe(P.id<O.Option<number>>(), P.some)
+    const sb = pipe(sa, _.composePrism(ab))
+    assert.deepStrictEqual(sb.getOption(O.none), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
+    assert.deepStrictEqual(sb.set(2)(O.none), O.none)
+    assert.deepStrictEqual(sb.set(2)(O.some(O.none)), O.some(O.none))
+    assert.deepStrictEqual(sb.set(2)(O.some(O.some(1))), O.some(O.some(2)))
   })
 
   it('id', () => {
