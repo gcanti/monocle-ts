@@ -19,9 +19,9 @@ an element inside of `S`.
 
 Laws:
 
-1. get(set(a)(s)) = a
-2. set(get(s))(s) = s
-3. set(a)(set(a)(s)) = set(a)(s)
+1. `get(set(a)(s)) = a`
+2. `set(get(s))(s) = s`
+3. `set(a)(set(a)(s)) = set(a)(s)`
 
 Added in v2.3.0
 
