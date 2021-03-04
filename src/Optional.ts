@@ -29,6 +29,7 @@ import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
+import { Lens } from './Lens'
 import { Traversal } from './Traversal'
 
 // -------------------------------------------------------------------------------------
@@ -64,7 +65,7 @@ export const id = <S>(): Optional<S, S> => ({
 // -------------------------------------------------------------------------------------
 
 /**
- * View a `Optional` as a `Traversal`
+ * View a `Optional` as a `Traversal`.
  *
  * @category converters
  * @since 2.3.0
@@ -76,13 +77,22 @@ export const asTraversal: <S, A>(sa: Optional<S, A>) => Traversal<S, A> = _.opti
 // -------------------------------------------------------------------------------------
 
 /**
- * Compose a `Optional` with a `Optional`
+ * Compose a `Optional` with a `Optional`.
  *
  * @category compositions
  * @since 2.3.0
  */
 export const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> =
   _.optionalComposeOptional
+
+/**
+ * Compose a `Optional` with a `Lens`.
+ *
+ * @category compositions
+ * @since 2.3.7
+ */
+export const composeLens = <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, A>): Optional<S, B> =>
+  _.optionalComposeOptional(_.lensAsOptional(ab))(sa)
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -131,7 +141,7 @@ export function modifyF<F>(
 }
 
 /**
- * Return an `Optional` from a `Optional` focused on a nullable value
+ * Return an `Optional` from a `Optional` focused on a nullable value.
  *
  * @category combinators
  * @since 2.3.3
@@ -151,7 +161,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Optional<S, A>) => O
 }
 
 /**
- * Return a `Optional` from a `Optional` and a prop
+ * Return a `Optional` from a `Optional` and a prop.
  *
  * @category combinators
  * @since 2.3.0
@@ -160,7 +170,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Optional<S, A>) =>
   compose(pipe(_.lensId<A>(), _.lensProp(prop), _.lensAsOptional))
 
 /**
- * Return a `Optional` from a `Optional` and a list of props
+ * Return a `Optional` from a `Optional` and a list of props.
  *
  * @category combinators
  * @since 2.3.0
@@ -171,7 +181,7 @@ export const props = <A, P extends keyof A>(
   compose(pipe(_.lensId<A>(), _.lensProps(...props), _.lensAsOptional))
 
 /**
- * Return a `Optional` from a `Optional` and a component
+ * Return a `Optional` from a `Optional` and a component.
  *
  * @category combinators
  * @since 2.3.0
@@ -182,7 +192,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
   compose(pipe(_.lensId<A>(), _.lensComponent(prop), _.lensAsOptional))
 
 /**
- * Return a `Optional` from a `Optional` focused on a `ReadonlyArray`
+ * Return a `Optional` from a `Optional` focused on a `ReadonlyArray`.
  *
  * @category combinators
  * @since 2.3.0
@@ -191,7 +201,7 @@ export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): O
   pipe(sa, _.optionalComposeOptional(_.indexArray<A>().index(i)))
 
 /**
- * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key
+ * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key.
  *
  * @category combinators
  * @since 2.3.0
@@ -200,7 +210,7 @@ export const key = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<strin
   pipe(sa, _.optionalComposeOptional(_.indexRecord<A>().index(key)))
 
 /**
- * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key
+ * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key.
  *
  * @category combinators
  * @since 2.3.0
@@ -209,7 +219,7 @@ export const atKey = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<str
   pipe(sa, compose(_.lensAsOptional(_.atRecord<A>().at(key))))
 
 /**
- * Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type
+ * Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type.
  *
  * @category combinators
  * @since 2.3.0
@@ -219,7 +229,7 @@ export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> =
   compose(_.prismAsOptional(_.prismSome()))
 
 /**
- * Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type
+ * Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type.
  *
  * @category combinators
  * @since 2.3.0
@@ -229,7 +239,7 @@ export const right: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, A> 
   compose(_.prismAsOptional(_.prismRight()))
 
 /**
- * Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type
+ * Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type.
  *
  * @category combinators
  * @since 2.3.0
@@ -239,7 +249,7 @@ export const left: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, E> =
   compose(_.prismAsOptional(_.prismLeft()))
 
 /**
- * Return a `Traversal` from a `Optional` focused on a `Traversable`
+ * Return a `Traversal` from a `Optional` focused on a `Traversable`.
  *
  * @category combinators
  * @since 2.3.0

@@ -5,6 +5,7 @@ import { pipe } from 'fp-ts/lib/function'
 import * as Id from 'fp-ts/lib/Identity'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as T from '../src/Traversal'
+import * as L from '../src/Lens'
 
 type S = O.Option<{
   a: string
@@ -28,16 +29,26 @@ describe('Optional', () => {
     })
   })
 
-  describe('instances', () => {
-    it('compose', () => {
-      type S = O.Option<O.Option<number>>
-      const sa = pipe(_.id<S>(), _.some)
-      const ab = pipe(_.id<O.Option<number>>(), _.some)
-      const sb = _.categoryOptional.compose(ab, sa)
-      assert.deepStrictEqual(sb.getOption(O.none), O.none)
-      assert.deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
-      assert.deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
-    })
+  it('compose', () => {
+    type S = O.Option<O.Option<number>>
+    const sa = pipe(_.id<S>(), _.some)
+    const ab = pipe(_.id<O.Option<number>>(), _.some)
+    const sb = _.categoryOptional.compose(ab, sa)
+    assert.deepStrictEqual(sb.getOption(O.none), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
+  })
+
+  it('composeLens', () => {
+    type Inner = { a: number }
+    type S = O.Option<Inner>
+    const sa = pipe(_.id<S>(), _.some)
+    const ab = pipe(L.id<Inner>(), L.prop('a'))
+    const sb = pipe(sa, _.composeLens(ab))
+    assert.deepStrictEqual(sb.getOption(O.none), O.none)
+    assert.deepStrictEqual(sb.getOption(O.some({ a: 1 })), O.some(1))
+    assert.deepStrictEqual(sb.set(2)(O.some({ a: 1 })), O.some({ a: 2 }))
+    assert.deepStrictEqual(sb.set(2)(O.none), O.none)
   })
 
   it('id', () => {

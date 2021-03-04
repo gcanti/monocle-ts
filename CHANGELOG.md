@@ -15,6 +15,10 @@ high state of flux, you're at risk of it changing without notice.
 
 # 2.3.7
 
+- **Experimental**
+  - `Optional`
+    - add `composeLens` (@gcanti)
+
 # 2.3.6
 
 - **Polish**

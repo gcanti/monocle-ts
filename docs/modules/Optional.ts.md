@@ -51,6 +51,7 @@ Added in v2.3.0
   - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
+  - [composeLens](#composelens)
 - [constructors](#constructors)
   - [id](#id)
 - [converters](#converters)
@@ -81,7 +82,7 @@ Added in v2.3.0
 
 ## atKey
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key
+Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key.
 
 **Signature**
 
@@ -95,7 +96,7 @@ Added in v2.3.0
 
 ## component
 
-Return a `Optional` from a `Optional` and a component
+Return a `Optional` from a `Optional` and a component.
 
 **Signature**
 
@@ -133,7 +134,7 @@ Added in v2.3.2
 
 ## fromNullable
 
-Return an `Optional` from a `Optional` focused on a nullable value
+Return an `Optional` from a `Optional` focused on a nullable value.
 
 **Signature**
 
@@ -145,7 +146,7 @@ Added in v2.3.3
 
 ## index
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyArray`
+Return a `Optional` from a `Optional` focused on a `ReadonlyArray`.
 
 **Signature**
 
@@ -157,7 +158,7 @@ Added in v2.3.0
 
 ## key
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key
+Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key.
 
 **Signature**
 
@@ -169,7 +170,7 @@ Added in v2.3.0
 
 ## left
 
-Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type
+Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type.
 
 **Signature**
 
@@ -222,7 +223,7 @@ Added in v2.3.0
 
 ## prop
 
-Return a `Optional` from a `Optional` and a prop
+Return a `Optional` from a `Optional` and a prop.
 
 **Signature**
 
@@ -234,7 +235,7 @@ Added in v2.3.0
 
 ## props
 
-Return a `Optional` from a `Optional` and a list of props
+Return a `Optional` from a `Optional` and a list of props.
 
 **Signature**
 
@@ -250,7 +251,7 @@ Added in v2.3.0
 
 ## right
 
-Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type
+Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type.
 
 **Signature**
 
@@ -262,7 +263,7 @@ Added in v2.3.0
 
 ## some
 
-Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type
+Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type.
 
 **Signature**
 
@@ -274,7 +275,7 @@ Added in v2.3.0
 
 ## traverse
 
-Return a `Traversal` from a `Optional` focused on a `Traversable`
+Return a `Traversal` from a `Optional` focused on a `Traversable`.
 
 **Signature**
 
@@ -290,7 +291,7 @@ Added in v2.3.0
 
 ## compose
 
-Compose a `Optional` with a `Optional`
+Compose a `Optional` with a `Optional`.
 
 **Signature**
 
@@ -299,6 +300,18 @@ export declare const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, 
 ```
 
 Added in v2.3.0
+
+## composeLens
+
+Compose a `Optional` with a `Lens`.
+
+**Signature**
+
+```ts
+export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
+```
+
+Added in v2.3.7
 
 # constructors
 
@@ -316,7 +329,7 @@ Added in v2.3.0
 
 ## asTraversal
 
-View a `Optional` as a `Traversal`
+View a `Optional` as a `Traversal`.
 
 **Signature**
 
