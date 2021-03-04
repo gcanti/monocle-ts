@@ -7,11 +7,15 @@
  *
  * @since 2.3.0
  */
-import { Option } from 'fp-ts/lib/Option'
+import { Eq } from 'fp-ts/lib/Eq'
+import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
+import * as RM from 'fp-ts/lib/ReadonlyMap'
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
+
+import Option = O.Option
 
 // -------------------------------------------------------------------------------------
 // model
@@ -44,6 +48,25 @@ export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>): At<T,
  * @since 2.3.7
  */
 export const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>> = _.atReadonlyRecord
+
+/**
+ * @category constructors
+ * @since 2.3.7
+ */
+export const atReadonlyMap = <K>(E: Eq<K>) => <A = never>(): At<ReadonlyMap<K, A>, K, Option<A>> => {
+  const lookup = RM.lookup(E)
+  const deleteAt = RM.deleteAt(E)
+  const insertAt = RM.insertAt(E)
+  return {
+    at: (key) => ({
+      get: lookup(key),
+      set: O.fold(
+        () => deleteAt(key),
+        (a) => insertAt(key, a)
+      )
+    })
+  }
+}
 
 // -------------------------------------------------------------------------------------
 // deprecated
