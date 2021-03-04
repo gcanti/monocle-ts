@@ -47,6 +47,7 @@ Added in v2.3.0
   - [prop](#prop)
   - [props](#props)
   - [right](#right)
+  - [setOption](#setoption)
   - [some](#some)
   - [traverse](#traverse)
 - [compositions](#compositions)
@@ -261,6 +262,16 @@ export declare const right: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optiona
 ```
 
 Added in v2.3.0
+
+## setOption
+
+**Signature**
+
+```ts
+export declare const setOption: <A>(a: A) => <S>(optional: Optional<S, A>) => (s: S) => O.Option<S>
+```
+
+Added in v2.3.7
 
 ## some
 

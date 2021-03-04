@@ -117,6 +117,12 @@ export const modifyOption: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) 
 
 /**
  * @category combinators
+ * @since 2.3.7
+ */
+export const setOption = <A>(a: A): (<S>(optional: Optional<S, A>) => (s: S) => Option<S>) => modifyOption(() => a)
+
+/**
+ * @category combinators
  * @since 2.3.0
  */
 export const modify: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => S = _.optionalModify
