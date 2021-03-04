@@ -16,6 +16,7 @@ Added in v3.0.0
   - [fromAt](#fromat)
   - [fromIso](#fromiso)
   - [indexReadonlyArray](#indexreadonlyarray)
+  - [indexReadonlyMap](#indexreadonlymap)
   - [indexReadonlyRecord](#indexreadonlyrecord)
 - [model](#model)
   - [Index (interface)](#index-interface)
@@ -29,7 +30,7 @@ Added in v3.0.0
 **Signature**
 
 ```ts
-export declare const fromAt: <T, J, B>(at: At<T, J, Option<B>>) => Index<T, J, B>
+export declare const fromAt: <T, J, B>(at: At<T, J, O.Option<B>>) => Index<T, J, B>
 ```
 
 Added in v3.0.0
@@ -52,6 +53,16 @@ Added in v3.0.0
 
 ```ts
 export declare const indexReadonlyArray: <A = never>() => Index<readonly A[], number, A>
+```
+
+Added in v3.0.0
+
+## indexReadonlyMap
+
+**Signature**
+
+```ts
+export declare const indexReadonlyMap: <K>(E: Eq<K>) => <A = never>() => Index<ReadonlyMap<K, A>, K, A>
 ```
 
 Added in v3.0.0

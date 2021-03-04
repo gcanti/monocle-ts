@@ -40,11 +40,14 @@ Added in v3.0.0
   - [modifyOption](#modifyoption)
   - [prop](#prop)
   - [props](#props)
+  - [replaceOption](#replaceoption)
   - [right](#right)
   - [some](#some)
   - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
+  - [composeLens](#composelens)
+  - [composePrism](#composeprism)
 - [constructors](#constructors)
   - [id](#id)
 - [converters](#converters)
@@ -241,6 +244,16 @@ export declare const props: <A, P extends keyof A>(
 
 Added in v3.0.0
 
+## replaceOption
+
+**Signature**
+
+```ts
+export declare const replaceOption: <A>(a: A) => <S>(optional: Optional<S, A>) => (s: S) => O.Option<S>
+```
+
+Added in v3.0.0
+
 ## right
 
 Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type.
@@ -289,6 +302,30 @@ Compose a `Optional` with a `Optional`.
 
 ```ts
 export declare const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
+```
+
+Added in v3.0.0
+
+## composeLens
+
+Compose a `Optional` with a `Lens`.
+
+**Signature**
+
+```ts
+export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
+```
+
+Added in v3.0.0
+
+## composePrism
+
+Compose a `Optional` with a `Prism`.
+
+**Signature**
+
+```ts
+export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
 ```
 
 Added in v3.0.0

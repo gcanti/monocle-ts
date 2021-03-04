@@ -4,6 +4,8 @@ import * as At from '../src/At'
 import { Iso } from '../src/Iso'
 import * as _ from '../src/Ix'
 import { deepStrictEqual } from './util'
+import * as assert from 'assert'
+import * as S from 'fp-ts/string'
 
 describe('Index', () => {
   it('fromIso', () => {
@@ -29,5 +31,38 @@ describe('Index', () => {
 
     deepStrictEqual(ix.replace(2)({}), {})
     deepStrictEqual(ix.replace(2)({ a: 1 }), { a: 2 })
+  })
+
+  it('indexReadonlyMap', () => {
+    const index = _.indexReadonlyMap(S.Eq)<number>().index('a')
+    deepStrictEqual(index.getOption(new Map([])), O.none)
+    deepStrictEqual(
+      index.getOption(
+        new Map([
+          ['a', 1],
+          ['b', 2]
+        ])
+      ),
+      O.some(1)
+    )
+    deepStrictEqual(index.replace(3)(new Map([['b', 2]])), new Map([['b', 2]]))
+    deepStrictEqual(
+      index.replace(3)(
+        new Map([
+          ['a', 1],
+          ['b', 2]
+        ])
+      ),
+      new Map([
+        ['a', 3],
+        ['b', 2]
+      ])
+    )
+    // should return the same reference if nothing changed
+    const x = new Map([
+      ['a', 1],
+      ['b', 2]
+    ])
+    assert.strictEqual(index.replace(1)(x), x)
   })
 })

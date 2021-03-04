@@ -13,7 +13,9 @@ Added in v3.0.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
+  - [atReadonlyMap](#atreadonlymap)
   - [atReadonlyRecord](#atreadonlyrecord)
+  - [atReadonlySet](#atreadonlyset)
   - [fromIso](#fromiso)
 - [model](#model)
   - [At (interface)](#at-interface)
@@ -22,12 +24,32 @@ Added in v3.0.0
 
 # constructors
 
+## atReadonlyMap
+
+**Signature**
+
+```ts
+export declare const atReadonlyMap: <K>(E: Eq<K>) => <A = never>() => At<ReadonlyMap<K, A>, K, O.Option<A>>
+```
+
+Added in v3.0.0
+
 ## atReadonlyRecord
 
 **Signature**
 
 ```ts
-export declare const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>>
+export declare const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, string, O.Option<A>>
+```
+
+Added in v3.0.0
+
+## atReadonlySet
+
+**Signature**
+
+```ts
+export declare const atReadonlySet: <A>(E: Eq<A>) => At<ReadonlySet<A>, A, boolean>
 ```
 
 Added in v3.0.0

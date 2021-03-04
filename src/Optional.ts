@@ -13,15 +13,17 @@
  *
  * @since 3.0.0
  */
+import { Applicative, Applicative1, Applicative2, Applicative3 } from 'fp-ts/Applicative'
 import { Category2 } from 'fp-ts/Category'
 import { Either } from 'fp-ts/Either'
 import { constant, flow, pipe, Predicate, Refinement } from 'fp-ts/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/HKT'
 import { Invariant2 } from 'fp-ts/Invariant'
-import { Applicative, Applicative1, Applicative2, Applicative3 } from 'fp-ts/Applicative'
 import * as O from 'fp-ts/Option'
 import { Traversable1 } from 'fp-ts/Traversable'
 import * as _ from './internal'
+import { Lens } from './Lens'
+import { Prism } from './Prism'
 import { Traversal } from './Traversal'
 
 import Option = O.Option
@@ -77,6 +79,24 @@ export const asTraversal: <S, A>(sa: Optional<S, A>) => Traversal<S, A> = _.opti
 export const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B> =
   _.optionalComposeOptional
 
+/**
+ * Compose a `Optional` with a `Lens`.
+ *
+ * @category compositions
+ * @since 3.0.0
+ */
+export const composeLens = <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, A>): Optional<S, B> =>
+  _.optionalComposeOptional(_.lensAsOptional(ab))(sa)
+
+/**
+ * Compose a `Optional` with a `Prism`.
+ *
+ * @category compositions
+ * @since 3.0.0
+ */
+export const composePrism = <A, B>(ab: Prism<A, B>) => <S>(sa: Optional<S, A>): Optional<S, B> =>
+  _.optionalComposeOptional(_.prismAsOptional(ab))(sa)
+
 // -------------------------------------------------------------------------------------
 // combinators
 // -------------------------------------------------------------------------------------
@@ -87,6 +107,12 @@ export const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => O
  */
 export const modifyOption: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => Option<S> =
   _.optionalModifyOption
+
+/**
+ * @category combinators
+ * @since 3.0.0
+ */
+export const replaceOption = <A>(a: A): (<S>(optional: Optional<S, A>) => (s: S) => Option<S>) => modifyOption(() => a)
 
 /**
  * @category combinators

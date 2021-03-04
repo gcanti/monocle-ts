@@ -4,6 +4,8 @@ import * as O from 'fp-ts/Option'
 import * as A from 'fp-ts/ReadonlyArray'
 import * as _ from '../src/Optional'
 import * as T from '../src/Traversal'
+import * as L from '../src/Lens'
+import * as P from '../src/Prism'
 import { deepStrictEqual } from './util'
 
 type S = O.Option<{
@@ -36,6 +38,31 @@ describe('Optional', () => {
     deepStrictEqual(sb.getOption(O.none), O.none)
     deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
     deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
+  })
+
+  it('composeLens', () => {
+    type Inner = { readonly a: number }
+    type S = O.Option<Inner>
+    const sa = pipe(_.id<S>(), _.some)
+    const ab = pipe(L.id<Inner>(), L.prop('a'))
+    const sb = pipe(sa, _.composeLens(ab))
+    deepStrictEqual(sb.getOption(O.none), O.none)
+    deepStrictEqual(sb.getOption(O.some({ a: 1 })), O.some(1))
+    deepStrictEqual(sb.replace(2)(O.some({ a: 1 })), O.some({ a: 2 }))
+    deepStrictEqual(sb.replace(2)(O.none), O.none)
+  })
+
+  it('composePrism', () => {
+    type S = O.Option<O.Option<number>>
+    const sa = pipe(_.id<S>(), _.some)
+    const ab = pipe(P.id<O.Option<number>>(), P.some)
+    const sb = pipe(sa, _.composePrism(ab))
+    deepStrictEqual(sb.getOption(O.none), O.none)
+    deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
+    deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
+    deepStrictEqual(sb.replace(2)(O.none), O.none)
+    deepStrictEqual(sb.replace(2)(O.some(O.none)), O.some(O.none))
+    deepStrictEqual(sb.replace(2)(O.some(O.some(1))), O.some(O.some(2)))
   })
 
   it('id', () => {
@@ -163,5 +190,11 @@ describe('Optional', () => {
     deepStrictEqual(f([]), O.some([]))
     deepStrictEqual(f([1, 2, 3]), O.some([2, 2, 3]))
     deepStrictEqual(f([-1, 2, 3]), O.none)
+  })
+
+  it('replaceOption', () => {
+    const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
+    deepStrictEqual(pipe(sa, _.replaceOption(2))([]), O.none)
+    deepStrictEqual(pipe(sa, _.replaceOption(2))([1, 3]), O.some([2, 3]))
   })
 })
