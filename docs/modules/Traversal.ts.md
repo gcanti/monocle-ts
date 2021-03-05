@@ -43,6 +43,10 @@ Added in v2.3.0
   - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
+  - [composeIso](#composeiso)
+  - [composeLens](#composelens)
+  - [composeOptional](#composeoptional)
+  - [composePrism](#composeprism)
 - [constructor](#constructor)
   - [fromTraversable](#fromtraversable)
 - [constructors](#constructors)
@@ -61,7 +65,7 @@ Added in v2.3.0
 
 ## atKey
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key
+Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key.
 
 **Signature**
 
@@ -75,7 +79,7 @@ Added in v2.3.0
 
 ## component
 
-Return a `Traversal` from a `Traversal` and a component
+Return a `Traversal` from a `Traversal` and a component.
 
 **Signature**
 
@@ -138,7 +142,7 @@ Added in v2.3.0
 
 ## index
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`
+Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`.
 
 **Signature**
 
@@ -150,7 +154,7 @@ Added in v2.3.0
 
 ## key
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key
+Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key.
 
 **Signature**
 
@@ -162,7 +166,7 @@ Added in v2.3.0
 
 ## left
 
-Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type
+Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type.
 
 **Signature**
 
@@ -184,7 +188,7 @@ Added in v2.3.0
 
 ## prop
 
-Return a `Traversal` from a `Traversal` and a prop
+Return a `Traversal` from a `Traversal` and a prop.
 
 **Signature**
 
@@ -196,7 +200,7 @@ Added in v2.3.0
 
 ## props
 
-Return a `Traversal` from a `Traversal` and a list of props
+Return a `Traversal` from a `Traversal` and a list of props.
 
 **Signature**
 
@@ -212,7 +216,7 @@ Added in v2.3.0
 
 ## right
 
-Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type
+Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type.
 
 **Signature**
 
@@ -234,7 +238,7 @@ Added in v2.3.0
 
 ## some
 
-Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type
+Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type.
 
 **Signature**
 
@@ -246,7 +250,7 @@ Added in v2.3.0
 
 ## traverse
 
-Return a `Traversal` from a `Traversal` focused on a `Traversable`
+Return a `Traversal` from a `Traversal` focused on a `Traversable`.
 
 **Signature**
 
@@ -262,7 +266,7 @@ Added in v2.3.0
 
 ## compose
 
-Compose a `Traversal` with a `Traversal`
+Compose a `Traversal` with a `Traversal`.
 
 **Signature**
 
@@ -272,11 +276,59 @@ export declare const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S
 
 Added in v2.3.0
 
+## composeIso
+
+Compose a `Traversal` with a `Iso`.
+
+**Signature**
+
+```ts
+export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
+
+## composeLens
+
+Compose a `Traversal` with a `Lens`.
+
+**Signature**
+
+```ts
+export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
+
+## composeOptional
+
+Compose a `Traversal` with a `Optional`.
+
+**Signature**
+
+```ts
+export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
+
+## composePrism
+
+Compose a `Traversal` with a `Prism`.
+
+**Signature**
+
+```ts
+export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
+
 # constructor
 
 ## fromTraversable
 
-Create a `Traversal` from a `Traversable`
+Create a `Traversal` from a `Traversable`.
 
 **Signature**
 

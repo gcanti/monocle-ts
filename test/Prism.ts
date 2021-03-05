@@ -6,6 +6,7 @@ import * as _ from '../src/Prism'
 import { Optional } from '../src/Optional'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as T from '../src/Traversal'
+import * as Id from 'fp-ts/lib/Identity'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -154,6 +155,15 @@ describe('Prism', () => {
     assert.deepStrictEqual(sb.set('c')(O.none), O.none)
     assert.deepStrictEqual(sb.set('c')(O.some('')), O.some(''))
     assert.deepStrictEqual(sb.set('c')(O.some('ab')), O.some('cb'))
+  })
+
+  it('composeTraversal', () => {
+    type S = O.Option<ReadonlyArray<number>>
+    const sa = pipe(_.id<S>(), _.some)
+    const ab = T.fromTraversable(A.readonlyArray)<number>()
+    const sb = pipe(sa, _.composeTraversal(ab))
+    assert.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)(O.none), O.none)
+    assert.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)(O.some([1, 2, 3])), O.some([2, 4, 6]))
   })
 
   it('right', () => {

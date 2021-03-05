@@ -43,7 +43,7 @@ export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> => ({
 })
 
 /**
- * Lift an instance of `Index` using an `Iso`
+ * Lift an instance of `Index` using an `Iso`.
  *
  * @category constructors
  * @since 2.3.0

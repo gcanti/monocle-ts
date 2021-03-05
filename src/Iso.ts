@@ -14,13 +14,11 @@
  *
  * @since 2.3.0
  */
-import { Applicative } from 'fp-ts/lib/Applicative'
 import { Category2 } from 'fp-ts/lib/Category'
 import { flow, identity, pipe } from 'fp-ts/lib/function'
 import { Functor, Functor1, Functor2, Functor3 } from 'fp-ts/lib/Functor'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
-import * as O from 'fp-ts/lib/Option'
 import * as _ from './internal'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
@@ -58,7 +56,7 @@ export const id = <S>(): Iso<S, S> => ({
 // -------------------------------------------------------------------------------------
 
 /**
- * View an `Iso` as a `Lens`
+ * View an `Iso` as a `Lens`.
  *
  * @category converters
  * @since 2.3.0
@@ -66,18 +64,15 @@ export const id = <S>(): Iso<S, S> => ({
 export const asLens: <S, A>(sa: Iso<S, A>) => Lens<S, A> = _.isoAsLens
 
 /**
- * View an `Iso` as a `Prism`
+ * View an `Iso` as a `Prism`.
  *
  * @category converters
  * @since 2.3.0
  */
-export const asPrism = <S, A>(sa: Iso<S, A>): Prism<S, A> => ({
-  getOption: flow(sa.get, O.some),
-  reverseGet: sa.reverseGet
-})
+export const asPrism: <S, A>(sa: Iso<S, A>) => Prism<S, A> = _.isoAsPrism
 
 /**
- * View an `Iso` as a `Optional`
+ * View an `Iso` as a `Optional`.
  *
  * @category converters
  * @since 2.3.0
@@ -85,21 +80,19 @@ export const asPrism = <S, A>(sa: Iso<S, A>): Prism<S, A> => ({
 export const asOptional: <S, A>(sa: Iso<S, A>) => Optional<S, A> = _.isoAsOptional
 
 /**
- * View an `Iso` as a `Traversal`
+ * View an `Iso` as a `Traversal`.
  *
  * @category converters
  * @since 2.3.0
  */
-export const asTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
-  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.reverseGet(a))
-})
+export const asTraversal: <S, A>(sa: Iso<S, A>) => Traversal<S, A> = _.isoAsTraversal
 
 // -------------------------------------------------------------------------------------
 // compositions
 // -------------------------------------------------------------------------------------
 
 /**
- * Compose an `Iso` with an `Iso`
+ * Compose an `Iso` with an `Iso`.
  *
  * @category compositions
  * @since 2.3.0

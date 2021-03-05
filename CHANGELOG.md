@@ -13,6 +13,24 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 2.3.8
+
+- **Experimental**
+  - `Lens`
+    - add `composeIso` (@gcanti)
+    - add `composeTraversal` (@gcanti)
+  - `Prism`
+    - add `composeIso` (@gcanti)
+    - add `composeTraversal` (@gcanti)
+  - `Optional`
+    - add `composeIso` (@gcanti)
+    - add `composeTraversal` (@gcanti)
+  - `Traversal`
+    - add `composeIso` (@gcanti)
+    - add `composeLens` (@gcanti)
+    - add `composePrism` (@gcanti)
+    - add `composeOptional` (@gcanti)
+
 # 2.3.7
 
 - **Experimental**

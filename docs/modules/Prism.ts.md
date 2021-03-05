@@ -47,8 +47,10 @@ Added in v2.3.0
   - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
+  - [composeIso](#composeiso)
   - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
+  - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
   - [fromPredicate](#frompredicate)
   - [id](#id)
@@ -81,7 +83,7 @@ Added in v2.3.0
 
 ## atKey
 
-Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key
+Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key.
 
 **Signature**
 
@@ -95,7 +97,7 @@ Added in v2.3.0
 
 ## component
 
-Return a `Optional` from a `Prism` and a component
+Return a `Optional` from a `Prism` and a component.
 
 **Signature**
 
@@ -133,7 +135,7 @@ Added in v2.3.2
 
 ## fromNullable
 
-Return a `Prism` from a `Prism` focused on a nullable value
+Return a `Prism` from a `Prism` focused on a nullable value.
 
 **Signature**
 
@@ -145,7 +147,7 @@ Added in v2.3.3
 
 ## index
 
-Return a `Optional` from a `Prism` focused on a `ReadonlyArray`
+Return a `Optional` from a `Prism` focused on a `ReadonlyArray`.
 
 **Signature**
 
@@ -157,7 +159,7 @@ Added in v2.3.0
 
 ## key
 
-Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key
+Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key.
 
 **Signature**
 
@@ -169,7 +171,7 @@ Added in v2.3.0
 
 ## left
 
-Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type
+Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type.
 
 **Signature**
 
@@ -222,7 +224,7 @@ Added in v2.3.0
 
 ## prop
 
-Return a `Optional` from a `Prism` and a prop
+Return a `Optional` from a `Prism` and a prop.
 
 **Signature**
 
@@ -234,7 +236,7 @@ Added in v2.3.0
 
 ## props
 
-Return a `Optional` from a `Prism` and a list of props
+Return a `Optional` from a `Prism` and a list of props.
 
 **Signature**
 
@@ -250,7 +252,7 @@ Added in v2.3.0
 
 ## right
 
-Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type
+Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type.
 
 **Signature**
 
@@ -272,7 +274,7 @@ Added in v2.3.0
 
 ## some
 
-Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type
+Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type.
 
 **Signature**
 
@@ -284,7 +286,7 @@ Added in v2.3.0
 
 ## traverse
 
-Return a `Traversal` from a `Prism` focused on a `Traversable`
+Return a `Traversal` from a `Prism` focused on a `Traversable`.
 
 **Signature**
 
@@ -300,7 +302,7 @@ Added in v2.3.0
 
 ## compose
 
-Compose a `Prism` with a `Prism`
+Compose a `Prism` with a `Prism`.
 
 **Signature**
 
@@ -310,9 +312,21 @@ export declare const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) =>
 
 Added in v2.3.0
 
+## composeIso
+
+Compose a `Prism` with a `Iso`.
+
+**Signature**
+
+```ts
+export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
+```
+
+Added in v2.3.8
+
 ## composeLens
 
-Compose a `Prism` with a `Lens`
+Compose a `Prism` with a `Lens`.
 
 **Signature**
 
@@ -324,7 +338,7 @@ Added in v2.3.0
 
 ## composeOptional
 
-Compose a `Prism` with an `Optional`
+Compose a `Prism` with an `Optional`.
 
 **Signature**
 
@@ -333,6 +347,18 @@ export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Pris
 ```
 
 Added in v2.3.0
+
+## composeTraversal
+
+Compose a `Prism` with an `Traversal`.
+
+**Signature**
+
+```ts
+export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Prism<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
 
 # constructors
 
@@ -363,7 +389,7 @@ Added in v2.3.0
 
 ## asOptional
 
-View a `Prism` as a `Optional`
+View a `Prism` as a `Optional`.
 
 **Signature**
 
@@ -375,7 +401,7 @@ Added in v2.3.0
 
 ## asTraversal
 
-View a `Prism` as a `Traversal`
+View a `Prism` as a `Traversal`.
 
 **Signature**
 

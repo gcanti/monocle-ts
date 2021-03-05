@@ -5,6 +5,7 @@ import * as O from 'fp-ts/lib/Option'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as T from '../src/Traversal'
 import { Optional } from '../src/Optional'
+import * as Id from 'fp-ts/lib/Identity'
 
 describe('Lens', () => {
   describe('pipeables', () => {
@@ -24,20 +25,28 @@ describe('Lens', () => {
     })
   })
 
-  describe('instances', () => {
-    it('compose', () => {
-      interface S {
-        readonly a: A
-      }
-      interface A {
-        readonly b: number
-      }
-      const sa = pipe(_.id<S>(), _.prop('a'))
-      const ab = pipe(_.id<A>(), _.prop('b'))
-      const sb = _.categoryLens.compose(ab, sa)
-      assert.deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
-      assert.deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
-    })
+  it('compose', () => {
+    interface S {
+      readonly a: A
+    }
+    interface A {
+      readonly b: number
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'))
+    const ab = pipe(_.id<A>(), _.prop('b'))
+    const sb = _.categoryLens.compose(ab, sa)
+    assert.deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
+    assert.deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
+  })
+
+  it('composeTraversal', () => {
+    interface S {
+      readonly a: ReadonlyArray<number>
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'))
+    const ab = T.fromTraversable(A.readonlyArray)<number>()
+    const sb = pipe(sa, _.composeTraversal(ab))
+    assert.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)({ a: [1, 2, 3] }), { a: [2, 4, 6] })
   })
 
   it('id', () => {

@@ -52,8 +52,10 @@ Added in v2.3.0
   - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
+  - [composeIso](#composeiso)
   - [composeLens](#composelens)
   - [composePrism](#composeprism)
+  - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
   - [id](#id)
 - [converters](#converters)
@@ -313,6 +315,18 @@ export declare const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, 
 
 Added in v2.3.0
 
+## composeIso
+
+Compose a `Optional` with a `Iso`.
+
+**Signature**
+
+```ts
+export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
+```
+
+Added in v2.3.8
+
 ## composeLens
 
 Compose a `Optional` with a `Lens`.
@@ -336,6 +350,18 @@ export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Optional<S
 ```
 
 Added in v2.3.7
+
+## composeTraversal
+
+Compose a `Optional` with an `Traversal`.
+
+**Signature**
+
+```ts
+export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Optional<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
 
 # constructors
 
