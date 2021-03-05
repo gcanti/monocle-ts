@@ -35,7 +35,7 @@ export interface At<S, I, A> {
 // -------------------------------------------------------------------------------------
 
 /**
- * Lift an instance of `At` using an `Iso`
+ * Lift an instance of `At` using an `Iso`.
  *
  * @category constructors
  * @since 2.3.0

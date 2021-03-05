@@ -63,7 +63,7 @@ Added in v2.3.7
 
 ## fromIso
 
-Lift an instance of `At` using an `Iso`
+Lift an instance of `At` using an `Iso`.
 
 **Signature**
 

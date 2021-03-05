@@ -35,9 +35,20 @@ export const isoAsLens = <S, A>(sa: Iso<S, A>): Lens<S, A> => ({
 })
 
 /** @internal */
+export const isoAsPrism = <S, A>(sa: Iso<S, A>): Prism<S, A> => ({
+  getOption: flow(sa.get, O.some),
+  reverseGet: sa.reverseGet
+})
+
+/** @internal */
 export const isoAsOptional = <S, A>(sa: Iso<S, A>): Optional<S, A> => ({
   getOption: flow(sa.get, O.some),
   set: flow(sa.reverseGet, constant)
+})
+
+/** @internal */
+export const isoAsTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> => ({
+  modifyF: <F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) => F.map(f(sa.get(s)), (a) => sa.reverseGet(a))
 })
 
 // -------------------------------------------------------------------------------------

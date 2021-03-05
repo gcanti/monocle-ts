@@ -49,8 +49,10 @@ Added in v2.3.0
   - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
+  - [composeIso](#composeiso)
   - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
+  - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
   - [id](#id)
 - [converters](#converters)
@@ -82,7 +84,7 @@ Added in v2.3.0
 
 ## atKey
 
-Return a `Lens` from a `Lens` focused on a `ReadonlyRecord` and a required key
+Return a `Lens` from a `Lens` focused on a `ReadonlyRecord` and a required key.
 
 **Signature**
 
@@ -94,7 +96,7 @@ Added in v2.3.0
 
 ## component
 
-Return a `Lens` from a `Lens` and a component
+Return a `Lens` from a `Lens` and a component.
 
 **Signature**
 
@@ -132,7 +134,7 @@ Added in v2.3.2
 
 ## fromNullable
 
-Return a `Optional` from a `Lens` focused on a nullable value
+Return a `Optional` from a `Lens` focused on a nullable value.
 
 **Signature**
 
@@ -144,7 +146,7 @@ Added in v2.3.0
 
 ## index
 
-Return a `Optional` from a `Lens` focused on a `ReadonlyArray`
+Return a `Optional` from a `Lens` focused on a `ReadonlyArray`.
 
 **Signature**
 
@@ -156,7 +158,7 @@ Added in v2.3.0
 
 ## key
 
-Return a `Optional` from a `Lens` focused on a `ReadonlyRecord` and a key
+Return a `Optional` from a `Lens` focused on a `ReadonlyRecord` and a key.
 
 **Signature**
 
@@ -168,7 +170,7 @@ Added in v2.3.0
 
 ## left
 
-Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type
+Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type.
 
 **Signature**
 
@@ -211,7 +213,7 @@ Added in v2.3.5
 
 ## prop
 
-Return a `Lens` from a `Lens` and a prop
+Return a `Lens` from a `Lens` and a prop.
 
 **Signature**
 
@@ -223,7 +225,7 @@ Added in v2.3.0
 
 ## props
 
-Return a `Lens` from a `Lens` and a list of props
+Return a `Lens` from a `Lens` and a list of props.
 
 **Signature**
 
@@ -239,7 +241,7 @@ Added in v2.3.0
 
 ## right
 
-Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type
+Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type.
 
 **Signature**
 
@@ -251,7 +253,7 @@ Added in v2.3.0
 
 ## some
 
-Return a `Optional` from a `Lens` focused on the `Some` of a `Option` type
+Return a `Optional` from a `Lens` focused on the `Some` of a `Option` type.
 
 **Signature**
 
@@ -263,7 +265,7 @@ Added in v2.3.0
 
 ## traverse
 
-Return a `Traversal` from a `Lens` focused on a `Traversable`
+Return a `Traversal` from a `Lens` focused on a `Traversable`.
 
 **Signature**
 
@@ -279,7 +281,7 @@ Added in v2.3.0
 
 ## compose
 
-Compose a `Lens` with a `Lens`
+Compose a `Lens` with a `Lens`.
 
 **Signature**
 
@@ -289,9 +291,21 @@ export declare const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => L
 
 Added in v2.3.0
 
+## composeIso
+
+Compose a `Lens` with a `Iso`.
+
+**Signature**
+
+```ts
+export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
+```
+
+Added in v2.3.8
+
 ## composeOptional
 
-Compose a `Lens` with an `Optional`
+Compose a `Lens` with an `Optional`.
 
 **Signature**
 
@@ -303,7 +317,7 @@ Added in v2.3.0
 
 ## composePrism
 
-Compose a `Lens` with a `Prism`
+Compose a `Lens` with a `Prism`.
 
 **Signature**
 
@@ -312,6 +326,18 @@ export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>
 ```
 
 Added in v2.3.0
+
+## composeTraversal
+
+Compose a `Lens` with an `Traversal`.
+
+**Signature**
+
+```ts
+export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Lens<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
 
 # constructors
 
@@ -329,7 +355,7 @@ Added in v2.3.0
 
 ## asOptional
 
-View a `Lens` as a `Optional`
+View a `Lens` as a `Optional`.
 
 **Signature**
 
@@ -341,7 +367,7 @@ Added in v2.3.0
 
 ## asTraversal
 
-View a `Lens` as a `Traversal`
+View a `Lens` as a `Traversal`.
 
 **Signature**
 

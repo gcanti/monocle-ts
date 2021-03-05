@@ -99,7 +99,7 @@ Added in v2.3.5
 
 ## compose
 
-Compose an `Iso` with an `Iso`
+Compose an `Iso` with an `Iso`.
 
 **Signature**
 
@@ -135,7 +135,7 @@ Added in v2.3.0
 
 ## asLens
 
-View an `Iso` as a `Lens`
+View an `Iso` as a `Lens`.
 
 **Signature**
 
@@ -147,7 +147,7 @@ Added in v2.3.0
 
 ## asOptional
 
-View an `Iso` as a `Optional`
+View an `Iso` as a `Optional`.
 
 **Signature**
 
@@ -159,7 +159,7 @@ Added in v2.3.0
 
 ## asPrism
 
-View an `Iso` as a `Prism`
+View an `Iso` as a `Prism`.
 
 **Signature**
 
@@ -171,7 +171,7 @@ Added in v2.3.0
 
 ## asTraversal
 
-View an `Iso` as a `Traversal`
+View an `Iso` as a `Traversal`.
 
 **Signature**
 

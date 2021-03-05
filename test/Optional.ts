@@ -65,6 +65,17 @@ describe('Optional', () => {
     assert.deepStrictEqual(sb.set(2)(O.some(O.some(1))), O.some(O.some(2)))
   })
 
+  it('composeTraversal', () => {
+    type S = {
+      readonly a: O.Option<ReadonlyArray<number>>
+    }
+    const sa = pipe(L.id<S>(), L.prop('a'), L.some)
+    const ab = T.fromTraversable(A.readonlyArray)<number>()
+    const sb = pipe(sa, _.composeTraversal(ab))
+    assert.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)({ a: O.none }), { a: O.none })
+    assert.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)({ a: O.some([1, 2, 3]) }), { a: O.some([2, 4, 6]) })
+  })
+
   it('id', () => {
     const ss = _.id<S>()
     assert.deepStrictEqual(ss.getOption(O.none), O.some(O.none))

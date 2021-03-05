@@ -17,7 +17,7 @@ import { Applicative, Applicative1, Applicative2, Applicative2C, Applicative3 } 
 import { Category2 } from 'fp-ts/lib/Category'
 import * as C from 'fp-ts/lib/Const'
 import { Either } from 'fp-ts/lib/Either'
-import { identity, Predicate, Refinement } from 'fp-ts/lib/function'
+import { flow, identity, Predicate, Refinement } from 'fp-ts/lib/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import * as I from 'fp-ts/lib/Identity'
 import { Monoid } from 'fp-ts/lib/Monoid'
@@ -26,6 +26,10 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
+import { Iso } from './Iso'
+import { Lens } from './Lens'
+import { Optional } from './Optional'
+import { Prism } from './Prism'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -64,7 +68,7 @@ export const id = <S>(): Traversal<S, S> => ({
 })
 
 /**
- * Create a `Traversal` from a `Traversable`
+ * Create a `Traversal` from a `Traversable`.
  *
  * @category constructor
  * @since 2.3.0
@@ -76,13 +80,53 @@ export const fromTraversable = _.fromTraversable
 // -------------------------------------------------------------------------------------
 
 /**
- * Compose a `Traversal` with a `Traversal`
+ * Compose a `Traversal` with a `Traversal`.
  *
  * @category compositions
  * @since 2.3.0
  */
 export const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
   _.traversalComposeTraversal
+
+/**
+ * Compose a `Traversal` with a `Iso`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
+  /*#__PURE__*/
+  flow(_.isoAsTraversal, compose)
+
+/**
+ * Compose a `Traversal` with a `Lens`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
+  /*#__PURE__*/
+  flow(_.lensAsTraversal, _.traversalComposeTraversal)
+
+/**
+ * Compose a `Traversal` with a `Prism`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
+  /*#__PURE__*/
+  flow(_.prismAsTraversal, _.traversalComposeTraversal)
+
+/**
+ * Compose a `Traversal` with a `Optional`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
+  /*#__PURE__*/
+  flow(_.optionalAsTraversal, _.traversalComposeTraversal)
 
 // -------------------------------------------------------------------------------------
 // combinators
@@ -115,7 +159,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, A>) => 
 }
 
 /**
- * Return a `Traversal` from a `Traversal` and a prop
+ * Return a `Traversal` from a `Traversal` and a prop.
  *
  * @category combinators
  * @since 2.3.0
@@ -124,7 +168,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Traversal<S, A>) =
   compose(pipe(_.lensId<A>(), _.lensProp(prop), _.lensAsTraversal))
 
 /**
- * Return a `Traversal` from a `Traversal` and a list of props
+ * Return a `Traversal` from a `Traversal` and a list of props.
  *
  * @category combinators
  * @since 2.3.0
@@ -135,7 +179,7 @@ export const props = <A, P extends keyof A>(
   compose(pipe(_.lensId<A>(), _.lensProps(...props), _.lensAsTraversal))
 
 /**
- * Return a `Traversal` from a `Traversal` and a component
+ * Return a `Traversal` from a `Traversal` and a component.
  *
  * @category combinators
  * @since 2.3.0
@@ -146,7 +190,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
   compose(pipe(_.lensId<A>(), _.lensComponent(prop), _.lensAsTraversal))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`
+ * Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`.
  *
  * @category combinators
  * @since 2.3.0
@@ -155,7 +199,7 @@ export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): 
   pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyArray<A>().index(i))))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key
+ * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key.
  *
  * @category combinators
  * @since 2.3.0
@@ -164,7 +208,7 @@ export const key = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<stri
   pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyRecord<A>().index(key))))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key
+ * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key.
  *
  * @category combinators
  * @since 2.3.0
@@ -173,7 +217,7 @@ export const atKey = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<st
   pipe(sa, compose(_.lensAsTraversal(_.atReadonlyRecord<A>().at(key))))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type
+ * Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type.
  *
  * @category combinators
  * @since 2.3.0
@@ -183,7 +227,7 @@ export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> =
   compose(_.prismAsTraversal(_.prismSome()))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type
+ * Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type.
  *
  * @category combinators
  * @since 2.3.0
@@ -193,7 +237,7 @@ export const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A
   compose(_.prismAsTraversal(_.prismRight()))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type
+ * Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type.
  *
  * @category combinators
  * @since 2.3.0
@@ -203,7 +247,7 @@ export const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E>
   compose(_.prismAsTraversal(_.prismLeft()))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on a `Traversable`
+ * Return a `Traversal` from a `Traversal` focused on a `Traversable`.
  *
  * @category combinators
  * @since 2.3.0
