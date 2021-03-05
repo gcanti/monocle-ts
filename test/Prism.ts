@@ -1,4 +1,3 @@
-import * as assert from 'assert'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as O from 'fp-ts/lib/Option'
 import * as E from 'fp-ts/lib/Either'
@@ -7,6 +6,7 @@ import { Optional } from '../src/Optional'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as T from '../src/Traversal'
 import * as Id from 'fp-ts/lib/Identity'
+import * as U from './util'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -49,9 +49,9 @@ describe('Prism', () => {
           (s) => parseFloat(s)
         )
       )
-      assert.deepStrictEqual(sa.getOption(leaf), O.none)
-      assert.deepStrictEqual(sa.getOption(node(1, leaf, leaf)), O.some('1'))
-      assert.deepStrictEqual(sa.reverseGet('1'), node(1, leaf, leaf))
+      U.deepStrictEqual(sa.getOption(leaf), O.none)
+      U.deepStrictEqual(sa.getOption(node(1, leaf, leaf)), O.some('1'))
+      U.deepStrictEqual(sa.reverseGet('1'), node(1, leaf, leaf))
     })
   })
 
@@ -61,17 +61,17 @@ describe('Prism', () => {
       const sa = pipe(_.id<S>(), _.some)
       const ab = value
       const sb = _.categoryPrism.compose(ab, sa)
-      assert.deepStrictEqual(sb.getOption(O.none), O.none)
-      assert.deepStrictEqual(sb.getOption(O.some(leaf)), O.none)
-      assert.deepStrictEqual(sb.getOption(O.some(node(1, leaf, leaf))), O.some(1))
-      assert.deepStrictEqual(sb.reverseGet(1), O.some(node(1, leaf, leaf)))
+      U.deepStrictEqual(sb.getOption(O.none), O.none)
+      U.deepStrictEqual(sb.getOption(O.some(leaf)), O.none)
+      U.deepStrictEqual(sb.getOption(O.some(node(1, leaf, leaf))), O.some(1))
+      U.deepStrictEqual(sb.reverseGet(1), O.some(node(1, leaf, leaf)))
     })
   })
 
   it('id', () => {
     const ss = _.id<Tree>()
-    assert.deepStrictEqual(ss.getOption(leaf), O.some(leaf))
-    assert.deepStrictEqual(ss.reverseGet(leaf), leaf)
+    U.deepStrictEqual(ss.getOption(leaf), O.some(leaf))
+    U.deepStrictEqual(ss.reverseGet(leaf), leaf)
   })
 
   it('modify', () => {
@@ -79,8 +79,8 @@ describe('Prism', () => {
       value,
       _.modify((value) => value * 2)
     )
-    assert.deepStrictEqual(modify(leaf), leaf)
-    assert.deepStrictEqual(modify(node(1, leaf, leaf)), node(2, leaf, leaf))
+    U.deepStrictEqual(modify(leaf), leaf)
+    U.deepStrictEqual(modify(node(1, leaf, leaf)), node(2, leaf, leaf))
   })
 
   it('modifyOption', () => {
@@ -88,8 +88,8 @@ describe('Prism', () => {
       value,
       _.modifyOption((value) => value * 2)
     )
-    assert.deepStrictEqual(modifyOption(leaf), O.none)
-    assert.deepStrictEqual(modifyOption(node(1, leaf, leaf)), O.some(node(2, leaf, leaf)))
+    U.deepStrictEqual(modifyOption(leaf), O.none)
+    U.deepStrictEqual(modifyOption(node(1, leaf, leaf)), O.some(node(2, leaf, leaf)))
   })
 
   it('prop', () => {
@@ -98,8 +98,8 @@ describe('Prism', () => {
       readonly b: number
     }>
     const sa = pipe(_.id<S>(), _.some, _.prop('a'))
-    assert.deepStrictEqual(sa.getOption(O.none), O.none)
-    assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1 })), O.some('a'))
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1 })), O.some('a'))
   })
 
   it('props', () => {
@@ -109,25 +109,25 @@ describe('Prism', () => {
       readonly c: boolean
     }>
     const sa = pipe(_.id<S>(), _.some, _.props('a', 'b'))
-    assert.deepStrictEqual(sa.getOption(O.none), O.none)
-    assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
   })
 
   it('component', () => {
     type S = O.Option<[string, number]>
     const sa = pipe(_.id<S>(), _.some, _.component(1))
-    assert.deepStrictEqual(sa.getOption(O.none), O.none)
-    assert.deepStrictEqual(sa.getOption(O.some(['a', 1])), O.some(1))
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some(['a', 1])), O.some(1))
   })
 
   it('index', () => {
     const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
-    assert.deepStrictEqual(sa.getOption([1, 2, 3]), O.some(1))
+    U.deepStrictEqual(sa.getOption([1, 2, 3]), O.some(1))
   })
 
   it('key', () => {
     const sa = pipe(_.id<Readonly<Record<string, number>>>(), _.key('k'))
-    assert.deepStrictEqual(sa.getOption({ k: 1, j: 2 }), O.some(1))
+    U.deepStrictEqual(sa.getOption({ k: 1, j: 2 }), O.some(1))
   })
 
   it('compose', () => {
@@ -135,10 +135,10 @@ describe('Prism', () => {
     const sa = pipe(_.id<S>(), _.some)
     const ab = value
     const sb = pipe(sa, _.compose(ab))
-    assert.deepStrictEqual(sb.getOption(O.none), O.none)
-    assert.deepStrictEqual(sb.getOption(O.some(leaf)), O.none)
-    assert.deepStrictEqual(sb.getOption(O.some(node(1, leaf, leaf))), O.some(1))
-    assert.deepStrictEqual(sb.reverseGet(1), O.some(node(1, leaf, leaf)))
+    U.deepStrictEqual(sb.getOption(O.none), O.none)
+    U.deepStrictEqual(sb.getOption(O.some(leaf)), O.none)
+    U.deepStrictEqual(sb.getOption(O.some(node(1, leaf, leaf))), O.some(1))
+    U.deepStrictEqual(sb.reverseGet(1), O.some(node(1, leaf, leaf)))
   })
 
   it('composeOptional', () => {
@@ -149,12 +149,12 @@ describe('Prism', () => {
       set: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
     }
     const sb = pipe(sa, _.composeOptional(ab))
-    assert.deepStrictEqual(sb.getOption(O.none), O.none)
-    assert.deepStrictEqual(sb.getOption(O.some('')), O.none)
-    assert.deepStrictEqual(sb.getOption(O.some('ab')), O.some('a'))
-    assert.deepStrictEqual(sb.set('c')(O.none), O.none)
-    assert.deepStrictEqual(sb.set('c')(O.some('')), O.some(''))
-    assert.deepStrictEqual(sb.set('c')(O.some('ab')), O.some('cb'))
+    U.deepStrictEqual(sb.getOption(O.none), O.none)
+    U.deepStrictEqual(sb.getOption(O.some('')), O.none)
+    U.deepStrictEqual(sb.getOption(O.some('ab')), O.some('a'))
+    U.deepStrictEqual(sb.set('c')(O.none), O.none)
+    U.deepStrictEqual(sb.set('c')(O.some('')), O.some(''))
+    U.deepStrictEqual(sb.set('c')(O.some('ab')), O.some('cb'))
   })
 
   it('composeTraversal', () => {
@@ -162,33 +162,33 @@ describe('Prism', () => {
     const sa = pipe(_.id<S>(), _.some)
     const ab = T.fromTraversable(A.readonlyArray)<number>()
     const sb = pipe(sa, _.composeTraversal(ab))
-    assert.deepStrictEqual(sb.modifyF(Id.identity)((n) => n * 2)(O.none), O.none)
-    assert.deepStrictEqual(sb.modifyF(Id.identity)((n) => n * 2)(O.some([1, 2, 3])), O.some([2, 4, 6]))
+    U.deepStrictEqual(sb.modifyF(Id.identity)((n) => n * 2)(O.none), O.none)
+    U.deepStrictEqual(sb.modifyF(Id.identity)((n) => n * 2)(O.some([1, 2, 3])), O.some([2, 4, 6]))
   })
 
   it('right', () => {
     type S = E.Either<string, number>
     const sa = pipe(_.id<S>(), _.right)
-    assert.deepStrictEqual(sa.getOption(E.right(1)), O.some(1))
-    assert.deepStrictEqual(sa.getOption(E.left('a')), O.none)
-    assert.deepStrictEqual(sa.reverseGet(2), E.right(2))
+    U.deepStrictEqual(sa.getOption(E.right(1)), O.some(1))
+    U.deepStrictEqual(sa.getOption(E.left('a')), O.none)
+    U.deepStrictEqual(sa.reverseGet(2), E.right(2))
   })
 
   it('left', () => {
     type S = E.Either<string, number>
     const sa = pipe(_.id<S>(), _.left)
-    assert.deepStrictEqual(sa.getOption(E.right(1)), O.none)
-    assert.deepStrictEqual(sa.getOption(E.left('a')), O.some('a'))
-    assert.deepStrictEqual(sa.reverseGet('b'), E.left('b'))
+    U.deepStrictEqual(sa.getOption(E.right(1)), O.none)
+    U.deepStrictEqual(sa.getOption(E.left('a')), O.some('a'))
+    U.deepStrictEqual(sa.reverseGet('b'), E.left('b'))
   })
 
   it('atKey', () => {
     type S = Readonly<Record<string, number>>
     const sa = pipe(_.id<S>(), _.atKey('a'))
-    assert.deepStrictEqual(sa.getOption({ a: 1 }), O.some(O.some(1)))
-    assert.deepStrictEqual(sa.set(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
-    assert.deepStrictEqual(sa.set(O.some(1))({ b: 2 }), { a: 1, b: 2 })
-    assert.deepStrictEqual(sa.set(O.none)({ a: 1, b: 2 }), { b: 2 })
+    U.deepStrictEqual(sa.getOption({ a: 1 }), O.some(O.some(1)))
+    U.deepStrictEqual(sa.set(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
+    U.deepStrictEqual(sa.set(O.some(1))({ b: 2 }), { a: 1, b: 2 })
+    U.deepStrictEqual(sa.set(O.none)({ a: 1, b: 2 }), { b: 2 })
   })
 
   it('filter', () => {
@@ -198,11 +198,11 @@ describe('Prism', () => {
       _.some,
       _.filter((n) => n > 0)
     )
-    assert.deepStrictEqual(sa.getOption(O.some(1)), O.some(1))
-    assert.deepStrictEqual(sa.getOption(O.some(-1)), O.none)
-    assert.deepStrictEqual(sa.getOption(O.none), O.none)
-    assert.deepStrictEqual(sa.reverseGet(2), O.some(2))
-    assert.deepStrictEqual(sa.reverseGet(-1), O.some(-1))
+    U.deepStrictEqual(sa.getOption(O.some(1)), O.some(1))
+    U.deepStrictEqual(sa.getOption(O.some(-1)), O.none)
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.reverseGet(2), O.some(2))
+    U.deepStrictEqual(sa.reverseGet(-1), O.some(-1))
   })
 
   it('findFirst', () => {
@@ -212,15 +212,15 @@ describe('Prism', () => {
       _.some,
       _.findFirst((n) => n > 0)
     )
-    assert.deepStrictEqual(sa.getOption(O.none), O.none)
-    assert.deepStrictEqual(sa.getOption(O.some([])), O.none)
-    assert.deepStrictEqual(sa.getOption(O.some([-1, -2, -3])), O.none)
-    assert.deepStrictEqual(sa.getOption(O.some([-1, 2, -3])), O.some(2))
-    assert.deepStrictEqual(sa.set(3)(O.none), O.none)
-    assert.deepStrictEqual(sa.set(3)(O.some([])), O.some([]))
-    assert.deepStrictEqual(sa.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3]))
-    assert.deepStrictEqual(sa.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3]))
-    assert.deepStrictEqual(sa.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4]))
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some([])), O.none)
+    U.deepStrictEqual(sa.getOption(O.some([-1, -2, -3])), O.none)
+    U.deepStrictEqual(sa.getOption(O.some([-1, 2, -3])), O.some(2))
+    U.deepStrictEqual(sa.set(3)(O.none), O.none)
+    U.deepStrictEqual(sa.set(3)(O.some([])), O.some([]))
+    U.deepStrictEqual(sa.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3]))
+    U.deepStrictEqual(sa.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3]))
+    U.deepStrictEqual(sa.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4]))
   })
 
   it('traverse', () => {
@@ -230,16 +230,16 @@ describe('Prism', () => {
       sa,
       T.modify((s) => s.toUpperCase())
     )
-    assert.deepStrictEqual(modify(O.some(['a'])), O.some(['A']))
+    U.deepStrictEqual(modify(O.some(['a'])), O.some(['A']))
   })
 
   it('fromNullable', () => {
     type S = O.Option<number | undefined>
     const sa = pipe(_.id<S>(), _.some, _.fromNullable)
-    assert.deepStrictEqual(sa.getOption(O.none), O.none)
-    assert.deepStrictEqual(sa.getOption(O.some(undefined)), O.none)
-    assert.deepStrictEqual(sa.getOption(O.some(1)), O.some(1))
-    assert.deepStrictEqual(sa.reverseGet(1), O.some(1))
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some(undefined)), O.none)
+    U.deepStrictEqual(sa.getOption(O.some(1)), O.some(1))
+    U.deepStrictEqual(sa.reverseGet(1), O.some(1))
   })
 
   it('modifyF', () => {
@@ -247,8 +247,8 @@ describe('Prism', () => {
       value,
       _.modifyF(O.option)((n) => (n > 0 ? O.some(n * 2) : O.none))
     )
-    assert.deepStrictEqual(f(node(1, leaf, leaf)), O.some(node(2, leaf, leaf)))
-    assert.deepStrictEqual(f(leaf), O.some(leaf))
-    assert.deepStrictEqual(f(node(-1, leaf, leaf)), O.none)
+    U.deepStrictEqual(f(node(1, leaf, leaf)), O.some(node(2, leaf, leaf)))
+    U.deepStrictEqual(f(leaf), O.some(leaf))
+    U.deepStrictEqual(f(node(-1, leaf, leaf)), O.none)
   })
 })

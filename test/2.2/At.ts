@@ -8,6 +8,7 @@ import { eqNumber } from 'fp-ts/lib/Eq'
 import * as R from 'fp-ts/lib/Record'
 import * as S from 'fp-ts/lib/Set'
 import { Iso } from '../../src'
+import * as U from '../util'
 
 describe('At', () => {
   describe('atRecord', () => {
@@ -15,12 +16,12 @@ describe('At', () => {
     const at = atRecord<string>().at('key')
 
     it('get', () => {
-      assert.deepStrictEqual(at.get(map), some('value'))
+      U.deepStrictEqual(at.get(map), some('value'))
     })
 
     it('add', () => {
       const newMap = at.set(some('NEW'))(map)
-      assert.deepStrictEqual(newMap, R.singleton('key', 'NEW'))
+      U.deepStrictEqual(newMap, R.singleton('key', 'NEW'))
     })
 
     it('delete', () => {
@@ -34,12 +35,12 @@ describe('At', () => {
     const at = atReadonlyRecord<string>().at('key')
 
     it('get', () => {
-      assert.deepStrictEqual(at.get(map), some('value'))
+      U.deepStrictEqual(at.get(map), some('value'))
     })
 
     it('add', () => {
       const newMap = at.set(some('NEW'))(map)
-      assert.deepStrictEqual(newMap, R.singleton('key', 'NEW'))
+      U.deepStrictEqual(newMap, R.singleton('key', 'NEW'))
     })
 
     it('delete', () => {
@@ -53,17 +54,17 @@ describe('At', () => {
     const at = atSet(eqNumber).at(3)
 
     it('get', () => {
-      assert.deepStrictEqual(at.get(set), true)
+      U.deepStrictEqual(at.get(set), true)
     })
 
     it('add', () => {
       const newSet = at.set(true)(set)
-      assert.deepStrictEqual(newSet, set)
+      U.deepStrictEqual(newSet, set)
     })
 
     it('delete', () => {
       const newSet = at.set(false)(set)
-      assert.deepStrictEqual(newSet, new Set())
+      U.deepStrictEqual(newSet, new Set())
     })
   })
 
@@ -72,17 +73,17 @@ describe('At', () => {
     const at = atReadonlySet(eqNumber).at(3)
 
     it('get', () => {
-      assert.deepStrictEqual(at.get(set), true)
+      U.deepStrictEqual(at.get(set), true)
     })
 
     it('add', () => {
       const newSet = at.set(true)(set)
-      assert.deepStrictEqual(newSet, set)
+      U.deepStrictEqual(newSet, set)
     })
 
     it('delete', () => {
       const newSet = at.set(false)(set)
-      assert.deepStrictEqual(newSet, new Set())
+      U.deepStrictEqual(newSet, new Set())
     })
   })
 
@@ -92,10 +93,10 @@ describe('At', () => {
       R.map(String)
     )
     const at = atRecord<number>().fromIso(iso).at('a')
-    assert.deepStrictEqual(at.get({}), none)
-    assert.deepStrictEqual(at.get({ a: '1' }), some(1))
+    U.deepStrictEqual(at.get({}), none)
+    U.deepStrictEqual(at.get({ a: '1' }), some(1))
 
-    assert.deepStrictEqual(at.set(none)({}), {})
-    assert.deepStrictEqual(at.set(some(1))({}), { a: '1' })
+    U.deepStrictEqual(at.set(none)({}), {})
+    U.deepStrictEqual(at.set(some(1))({}), { a: '1' })
   })
 })

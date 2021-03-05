@@ -2,6 +2,7 @@ import * as assert from 'assert'
 import { identity } from 'fp-ts/lib/function'
 import * as O from 'fp-ts/lib/Option'
 import { Optional } from '../../src'
+import * as U from '../util'
 
 describe('Optional', () => {
   interface Phone {
@@ -35,9 +36,9 @@ describe('Optional', () => {
 
     const numberFromResponse = Optional.fromPath<Response>()(['info', 'employment', 'phone', 'number'])
 
-    assert.deepStrictEqual(numberFromResponse.getOption(response1), O.some('555-1234'))
-    assert.deepStrictEqual(numberFromResponse.getOption(response2), O.none)
-    assert.deepStrictEqual(numberFromResponse.set('b')(response1), {
+    U.deepStrictEqual(numberFromResponse.getOption(response1), O.some('555-1234'))
+    U.deepStrictEqual(numberFromResponse.getOption(response2), O.none)
+    U.deepStrictEqual(numberFromResponse.set('b')(response1), {
       info: {
         employment: {
           phone: {
@@ -46,7 +47,7 @@ describe('Optional', () => {
         }
       }
     })
-    assert.deepStrictEqual(numberFromResponse.set('b')(response2), response2)
+    U.deepStrictEqual(numberFromResponse.set('b')(response2), response2)
     assert.strictEqual(numberFromResponse.set('555-1234')(response1), response1)
     assert.strictEqual(numberFromResponse.modify(identity)(response1), response1)
     assert.strictEqual(numberFromResponse.modify(identity)(response2), response2)
@@ -68,9 +69,9 @@ describe('Optional', () => {
     const s1: S = { a: undefined }
     const s2: S = { a: null }
     const s3: S = { a: 1 }
-    assert.deepStrictEqual(optional.set(2)(s1), s1)
-    assert.deepStrictEqual(optional.set(2)(s2), s2)
-    assert.deepStrictEqual(optional.set(2)(s3), { a: 2 })
+    U.deepStrictEqual(optional.set(2)(s1), s1)
+    U.deepStrictEqual(optional.set(2)(s2), s2)
+    U.deepStrictEqual(optional.set(2)(s3), { a: 2 })
   })
 
   it('fromOptionProp', () => {
@@ -80,8 +81,8 @@ describe('Optional', () => {
     const optional = Optional.fromOptionProp<S>()('a')
     const s1: S = { a: O.none }
     const s2: S = { a: O.some(1) }
-    assert.deepStrictEqual(optional.set(2)(s1), s1)
-    assert.deepStrictEqual(optional.set(2)(s2), { a: O.some(2) })
+    U.deepStrictEqual(optional.set(2)(s1), s1)
+    U.deepStrictEqual(optional.set(2)(s2), { a: O.some(2) })
   })
 
   it('modify', () => {
@@ -90,8 +91,8 @@ describe('Optional', () => {
     }
     const optional = Optional.fromOptionProp<S>()('a')
     const double = (n: number): number => n * 2
-    assert.deepStrictEqual(optional.modify(double)({ a: O.some(2) }), { a: O.some(4) })
-    assert.deepStrictEqual(optional.modify(double)({ a: O.none }), { a: O.none })
+    U.deepStrictEqual(optional.modify(double)({ a: O.some(2) }), { a: O.some(4) })
+    U.deepStrictEqual(optional.modify(double)({ a: O.none }), { a: O.none })
   })
 
   it('compose', () => {
@@ -105,33 +106,33 @@ describe('Optional', () => {
     const phoneNumber = Optional.fromOptionProp<Phone>()('number')
     const composition1 = phone.compose(phoneNumber)
     const composition2 = phone.composeOptional(phoneNumber)
-    assert.deepStrictEqual(composition1.getOption({ phone: O.none }), O.none)
-    assert.deepStrictEqual(composition1.getOption({ phone: O.some({ number: O.none }) }), O.none)
-    assert.deepStrictEqual(composition1.getOption({ phone: O.some({ number: O.some('a') }) }), O.some('a'))
-    assert.deepStrictEqual(composition1.set('a')({ phone: O.none }), { phone: O.none })
-    assert.deepStrictEqual(composition1.set('a')({ phone: O.some({ number: O.none }) }), {
+    U.deepStrictEqual(composition1.getOption({ phone: O.none }), O.none)
+    U.deepStrictEqual(composition1.getOption({ phone: O.some({ number: O.none }) }), O.none)
+    U.deepStrictEqual(composition1.getOption({ phone: O.some({ number: O.some('a') }) }), O.some('a'))
+    U.deepStrictEqual(composition1.set('a')({ phone: O.none }), { phone: O.none })
+    U.deepStrictEqual(composition1.set('a')({ phone: O.some({ number: O.none }) }), {
       phone: O.some({ number: O.none })
     })
-    assert.deepStrictEqual(composition1.set('a')({ phone: O.some({ number: O.some('b') }) }), {
+    U.deepStrictEqual(composition1.set('a')({ phone: O.some({ number: O.some('b') }) }), {
       phone: O.some({ number: O.some('a') })
     })
 
-    assert.deepStrictEqual(composition2.getOption({ phone: O.none }), composition1.getOption({ phone: O.none }))
-    assert.deepStrictEqual(
+    U.deepStrictEqual(composition2.getOption({ phone: O.none }), composition1.getOption({ phone: O.none }))
+    U.deepStrictEqual(
       composition2.getOption({ phone: O.some({ number: O.none }) }),
       composition1.getOption({ phone: O.some({ number: O.none }) })
     )
-    assert.deepStrictEqual(
+    U.deepStrictEqual(
       composition2.getOption({ phone: O.some({ number: O.some('a') }) }),
       composition1.getOption({ phone: O.some({ number: O.some('a') }) })
     )
 
-    assert.deepStrictEqual(composition2.set('a')({ phone: O.none }), composition1.set('a')({ phone: O.none }))
-    assert.deepStrictEqual(
+    U.deepStrictEqual(composition2.set('a')({ phone: O.none }), composition1.set('a')({ phone: O.none }))
+    U.deepStrictEqual(
       composition2.set('a')({ phone: O.some({ number: O.none }) }),
       composition1.set('a')({ phone: O.some({ number: O.none }) })
     )
-    assert.deepStrictEqual(
+    U.deepStrictEqual(
       composition2.set('a')({ phone: O.some({ number: O.some('b') }) }),
       composition1.set('a')({ phone: O.some({ number: O.some('b') }) })
     )
