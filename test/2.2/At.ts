@@ -1,5 +1,7 @@
 import { atRecord } from '../../src/At/Record'
+import { atReadonlyRecord } from '../../src/At/ReadonlyRecord'
 import { atSet } from '../../src/At/Set'
+import { atReadonlySet } from '../../src/At/ReadonlySet'
 import * as assert from 'assert'
 import { none, some } from 'fp-ts/lib/Option'
 import { eqNumber } from 'fp-ts/lib/Eq'
@@ -18,13 +20,30 @@ describe('At', () => {
 
     it('add', () => {
       const newMap = at.set(some('NEW'))(map)
-
       assert.deepStrictEqual(newMap, R.singleton('key', 'NEW'))
     })
 
     it('delete', () => {
       const newMap = at.set(none)(map)
+      assert(R.isEmpty(newMap))
+    })
+  })
 
+  describe('atReadonlyRecord', () => {
+    const map = R.singleton('key', 'value')
+    const at = atReadonlyRecord<string>().at('key')
+
+    it('get', () => {
+      assert.deepStrictEqual(at.get(map), some('value'))
+    })
+
+    it('add', () => {
+      const newMap = at.set(some('NEW'))(map)
+      assert.deepStrictEqual(newMap, R.singleton('key', 'NEW'))
+    })
+
+    it('delete', () => {
+      const newMap = at.set(none)(map)
       assert(R.isEmpty(newMap))
     })
   })
@@ -39,13 +58,30 @@ describe('At', () => {
 
     it('add', () => {
       const newSet = at.set(true)(set)
-
       assert.deepStrictEqual(newSet, set)
     })
 
     it('delete', () => {
       const newSet = at.set(false)(set)
+      assert.deepStrictEqual(newSet, new Set())
+    })
+  })
 
+  describe('atReadonlySet', () => {
+    const set = S.singleton(3)
+    const at = atReadonlySet(eqNumber).at(3)
+
+    it('get', () => {
+      assert.deepStrictEqual(at.get(set), true)
+    })
+
+    it('add', () => {
+      const newSet = at.set(true)(set)
+      assert.deepStrictEqual(newSet, set)
+    })
+
+    it('delete', () => {
+      const newSet = at.set(false)(set)
       assert.deepStrictEqual(newSet, new Set())
     })
   })
