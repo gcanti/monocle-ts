@@ -1,5 +1,5 @@
-import * as TE from 'fp-ts/TaskEither'
-import { flow } from 'fp-ts/function'
+import * as TE from 'fp-ts/lib/TaskEither'
+import { flow } from 'fp-ts/lib/function'
 import * as fs from 'fs'
 import * as G from 'glob'
 
@@ -25,6 +25,6 @@ export const fileSystem: FileSystem = {
   mkdir: flow(
     mkdirTE,
     TE.map(() => undefined),
-    TE.orElse((e) => (e.code === 'EEXIST' ? TE.of(undefined) : TE.left(e)))
+    TE.orElse((e) => (e.code === 'EEXIST' ? TE.right(undefined) : TE.left(e)))
   )
 }

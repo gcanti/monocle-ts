@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import { pipe } from 'fp-ts/lib/function'
+import { pipe } from 'fp-ts/lib/pipeable'
 import * as O from 'fp-ts/lib/Option'
 import * as E from 'fp-ts/lib/Either'
 import * as _ from '../src/Prism'
@@ -162,8 +162,8 @@ describe('Prism', () => {
     const sa = pipe(_.id<S>(), _.some)
     const ab = T.fromTraversable(A.readonlyArray)<number>()
     const sb = pipe(sa, _.composeTraversal(ab))
-    assert.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)(O.none), O.none)
-    assert.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)(O.some([1, 2, 3])), O.some([2, 4, 6]))
+    assert.deepStrictEqual(sb.modifyF(Id.identity)((n) => n * 2)(O.none), O.none)
+    assert.deepStrictEqual(sb.modifyF(Id.identity)((n) => n * 2)(O.some([1, 2, 3])), O.some([2, 4, 6]))
   })
 
   it('right', () => {
@@ -245,7 +245,7 @@ describe('Prism', () => {
   it('modifyF', () => {
     const f = pipe(
       value,
-      _.modifyF(O.Applicative)((n) => (n > 0 ? O.some(n * 2) : O.none))
+      _.modifyF(O.option)((n) => (n > 0 ? O.some(n * 2) : O.none))
     )
     assert.deepStrictEqual(f(node(1, leaf, leaf)), O.some(node(2, leaf, leaf)))
     assert.deepStrictEqual(f(leaf), O.some(leaf))

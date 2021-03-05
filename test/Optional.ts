@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 import * as O from 'fp-ts/lib/Option'
 import * as _ from '../src/Optional'
-import { pipe } from 'fp-ts/lib/function'
+import { pipe } from 'fp-ts/lib/pipeable'
 import * as Id from 'fp-ts/lib/Identity'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as T from '../src/Traversal'
@@ -72,8 +72,8 @@ describe('Optional', () => {
     const sa = pipe(L.id<S>(), L.prop('a'), L.some)
     const ab = T.fromTraversable(A.readonlyArray)<number>()
     const sb = pipe(sa, _.composeTraversal(ab))
-    assert.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)({ a: O.none }), { a: O.none })
-    assert.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)({ a: O.some([1, 2, 3]) }), { a: O.some([2, 4, 6]) })
+    assert.deepStrictEqual(sb.modifyF(Id.identity)((n) => n * 2)({ a: O.none }), { a: O.none })
+    assert.deepStrictEqual(sb.modifyF(Id.identity)((n) => n * 2)({ a: O.some([1, 2, 3]) }), { a: O.some([2, 4, 6]) })
   })
 
   it('id', () => {
@@ -196,7 +196,7 @@ describe('Optional', () => {
     const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
     const f = pipe(
       sa,
-      _.modifyF(O.Applicative)((n) => (n > 0 ? O.some(n * 2) : O.none))
+      _.modifyF(O.option)((n) => (n > 0 ? O.some(n * 2) : O.none))
     )
     assert.deepStrictEqual(f([]), O.some([]))
     assert.deepStrictEqual(f([1, 2, 3]), O.some([2, 2, 3]))

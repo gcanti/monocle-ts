@@ -1,5 +1,5 @@
 import * as P from '../../src/Prism'
-import { pipe } from 'fp-ts/lib/function'
+import { pipe } from 'fp-ts/lib/pipeable'
 
 interface A {
   a: string
