@@ -1,5 +1,5 @@
 import * as assert from 'assert'
-import { pipe } from 'fp-ts/lib/function'
+import { pipe } from 'fp-ts/lib/pipeable'
 import * as _ from '../src/Iso'
 import * as Id from 'fp-ts/lib/Identity'
 import * as O from 'fp-ts/lib/Option'
@@ -63,7 +63,7 @@ describe('Iso', () => {
   it('modifyF', () => {
     const f = pipe(
       double,
-      _.modifyF(O.Functor)((n) => (n > 0 ? O.some(n * 2) : O.none))
+      _.modifyF(O.option)((n) => (n > 0 ? O.some(n * 2) : O.none))
     )
     assert.deepStrictEqual(f(1), O.some(2))
     assert.deepStrictEqual(f(-1), O.none)

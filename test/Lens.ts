@@ -1,6 +1,6 @@
 import * as assert from 'assert'
 import * as _ from '../src/Lens'
-import { pipe } from 'fp-ts/lib/function'
+import { pipe } from 'fp-ts/lib/pipeable'
 import * as O from 'fp-ts/lib/Option'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as T from '../src/Traversal'
@@ -46,7 +46,7 @@ describe('Lens', () => {
     const sa = pipe(_.id<S>(), _.prop('a'))
     const ab = T.fromTraversable(A.readonlyArray)<number>()
     const sb = pipe(sa, _.composeTraversal(ab))
-    assert.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)({ a: [1, 2, 3] }), { a: [2, 4, 6] })
+    assert.deepStrictEqual(sb.modifyF(Id.identity)((n) => n * 2)({ a: [1, 2, 3] }), { a: [2, 4, 6] })
   })
 
   it('id', () => {
@@ -241,7 +241,7 @@ describe('Lens', () => {
     const sa: _.Lens<S, number> = pipe(_.id<S>(), _.prop('a'))
     const f = pipe(
       sa,
-      _.modifyF(O.Functor)((n) => (n > 0 ? O.some(n * 2) : O.none))
+      _.modifyF(O.option)((n) => (n > 0 ? O.some(n * 2) : O.none))
     )
     assert.deepStrictEqual(f({ a: 1 }), O.some({ a: 2 }))
     assert.deepStrictEqual(f({ a: -1 }), O.none)

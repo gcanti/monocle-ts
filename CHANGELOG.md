@@ -15,6 +15,8 @@ high state of flux, you're at risk of it changing without notice.
 
 # 2.3.8
 
+Experimental modules require `fp-ts@^2.5.0`.
+
 - **Experimental**
   - `Lens`
     - add `composeIso` (@gcanti)

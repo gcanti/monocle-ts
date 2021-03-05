@@ -3,7 +3,7 @@ import * as _ from '../src/Traversal'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as Id from 'fp-ts/lib/Identity'
 import * as O from 'fp-ts/lib/Option'
-import { pipe } from 'fp-ts/lib/function'
+import { pipe } from 'fp-ts/lib/pipeable'
 import { monoidSum } from 'fp-ts/lib/Monoid'
 
 describe('Traversal', () => {

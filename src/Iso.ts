@@ -15,7 +15,8 @@
  * @since 2.3.0
  */
 import { Category2 } from 'fp-ts/lib/Category'
-import { flow, identity, pipe } from 'fp-ts/lib/function'
+import { flow, identity } from 'fp-ts/lib/function'
+import { pipe } from 'fp-ts/lib/pipeable'
 import { Functor, Functor1, Functor2, Functor3 } from 'fp-ts/lib/Functor'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'

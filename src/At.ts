@@ -60,7 +60,7 @@ export const atReadonlyMap = <K>(E: Eq<K>): (<A = never>() => At<ReadonlyMap<K, 
   const insertAtE = RM.insertAt(E)
   return () => ({
     at: (key) => ({
-      get: lookupE(key),
+      get: (s) => lookupE(key, s),
       set: O.fold(
         () => deleteAtE(key),
         (a) => insertAtE(key, a)
@@ -82,7 +82,7 @@ export const atReadonlySet = <A>(E: Eq<A>): At<ReadonlySet<A>, A, boolean> => {
       const insert = insertE(a)
       const remove = removeE(a)
       return {
-        get: elemE(a),
+        get: (s) => elemE(a, s),
         set: (b) => (s) => (b ? insert(s) : remove(s))
       }
     }

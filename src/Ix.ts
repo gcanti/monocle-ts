@@ -73,14 +73,13 @@ export const indexReadonlyMap = <K>(E: Eq<K>): (<A = never>() => Index<ReadonlyM
   const insertAtE = RM.insertAt(E)
   return () => ({
     index: (key) => {
-      const lookup = lookupE(key)
       return {
-        getOption: lookup,
+        getOption: (s) => lookupE(key, s),
         set: (next) => {
           const insert = insertAtE(key, next)
           return (s) =>
             pipe(
-              lookup(s),
+              lookupE(key, s),
               O.fold(
                 () => s,
                 (prev) => (next === prev ? s : insert(s))
