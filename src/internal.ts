@@ -84,7 +84,7 @@ export const lensProp = <A, P extends keyof A>(prop: P) => <S>(lens: Lens<S, A>)
 })
 
 /** @internal */
-export const lensProps = <A, P extends keyof A>(...props: [P, P, ...Array<P>]) => <S>(
+export const lensProps = <A, P extends keyof A>(...props: readonly [P, P, ...ReadonlyArray<P>]) => <S>(
   lens: Lens<S, A>
 ): Lens<S, { [K in P]: A[K] }> => ({
   get: (s) => {

@@ -5,16 +5,16 @@ import { Optional } from '../../src'
 
 describe('Optional', () => {
   interface Phone {
-    number: string
+    readonly number: string
   }
   interface Employment {
-    phone?: Phone
+    readonly phone?: Phone
   }
   interface Info {
-    employment?: Employment
+    readonly employment?: Employment
   }
   interface Response {
-    info?: Info
+    readonly info?: Info
   }
 
   it('fromPath', () => {
@@ -62,7 +62,7 @@ describe('Optional', () => {
     //
 
     interface S {
-      a: number | undefined | null
+      readonly a: number | undefined | null
     }
     const optional = Optional.fromNullableProp<S>()('a')
     const s1: S = { a: undefined }
@@ -75,7 +75,7 @@ describe('Optional', () => {
 
   it('fromOptionProp', () => {
     interface S {
-      a: O.Option<number>
+      readonly a: O.Option<number>
     }
     const optional = Optional.fromOptionProp<S>()('a')
     const s1: S = { a: O.none }
@@ -86,7 +86,7 @@ describe('Optional', () => {
 
   it('modify', () => {
     interface S {
-      a: O.Option<number>
+      readonly a: O.Option<number>
     }
     const optional = Optional.fromOptionProp<S>()('a')
     const double = (n: number): number => n * 2
@@ -96,10 +96,10 @@ describe('Optional', () => {
 
   it('compose', () => {
     interface Phone {
-      number: O.Option<string>
+      readonly number: O.Option<string>
     }
     interface Employment {
-      phone: O.Option<Phone>
+      readonly phone: O.Option<Phone>
     }
     const phone = Optional.fromOptionProp<Employment>()('phone')
     const phoneNumber = Optional.fromOptionProp<Phone>()('number')

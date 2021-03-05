@@ -1355,7 +1355,7 @@ export class Fold<S, A> {
    * @since 1.0.0
    */
   readonly all: (p: Predicate<A>) => Predicate<S>
-  private foldMapFirst: (f: (a: A) => Option<A>) => (s: S) => Option<A>
+  private readonly foldMapFirst: (f: (a: A) => Option<A>) => (s: S) => Option<A>
   constructor(readonly foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M) {
     this.getAll = foldMap(getMonoid<A>())((a) => [a])
     this.exist = foldMap(monoidAny)

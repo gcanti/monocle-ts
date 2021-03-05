@@ -1,10 +1,16 @@
 {
-  "extends": "tslint-config-standard",
+  "extends": ["tslint-config-standard", "tslint-immutable"],
   "rules": {
     "space-before-function-paren": false,
-    "no-unnecessary-generics": false,
-    "deprecation": true,
+    "no-use-before-declare": false,
     "variable-name": false,
-    "ter-indent": false
+    "quotemark": [true, "single", "jsx-double"],
+    "ter-indent": false,
+    "strict-boolean-expressions": true,
+    "forin": true,
+    "no-console": true,
+    "array-type": [true, "generic"],
+    "readonly-keyword": true,
+    "readonly-array": false
   }
 }

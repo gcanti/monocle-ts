@@ -11,8 +11,15 @@ import * as T from '../src/Traversal'
 // model
 // -------------------------------------------------------------------------------------
 
-type Leaf = { _tag: 'Leaf' }
-type Node = { _tag: 'Node'; value: number; left: Tree; right: Tree }
+type Leaf = {
+  readonly _tag: 'Leaf'
+}
+type Node = {
+  readonly _tag: 'Node'
+  readonly value: number
+  readonly left: Tree
+  readonly right: Tree
+}
 type Tree = Leaf | Node
 
 // -------------------------------------------------------------------------------------
@@ -85,14 +92,21 @@ describe('Prism', () => {
   })
 
   it('prop', () => {
-    type S = O.Option<{ a: string; b: number }>
+    type S = O.Option<{
+      readonly a: string
+      readonly b: number
+    }>
     const sa = pipe(_.id<S>(), _.some, _.prop('a'))
     assert.deepStrictEqual(sa.getOption(O.none), O.none)
     assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1 })), O.some('a'))
   })
 
   it('props', () => {
-    type S = O.Option<{ a: string; b: number; c: boolean }>
+    type S = O.Option<{
+      readonly a: string
+      readonly b: number
+      readonly c: boolean
+    }>
     const sa = pipe(_.id<S>(), _.some, _.props('a', 'b'))
     assert.deepStrictEqual(sa.getOption(O.none), O.none)
     assert.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))

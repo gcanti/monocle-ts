@@ -170,7 +170,7 @@ export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Lens<S, A>) => Len
  * @since 2.3.0
  */
 export const props: <A, P extends keyof A>(
-  ...props: [P, P, ...Array<P>]
+  ...props: readonly [P, P, ...ReadonlyArray<P>]
 ) => <S>(sa: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> = _.lensProps
 
 /**

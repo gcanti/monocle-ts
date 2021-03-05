@@ -4,12 +4,12 @@ import { Refinement } from 'fp-ts/lib/function'
 import { none, some, Option } from 'fp-ts/lib/Option'
 
 interface A {
-  type: 'A'
-  a: string
+  readonly type: 'A'
+  readonly a: string
 }
 interface B {
-  type: 'B'
-  b: Option<number>
+  readonly type: 'B'
+  readonly b: Option<number>
 }
 type U = A | B
 

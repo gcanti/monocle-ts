@@ -6,11 +6,11 @@ import { Option, isSome, some, Some } from 'fp-ts/lib/Option'
 describe('Traversal', () => {
   it('fromTraversable', () => {
     interface Tweet {
-      text: string
+      readonly text: string
     }
 
     interface Tweets {
-      tweets: Tweet[]
+      readonly tweets: Array<Tweet>
     }
 
     const tweetsLens = Lens.fromProp<Tweets>()('tweets')

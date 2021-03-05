@@ -204,7 +204,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Prism<S, A>) => Op
  * @since 2.3.0
  */
 export const props = <A, P extends keyof A>(
-  ...props: [P, P, ...Array<P>]
+  ...props: readonly [P, P, ...ReadonlyArray<P>]
 ): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) => composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
 
 /**

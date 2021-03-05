@@ -1,7 +1,10 @@
 import { Getter } from '../../src'
 import * as assert from 'assert'
 
-type Point = { x: number; y: number }
+type Point = {
+  readonly x: number
+  readonly y: number
+}
 
 const _x = new Getter<Point, number>((p: Point): number => p.x)
 

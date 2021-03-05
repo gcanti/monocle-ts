@@ -27,7 +27,14 @@ describe('Traversal', () => {
   })
 
   it('prop', () => {
-    const sa = pipe(_.fromTraversable(A.readonlyArray)<{ a: string; b: number; c: boolean }>(), _.prop('b'))
+    const sa = pipe(
+      _.fromTraversable(A.readonlyArray)<{
+        readonly a: string
+        readonly b: number
+        readonly c: boolean
+      }>(),
+      _.prop('b')
+    )
     assert.deepStrictEqual(
       sa.modifyF(Id.identity)((n) => n * 2)([
         { a: 'a', b: 1, c: true },
@@ -43,7 +50,14 @@ describe('Traversal', () => {
   })
 
   it('props', () => {
-    const sa = pipe(_.fromTraversable(A.readonlyArray)<{ a: string; b: number; c: boolean }>(), _.props('a', 'b'))
+    const sa = pipe(
+      _.fromTraversable(A.readonlyArray)<{
+        readonly a: string
+        readonly b: number
+        readonly c: boolean
+      }>(),
+      _.props('a', 'b')
+    )
     assert.deepStrictEqual(
       sa.modifyF(Id.identity)((x) => ({ a: x.a, b: x.b * 2 }))([
         { a: 'a', b: 1, c: true },

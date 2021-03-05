@@ -68,10 +68,10 @@ export const indexReadonlyRecord: <A = never>() => Index<Readonly<Record<string,
  * @category constructors
  * @since 2.3.7
  */
-export const indexReadonlyMap = <K>(E: Eq<K>) => <A = never>(): Index<ReadonlyMap<K, A>, K, A> => {
+export const indexReadonlyMap = <K>(E: Eq<K>): (<A = never>() => Index<ReadonlyMap<K, A>, K, A>) => {
   const lookupE = RM.lookup(E)
   const insertAtE = RM.insertAt(E)
-  return {
+  return () => ({
     index: (key) => {
       const lookup = lookupE(key)
       return {
@@ -89,7 +89,7 @@ export const indexReadonlyMap = <K>(E: Eq<K>) => <A = never>(): Index<ReadonlyMa
         }
       }
     }
-  }
+  })
 }
 
 // -------------------------------------------------------------------------------------

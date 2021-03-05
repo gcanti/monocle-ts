@@ -3,20 +3,20 @@ import * as assert from 'assert'
 import { identity } from 'fp-ts/lib/function'
 
 interface Street {
-  num: number
-  name: string
+  readonly num: number
+  readonly name: string
 }
 interface Address {
-  city: string
-  street: Street
+  readonly city: string
+  readonly street: Street
 }
 interface Company {
-  name: string
-  address: Address
+  readonly name: string
+  readonly address: Address
 }
 interface Employee {
-  name: string
-  company: Company
+  readonly name: string
+  readonly company: Company
 }
 
 const employee: Employee = {
@@ -34,9 +34,9 @@ const employee: Employee = {
 }
 
 interface Person {
-  name: string
-  age: number
-  rememberMe: boolean
+  readonly name: string
+  readonly age: number
+  readonly rememberMe: boolean
 }
 
 const person: Person = { name: 'giulio', age: 44, rememberMe: true }
@@ -63,13 +63,13 @@ describe('Lens', () => {
 
   it('fromNullableProp', () => {
     interface Outer {
-      inner?: Inner
+      readonly inner?: Inner
     }
     const outer1 = { inner: { value: 1, foo: 'a' } }
 
     interface Inner {
-      value: number
-      foo: string
+      readonly value: number
+      readonly foo: string
     }
 
     const value = Lens.fromProp<Inner>()('value')

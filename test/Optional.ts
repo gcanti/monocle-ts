@@ -9,9 +9,9 @@ import * as L from '../src/Lens'
 import * as P from '../src/Prism'
 
 type S = O.Option<{
-  a: string
-  b: number
-  c: boolean
+  readonly a: string
+  readonly b: number
+  readonly c: boolean
 }>
 
 describe('Optional', () => {
@@ -41,7 +41,7 @@ describe('Optional', () => {
   })
 
   it('composeLens', () => {
-    type Inner = { a: number }
+    type Inner = { readonly a: number }
     type S = O.Option<Inner>
     const sa = pipe(_.id<S>(), _.some)
     const ab = pipe(L.id<Inner>(), L.prop('a'))
@@ -123,7 +123,7 @@ describe('Optional', () => {
   })
 
   it('filter', () => {
-    type S = O.Option<{ a: number }>
+    type S = O.Option<{ readonly a: number }>
     const sa = pipe(
       _.id<S>(),
       _.some,
@@ -140,7 +140,7 @@ describe('Optional', () => {
   })
 
   it('findFirst', () => {
-    type S = O.Option<{ a: ReadonlyArray<number> }>
+    type S = O.Option<{ readonly a: ReadonlyArray<number> }>
     const sa = pipe(
       _.id<S>(),
       _.some,
@@ -159,7 +159,7 @@ describe('Optional', () => {
   })
 
   it('traverse', () => {
-    type S = O.Option<{ a: ReadonlyArray<string> }>
+    type S = O.Option<{ readonly a: ReadonlyArray<string> }>
     const sa = pipe(_.id<S>(), _.some, _.prop('a'), _.traverse(A.readonlyArray))
     const modify = pipe(
       sa,
@@ -170,7 +170,7 @@ describe('Optional', () => {
 
   it('fromNullable', () => {
     interface S {
-      a?: number
+      readonly a?: number
     }
     const sa = pipe(_.id<S>(), _.prop('a'), _.fromNullable)
     assert.deepStrictEqual(sa.getOption({}), O.none)
