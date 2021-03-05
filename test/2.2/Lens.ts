@@ -1,6 +1,7 @@
 import { Lens } from '../../src'
 import * as assert from 'assert'
 import { identity } from 'fp-ts/lib/function'
+import * as U from '../util'
 
 interface Street {
   readonly num: number
@@ -75,9 +76,9 @@ describe('Lens', () => {
     const value = Lens.fromProp<Inner>()('value')
     const inner = Lens.fromNullableProp<Outer>()('inner', { value: 0, foo: 'foo' })
     const lens = inner.compose(value)
-    assert.deepStrictEqual(lens.set(1)({}), { inner: { value: 1, foo: 'foo' } })
+    U.deepStrictEqual(lens.set(1)({}), { inner: { value: 1, foo: 'foo' } })
     assert.strictEqual(lens.get({}), 0)
-    assert.deepStrictEqual(lens.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
+    U.deepStrictEqual(lens.set(1)({ inner: { value: 1, foo: 'bar' } }), { inner: { value: 1, foo: 'bar' } })
     assert.strictEqual(lens.get({ inner: { value: 1, foo: 'bar' } }), 1)
     assert.strictEqual(lens.set(1)(outer1), outer1)
     assert.strictEqual(lens.modify(identity)(outer1), outer1)
@@ -85,8 +86,8 @@ describe('Lens', () => {
 
   it('fromProps', () => {
     const lens = Lens.fromProps<Person>()(['name', 'age'])
-    assert.deepStrictEqual(lens.get(person), { name: 'giulio', age: 44 })
-    assert.deepStrictEqual(lens.set({ name: 'Guido', age: 47 })(person), { name: 'Guido', age: 47, rememberMe: true })
+    U.deepStrictEqual(lens.get(person), { name: 'giulio', age: 44 })
+    U.deepStrictEqual(lens.set({ name: 'Guido', age: 47 })(person), { name: 'Guido', age: 47, rememberMe: true })
     assert.strictEqual(lens.set({ age: 44, name: 'giulio' })(person), person)
     assert.strictEqual(lens.modify(identity)(person), person)
   })
@@ -111,12 +112,12 @@ describe('Lens', () => {
       }
     }
     assert.strictEqual(composition1.get(address), 'name')
-    assert.deepStrictEqual(composition1.set('name2')(address), expected)
+    U.deepStrictEqual(composition1.set('name2')(address), expected)
     assert.strictEqual(composition1.set('name')(address), address)
     assert.strictEqual(composition1.modify(identity)(address), address)
 
     assert.strictEqual(composition2.get(address), composition1.get(address))
-    assert.deepStrictEqual(composition2.set('name2')(address), composition1.set('name2')(address))
+    U.deepStrictEqual(composition2.set('name2')(address), composition1.set('name2')(address))
     assert.strictEqual(composition2.set('name')(address), address)
     assert.strictEqual(composition2.modify(identity)(address), address)
   })

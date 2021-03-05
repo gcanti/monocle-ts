@@ -4,11 +4,11 @@ import { indexNonEmptyArray } from '../../src/Index/NonEmptyArray'
 import { indexReadonlyNonEmptyArray } from '../../src/Index/ReadonlyNonEmptyArray'
 import { indexRecord } from '../../src/Index/Record'
 import { indexReadonlyRecord } from '../../src/Index/ReadonlyRecord'
-import * as assert from 'assert'
 import { some, none } from 'fp-ts/lib/Option'
 import * as R from 'fp-ts/lib/Record'
 import { cons } from 'fp-ts/lib/NonEmptyArray'
 import { Iso } from '../../src'
+import * as U from '../util'
 
 describe('Index', () => {
   describe('indexRecord', () => {
@@ -16,19 +16,19 @@ describe('Index', () => {
 
     it('get', () => {
       const map = R.singleton('key', 'value')
-      assert.deepStrictEqual(index.getOption(map), some('value'))
+      U.deepStrictEqual(index.getOption(map), some('value'))
     })
 
     it('set if there', () => {
       const map = R.singleton('key', 'value')
       const newMap = index.set('new')(map)
-      assert.deepStrictEqual(newMap, R.singleton('key', 'new'))
+      U.deepStrictEqual(newMap, R.singleton('key', 'new'))
     })
 
     it('leave if missing', () => {
       const map = {}
       const newMap = index.set('new')(map)
-      assert.deepStrictEqual(newMap, map)
+      U.deepStrictEqual(newMap, map)
     })
   })
 
@@ -37,19 +37,19 @@ describe('Index', () => {
 
     it('get', () => {
       const map = R.singleton('key', 'value')
-      assert.deepStrictEqual(index.getOption(map), some('value'))
+      U.deepStrictEqual(index.getOption(map), some('value'))
     })
 
     it('set if there', () => {
       const map = R.singleton('key', 'value')
       const newMap = index.set('new')(map)
-      assert.deepStrictEqual(newMap, R.singleton('key', 'new'))
+      U.deepStrictEqual(newMap, R.singleton('key', 'new'))
     })
 
     it('leave if missing', () => {
       const map = {}
       const newMap = index.set('new')(map)
-      assert.deepStrictEqual(newMap, map)
+      U.deepStrictEqual(newMap, map)
     })
   })
 
@@ -57,23 +57,23 @@ describe('Index', () => {
     const one = indexArray<string>().index(1)
 
     it('get', () => {
-      assert.deepStrictEqual(one.getOption(['a']), none)
-      assert.deepStrictEqual(one.getOption(['a', 'b']), some('b'))
+      U.deepStrictEqual(one.getOption(['a']), none)
+      U.deepStrictEqual(one.getOption(['a', 'b']), some('b'))
     })
 
     it('get', () => {
-      assert.deepStrictEqual(one.set('x')(['a']), ['a'])
-      assert.deepStrictEqual(one.set('x')(['a', 'b']), ['a', 'x'])
+      U.deepStrictEqual(one.set('x')(['a']), ['a'])
+      U.deepStrictEqual(one.set('x')(['a', 'b']), ['a', 'x'])
     })
 
     it('modify', () => {
-      assert.deepStrictEqual(one.modify((v) => `${v}X`)(['a']), ['a'])
-      assert.deepStrictEqual(one.modify((v) => `${v}X`)(['a', 'b']), ['a', 'bX'])
+      U.deepStrictEqual(one.modify((v) => `${v}X`)(['a']), ['a'])
+      U.deepStrictEqual(one.modify((v) => `${v}X`)(['a', 'b']), ['a', 'bX'])
     })
 
     it('modifyOption', () => {
-      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(['a']), none)
-      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(['a', 'b']), some(['a', 'bX']))
+      U.deepStrictEqual(one.modifyOption((v) => `${v}X`)(['a']), none)
+      U.deepStrictEqual(one.modifyOption((v) => `${v}X`)(['a', 'b']), some(['a', 'bX']))
     })
   })
 
@@ -81,23 +81,23 @@ describe('Index', () => {
     const one = indexReadonlyArray<string>().index(1)
 
     it('get', () => {
-      assert.deepStrictEqual(one.getOption(['a']), none)
-      assert.deepStrictEqual(one.getOption(['a', 'b']), some('b'))
+      U.deepStrictEqual(one.getOption(['a']), none)
+      U.deepStrictEqual(one.getOption(['a', 'b']), some('b'))
     })
 
     it('get', () => {
-      assert.deepStrictEqual(one.set('x')(['a']), ['a'])
-      assert.deepStrictEqual(one.set('x')(['a', 'b']), ['a', 'x'])
+      U.deepStrictEqual(one.set('x')(['a']), ['a'])
+      U.deepStrictEqual(one.set('x')(['a', 'b']), ['a', 'x'])
     })
 
     it('modify', () => {
-      assert.deepStrictEqual(one.modify((v) => `${v}X`)(['a']), ['a'])
-      assert.deepStrictEqual(one.modify((v) => `${v}X`)(['a', 'b']), ['a', 'bX'])
+      U.deepStrictEqual(one.modify((v) => `${v}X`)(['a']), ['a'])
+      U.deepStrictEqual(one.modify((v) => `${v}X`)(['a', 'b']), ['a', 'bX'])
     })
 
     it('modifyOption', () => {
-      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(['a']), none)
-      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(['a', 'b']), some(['a', 'bX']))
+      U.deepStrictEqual(one.modifyOption((v) => `${v}X`)(['a']), none)
+      U.deepStrictEqual(one.modifyOption((v) => `${v}X`)(['a', 'b']), some(['a', 'bX']))
     })
   })
 
@@ -105,23 +105,23 @@ describe('Index', () => {
     const one = indexNonEmptyArray<string>().index(1)
 
     it('get', () => {
-      assert.deepStrictEqual(one.getOption(cons('a', [])), none)
-      assert.deepStrictEqual(one.getOption(cons('a', ['b'])), some('b'))
+      U.deepStrictEqual(one.getOption(cons('a', [])), none)
+      U.deepStrictEqual(one.getOption(cons('a', ['b'])), some('b'))
     })
 
     it('get', () => {
-      assert.deepStrictEqual(one.set('x')(cons('a', [])), cons('a', []))
-      assert.deepStrictEqual(one.set('x')(cons('a', ['b'])), cons('a', ['x']))
+      U.deepStrictEqual(one.set('x')(cons('a', [])), cons('a', []))
+      U.deepStrictEqual(one.set('x')(cons('a', ['b'])), cons('a', ['x']))
     })
 
     it('modify', () => {
-      assert.deepStrictEqual(one.modify((v) => `${v}X`)(cons('a', [])), cons('a', []))
-      assert.deepStrictEqual(one.modify((v) => `${v}X`)(cons('a', ['b'])), cons('a', ['bX']))
+      U.deepStrictEqual(one.modify((v) => `${v}X`)(cons('a', [])), cons('a', []))
+      U.deepStrictEqual(one.modify((v) => `${v}X`)(cons('a', ['b'])), cons('a', ['bX']))
     })
 
     it('modifyOption', () => {
-      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(cons('a', [])), none)
-      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(cons('a', ['b'])), some(cons('a', ['bX'])))
+      U.deepStrictEqual(one.modifyOption((v) => `${v}X`)(cons('a', [])), none)
+      U.deepStrictEqual(one.modifyOption((v) => `${v}X`)(cons('a', ['b'])), some(cons('a', ['bX'])))
     })
   })
 
@@ -129,23 +129,23 @@ describe('Index', () => {
     const one = indexReadonlyNonEmptyArray<string>().index(1)
 
     it('get', () => {
-      assert.deepStrictEqual(one.getOption(cons('a', [])), none)
-      assert.deepStrictEqual(one.getOption(cons('a', ['b'])), some('b'))
+      U.deepStrictEqual(one.getOption(cons('a', [])), none)
+      U.deepStrictEqual(one.getOption(cons('a', ['b'])), some('b'))
     })
 
     it('get', () => {
-      assert.deepStrictEqual(one.set('x')(cons('a', [])), cons('a', []))
-      assert.deepStrictEqual(one.set('x')(cons('a', ['b'])), cons('a', ['x']))
+      U.deepStrictEqual(one.set('x')(cons('a', [])), cons('a', []))
+      U.deepStrictEqual(one.set('x')(cons('a', ['b'])), cons('a', ['x']))
     })
 
     it('modify', () => {
-      assert.deepStrictEqual(one.modify((v) => `${v}X`)(cons('a', [])), cons('a', []))
-      assert.deepStrictEqual(one.modify((v) => `${v}X`)(cons('a', ['b'])), cons('a', ['bX']))
+      U.deepStrictEqual(one.modify((v) => `${v}X`)(cons('a', [])), cons('a', []))
+      U.deepStrictEqual(one.modify((v) => `${v}X`)(cons('a', ['b'])), cons('a', ['bX']))
     })
 
     it('modifyOption', () => {
-      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(cons('a', [])), none)
-      assert.deepStrictEqual(one.modifyOption((v) => `${v}X`)(cons('a', ['b'])), some(cons('a', ['bX'])))
+      U.deepStrictEqual(one.modifyOption((v) => `${v}X`)(cons('a', [])), none)
+      U.deepStrictEqual(one.modifyOption((v) => `${v}X`)(cons('a', ['b'])), some(cons('a', ['bX'])))
     })
   })
 
@@ -155,12 +155,12 @@ describe('Index', () => {
       (a) => a.map(String)
     )
     const index = indexArray<number>().fromIso(iso).index(1)
-    assert.deepStrictEqual(index.getOption([]), none)
-    assert.deepStrictEqual(index.getOption(['1']), none)
-    assert.deepStrictEqual(index.getOption(['1', '2']), some(2))
+    U.deepStrictEqual(index.getOption([]), none)
+    U.deepStrictEqual(index.getOption(['1']), none)
+    U.deepStrictEqual(index.getOption(['1', '2']), some(2))
 
-    assert.deepStrictEqual(index.set(3)([]), [])
-    assert.deepStrictEqual(index.set(3)(['1']), ['1'])
-    assert.deepStrictEqual(index.set(3)(['1', '2']), ['1', '3'])
+    U.deepStrictEqual(index.set(3)([]), [])
+    U.deepStrictEqual(index.set(3)(['1']), ['1'])
+    U.deepStrictEqual(index.set(3)(['1', '2']), ['1', '3'])
   })
 })

@@ -2,12 +2,13 @@ import * as assert from 'assert'
 import * as _ from '../src/Ix'
 import * as O from 'fp-ts/lib/Option'
 import { eqString } from 'fp-ts/lib/Eq'
+import * as U from './util'
 
 describe('Ix', () => {
   it('indexReadonlyMap', () => {
     const index = _.indexReadonlyMap(eqString)<number>().index('a')
-    assert.deepStrictEqual(index.getOption(new Map([])), O.none)
-    assert.deepStrictEqual(
+    U.deepStrictEqual(index.getOption(new Map([])), O.none)
+    U.deepStrictEqual(
       index.getOption(
         new Map([
           ['a', 1],
@@ -16,8 +17,8 @@ describe('Ix', () => {
       ),
       O.some(1)
     )
-    assert.deepStrictEqual(index.set(3)(new Map([['b', 2]])), new Map([['b', 2]]))
-    assert.deepStrictEqual(
+    U.deepStrictEqual(index.set(3)(new Map([['b', 2]])), new Map([['b', 2]]))
+    U.deepStrictEqual(
       index.set(3)(
         new Map([
           ['a', 1],
