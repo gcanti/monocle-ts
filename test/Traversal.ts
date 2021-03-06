@@ -6,6 +6,7 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import { monoidSum } from 'fp-ts/lib/Monoid'
 import * as U from './util'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
+import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 
 describe('Traversal', () => {
   describe('instances', () => {
@@ -90,7 +91,7 @@ describe('Traversal', () => {
   })
 
   it('index', () => {
-    const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
+    const sa = pipe(_.id<ReadonlyNonEmptyArray<number>>(), _.index(0))
     U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 2, 3])
   })
 
@@ -126,5 +127,13 @@ describe('Traversal', () => {
   it('getAll', () => {
     const sa = pipe(_.id<ReadonlyArray<number>>(), _.traverse(A.readonlyArray))
     U.deepStrictEqual(pipe(sa, _.getAll([1, 2, 3])), [1, 2, 3])
+  })
+
+  it('findFirst', () => {
+    const sa = pipe(
+      _.id<ReadonlyNonEmptyArray<number>>(),
+      _.findFirst((n) => n > 0)
+    )
+    U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 2, 3])
   })
 })

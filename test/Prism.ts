@@ -8,6 +8,7 @@ import * as T from '../src/Traversal'
 import * as Id from 'fp-ts/lib/Identity'
 import * as U from './util'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
+import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -126,6 +127,11 @@ describe('Prism', () => {
     U.deepStrictEqual(sa.getOption([1, 2, 3]), O.some(1))
   })
 
+  it('indexNonEmpty', () => {
+    const sa = pipe(_.id<ReadonlyNonEmptyArray<number>>(), _.indexNonEmpty(0))
+    U.deepStrictEqual(sa.getOption([1, 2, 3]), O.some(1))
+  })
+
   it('key', () => {
     const sa = pipe(_.id<ReadonlyRecord<string, number>>(), _.key('k'))
     U.deepStrictEqual(sa.getOption({ k: 1, j: 2 }), O.some(1))
@@ -222,6 +228,22 @@ describe('Prism', () => {
     U.deepStrictEqual(sa.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3]))
     U.deepStrictEqual(sa.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3]))
     U.deepStrictEqual(sa.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4]))
+  })
+
+  it('findFirstNonEmpty', () => {
+    type S = O.Option<ReadonlyNonEmptyArray<number>>
+    const sa = pipe(
+      _.id<S>(),
+      _.some,
+      _.findFirstNonEmpty((n) => n > 0)
+    )
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some([-1, -2, -3])), O.none)
+    U.deepStrictEqual(sa.getOption(O.some([-1, 2, -3])), O.some(2))
+    U.deepStrictEqual(sa.set(3)(O.none), O.none)
+    U.deepStrictEqual(sa.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3] as const))
+    U.deepStrictEqual(sa.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3] as const))
+    U.deepStrictEqual(sa.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4] as const))
   })
 
   it('traverse', () => {

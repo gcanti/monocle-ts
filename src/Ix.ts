@@ -18,6 +18,7 @@ import { Eq } from 'fp-ts/lib/Eq'
 
 import Option = O.Option
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
+import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -58,6 +59,13 @@ export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: Index<S, I, A>): In
  * @since 2.3.7
  */
 export const indexReadonlyArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = _.indexReadonlyArray
+
+/**
+ * @category constructors
+ * @since 2.3.8
+ */
+export const indexReadonlyNonEmptyArray: <A = never>() => Index<ReadonlyNonEmptyArray<A>, number, A> =
+  _.indexReadonlyNonEmptyArray
 
 /**
  * @category constructors

@@ -258,6 +258,18 @@ export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Traver
 }
 
 /**
+ * @category combinators
+ * @since 2.3.8
+ */
+export function findFirst<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, B>
+export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, A>
+export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, A> {
+  return composeOptional(_.findFirst(predicate))
+}
+
+/**
  * Map each target to a `Monoid` and combine the results.
  *
  * @category combinators
