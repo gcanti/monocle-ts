@@ -7,6 +7,7 @@ import * as T from '../src/Traversal'
 import { Optional } from '../src/Optional'
 import * as Id from 'fp-ts/lib/Identity'
 import * as U from './util'
+import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 
 describe('Lens', () => {
   describe('pipeables', () => {
@@ -143,7 +144,7 @@ describe('Lens', () => {
 
   it('key', () => {
     interface S {
-      readonly a: Readonly<Record<string, number>>
+      readonly a: ReadonlyRecord<string, number>
     }
     const sa = pipe(_.id<S>(), _.prop('a'), _.key('k'))
     const empty: S = { a: {} }
@@ -197,7 +198,7 @@ describe('Lens', () => {
   })
 
   it('atKey', () => {
-    type S = Readonly<Record<string, number>>
+    type S = ReadonlyRecord<string, number>
     const sa = pipe(_.id<S>(), _.atKey('a'))
     U.deepStrictEqual(sa.get({ a: 1 }), O.some(1))
     U.deepStrictEqual(sa.set(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })

@@ -7,6 +7,7 @@ import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as T from '../src/Traversal'
 import * as Id from 'fp-ts/lib/Identity'
 import * as U from './util'
+import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -126,7 +127,7 @@ describe('Prism', () => {
   })
 
   it('key', () => {
-    const sa = pipe(_.id<Readonly<Record<string, number>>>(), _.key('k'))
+    const sa = pipe(_.id<ReadonlyRecord<string, number>>(), _.key('k'))
     U.deepStrictEqual(sa.getOption({ k: 1, j: 2 }), O.some(1))
   })
 
@@ -183,7 +184,7 @@ describe('Prism', () => {
   })
 
   it('atKey', () => {
-    type S = Readonly<Record<string, number>>
+    type S = ReadonlyRecord<string, number>
     const sa = pipe(_.id<S>(), _.atKey('a'))
     U.deepStrictEqual(sa.getOption({ a: 1 }), O.some(O.some(1)))
     U.deepStrictEqual(sa.set(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })

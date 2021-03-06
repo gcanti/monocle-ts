@@ -8,8 +8,8 @@
  * @since 2.3.0
  */
 import { Applicative } from 'fp-ts/lib/Applicative'
-import * as A from 'fp-ts/lib/Array' // TODO: replace with ReadonlyArray in v3
-import * as R from 'fp-ts/lib/Record' // TODO: replace with ReadonlyRecord in v3
+import * as RA from 'fp-ts/lib/ReadonlyArray'
+import * as RR from 'fp-ts/lib/ReadonlyRecord'
 import { constant, flow, identity, Predicate } from 'fp-ts/lib/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import * as O from 'fp-ts/lib/Option'
@@ -256,20 +256,18 @@ export const optionalComposeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Opt
   set: (b) => optionalModify(ab.set(b))(sa)
 })
 
-const findFirstMutable = <A>(predicate: Predicate<A>): Optional<Array<A>, A> => ({
-  getOption: A.findFirst(predicate),
+/** @internal */
+export const findFirst = <A>(predicate: Predicate<A>): Optional<ReadonlyArray<A>, A> => ({
+  getOption: RA.findFirst(predicate),
   set: (a) => (s) =>
     pipe(
-      A.findIndex(predicate)(s),
+      RA.findIndex(predicate)(s),
       O.fold(
         () => s,
-        (i) => A.unsafeUpdateAt(i, a, s)
+        (i) => RA.unsafeUpdateAt(i, a, s)
       )
     )
 })
-
-/** @internal */
-export const findFirst: <A>(predicate: Predicate<A>) => Optional<ReadonlyArray<A>, A> = findFirstMutable as any
 
 // -------------------------------------------------------------------------------------
 // Traversal
@@ -301,32 +299,28 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 // Ix
 // -------------------------------------------------------------------------------------
 
-function indexMutableArray<A = never>(): Index<Array<A>, number, A> {
-  return {
-    index: (i) => ({
-      getOption: (as) => A.lookup(i, as),
-      set: (a) => (as) =>
-        pipe(
-          A.updateAt(i, a)(as),
-          O.getOrElse(() => as)
-        )
-    })
-  }
-}
+/** @internal */
+export const indexReadonlyArray = <A = never>(): Index<ReadonlyArray<A>, number, A> => ({
+  index: (i) => ({
+    getOption: (as) => RA.lookup(i, as),
+    set: (a) => (as) =>
+      pipe(
+        RA.updateAt(i, a)(as),
+        O.getOrElse(() => as)
+      )
+  })
+})
 
 /** @internal */
-export const indexReadonlyArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = indexMutableArray as any
-
-/** @internal */
-export function indexReadonlyRecord<A = never>(): Index<Readonly<Record<string, A>>, string, A> {
+export function indexReadonlyRecord<A = never>(): Index<RR.ReadonlyRecord<string, A>, string, A> {
   return {
     index: (k) => ({
-      getOption: (r) => R.lookup(k, r),
+      getOption: (r) => RR.lookup(k, r),
       set: (a) => (r) => {
-        if (r[k] === a || O.isNone(R.lookup(k, r))) {
+        if (r[k] === a || O.isNone(RR.lookup(k, r))) {
           return r
         }
-        return R.insertAt(k, a)(r)
+        return RR.insertAt(k, a)(r)
       }
     })
   }
@@ -337,13 +331,13 @@ export function indexReadonlyRecord<A = never>(): Index<Readonly<Record<string, 
 // -------------------------------------------------------------------------------------
 
 /** @internal */
-export function atReadonlyRecord<A = never>(): At<Readonly<Record<string, A>>, string, O.Option<A>> {
+export function atReadonlyRecord<A = never>(): At<RR.ReadonlyRecord<string, A>, string, O.Option<A>> {
   return {
     at: (key) => ({
-      get: (r) => R.lookup(key, r),
+      get: (r) => RR.lookup(key, r),
       set: O.fold(
-        () => R.deleteAt(key),
-        (a) => R.insertAt(key, a)
+        () => RR.deleteAt(key),
+        (a) => RR.insertAt(key, a)
       )
     })
   }

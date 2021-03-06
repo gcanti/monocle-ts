@@ -27,6 +27,7 @@ import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
+import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Iso } from './Iso'
@@ -244,7 +245,7 @@ export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): O
  * @category combinators
  * @since 2.3.0
  */
-export const key = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>): Optional<S, A> =>
+export const key = (key: string) => <S, A>(sa: Optional<S, ReadonlyRecord<string, A>>): Optional<S, A> =>
   pipe(sa, _.optionalComposeOptional(_.indexReadonlyRecord<A>().index(key)))
 
 /**
@@ -253,7 +254,7 @@ export const key = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<strin
  * @category combinators
  * @since 2.3.0
  */
-export const atKey = (key: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>): Optional<S, Option<A>> =>
+export const atKey = (key: string) => <S, A>(sa: Optional<S, ReadonlyRecord<string, A>>): Optional<S, Option<A>> =>
   pipe(sa, compose(_.lensAsOptional(_.atReadonlyRecord<A>().at(key))))
 
 /**
