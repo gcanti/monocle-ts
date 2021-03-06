@@ -98,10 +98,7 @@ export const asTraversal: <S, A>(sa: Prism<S, A>) => Traversal<S, A> = _.prismAs
  * @category compositions
  * @since 2.3.0
  */
-export const compose = <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>): Prism<S, B> => ({
-  getOption: flow(sa.getOption, O.chain(ab.getOption)),
-  reverseGet: flow(ab.reverseGet, sa.reverseGet)
-})
+export const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B> = _.prismComposePrism
 
 /**
  * Compose a `Prism` with a `Iso`.

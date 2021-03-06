@@ -75,6 +75,12 @@ export const lensComposeLens = <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>): Le
 })
 
 /** @internal */
+export const prismComposePrism = <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>): Prism<S, B> => ({
+  getOption: flow(sa.getOption, O.chain(ab.getOption)),
+  reverseGet: flow(ab.reverseGet, sa.reverseGet)
+})
+
+/** @internal */
 export const lensComposePrism = <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>): Optional<S, B> =>
   optionalComposeOptional(prismAsOptional(ab))(lensAsOptional(sa))
 

@@ -103,6 +103,42 @@ export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> =>
   reverseGet: flow(ab.reverseGet, sa.reverseGet)
 })
 
+/**
+ * Compose an `Iso` with a `Lens`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composeLens = <A, B>(ab: Lens<A, B>): (<S>(sa: Iso<S, A>) => Lens<S, B>) =>
+  flow(asLens, _.lensComposeLens(ab))
+
+/**
+ * Compose an `Iso` with a `Prism`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composePrism = <A, B>(ab: Prism<A, B>): (<S>(sa: Iso<S, A>) => Prism<S, B>) =>
+  flow(asPrism, _.prismComposePrism(ab))
+
+/**
+ * Compose an `Iso` with a `Optional`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composeOptional = <A, B>(ab: Optional<A, B>): (<S>(sa: Iso<S, A>) => Optional<S, B>) =>
+  flow(asOptional, _.optionalComposeOptional(ab))
+
+/**
+ * Compose an `Iso` with a `Traversal`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composeTraversal = <A, B>(ab: Traversal<A, B>): (<S>(sa: Iso<S, A>) => Traversal<S, B>) =>
+  flow(asTraversal, _.traversalComposeTraversal(ab))
+
 // -------------------------------------------------------------------------------------
 // combinators
 // -------------------------------------------------------------------------------------
