@@ -18,6 +18,11 @@ high state of flux, you're at risk of it changing without notice.
 Experimental modules require `fp-ts@^2.5.0`.
 
 - **Experimental**
+  - `Iso`
+    - add `composeLens` (@gcanti)
+    - add `composePrism` (@gcanti)
+    - add `composeOptional` (@gcanti)
+    - add `composeTraversal` (@gcanti)
   - `Ix`
     - add `indexReadonlyNonEmptyArray` (@gcanti)
   - `Lens`
