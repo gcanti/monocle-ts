@@ -37,8 +37,10 @@ Added in v2.3.0
   - [component](#component)
   - [filter](#filter)
   - [findFirst](#findfirst)
+  - [findFirstNonEmpty](#findfirstnonempty)
   - [fromNullable](#fromnullable)
   - [index](#index)
+  - [indexNonEmpty](#indexnonempty)
   - [key](#key)
   - [left](#left)
   - [modify](#modify)
@@ -136,6 +138,21 @@ export declare function findFirst<A>(predicate: Predicate<A>): <S>(sa: Optional<
 
 Added in v2.3.2
 
+## findFirstNonEmpty
+
+**Signature**
+
+```ts
+export declare function findFirstNonEmpty<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Optional<S, ReadonlyNonEmptyArray<A>>) => Optional<S, B>
+export declare function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Optional<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
+```
+
+Added in v2.3.8
+
 ## fromNullable
 
 Return an `Optional` from a `Optional` focused on a nullable value.
@@ -159,6 +176,18 @@ export declare const index: (i: number) => <S, A>(sa: Optional<S, readonly A[]>)
 ```
 
 Added in v2.3.0
+
+## indexNonEmpty
+
+Return a `Optional` from a `Optional` focused on a `ReadonlyNonEmptyArray`.
+
+**Signature**
+
+```ts
+export declare const indexNonEmpty: (i: number) => <S, A>(sa: Optional<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
+```
+
+Added in v2.3.8
 
 ## key
 

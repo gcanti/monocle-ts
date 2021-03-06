@@ -28,6 +28,7 @@ Added in v2.3.0
   - [atKey](#atkey)
   - [component](#component)
   - [filter](#filter)
+  - [findFirst](#findfirst)
   - [fold](#fold)
   - [foldMap](#foldmap)
   - [getAll](#getall)
@@ -103,6 +104,21 @@ export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S,
 ```
 
 Added in v2.3.0
+
+## findFirst
+
+**Signature**
+
+```ts
+export declare function findFirst<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, B>
+export declare function findFirst<A>(
+  predicate: Predicate<A>
+): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, A>
+```
+
+Added in v2.3.8
 
 ## fold
 

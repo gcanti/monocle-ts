@@ -22,6 +22,7 @@ import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
+import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
@@ -248,6 +249,15 @@ export const index = (i: number) => <S, A>(sa: Prism<S, ReadonlyArray<A>>): Opti
   pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyArray<A>().index(i)))
 
 /**
+ * Return a `Optional` from a `Prism` focused on a `ReadonlyNonEmptyArray`.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const indexNonEmpty = (i: number) => <S, A>(sa: Prism<S, ReadonlyNonEmptyArray<A>>): Optional<S, A> =>
+  pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyNonEmptyArray<A>().index(i)))
+
+/**
  * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key.
  *
  * @category combinators
@@ -315,6 +325,22 @@ export function findFirst<A, B extends A>(
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A> {
   return composeOptional(_.findFirst(predicate))
+}
+
+/**
+ * @category combinators
+ * @since 2.3.8
+ */
+export function findFirstNonEmpty<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Prism<S, ReadonlyNonEmptyArray<A>>) => Optional<S, B>
+export function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Prism<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
+export function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Prism<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A> {
+  return composeOptional(_.findFirstNonEmpty(predicate))
 }
 
 // -------------------------------------------------------------------------------------

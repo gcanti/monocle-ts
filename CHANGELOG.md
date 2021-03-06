@@ -18,20 +18,29 @@ high state of flux, you're at risk of it changing without notice.
 Experimental modules require `fp-ts@^2.5.0`.
 
 - **Experimental**
+  - `Ix`
+    - add `indexReadonlyNonEmptyArray` (@gcanti)
   - `Lens`
     - add `composeIso` (@gcanti)
     - add `composeTraversal` (@gcanti)
+    - add `indexNonEmpty` (@gcanti)
+    - add `findFirstNonEmpty` (@gcanti)
   - `Prism`
     - add `composeIso` (@gcanti)
     - add `composeTraversal` (@gcanti)
+    - add `indexNonEmpty` (@gcanti)
+    - add `findFirstNonEmpty` (@gcanti)
   - `Optional`
     - add `composeIso` (@gcanti)
     - add `composeTraversal` (@gcanti)
+    - add `indexNonEmpty` (@gcanti)
+    - add `findFirstNonEmpty` (@gcanti)
   - `Traversal`
     - add `composeIso` (@gcanti)
     - add `composeLens` (@gcanti)
     - add `composePrism` (@gcanti)
     - add `composeOptional` (@gcanti)
+    - add `findFirst` (@gcanti)
 
 # 2.3.7
 

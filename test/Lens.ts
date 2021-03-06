@@ -8,6 +8,7 @@ import { Optional } from '../src/Optional'
 import * as Id from 'fp-ts/lib/Identity'
 import * as U from './util'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
+import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 
 describe('Lens', () => {
   describe('pipeables', () => {
@@ -142,6 +143,18 @@ describe('Lens', () => {
     assert.strictEqual(sa.set(1)(full), full)
   })
 
+  it('indexNonEmpty', () => {
+    interface S {
+      readonly a: ReadonlyNonEmptyArray<number>
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'), _.indexNonEmpty(0))
+    const full: S = { a: [1, 2] }
+    U.deepStrictEqual(sa.getOption(full), O.some(1))
+    U.deepStrictEqual(sa.set(2)(full), { a: [2, 2] })
+    // should return the same reference
+    assert.strictEqual(sa.set(1)(full), full)
+  })
+
   it('key', () => {
     interface S {
       readonly a: ReadonlyRecord<string, number>
@@ -231,6 +244,19 @@ describe('Lens', () => {
     U.deepStrictEqual(sa.getOption([-1, -2, -3]), O.none)
     U.deepStrictEqual(sa.getOption([-1, 2, -3]), O.some(2))
     U.deepStrictEqual(sa.set(3)([]), [])
+    U.deepStrictEqual(sa.set(3)([-1, -2, -3]), [-1, -2, -3])
+    U.deepStrictEqual(sa.set(3)([-1, 2, -3]), [-1, 3, -3])
+    U.deepStrictEqual(sa.set(4)([-1, -2, 3]), [-1, -2, 4])
+  })
+
+  it('findFirstNonEmpty', () => {
+    type S = ReadonlyNonEmptyArray<number>
+    const sa = pipe(
+      _.id<S>(),
+      _.findFirstNonEmpty((n) => n > 0)
+    )
+    U.deepStrictEqual(sa.getOption([-1, -2, -3]), O.none)
+    U.deepStrictEqual(sa.getOption([-1, 2, -3]), O.some(2))
     U.deepStrictEqual(sa.set(3)([-1, -2, -3]), [-1, -2, -3])
     U.deepStrictEqual(sa.set(3)([-1, 2, -3]), [-1, 3, -3])
     U.deepStrictEqual(sa.set(4)([-1, -2, 3]), [-1, -2, 4])

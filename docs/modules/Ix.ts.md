@@ -23,6 +23,7 @@ Added in v2.3.0
   - [fromIso](#fromiso)
   - [indexReadonlyArray](#indexreadonlyarray)
   - [indexReadonlyMap](#indexreadonlymap)
+  - [indexReadonlyNonEmptyArray](#indexreadonlynonemptyarray)
   - [indexReadonlyRecord](#indexreadonlyrecord)
   - [~~indexArray~~](#indexarray)
   - [~~indexRecord~~](#indexrecord)
@@ -74,6 +75,16 @@ export declare const indexReadonlyMap: <K>(E: Eq<K>) => <A = never>() => Index<R
 ```
 
 Added in v2.3.7
+
+## indexReadonlyNonEmptyArray
+
+**Signature**
+
+```ts
+export declare const indexReadonlyNonEmptyArray: <A = never>() => Index<ReadonlyNonEmptyArray<A>, number, A>
+```
+
+Added in v2.3.8
 
 ## indexReadonlyRecord
 

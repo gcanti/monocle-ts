@@ -36,8 +36,10 @@ Added in v2.3.0
   - [component](#component)
   - [filter](#filter)
   - [findFirst](#findfirst)
+  - [findFirstNonEmpty](#findfirstnonempty)
   - [fromNullable](#fromnullable)
   - [index](#index)
+  - [indexNonEmpty](#indexnonempty)
   - [key](#key)
   - [left](#left)
   - [modify](#modify)
@@ -132,6 +134,21 @@ export declare function findFirst<A>(predicate: Predicate<A>): <S>(sa: Lens<S, R
 
 Added in v2.3.2
 
+## findFirstNonEmpty
+
+**Signature**
+
+```ts
+export declare function findFirstNonEmpty<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Lens<S, ReadonlyNonEmptyArray<A>>) => Optional<S, B>
+export declare function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Lens<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
+```
+
+Added in v2.3.8
+
 ## fromNullable
 
 Return a `Optional` from a `Lens` focused on a nullable value.
@@ -155,6 +172,18 @@ export declare const index: (i: number) => <S, A>(sa: Lens<S, readonly A[]>) => 
 ```
 
 Added in v2.3.0
+
+## indexNonEmpty
+
+Return a `Optional` from a `Lens` focused on a `ReadonlyNonEmptyArray`.
+
+**Signature**
+
+```ts
+export declare const indexNonEmpty: (i: number) => <S, A>(sa: Lens<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
+```
+
+Added in v2.3.8
 
 ## key
 

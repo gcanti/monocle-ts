@@ -8,6 +8,7 @@ import * as L from '../src/Lens'
 import * as P from '../src/Prism'
 import * as U from './util'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
+import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 
 type S = O.Option<{
   readonly a: string
@@ -107,6 +108,11 @@ describe('Optional', () => {
     U.deepStrictEqual(sa.getOption([1, 2, 3]), O.some(1))
   })
 
+  it('indexNonEmpty', () => {
+    const sa = pipe(_.id<ReadonlyNonEmptyArray<number>>(), _.indexNonEmpty(0))
+    U.deepStrictEqual(sa.getOption([1, 2, 3]), O.some(1))
+  })
+
   it('key', () => {
     const sa = pipe(_.id<ReadonlyRecord<string, number>>(), _.key('k'))
     U.deepStrictEqual(sa.getOption({ k: 1, j: 2 }), O.some(1))
@@ -168,6 +174,23 @@ describe('Optional', () => {
     U.deepStrictEqual(sa.set(3)(O.some({ a: [-1, -2, -3] })), O.some({ a: [-1, -2, -3] }))
     U.deepStrictEqual(sa.set(3)(O.some({ a: [-1, 2, -3] })), O.some({ a: [-1, 3, -3] }))
     U.deepStrictEqual(sa.set(4)(O.some({ a: [-1, -2, 3] })), O.some({ a: [-1, -2, 4] }))
+  })
+
+  it('findFirstNonEmpty', () => {
+    type S = O.Option<{ readonly a: ReadonlyNonEmptyArray<number> }>
+    const sa = pipe(
+      _.id<S>(),
+      _.some,
+      _.prop('a'),
+      _.findFirstNonEmpty((n) => n > 0)
+    )
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some({ a: [-1, -2, -3] })), O.none)
+    U.deepStrictEqual(sa.getOption(O.some({ a: [-1, 2, -3] })), O.some(2))
+    U.deepStrictEqual(sa.set(3)(O.none), O.none)
+    U.deepStrictEqual(sa.set(3)(O.some({ a: [-1, -2, -3] })), O.some({ a: [-1, -2, -3] as const }))
+    U.deepStrictEqual(sa.set(3)(O.some({ a: [-1, 2, -3] })), O.some({ a: [-1, 3, -3] as const }))
+    U.deepStrictEqual(sa.set(4)(O.some({ a: [-1, -2, 3] })), O.some({ a: [-1, -2, 4] as const }))
   })
 
   it('traverse', () => {

@@ -9,6 +9,7 @@
  */
 import { Applicative } from 'fp-ts/lib/Applicative'
 import * as RA from 'fp-ts/lib/ReadonlyArray'
+import * as RNEA from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import * as RR from 'fp-ts/lib/ReadonlyRecord'
 import { constant, flow, identity, Predicate } from 'fp-ts/lib/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
@@ -23,6 +24,7 @@ import { Optional } from './Optional'
 import { Prism } from './Prism'
 import { Traversal } from './Traversal'
 import { At } from './At'
+import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray'
 
 // -------------------------------------------------------------------------------------
 // Iso
@@ -269,6 +271,29 @@ export const findFirst = <A>(predicate: Predicate<A>): Optional<ReadonlyArray<A>
     )
 })
 
+const unsafeUpdateAt = <A>(i: number, a: A, as: RNEA.ReadonlyNonEmptyArray<A>): RNEA.ReadonlyNonEmptyArray<A> => {
+  if (as[i] === a) {
+    return as
+  } else {
+    const xs: NonEmptyArray<A> = [as[0], ...as.slice(1)]
+    xs[i] = a
+    return xs
+  }
+}
+
+/** @internal */
+export const findFirstNonEmpty = <A>(predicate: Predicate<A>): Optional<RNEA.ReadonlyNonEmptyArray<A>, A> => ({
+  getOption: RA.findFirst(predicate),
+  set: (a) => (as) =>
+    pipe(
+      RA.findIndex(predicate)(as),
+      O.fold(
+        () => as,
+        (i) => unsafeUpdateAt(i, a, as)
+      )
+    )
+})
+
 // -------------------------------------------------------------------------------------
 // Traversal
 // -------------------------------------------------------------------------------------
@@ -298,6 +323,14 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 // -------------------------------------------------------------------------------------
 // Ix
 // -------------------------------------------------------------------------------------
+
+/** @internal */
+export const indexReadonlyNonEmptyArray = <A = never>(): Index<RNEA.ReadonlyNonEmptyArray<A>, number, A> => ({
+  index: (i) => ({
+    getOption: (as) => RA.lookup(i, as),
+    set: (a) => (as) => unsafeUpdateAt(i, a, as)
+  })
+})
 
 /** @internal */
 export const indexReadonlyArray = <A = never>(): Index<ReadonlyArray<A>, number, A> => ({
