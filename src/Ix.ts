@@ -17,6 +17,7 @@ import * as RM from 'fp-ts/lib/ReadonlyMap'
 import { Eq } from 'fp-ts/lib/Eq'
 
 import Option = O.Option
+import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -62,7 +63,7 @@ export const indexReadonlyArray: <A = never>() => Index<ReadonlyArray<A>, number
  * @category constructors
  * @since 2.3.7
  */
-export const indexReadonlyRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A> = _.indexReadonlyRecord
+export const indexReadonlyRecord: <A = never>() => Index<ReadonlyRecord<string, A>, string, A> = _.indexReadonlyRecord
 
 /**
  * @category constructors
@@ -111,4 +112,4 @@ export const indexArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = _
  * @since 2.3.2
  * @deprecated
  */
-export const indexRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A> = _.indexReadonlyRecord
+export const indexRecord: <A = never>() => Index<ReadonlyRecord<string, A>, string, A> = _.indexReadonlyRecord

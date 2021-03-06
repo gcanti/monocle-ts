@@ -24,6 +24,7 @@ import { Monoid } from 'fp-ts/lib/Monoid'
 import { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as A from 'fp-ts/lib/ReadonlyArray'
+import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Iso } from './Iso'
@@ -204,7 +205,7 @@ export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): 
  * @category combinators
  * @since 2.3.0
  */
-export const key = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>): Traversal<S, A> =>
+export const key = (key: string) => <S, A>(sa: Traversal<S, ReadonlyRecord<string, A>>): Traversal<S, A> =>
   pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyRecord<A>().index(key))))
 
 /**
@@ -213,7 +214,7 @@ export const key = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<stri
  * @category combinators
  * @since 2.3.0
  */
-export const atKey = (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>): Traversal<S, Option<A>> =>
+export const atKey = (key: string) => <S, A>(sa: Traversal<S, ReadonlyRecord<string, A>>): Traversal<S, Option<A>> =>
   pipe(sa, compose(_.lensAsTraversal(_.atReadonlyRecord<A>().at(key))))
 
 /**

@@ -11,6 +11,7 @@ import { Eq } from 'fp-ts/lib/Eq'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as RM from 'fp-ts/lib/ReadonlyMap'
+import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 import * as RS from 'fp-ts/lib/ReadonlySet'
 import * as _ from './internal'
 import { Iso } from './Iso'
@@ -48,7 +49,7 @@ export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>): At<T,
  * @category constructors
  * @since 2.3.7
  */
-export const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>> = _.atReadonlyRecord
+export const atReadonlyRecord: <A = never>() => At<ReadonlyRecord<string, A>, string, Option<A>> = _.atReadonlyRecord
 
 /**
  * @category constructors
@@ -100,4 +101,4 @@ export const atReadonlySet = <A>(E: Eq<A>): At<ReadonlySet<A>, A, boolean> => {
  * @since 2.3.2
  * @deprecated
  */
-export const atRecord: <A = never>() => At<Readonly<Record<string, A>>, string, Option<A>> = _.atReadonlyRecord
+export const atRecord: <A = never>() => At<ReadonlyRecord<string, A>, string, Option<A>> = _.atReadonlyRecord

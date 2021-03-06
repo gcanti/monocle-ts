@@ -5,6 +5,7 @@ import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { monoidSum } from 'fp-ts/lib/Monoid'
 import * as U from './util'
+import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 
 describe('Traversal', () => {
   describe('instances', () => {
@@ -94,12 +95,12 @@ describe('Traversal', () => {
   })
 
   it('key', () => {
-    const sa = pipe(_.id<Readonly<Record<string, number>>>(), _.key('k'))
+    const sa = pipe(_.id<ReadonlyRecord<string, number>>(), _.key('k'))
     U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)({ k: 1, j: 2 }), { k: 2, j: 2 })
   })
 
   it('atKey', () => {
-    const sa = pipe(_.id<Readonly<Record<string, number>>>(), _.atKey('k'))
+    const sa = pipe(_.id<ReadonlyRecord<string, number>>(), _.atKey('k'))
     const f = sa.modifyF(Id.identity)((on) =>
       pipe(
         on,
