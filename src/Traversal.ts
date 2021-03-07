@@ -24,6 +24,7 @@ import { Monoid } from 'fp-ts/lib/Monoid'
 import { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import * as A from 'fp-ts/lib/ReadonlyArray'
+import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
@@ -271,6 +272,24 @@ export function findFirst<A, B extends A>(
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, A>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, A> {
   return composeOptional(_.findFirst(predicate))
+}
+
+/**
+ * Alias of `findFirst`.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export function findFirstNonEmpty<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, B>
+export function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A>
+export function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A> {
+  return findFirst(predicate)
 }
 
 /**

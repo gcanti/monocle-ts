@@ -479,7 +479,6 @@ Added in v2.3.0
 
 ```ts
 export interface Optional<S, A> {
-  readonly _tag: 'Optional'
   readonly getOption: (s: S) => Option<A>
   readonly set: (a: A) => (s: S) => S
 }

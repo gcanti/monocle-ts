@@ -139,7 +139,6 @@ Added in v2.3.2
 
 ```ts
 export interface Index<S, I, A> {
-  readonly _tag: 'Index'
   readonly index: (i: I) => Optional<S, A>
 }
 ```
