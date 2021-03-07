@@ -155,6 +155,15 @@ export const set = <A>(a: A): (<S>(sa: Traversal<S, A>) => (s: S) => S) => {
 }
 
 /**
+ * Return a `Traversal` from a `Traversal` focused on a nullable value.
+ *
+ * @category combinators
+ * @since 2.3.0
+ */
+export const fromNullable = <S, A>(sa: Traversal<S, A>): Traversal<S, NonNullable<A>> =>
+  composePrism(_.prismFromNullable<A>())(sa)
+
+/**
  * @category combinators
  * @since 2.3.0
  */

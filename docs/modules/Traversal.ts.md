@@ -32,6 +32,7 @@ Added in v2.3.0
   - [findFirstNonEmpty](#findfirstnonempty)
   - [fold](#fold)
   - [foldMap](#foldmap)
+  - [fromNullable](#fromnullable)
   - [getAll](#getall)
   - [index](#index)
   - [key](#key)
@@ -159,6 +160,18 @@ Map each target to a `Monoid` and combine the results.
 
 ```ts
 export declare const foldMap: <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => <S>(sa: Traversal<S, A>) => (s: S) => M
+```
+
+Added in v2.3.0
+
+## fromNullable
+
+Return a `Traversal` from a `Traversal` focused on a nullable value.
+
+**Signature**
+
+```ts
+export declare const fromNullable: <S, A>(sa: Traversal<S, A>) => Traversal<S, NonNullable<A>>
 ```
 
 Added in v2.3.0

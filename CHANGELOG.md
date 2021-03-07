@@ -55,6 +55,7 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `composeOptional` (@gcanti)
     - add `findFirst` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
+    - add `fromNullable` (@gcanti)
 
 # 2.3.7
 
