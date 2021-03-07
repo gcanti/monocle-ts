@@ -87,7 +87,7 @@ Added in v2.3.0
 
 ## atKey
 
-Return a `Lens` from a `Iso` focused on a `ReadonlyRecord` and a required key.
+Return a `Lens` from a `Iso` focused on a required key of a `ReadonlyRecord`.
 
 **Signature**
 
@@ -99,7 +99,7 @@ Added in v2.3.8
 
 ## component
 
-Return a `Lens` from a `Iso` and a component.
+Return a `Lens` from a `Iso` focused on a component of a tuple.
 
 **Signature**
 
@@ -164,7 +164,7 @@ Added in v2.3.8
 
 ## index
 
-Return a `Optional` from a `Iso` focused on a `ReadonlyArray`.
+Return a `Optional` from a `Iso` focused on an index of a `ReadonlyArray`.
 
 **Signature**
 
@@ -176,7 +176,7 @@ Added in v2.3.8
 
 ## indexNonEmpty
 
-Return a `Optional` from a `Iso` focused on a `ReadonlyNonEmptyArray`.
+Return a `Optional` from a `Iso` focused on an index of a `ReadonlyNonEmptyArray`.
 
 **Signature**
 
@@ -188,7 +188,7 @@ Added in v2.3.8
 
 ## key
 
-Return a `Optional` from a `Iso` focused on a `ReadonlyRecord` and a key.
+Return a `Optional` from a `Iso` focused on a key of a `ReadonlyRecord`.
 
 **Signature**
 
