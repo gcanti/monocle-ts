@@ -47,6 +47,7 @@ Added in v2.3.0
   - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
+  - [composeIso](#composeiso)
   - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
@@ -132,7 +133,7 @@ export declare function findFirst<A, B extends A>(
 export declare function findFirst<A>(predicate: Predicate<A>): <S>(sa: Iso<S, ReadonlyArray<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.2
+Added in v2.3.8
 
 ## findFirstNonEmpty
 
@@ -317,6 +318,18 @@ export declare const compose: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso
 ```
 
 Added in v2.3.0
+
+## composeIso
+
+Alias of `compose`.
+
+**Signature**
+
+```ts
+export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B>
+```
+
+Added in v2.3.8
 
 ## composeLens
 

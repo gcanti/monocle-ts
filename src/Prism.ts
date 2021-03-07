@@ -105,6 +105,14 @@ export const asTraversal: <S, A>(sa: Prism<S, A>) => Traversal<S, A> = _.prismAs
 export const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B> = _.prismComposePrism
 
 /**
+ * Alias of `compose`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composePrism = compose
+
+/**
  * Compose a `Prism` with a `Iso`.
  *
  * @category compositions

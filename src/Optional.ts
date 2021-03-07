@@ -94,6 +94,14 @@ export const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => O
   _.optionalComposeOptional
 
 /**
+ * Alias of `compose`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composeOptional = compose
+
+/**
  * Compose a `Optional` with a `Iso`.
  *
  * @category compositions

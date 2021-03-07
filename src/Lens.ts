@@ -97,6 +97,14 @@ export const asTraversal: <S, A>(sa: Lens<S, A>) => Traversal<S, A> = _.lensAsTr
 export const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B> = _.lensComposeLens
 
 /**
+ * Alias of `compose`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composeLens = compose
+
+/**
  * Compose a `Lens` with a `Iso`.
  *
  * @category compositions

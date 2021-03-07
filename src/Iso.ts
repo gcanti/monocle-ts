@@ -110,6 +110,14 @@ export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> =>
   iso(flow(sa.get, ab.get), flow(ab.reverseGet, sa.reverseGet))
 
 /**
+ * Alias of `compose`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composeIso = compose
+
+/**
  * Compose an `Iso` with a `Lens`.
  *
  * @category compositions
@@ -305,7 +313,7 @@ export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Iso<S,
 
 /**
  * @category combinators
- * @since 2.3.2
+ * @since 2.3.8
  */
 export function findFirst<A, B extends A>(
   refinement: Refinement<A, B>

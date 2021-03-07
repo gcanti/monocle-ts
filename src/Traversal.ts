@@ -94,6 +94,14 @@ export const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) =>
   _.traversalComposeTraversal
 
 /**
+ * Alias of `compose`.
+ *
+ * @category compositions
+ * @since 2.3.8
+ */
+export const composeTraversal = compose
+
+/**
  * Compose a `Traversal` with a `Iso`.
  *
  * @category compositions
