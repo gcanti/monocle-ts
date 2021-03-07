@@ -42,6 +42,7 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `traverse` (@gcanti)
     - add `findFirst` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
+    - add `composeIso` (@gcanti)
   - `Ix`
     - add `index` constructor (@gcanti)
     - add `indexReadonlyNonEmptyArray` (@gcanti)
@@ -51,18 +52,21 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `composeTraversal` (@gcanti)
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
+    - add `composeLens` (@gcanti)
   - `Prism`
     - add `prism` constructor (@gcanti)
     - add `composeIso` (@gcanti)
     - add `composeTraversal` (@gcanti)
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
+    - add `composePrism` (@gcanti)
   - `Optional`
     - add `optional` constructor (@gcanti)
     - add `composeIso` (@gcanti)
     - add `composeTraversal` (@gcanti)
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
+    - add `composeOptional` (@gcanti)
   - `Traversal`
     - add `traversal` constructor (@gcanti)
     - add `composeIso` (@gcanti)
@@ -73,6 +77,7 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `findFirstNonEmpty` (@gcanti)
     - add `fromNullable` (@gcanti)
     - add `indexNonEmpty` (@gcanti)
+    - add `composeTraversal` (@gcanti)
 
 # 2.3.7
 

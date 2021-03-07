@@ -51,6 +51,7 @@ Added in v2.3.0
   - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
+  - [composeTraversal](#composetraversal)
 - [constructor](#constructor)
   - [fromTraversable](#fromtraversable)
 - [constructors](#constructors)
@@ -379,6 +380,18 @@ Compose a `Traversal` with a `Prism`.
 
 ```ts
 export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
+
+## composeTraversal
+
+Alias of `compose`.
+
+**Signature**
+
+```ts
+export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
 ```
 
 Added in v2.3.8

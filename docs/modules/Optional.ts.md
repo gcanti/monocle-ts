@@ -56,6 +56,7 @@ Added in v2.3.0
   - [compose](#compose)
   - [composeIso](#composeiso)
   - [composeLens](#composelens)
+  - [composeOptional](#composeoptional)
   - [composePrism](#composeprism)
   - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
@@ -368,6 +369,18 @@ export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, 
 ```
 
 Added in v2.3.7
+
+## composeOptional
+
+Alias of `compose`.
+
+**Signature**
+
+```ts
+export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
+```
+
+Added in v2.3.8
 
 ## composePrism
 
