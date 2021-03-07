@@ -241,8 +241,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * @category combinators
  * @since 2.3.0
  */
-export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): Optional<S, A> =>
-  pipe(sa, _.optionalComposeOptional(_.indexReadonlyArray<A>().index(i)))
+export const index: (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>) => Optional<S, A> = _.optionalIndex
 
 /**
  * Return a `Optional` from a `Optional` focused on a `ReadonlyNonEmptyArray`.
@@ -250,8 +249,8 @@ export const index = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): O
  * @category combinators
  * @since 2.3.8
  */
-export const indexNonEmpty = (i: number) => <S, A>(sa: Optional<S, ReadonlyNonEmptyArray<A>>): Optional<S, A> =>
-  pipe(sa, _.optionalComposeOptional(_.indexReadonlyNonEmptyArray<A>().index(i)))
+export const indexNonEmpty: (i: number) => <S, A>(sa: Optional<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A> =
+  _.optionalIndexNonEmpty
 
 /**
  * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key.
@@ -259,8 +258,7 @@ export const indexNonEmpty = (i: number) => <S, A>(sa: Optional<S, ReadonlyNonEm
  * @category combinators
  * @since 2.3.0
  */
-export const key = (key: string) => <S, A>(sa: Optional<S, ReadonlyRecord<string, A>>): Optional<S, A> =>
-  pipe(sa, _.optionalComposeOptional(_.indexReadonlyRecord<A>().index(key)))
+export const key: (key: string) => <S, A>(sa: Optional<S, ReadonlyRecord<string, A>>) => Optional<S, A> = _.optionalKey
 
 /**
  * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key.
@@ -308,7 +306,7 @@ export const left: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, E> =
  * @since 2.3.0
  */
 export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Optional<S, Kind<T, A>>) => Traversal<S, A> {
-  return flow(asTraversal, _.traversalComposeTraversal(_.fromTraversable(T)()))
+  return flow(asTraversal, _.traversalTraverse(T))
 }
 
 /**
@@ -320,7 +318,7 @@ export function findFirst<A, B extends A>(
 ): <S>(sa: Optional<S, ReadonlyArray<A>>) => Optional<S, B>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Optional<S, ReadonlyArray<A>>) => Optional<S, A>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Optional<S, ReadonlyArray<A>>) => Optional<S, A> {
-  return compose(_.findFirst(predicate))
+  return compose(_.optionalFindFirst(predicate))
 }
 
 /**
@@ -336,7 +334,7 @@ export function findFirstNonEmpty<A>(
 export function findFirstNonEmpty<A>(
   predicate: Predicate<A>
 ): <S>(sa: Optional<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A> {
-  return compose(_.findFirstNonEmpty(predicate))
+  return compose(_.optionalFindFirstNonEmpty(predicate))
 }
 
 // -------------------------------------------------------------------------------------

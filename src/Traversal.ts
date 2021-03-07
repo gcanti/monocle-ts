@@ -26,7 +26,6 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
-import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
@@ -214,6 +213,14 @@ export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): 
   pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyArray<A>().index(i))))
 
 /**
+ * Alias of `index`.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const indexNonEmpty: (i: number) => <S, A>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A> = index
+
+/**
  * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key.
  *
  * @category combinators
@@ -267,9 +274,7 @@ export const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E>
  * @category combinators
  * @since 2.3.0
  */
-export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A> {
-  return compose(fromTraversable(T)())
-}
+export const traverse = _.traversalTraverse
 
 /**
  * @category combinators
@@ -280,7 +285,7 @@ export function findFirst<A, B extends A>(
 ): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, B>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, A>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, A> {
-  return composeOptional(_.findFirst(predicate))
+  return composeOptional(_.optionalFindFirst(predicate))
 }
 
 /**

@@ -1,12 +1,15 @@
+import * as assert from 'assert'
+import * as Id from 'fp-ts/lib/Identity'
+import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
+import * as RA from 'fp-ts/lib/ReadonlyArray'
+import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
+import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 import * as _ from '../src/Iso'
 import * as L from '../src/Lens'
-import * as P from '../src/Prism'
 import * as Op from '../src/Optional'
+import * as P from '../src/Prism'
 import * as T from '../src/Traversal'
-import * as Id from 'fp-ts/lib/Identity'
-import * as RA from 'fp-ts/lib/ReadonlyArray'
-import * as O from 'fp-ts/lib/Option'
 import * as U from './util'
 
 const numberFromString: _.Iso<number, string> = _.iso(String, parseFloat)
@@ -109,5 +112,184 @@ describe('Iso', () => {
     )
     U.deepStrictEqual(f(1), O.some(2))
     U.deepStrictEqual(f(-1), O.none)
+  })
+
+  it('fromNullable', () => {
+    type S = { readonly a: number } | null
+    type A = [number] | null
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => (s === null ? null : [s.a]),
+      (a) => (a === null ? null : { a: a[0] })
+    )
+    const prism = _.fromNullable(sa)
+    U.deepStrictEqual(prism.getOption(null), O.none)
+    U.deepStrictEqual(prism.getOption({ a: 1 }), O.some([1]))
+    U.deepStrictEqual(prism.reverseGet([1]), { a: 1 })
+  })
+
+  it('filter', () => {
+    type S = { readonly a: number }
+    type A = [number]
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => [s.a],
+      (a) => ({ a: a[0] })
+    )
+    const prism = pipe(
+      sa,
+      _.filter((a) => a[0] > 0)
+    )
+    U.deepStrictEqual(prism.getOption({ a: -1 }), O.none)
+    U.deepStrictEqual(prism.getOption({ a: 1 }), O.some([1]))
+    U.deepStrictEqual(prism.reverseGet([1]), { a: 1 })
+    U.deepStrictEqual(prism.reverseGet([-1]), { a: -1 })
+  })
+
+  it('prop', () => {
+    type S = [number]
+    type A = { readonly a: number }
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => ({ a: s[0] }),
+      (a) => [a.a]
+    )
+    const lens = pipe(sa, _.prop('a'))
+    U.deepStrictEqual(lens.get([1]), 1)
+    U.deepStrictEqual(lens.set(2)([1]), [2])
+  })
+
+  it('props', () => {
+    type S = [number, string]
+    type A = { readonly a: number; readonly b: string }
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => ({ a: s[0], b: s[1] }),
+      (a) => [a.a, a.b]
+    )
+    const lens = pipe(sa, _.props('a', 'b'))
+    U.deepStrictEqual(lens.get([1, 'b']), { a: 1, b: 'b' })
+    U.deepStrictEqual(lens.set({ a: 2, b: 'c' })([1, 'b']), [2, 'c'])
+  })
+
+  it('component', () => {
+    type S = { readonly a: number; readonly b: string }
+    type A = [number, string]
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => [s.a, s.b],
+      (a) => ({ a: a[0], b: a[1] })
+    )
+    const lens = pipe(sa, _.component(1))
+    U.deepStrictEqual(lens.get({ a: 1, b: 'b' }), 'b')
+    U.deepStrictEqual(lens.set('c')({ a: 1, b: 'b' }), { a: 1, b: 'c' })
+  })
+
+  it('index', () => {
+    type S = { readonly a: ReadonlyArray<number> }
+    type A = ReadonlyArray<number>
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => s.a,
+      (a) => ({ a })
+    )
+    const optional = pipe(sa, _.index(0))
+    U.deepStrictEqual(optional.getOption({ a: [] }), O.none)
+    U.deepStrictEqual(optional.getOption({ a: [1] }), O.some(1))
+    U.deepStrictEqual(optional.set(2)({ a: [] }), { a: [] })
+    U.deepStrictEqual(optional.set(2)({ a: [1] }), { a: [2] })
+    // should return the same reference
+    const empty: S = { a: [] }
+    const full: S = { a: [1] }
+    assert.strictEqual(optional.set(1)(empty), empty)
+    assert.strictEqual(optional.set(1)(full), full)
+  })
+
+  it('indexNonEmpty', () => {
+    type S = { readonly a: ReadonlyNonEmptyArray<number> }
+    type A = ReadonlyNonEmptyArray<number>
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => s.a,
+      (a) => ({ a })
+    )
+    const optional = pipe(sa, _.indexNonEmpty(1))
+    U.deepStrictEqual(optional.getOption({ a: [1] }), O.none)
+    U.deepStrictEqual(optional.getOption({ a: [1, 2] }), O.some(2))
+    U.deepStrictEqual(optional.set(3)({ a: [1] }), { a: [1] })
+    U.deepStrictEqual(optional.set(3)({ a: [1, 2] }), { a: [1, 3] })
+    // should return the same reference
+    const s: S = { a: [1, 2] }
+    assert.strictEqual(optional.set(2)(s), s)
+  })
+
+  it('key', () => {
+    type S = { readonly a: ReadonlyRecord<string, number> }
+    type A = ReadonlyRecord<string, number>
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => s.a,
+      (a) => ({ a })
+    )
+    const optional = pipe(sa, _.key('b'))
+    U.deepStrictEqual(optional.getOption({ a: {} }), O.none)
+    U.deepStrictEqual(optional.getOption({ a: { b: 1 } }), O.some(1))
+    U.deepStrictEqual(optional.set(2)({ a: {} }), { a: {} })
+    U.deepStrictEqual(optional.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
+  })
+
+  it('atKey', () => {
+    type S = { readonly a: ReadonlyRecord<string, number> }
+    type A = ReadonlyRecord<string, number>
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => s.a,
+      (a) => ({ a })
+    )
+    const optional = pipe(sa, _.atKey('b'))
+    U.deepStrictEqual(optional.get({ a: {} }), O.none)
+    U.deepStrictEqual(optional.get({ a: { b: 1 } }), O.some(1))
+    U.deepStrictEqual(optional.set(O.none)({ a: {} }), { a: {} })
+    U.deepStrictEqual(optional.set(O.some(1))({ a: {} }), { a: { b: 1 } })
+    U.deepStrictEqual(optional.set(O.none)({ a: { b: 1 } }), { a: {} })
+    U.deepStrictEqual(optional.set(O.some(2))({ a: { b: 1 } }), { a: { b: 2 } })
+  })
+
+  it('traverse', () => {
+    type S = { readonly a: ReadonlyArray<number> }
+    type A = ReadonlyArray<number>
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => s.a,
+      (a) => ({ a })
+    )
+    const traversal = pipe(sa, _.traverse(RA.readonlyArray))
+    U.deepStrictEqual(traversal.modifyF(Id.identity)((n) => n * 2)({ a: [1, 2, 3] }), { a: [2, 4, 6] })
+  })
+
+  it('findFirst', () => {
+    type S = { readonly a: ReadonlyArray<number> }
+    type A = ReadonlyArray<number>
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => s.a,
+      (a) => ({ a })
+    )
+    const optional = pipe(
+      sa,
+      _.findFirst((n) => n > 0)
+    )
+    U.deepStrictEqual(optional.getOption({ a: [] }), O.none)
+    U.deepStrictEqual(optional.getOption({ a: [-1] }), O.none)
+    U.deepStrictEqual(optional.getOption({ a: [-1, 2] }), O.some(2))
+    U.deepStrictEqual(optional.set(1)({ a: [] }), { a: [] })
+    U.deepStrictEqual(optional.set(1)({ a: [-1] }), { a: [-1] })
+    U.deepStrictEqual(optional.set(3)({ a: [-1, 2] }), { a: [-1, 3] })
+  })
+
+  it('findFirstNonEmpty', () => {
+    type S = { readonly a: ReadonlyNonEmptyArray<number> }
+    type A = ReadonlyNonEmptyArray<number>
+    const sa: _.Iso<S, A> = _.iso(
+      (s) => s.a,
+      (a) => ({ a })
+    )
+    const optional = pipe(
+      sa,
+      _.findFirstNonEmpty((n) => n > 0)
+    )
+    U.deepStrictEqual(optional.getOption({ a: [-1] }), O.none)
+    U.deepStrictEqual(optional.getOption({ a: [-1, 2] }), O.some(2))
+    U.deepStrictEqual(optional.set(1)({ a: [-1] }), { a: [-1] })
+    U.deepStrictEqual(optional.set(3)({ a: [-1, 2] }), { a: [-1, 3] })
   })
 })

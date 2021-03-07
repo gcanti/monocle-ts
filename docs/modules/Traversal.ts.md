@@ -35,6 +35,7 @@ Added in v2.3.0
   - [fromNullable](#fromnullable)
   - [getAll](#getall)
   - [index](#index)
+  - [indexNonEmpty](#indexnonempty)
   - [key](#key)
   - [left](#left)
   - [modify](#modify)
@@ -200,6 +201,18 @@ export declare const index: (i: number) => <S, A>(sa: Traversal<S, readonly A[]>
 
 Added in v2.3.0
 
+## indexNonEmpty
+
+Alias of `index`.
+
+**Signature**
+
+```ts
+export declare const indexNonEmpty: (i: number) => <S, A>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A>
+```
+
+Added in v2.3.8
+
 ## key
 
 Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key.
@@ -303,9 +316,7 @@ Return a `Traversal` from a `Traversal` focused on a `Traversable`.
 **Signature**
 
 ```ts
-export declare function traverse<T extends URIS>(
-  T: Traversable1<T>
-): <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A>
+export declare const traverse: typeof _.traversalTraverse
 ```
 
 Added in v2.3.0

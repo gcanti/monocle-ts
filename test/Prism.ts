@@ -1,14 +1,15 @@
-import { pipe } from 'fp-ts/lib/pipeable'
-import * as O from 'fp-ts/lib/Option'
+import * as assert from 'assert'
 import * as E from 'fp-ts/lib/Either'
-import * as _ from '../src/Prism'
-import { Optional } from '../src/Optional'
-import * as A from 'fp-ts/lib/ReadonlyArray'
-import * as T from '../src/Traversal'
 import * as Id from 'fp-ts/lib/Identity'
-import * as U from './util'
-import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
+import * as O from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/pipeable'
+import * as A from 'fp-ts/lib/ReadonlyArray'
 import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
+import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
+import { Optional } from '../src/Optional'
+import * as _ from '../src/Prism'
+import * as T from '../src/Traversal'
+import * as U from './util'
 
 // -------------------------------------------------------------------------------------
 // model
@@ -123,13 +124,28 @@ describe('Prism', () => {
   })
 
   it('index', () => {
-    const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
-    U.deepStrictEqual(sa.getOption([1, 2, 3]), O.some(1))
+    type S = ReadonlyArray<number>
+    const optional = pipe(_.id<S>(), _.index(0))
+    U.deepStrictEqual(optional.getOption([]), O.none)
+    U.deepStrictEqual(optional.getOption([1]), O.some(1))
+    U.deepStrictEqual(optional.set(2)([]), [])
+    U.deepStrictEqual(optional.set(2)([1]), [2])
+    // should return the same reference
+    const empty: S = []
+    const full: S = [1]
+    assert.strictEqual(optional.set(1)(empty), empty)
+    assert.strictEqual(optional.set(1)(full), full)
   })
 
   it('indexNonEmpty', () => {
-    const sa = pipe(_.id<ReadonlyNonEmptyArray<number>>(), _.indexNonEmpty(0))
-    U.deepStrictEqual(sa.getOption([1, 2, 3]), O.some(1))
+    type S = ReadonlyNonEmptyArray<number>
+    const optional = pipe(_.id<S>(), _.indexNonEmpty(1))
+    U.deepStrictEqual(optional.getOption([1, 2]), O.some(2))
+    U.deepStrictEqual(optional.set(3)([1]), [1])
+    U.deepStrictEqual(optional.set(3)([1, 2]), [1, 3])
+    // should return the same reference
+    const full: S = [1, 2]
+    assert.strictEqual(optional.set(2)(full), full)
   })
 
   it('key', () => {
@@ -214,36 +230,36 @@ describe('Prism', () => {
 
   it('findFirst', () => {
     type S = O.Option<ReadonlyArray<number>>
-    const sa = pipe(
+    const optional = pipe(
       _.id<S>(),
       _.some,
       _.findFirst((n) => n > 0)
     )
-    U.deepStrictEqual(sa.getOption(O.none), O.none)
-    U.deepStrictEqual(sa.getOption(O.some([])), O.none)
-    U.deepStrictEqual(sa.getOption(O.some([-1, -2, -3])), O.none)
-    U.deepStrictEqual(sa.getOption(O.some([-1, 2, -3])), O.some(2))
-    U.deepStrictEqual(sa.set(3)(O.none), O.none)
-    U.deepStrictEqual(sa.set(3)(O.some([])), O.some([]))
-    U.deepStrictEqual(sa.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3]))
-    U.deepStrictEqual(sa.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3]))
-    U.deepStrictEqual(sa.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4]))
+    U.deepStrictEqual(optional.getOption(O.none), O.none)
+    U.deepStrictEqual(optional.getOption(O.some([])), O.none)
+    U.deepStrictEqual(optional.getOption(O.some([-1, -2, -3])), O.none)
+    U.deepStrictEqual(optional.getOption(O.some([-1, 2, -3])), O.some(2))
+    U.deepStrictEqual(optional.set(3)(O.none), O.none)
+    U.deepStrictEqual(optional.set(3)(O.some([])), O.some([]))
+    U.deepStrictEqual(optional.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3]))
+    U.deepStrictEqual(optional.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3]))
+    U.deepStrictEqual(optional.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4]))
   })
 
   it('findFirstNonEmpty', () => {
     type S = O.Option<ReadonlyNonEmptyArray<number>>
-    const sa = pipe(
+    const optional = pipe(
       _.id<S>(),
       _.some,
       _.findFirstNonEmpty((n) => n > 0)
     )
-    U.deepStrictEqual(sa.getOption(O.none), O.none)
-    U.deepStrictEqual(sa.getOption(O.some([-1, -2, -3])), O.none)
-    U.deepStrictEqual(sa.getOption(O.some([-1, 2, -3])), O.some(2))
-    U.deepStrictEqual(sa.set(3)(O.none), O.none)
-    U.deepStrictEqual(sa.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3] as const))
-    U.deepStrictEqual(sa.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3] as const))
-    U.deepStrictEqual(sa.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4] as const))
+    U.deepStrictEqual(optional.getOption(O.none), O.none)
+    U.deepStrictEqual(optional.getOption(O.some([-1, -2, -3])), O.none)
+    U.deepStrictEqual(optional.getOption(O.some([-1, 2, -3])), O.some(2))
+    U.deepStrictEqual(optional.set(3)(O.none), O.none)
+    U.deepStrictEqual(optional.set(3)(O.some([-1, -2, -3])), O.some([-1, -2, -3] as const))
+    U.deepStrictEqual(optional.set(3)(O.some([-1, 2, -3])), O.some([-1, 3, -3] as const))
+    U.deepStrictEqual(optional.set(4)(O.some([-1, -2, 3])), O.some([-1, -2, 4] as const))
   })
 
   it('traverse', () => {

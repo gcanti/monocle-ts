@@ -218,7 +218,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Prism<S, A>) => Pris
  * @since 2.3.0
  */
 export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Prism<S, A>) => Optional<S, A[P]>) =>
-  composeLens(pipe(_.lensId<A>(), _.lensProp(prop)))
+  composeLens(pipe(_.lensId<A>(), _.lensProp(prop))) // TODO: simplify?
 
 /**
  * Return a `Optional` from a `Prism` and a list of props.
@@ -246,8 +246,8 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * @category combinators
  * @since 2.3.0
  */
-export const index = (i: number) => <S, A>(sa: Prism<S, ReadonlyArray<A>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyArray<A>().index(i)))
+export const index = (i: number): (<S, A>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A>) =>
+  flow(asOptional, _.optionalIndex(i))
 
 /**
  * Return a `Optional` from a `Prism` focused on a `ReadonlyNonEmptyArray`.
@@ -255,8 +255,8 @@ export const index = (i: number) => <S, A>(sa: Prism<S, ReadonlyArray<A>>): Opti
  * @category combinators
  * @since 2.3.8
  */
-export const indexNonEmpty = (i: number) => <S, A>(sa: Prism<S, ReadonlyNonEmptyArray<A>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyNonEmptyArray<A>().index(i)))
+export const indexNonEmpty = (i: number): (<S, A>(sa: Prism<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>) =>
+  flow(asOptional, _.optionalIndexNonEmpty(i))
 
 /**
  * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key.
@@ -264,8 +264,8 @@ export const indexNonEmpty = (i: number) => <S, A>(sa: Prism<S, ReadonlyNonEmpty
  * @category combinators
  * @since 2.3.0
  */
-export const key = (key: string) => <S, A>(sa: Prism<S, ReadonlyRecord<string, A>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyRecord<A>().index(key)))
+export const key = (key: string): (<S, A>(sa: Prism<S, ReadonlyRecord<string, A>>) => Optional<S, A>) =>
+  flow(asOptional, _.optionalKey(key))
 
 /**
  * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key.
@@ -313,7 +313,7 @@ export const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E> =
  * @since 2.3.0
  */
 export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Prism<S, Kind<T, A>>) => Traversal<S, A> {
-  return flow(asTraversal, _.traversalComposeTraversal(_.fromTraversable(T)()))
+  return flow(asTraversal, _.traversalTraverse(T))
 }
 
 /**
@@ -325,7 +325,7 @@ export function findFirst<A, B extends A>(
 ): <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, B>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A> {
-  return composeOptional(_.findFirst(predicate))
+  return composeOptional(_.optionalFindFirst(predicate))
 }
 
 /**
@@ -341,7 +341,7 @@ export function findFirstNonEmpty<A>(
 export function findFirstNonEmpty<A>(
   predicate: Predicate<A>
 ): <S>(sa: Prism<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A> {
-  return composeOptional(_.findFirstNonEmpty(predicate))
+  return composeOptional(_.optionalFindFirstNonEmpty(predicate))
 }
 
 // -------------------------------------------------------------------------------------

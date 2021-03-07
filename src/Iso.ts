@@ -15,11 +15,16 @@
  * @since 2.3.0
  */
 import { Category2 } from 'fp-ts/lib/Category'
-import { flow, identity } from 'fp-ts/lib/function'
+import { Either } from 'fp-ts/lib/Either'
+import { flow, identity, Predicate, Refinement } from 'fp-ts/lib/function'
 import { Functor, Functor1, Functor2, Functor3 } from 'fp-ts/lib/Functor'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
+import { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
+import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
+import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
+import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
@@ -172,6 +177,158 @@ export function modifyF<F extends URIS>(
 export function modifyF<F>(F: Functor<F>): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Iso<S, A>) => (s: S) => HKT<F, S>
 export function modifyF<F>(F: Functor<F>): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Iso<S, A>) => (s: S) => HKT<F, S> {
   return (f) => (sa) => (s) => pipe(sa.get(s), f, (fa) => F.map(fa, sa.reverseGet))
+}
+
+/**
+ * Return a `Prism` from a `Iso` focused on a nullable value.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const fromNullable = <S, A>(sa: Iso<S, A>): Prism<S, NonNullable<A>> =>
+  composePrism(_.prismFromNullable<A>())(sa)
+
+/**
+ * @category combinators
+ * @since 2.3.8
+ */
+export function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Iso<S, A>) => Prism<S, B>
+export function filter<A>(predicate: Predicate<A>): <S>(sa: Iso<S, A>) => Prism<S, A>
+export function filter<A>(predicate: Predicate<A>): <S>(sa: Iso<S, A>) => Prism<S, A> {
+  return composePrism(_.prismFromPredicate(predicate))
+}
+
+/**
+ * Return a `Lens` from a `Iso` and a prop.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Iso<S, A>) => Lens<S, A[P]>) =>
+  flow(asLens, _.lensProp(prop))
+
+/**
+ * Return a `Lens` from a `Iso` and a list of props.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const props = <A, P extends keyof A>(
+  ...props: readonly [P, P, ...ReadonlyArray<P>]
+): (<S>(sa: Iso<S, A>) => Lens<S, { [K in P]: A[K] }>) => flow(asLens, _.lensProps(...props))
+
+/**
+ * Return a `Lens` from a `Iso` and a component.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
+  prop: P
+): (<S>(sa: Iso<S, A>) => Lens<S, A[P]>) => flow(asLens, _.lensComponent(prop))
+
+/**
+ * Return a `Optional` from a `Iso` focused on a `ReadonlyArray`.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const index = (i: number): (<S, A>(sa: Iso<S, ReadonlyArray<A>>) => Optional<S, A>) =>
+  flow(asOptional, _.optionalIndex(i))
+
+/**
+ * Return a `Optional` from a `Iso` focused on a `ReadonlyNonEmptyArray`.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const indexNonEmpty = (i: number): (<S, A>(sa: Iso<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>) =>
+  flow(asOptional, _.optionalIndexNonEmpty(i))
+
+/**
+ * Return a `Optional` from a `Iso` focused on a `ReadonlyRecord` and a key.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const key = (key: string): (<S, A>(sa: Iso<S, ReadonlyRecord<string, A>>) => Optional<S, A>) =>
+  flow(asOptional, _.optionalKey(key))
+
+/**
+ * Return a `Lens` from a `Iso` focused on a `ReadonlyRecord` and a required key.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const atKey = (key: string): (<S, A>(sa: Iso<S, ReadonlyRecord<string, A>>) => Lens<S, Option<A>>) =>
+  flow(asLens, _.lensAtKey(key))
+
+/**
+ * Return a `Prism` from a `Iso` focused on the `Some` of a `Option` type.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const some: <S, A>(soa: Iso<S, Option<A>>) => Prism<S, A> =
+  /*#__PURE__*/
+  composePrism(_.prismSome())
+
+/**
+ * Return a `Prism` from a `Iso` focused on the `Right` of a `Either` type.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const right: <S, E, A>(sea: Iso<S, Either<E, A>>) => Prism<S, A> =
+  /*#__PURE__*/
+  composePrism(_.prismRight())
+
+/**
+ * Return a `Prism` from a `Iso` focused on the `Left` of a `Either` type.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export const left: <S, E, A>(sea: Iso<S, Either<E, A>>) => Prism<S, E> =
+  /*#__PURE__*/
+  composePrism(_.prismLeft())
+
+/**
+ * Return a `Traversal` from a `Iso` focused on a `Traversable`.
+ *
+ * @category combinators
+ * @since 2.3.8
+ */
+export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Iso<S, Kind<T, A>>) => Traversal<S, A> {
+  return flow(asTraversal, _.traversalTraverse(T))
+}
+
+/**
+ * @category combinators
+ * @since 2.3.2
+ */
+export function findFirst<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Iso<S, ReadonlyArray<A>>) => Optional<S, B>
+export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Iso<S, ReadonlyArray<A>>) => Optional<S, A>
+export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Iso<S, ReadonlyArray<A>>) => Optional<S, A> {
+  return composeOptional(_.optionalFindFirst(predicate))
+}
+
+/**
+ * @category combinators
+ * @since 2.3.8
+ */
+export function findFirstNonEmpty<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Iso<S, ReadonlyNonEmptyArray<A>>) => Optional<S, B>
+export function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Iso<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
+export function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Iso<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A> {
+  return composeOptional(_.optionalFindFirstNonEmpty(predicate))
 }
 
 // -------------------------------------------------------------------------------------
