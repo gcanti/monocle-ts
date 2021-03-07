@@ -91,8 +91,15 @@ describe('Traversal', () => {
   })
 
   it('index', () => {
-    const sa = pipe(_.id<ReadonlyNonEmptyArray<number>>(), _.index(0))
+    const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
+    U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([]), [])
     U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 2, 3])
+  })
+
+  it('indexNonEmpty', () => {
+    const sa = pipe(_.id<ReadonlyNonEmptyArray<number>>(), _.indexNonEmpty(1))
+    U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1]), [1])
+    U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [1, 4, 3])
   })
 
   it('key', () => {
@@ -131,20 +138,20 @@ describe('Traversal', () => {
 
   it('findFirst', () => {
     type S = ReadonlyArray<number>
-    const sa = pipe(
+    const optional = pipe(
       _.id<S>(),
       _.findFirst((n) => n > 0)
     )
-    U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 2, 3])
+    U.deepStrictEqual(optional.modifyF(Id.identity)((n) => n * 2)([-1, 2, 3]), [-1, 4, 3])
   })
 
   it('findFirstNonEmpty', () => {
     type S = ReadonlyNonEmptyArray<number>
-    const sa = pipe(
+    const optional = pipe(
       _.id<S>(),
       _.findFirstNonEmpty((n) => n > 0)
     )
-    U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 2, 3])
+    U.deepStrictEqual(optional.modifyF(Id.identity)((n) => n * 2)([-1, 2, 3]), [-1, 4, 3])
   })
 
   it('fromNullable', () => {

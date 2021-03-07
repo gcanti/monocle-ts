@@ -171,7 +171,7 @@ export function modifyF<F>(F: Functor<F>): <A>(f: (a: A) => HKT<F, A>) => <S>(sa
  * @since 2.3.0
  */
 export const fromNullable = <S, A>(sa: Lens<S, A>): Optional<S, NonNullable<A>> =>
-  _.lensComposePrism(_.prismFromNullable<A>())(sa)
+  composePrism(_.prismFromNullable<A>())(sa)
 
 /**
  * @category combinators
@@ -217,8 +217,8 @@ export const component: <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * @category combinators
  * @since 2.3.0
  */
-export const index = (i: number) => <S, A>(sa: Lens<S, ReadonlyArray<A>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyArray<A>().index(i)))
+export const index = (i: number): (<S, A>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A>) =>
+  flow(asOptional, _.optionalIndex(i))
 
 /**
  * Return a `Optional` from a `Lens` focused on a `ReadonlyNonEmptyArray`.
@@ -226,8 +226,8 @@ export const index = (i: number) => <S, A>(sa: Lens<S, ReadonlyArray<A>>): Optio
  * @category combinators
  * @since 2.3.8
  */
-export const indexNonEmpty = (i: number) => <S, A>(sa: Lens<S, ReadonlyNonEmptyArray<A>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyNonEmptyArray<A>().index(i)))
+export const indexNonEmpty = (i: number): (<S, A>(sa: Lens<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>) =>
+  flow(asOptional, _.optionalIndexNonEmpty(i))
 
 /**
  * Return a `Optional` from a `Lens` focused on a `ReadonlyRecord` and a key.
@@ -235,8 +235,8 @@ export const indexNonEmpty = (i: number) => <S, A>(sa: Lens<S, ReadonlyNonEmptyA
  * @category combinators
  * @since 2.3.0
  */
-export const key = (key: string) => <S, A>(sa: Lens<S, ReadonlyRecord<string, A>>): Optional<S, A> =>
-  pipe(sa, asOptional, _.optionalComposeOptional(_.indexReadonlyRecord<A>().index(key)))
+export const key = (key: string): (<S, A>(sa: Lens<S, ReadonlyRecord<string, A>>) => Optional<S, A>) =>
+  flow(asOptional, _.optionalKey(key))
 
 /**
  * Return a `Lens` from a `Lens` focused on a `ReadonlyRecord` and a required key.
@@ -244,8 +244,7 @@ export const key = (key: string) => <S, A>(sa: Lens<S, ReadonlyRecord<string, A>
  * @category combinators
  * @since 2.3.0
  */
-export const atKey = (key: string) => <S, A>(sa: Lens<S, ReadonlyRecord<string, A>>): Lens<S, Option<A>> =>
-  pipe(sa, compose(_.atReadonlyRecord<A>().at(key)))
+export const atKey: (key: string) => <S, A>(sa: Lens<S, ReadonlyRecord<string, A>>) => Lens<S, Option<A>> = _.lensAtKey
 
 /**
  * Return a `Optional` from a `Lens` focused on the `Some` of a `Option` type.
@@ -284,7 +283,7 @@ export const left: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, E> =
  * @since 2.3.0
  */
 export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Lens<S, Kind<T, A>>) => Traversal<S, A> {
-  return flow(asTraversal, _.traversalComposeTraversal(_.fromTraversable(T)()))
+  return flow(asTraversal, _.traversalTraverse(T))
 }
 
 /**
@@ -296,7 +295,7 @@ export function findFirst<A, B extends A>(
 ): <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, B>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A>
 export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A> {
-  return composeOptional(_.findFirst(predicate))
+  return composeOptional(_.optionalFindFirst(predicate))
 }
 
 /**
@@ -312,7 +311,7 @@ export function findFirstNonEmpty<A>(
 export function findFirstNonEmpty<A>(
   predicate: Predicate<A>
 ): <S>(sa: Lens<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A> {
-  return composeOptional(_.findFirstNonEmpty(predicate))
+  return composeOptional(_.optionalFindFirstNonEmpty(predicate))
 }
 
 // -------------------------------------------------------------------------------------

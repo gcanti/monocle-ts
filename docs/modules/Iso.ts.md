@@ -28,8 +28,23 @@ Added in v2.3.0
 - [Invariant](#invariant)
   - [imap](#imap)
 - [combinators](#combinators)
+  - [atKey](#atkey)
+  - [component](#component)
+  - [filter](#filter)
+  - [findFirst](#findfirst)
+  - [findFirstNonEmpty](#findfirstnonempty)
+  - [fromNullable](#fromnullable)
+  - [index](#index)
+  - [indexNonEmpty](#indexnonempty)
+  - [key](#key)
+  - [left](#left)
   - [modify](#modify)
   - [modifyF](#modifyf)
+  - [prop](#prop)
+  - [props](#props)
+  - [right](#right)
+  - [some](#some)
+  - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
   - [composeLens](#composelens)
@@ -69,6 +84,131 @@ Added in v2.3.0
 
 # combinators
 
+## atKey
+
+Return a `Lens` from a `Iso` focused on a `ReadonlyRecord` and a required key.
+
+**Signature**
+
+```ts
+export declare const atKey: (key: string) => <S, A>(sa: Iso<S, Readonly<Record<string, A>>>) => Lens<S, Option<A>>
+```
+
+Added in v2.3.8
+
+## component
+
+Return a `Lens` from a `Iso` and a component.
+
+**Signature**
+
+```ts
+export declare const component: <A extends readonly unknown[], P extends keyof A>(
+  prop: P
+) => <S>(sa: Iso<S, A>) => Lens<S, A[P]>
+```
+
+Added in v2.3.8
+
+## filter
+
+**Signature**
+
+```ts
+export declare function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Iso<S, A>) => Prism<S, B>
+export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Iso<S, A>) => Prism<S, A>
+```
+
+Added in v2.3.8
+
+## findFirst
+
+**Signature**
+
+```ts
+export declare function findFirst<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Iso<S, ReadonlyArray<A>>) => Optional<S, B>
+export declare function findFirst<A>(predicate: Predicate<A>): <S>(sa: Iso<S, ReadonlyArray<A>>) => Optional<S, A>
+```
+
+Added in v2.3.2
+
+## findFirstNonEmpty
+
+**Signature**
+
+```ts
+export declare function findFirstNonEmpty<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Iso<S, ReadonlyNonEmptyArray<A>>) => Optional<S, B>
+export declare function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Iso<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
+```
+
+Added in v2.3.8
+
+## fromNullable
+
+Return a `Prism` from a `Iso` focused on a nullable value.
+
+**Signature**
+
+```ts
+export declare const fromNullable: <S, A>(sa: Iso<S, A>) => Prism<S, NonNullable<A>>
+```
+
+Added in v2.3.8
+
+## index
+
+Return a `Optional` from a `Iso` focused on a `ReadonlyArray`.
+
+**Signature**
+
+```ts
+export declare const index: (i: number) => <S, A>(sa: Iso<S, readonly A[]>) => Optional<S, A>
+```
+
+Added in v2.3.8
+
+## indexNonEmpty
+
+Return a `Optional` from a `Iso` focused on a `ReadonlyNonEmptyArray`.
+
+**Signature**
+
+```ts
+export declare const indexNonEmpty: (i: number) => <S, A>(sa: Iso<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
+```
+
+Added in v2.3.8
+
+## key
+
+Return a `Optional` from a `Iso` focused on a `ReadonlyRecord` and a key.
+
+**Signature**
+
+```ts
+export declare const key: (key: string) => <S, A>(sa: Iso<S, Readonly<Record<string, A>>>) => Optional<S, A>
+```
+
+Added in v2.3.8
+
+## left
+
+Return a `Prism` from a `Iso` focused on the `Left` of a `Either` type.
+
+**Signature**
+
+```ts
+export declare const left: <S, E, A>(sea: Iso<S, Either<E, A>>) => Prism<S, E>
+```
+
+Added in v2.3.8
+
 ## modify
 
 **Signature**
@@ -99,6 +239,70 @@ export declare function modifyF<F>(
 ```
 
 Added in v2.3.5
+
+## prop
+
+Return a `Lens` from a `Iso` and a prop.
+
+**Signature**
+
+```ts
+export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Iso<S, A>) => Lens<S, A[P]>
+```
+
+Added in v2.3.8
+
+## props
+
+Return a `Lens` from a `Iso` and a list of props.
+
+**Signature**
+
+```ts
+export declare const props: <A, P extends keyof A>(
+  props_0: P,
+  props_1: P,
+  ...props_2: P[]
+) => <S>(sa: Iso<S, A>) => Lens<S, { [K in P]: A[K] }>
+```
+
+Added in v2.3.8
+
+## right
+
+Return a `Prism` from a `Iso` focused on the `Right` of a `Either` type.
+
+**Signature**
+
+```ts
+export declare const right: <S, E, A>(sea: Iso<S, Either<E, A>>) => Prism<S, A>
+```
+
+Added in v2.3.8
+
+## some
+
+Return a `Prism` from a `Iso` focused on the `Some` of a `Option` type.
+
+**Signature**
+
+```ts
+export declare const some: <S, A>(soa: Iso<S, Option<A>>) => Prism<S, A>
+```
+
+Added in v2.3.8
+
+## traverse
+
+Return a `Traversal` from a `Iso` focused on a `Traversable`.
+
+**Signature**
+
+```ts
+export declare function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Iso<S, Kind<T, A>>) => Traversal<S, A>
+```
+
+Added in v2.3.8
 
 # compositions
 

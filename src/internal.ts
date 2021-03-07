@@ -37,32 +37,6 @@ export const iso = <S, A>(get: Iso<S, A>['get'], reverseGet: Iso<S, A>['reverseG
 })
 
 /** @internal */
-export const lens = <S, A>(get: Lens<S, A>['get'], set: Lens<S, A>['set']): Lens<S, A> => ({ get, set })
-
-/** @internal */
-export const prism = <S, A>(
-  getOption: Prism<S, A>['getOption'],
-  reverseGet: Prism<S, A>['reverseGet']
-): Prism<S, A> => ({ getOption, reverseGet })
-
-/** @internal */
-export const optional = <S, A>(getOption: Optional<S, A>['getOption'], set: Optional<S, A>['set']): Optional<S, A> => ({
-  getOption,
-  set
-})
-
-/** @internal */
-export const traversal = <S, A>(modifyF: Traversal<S, A>['modifyF']): Traversal<S, A> => ({
-  modifyF
-})
-
-/** @internal */
-export const at = <S, I, A>(at: At<S, I, A>['at']): At<S, I, A> => ({ at })
-
-/** @internal */
-export const index = <S, I, A>(index: Index<S, I, A>['index']): Index<S, I, A> => ({ index })
-
-/** @internal */
 export const isoAsLens = <S, A>(sa: Iso<S, A>): Lens<S, A> => lens(sa.get, flow(sa.reverseGet, constant))
 
 /** @internal */
@@ -81,6 +55,9 @@ export const isoAsTraversal = <S, A>(sa: Iso<S, A>): Traversal<S, A> =>
 // -------------------------------------------------------------------------------------
 // Lens
 // -------------------------------------------------------------------------------------
+
+/** @internal */
+export const lens = <S, A>(get: Lens<S, A>['get'], set: Lens<S, A>['set']): Lens<S, A> => ({ get, set })
 
 /** @internal */
 export const lensAsOptional = <S, A>(sa: Lens<S, A>): Optional<S, A> => optional(flow(sa.get, O.some), sa.set)
@@ -161,9 +138,19 @@ export const lensComponent = <A extends ReadonlyArray<unknown>, P extends keyof 
     }
   )
 
+/** @internal */
+export const lensAtKey = (key: string) => <S, A>(sa: Lens<S, RR.ReadonlyRecord<string, A>>): Lens<S, O.Option<A>> =>
+  pipe(sa, lensComposeLens(atReadonlyRecord<A>().at(key)))
+
 // -------------------------------------------------------------------------------------
 // Prism
 // -------------------------------------------------------------------------------------
+
+/** @internal */
+export const prism = <S, A>(
+  getOption: Prism<S, A>['getOption'],
+  reverseGet: Prism<S, A>['reverseGet']
+): Prism<S, A> => ({ getOption, reverseGet })
 
 /** @internal */
 export const prismAsOptional = <S, A>(sa: Prism<S, A>): Optional<S, A> => optional(sa.getOption, (a) => prismSet(a)(sa))
@@ -232,6 +219,12 @@ export const prismLeft = <E, A>(): Prism<E.Either<E, A>, E> =>
 // -------------------------------------------------------------------------------------
 
 /** @internal */
+export const optional = <S, A>(getOption: Optional<S, A>['getOption'], set: Optional<S, A>['set']): Optional<S, A> => ({
+  getOption,
+  set
+})
+
+/** @internal */
 export const optionalAsTraversal = <S, A>(sa: Optional<S, A>): Traversal<S, A> =>
   traversal(<F>(F: Applicative<F>) => (f: (a: A) => HKT<F, A>) => (s: S) =>
     pipe(
@@ -268,7 +261,20 @@ export const optionalComposeOptional = <A, B>(ab: Optional<A, B>) => <S>(sa: Opt
   optional(flow(sa.getOption, O.chain(ab.getOption)), (b) => optionalModify(ab.set(b))(sa))
 
 /** @internal */
-export const findFirst = <A>(predicate: Predicate<A>): Optional<ReadonlyArray<A>, A> =>
+export const optionalIndex = (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>): Optional<S, A> =>
+  pipe(sa, optionalComposeOptional(indexReadonlyArray<A>().index(i)))
+
+/** @internal */
+export const optionalIndexNonEmpty = (i: number) => <S, A>(
+  sa: Optional<S, RNEA.ReadonlyNonEmptyArray<A>>
+): Optional<S, A> => pipe(sa, optionalComposeOptional(indexReadonlyNonEmptyArray<A>().index(i)))
+
+/** @internal */
+export const optionalKey = (key: string) => <S, A>(sa: Optional<S, RR.ReadonlyRecord<string, A>>): Optional<S, A> =>
+  pipe(sa, optionalComposeOptional(indexReadonlyRecord<A>().index(key)))
+
+/** @internal */
+export const optionalFindFirst = <A>(predicate: Predicate<A>): Optional<ReadonlyArray<A>, A> =>
   optional(RA.findFirst(predicate), (a) => (s) =>
     pipe(
       RA.findIndex(predicate)(s),
@@ -290,7 +296,7 @@ const unsafeUpdateAt = <A>(i: number, a: A, as: RNEA.ReadonlyNonEmptyArray<A>): 
 }
 
 /** @internal */
-export const findFirstNonEmpty = <A>(predicate: Predicate<A>): Optional<RNEA.ReadonlyNonEmptyArray<A>, A> =>
+export const optionalFindFirstNonEmpty = <A>(predicate: Predicate<A>): Optional<RNEA.ReadonlyNonEmptyArray<A>, A> =>
   optional<RNEA.ReadonlyNonEmptyArray<A>, A>(RA.findFirst(predicate), (a) => (as) =>
     pipe(
       RA.findIndex(predicate)(as),
@@ -304,6 +310,11 @@ export const findFirstNonEmpty = <A>(predicate: Predicate<A>): Optional<RNEA.Rea
 // -------------------------------------------------------------------------------------
 // Traversal
 // -------------------------------------------------------------------------------------
+
+/** @internal */
+export const traversal = <S, A>(modifyF: Traversal<S, A>['modifyF']): Traversal<S, A> => ({
+  modifyF
+})
 
 /** @internal */
 export function traversalComposeTraversal<A, B>(ab: Traversal<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B> {
@@ -324,18 +335,19 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
     })
 }
 
+/** @internal */
+export function traversalTraverse<T extends URIS>(
+  T: Traversable1<T>
+): <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A> {
+  return traversalComposeTraversal(fromTraversable(T)())
+}
+
 // -------------------------------------------------------------------------------------
 // Ix
 // -------------------------------------------------------------------------------------
 
 /** @internal */
-export const indexReadonlyNonEmptyArray = <A = never>(): Index<RNEA.ReadonlyNonEmptyArray<A>, number, A> =>
-  index((i) =>
-    optional(
-      (as) => RA.lookup(i, as),
-      (a) => (as) => unsafeUpdateAt(i, a, as)
-    )
-  )
+export const index = <S, I, A>(index: Index<S, I, A>['index']): Index<S, I, A> => ({ index })
 
 /** @internal */
 export const indexReadonlyArray = <A = never>(): Index<ReadonlyArray<A>, number, A> =>
@@ -344,8 +356,27 @@ export const indexReadonlyArray = <A = never>(): Index<ReadonlyArray<A>, number,
       (as) => RA.lookup(i, as),
       (a) => (as) =>
         pipe(
-          RA.updateAt(i, a)(as),
-          O.getOrElse(() => as)
+          RA.lookup(i, as),
+          O.fold(
+            () => as,
+            () => RA.unsafeUpdateAt(i, a, as)
+          )
+        )
+    )
+  )
+
+/** @internal */
+export const indexReadonlyNonEmptyArray = <A = never>(): Index<RNEA.ReadonlyNonEmptyArray<A>, number, A> =>
+  index((i) =>
+    optional(
+      (as) => RA.lookup(i, as),
+      (a) => (as) =>
+        pipe(
+          RA.lookup(i, as),
+          O.fold(
+            () => as,
+            () => unsafeUpdateAt(i, a, as)
+          )
         )
     )
   )
@@ -367,6 +398,9 @@ export const indexReadonlyRecord = <A = never>(): Index<RR.ReadonlyRecord<string
 // -------------------------------------------------------------------------------------
 // At
 // -------------------------------------------------------------------------------------
+
+/** @internal */
+export const at = <S, I, A>(at: At<S, I, A>['at']): At<S, I, A> => ({ at })
 
 /** @internal */
 export function atReadonlyRecord<A = never>(): At<RR.ReadonlyRecord<string, A>, string, O.Option<A>> {
