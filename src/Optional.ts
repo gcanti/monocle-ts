@@ -57,12 +57,16 @@ export interface Optional<S, A> {
 
 /**
  * @category constructors
+ * @since 2.3.8
+ */
+export const optional: <S, A>(getOption: Optional<S, A>['getOption'], set: Optional<S, A>['set']) => Optional<S, A> =
+  _.optional
+
+/**
+ * @category constructors
  * @since 2.3.0
  */
-export const id = <S>(): Optional<S, S> => ({
-  getOption: O.some,
-  set: constant
-})
+export const id = <S>(): Optional<S, S> => optional(O.some, constant)
 
 // -------------------------------------------------------------------------------------
 // converters
@@ -351,10 +355,7 @@ export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Optional<E,
 // instances
 // -------------------------------------------------------------------------------------
 
-const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => ({
-  getOption: flow(ea.getOption, O.map(ab)),
-  set: flow(ba, ea.set)
-})
+const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => optional(flow(ea.getOption, O.map(ab)), flow(ba, ea.set))
 
 /**
  * @category instances

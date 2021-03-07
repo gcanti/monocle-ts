@@ -57,6 +57,7 @@ Added in v2.3.0
   - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
   - [id](#id)
+  - [lens](#lens)
 - [converters](#converters)
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
@@ -380,6 +381,16 @@ export declare const id: <S>() => Lens<S, S>
 
 Added in v2.3.0
 
+## lens
+
+**Signature**
+
+```ts
+export declare const lens: <S, A>(get: (s: S) => A, set: (a: A) => (s: S) => S) => Lens<S, A>
+```
+
+Added in v2.3.8
+
 # converters
 
 ## asOptional
@@ -456,6 +467,7 @@ Added in v2.3.0
 
 ```ts
 export interface Lens<S, A> {
+  readonly _tag: 'Lens'
   readonly get: (s: S) => A
   readonly set: (a: A) => (s: S) => S
 }

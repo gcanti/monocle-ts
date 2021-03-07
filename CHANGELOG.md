@@ -18,29 +18,37 @@ high state of flux, you're at risk of it changing without notice.
 Experimental modules require `fp-ts@^2.5.0`.
 
 - **Experimental**
+  - `At`
+    - add `at` constructor (@gcanti)
   - `Iso`
+    - add `iso` constructor (@gcanti)
     - add `composeLens` (@gcanti)
     - add `composePrism` (@gcanti)
     - add `composeOptional` (@gcanti)
     - add `composeTraversal` (@gcanti)
   - `Ix`
+    - add `index` constructor (@gcanti)
     - add `indexReadonlyNonEmptyArray` (@gcanti)
   - `Lens`
+    - add `lens` constructor (@gcanti)
     - add `composeIso` (@gcanti)
     - add `composeTraversal` (@gcanti)
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
   - `Prism`
+    - add `prism` constructor (@gcanti)
     - add `composeIso` (@gcanti)
     - add `composeTraversal` (@gcanti)
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
   - `Optional`
+    - add `optional` constructor (@gcanti)
     - add `composeIso` (@gcanti)
     - add `composeTraversal` (@gcanti)
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
   - `Traversal`
+    - add `traversal` constructor (@gcanti)
     - add `composeIso` (@gcanti)
     - add `composeLens` (@gcanti)
     - add `composePrism` (@gcanti)

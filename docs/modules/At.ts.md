@@ -19,6 +19,7 @@ Added in v2.3.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
+  - [at](#at)
   - [atReadonlyMap](#atreadonlymap)
   - [atReadonlyRecord](#atreadonlyrecord)
   - [atReadonlySet](#atreadonlyset)
@@ -30,6 +31,16 @@ Added in v2.3.0
 ---
 
 # constructors
+
+## at
+
+**Signature**
+
+```ts
+export declare const at: <S, I, A>(at: (i: I) => Lens<S, A>) => At<S, I, A>
+```
+
+Added in v2.3.8
 
 ## atReadonlyMap
 
@@ -93,6 +104,7 @@ Added in v2.3.2
 
 ```ts
 export interface At<S, I, A> {
+  readonly _tag: 'At'
   readonly at: (i: I) => Lens<S, A>
 }
 ```

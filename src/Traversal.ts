@@ -62,11 +62,15 @@ export interface Traversal<S, A> {
 
 /**
  * @category constructors
+ * @since 2.3.8
+ */
+export const traversal: <S, A>(modifyF: Traversal<S, A>['modifyF']) => Traversal<S, A> = _.traversal
+
+/**
+ * @category constructors
  * @since 2.3.0
  */
-export const id = <S>(): Traversal<S, S> => ({
-  modifyF: <F>(_: Applicative<F>) => (f: (s: S) => HKT<F, S>) => f
-})
+export const id = <S>(): Traversal<S, S> => traversal(<F>(_: Applicative<F>) => (f: (s: S) => HKT<F, S>) => f)
 
 /**
  * Create a `Traversal` from a `Traversable`.

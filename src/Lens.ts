@@ -54,6 +54,12 @@ export interface Lens<S, A> {
 
 /**
  * @category constructors
+ * @since 2.3.8
+ */
+export const lens: <S, A>(get: Lens<S, A>['get'], set: Lens<S, A>['set']) => Lens<S, A> = _.lens
+
+/**
+ * @category constructors
  * @since 2.3.0
  */
 export const id: <S>() => Lens<S, S> = _.lensId
@@ -324,10 +330,7 @@ export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(sa: Lens<E, A>)
 // instances
 // -------------------------------------------------------------------------------------
 
-const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => ({
-  get: flow(ea.get, ab),
-  set: flow(ba, ea.set)
-})
+const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => lens(flow(ea.get, ab), flow(ba, ea.set))
 
 /**
  * @category instances

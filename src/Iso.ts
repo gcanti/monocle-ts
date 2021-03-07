@@ -16,10 +16,10 @@
  */
 import { Category2 } from 'fp-ts/lib/Category'
 import { flow, identity } from 'fp-ts/lib/function'
-import { pipe } from 'fp-ts/lib/pipeable'
 import { Functor, Functor1, Functor2, Functor3 } from 'fp-ts/lib/Functor'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
+import { pipe } from 'fp-ts/lib/pipeable'
 import * as _ from './internal'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
@@ -45,12 +45,15 @@ export interface Iso<S, A> {
 
 /**
  * @category constructors
+ * @since 2.3.8
+ */
+export const iso: <S, A>(get: Iso<S, A>['get'], reverseGet: Iso<S, A>['reverseGet']) => Iso<S, A> = _.iso
+
+/**
+ * @category constructors
  * @since 2.3.0
  */
-export const id = <S>(): Iso<S, S> => ({
-  get: identity,
-  reverseGet: identity
-})
+export const id = <S>(): Iso<S, S> => iso(identity, identity)
 
 // -------------------------------------------------------------------------------------
 // converters
@@ -98,10 +101,8 @@ export const asTraversal: <S, A>(sa: Iso<S, A>) => Traversal<S, A> = _.isoAsTrav
  * @category compositions
  * @since 2.3.0
  */
-export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> => ({
-  get: flow(sa.get, ab.get),
-  reverseGet: flow(ab.reverseGet, sa.reverseGet)
-})
+export const compose = <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>): Iso<S, B> =>
+  iso(flow(sa.get, ab.get), flow(ab.reverseGet, sa.reverseGet))
 
 /**
  * Compose an `Iso` with a `Lens`.
@@ -147,10 +148,7 @@ export const composeTraversal = <A, B>(ab: Traversal<A, B>): (<S>(sa: Iso<S, A>)
  * @category constructors
  * @since 2.3.0
  */
-export const reverse = <S, A>(sa: Iso<S, A>): Iso<A, S> => ({
-  get: sa.reverseGet,
-  reverseGet: sa.get
-})
+export const reverse = <S, A>(sa: Iso<S, A>): Iso<A, S> => iso(sa.reverseGet, sa.get)
 
 /**
  * @category combinators
@@ -191,10 +189,7 @@ export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <S>(sa: Iso<S, A>) 
 // instances
 // -------------------------------------------------------------------------------------
 
-const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => ({
-  get: flow(ea.get, ab),
-  reverseGet: flow(ba, ea.reverseGet)
-})
+const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => iso(flow(ea.get, ab), flow(ba, ea.reverseGet))
 
 /**
  * @category instances

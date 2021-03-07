@@ -38,11 +38,16 @@ export interface Index<S, I, A> {
 
 /**
  * @category constructors
+ * @since 2.3.8
+ */
+export const index: <S, I, A>(index: Index<S, I, A>['index']) => Index<S, I, A> = _.index
+
+/**
+ * @category constructors
  * @since 2.3.0
  */
-export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> => ({
-  index: (i) => _.lensComposePrism(_.prismSome<B>())(at.at(i))
-})
+export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> =>
+  index((i) => _.lensComposePrism(_.prismSome<B>())(at.at(i)))
 
 /**
  * Lift an instance of `Index` using an `Iso`.
@@ -50,9 +55,8 @@ export const fromAt = <T, J, B>(at: At<T, J, Option<B>>): Index<T, J, B> => ({
  * @category constructors
  * @since 2.3.0
  */
-export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: Index<S, I, A>): Index<T, I, A> => ({
-  index: (i) => pipe(iso, _.isoAsOptional, _.optionalComposeOptional(sia.index(i)))
-})
+export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: Index<S, I, A>): Index<T, I, A> =>
+  index((i) => pipe(iso, _.isoAsOptional, _.optionalComposeOptional(sia.index(i))))
 
 /**
  * @category constructors
@@ -80,11 +84,11 @@ export const indexReadonlyRecord: <A = never>() => Index<ReadonlyRecord<string, 
 export const indexReadonlyMap = <K>(E: Eq<K>): (<A = never>() => Index<ReadonlyMap<K, A>, K, A>) => {
   const lookupE = RM.lookup(E)
   const insertAtE = RM.insertAt(E)
-  return () => ({
-    index: (key) => {
-      return {
-        getOption: (s) => lookupE(key, s),
-        set: (next) => {
+  return () =>
+    index((key) =>
+      _.optional(
+        (s) => lookupE(key, s),
+        (next) => {
           const insert = insertAtE(key, next)
           return (s) =>
             pipe(
@@ -95,9 +99,8 @@ export const indexReadonlyMap = <K>(E: Eq<K>): (<A = never>() => Index<ReadonlyM
               )
             )
         }
-      }
-    }
-  })
+      )
+    )
 }
 
 // -------------------------------------------------------------------------------------

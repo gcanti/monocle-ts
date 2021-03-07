@@ -56,6 +56,7 @@ Added in v2.3.0
 - [constructors](#constructors)
   - [fromPredicate](#frompredicate)
   - [id](#id)
+  - [prism](#prism)
 - [converters](#converters)
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
@@ -414,6 +415,16 @@ export declare const id: <S>() => Prism<S, S>
 
 Added in v2.3.0
 
+## prism
+
+**Signature**
+
+```ts
+export declare const prism: <S, A>(getOption: (s: S) => O.Option<A>, reverseGet: (a: A) => S) => Prism<S, A>
+```
+
+Added in v2.3.8
+
 # converters
 
 ## asOptional
@@ -490,6 +501,7 @@ Added in v2.3.0
 
 ```ts
 export interface Prism<S, A> {
+  readonly _tag: 'Prism'
   readonly getOption: (s: S) => Option<A>
   readonly reverseGet: (a: A) => S
 }

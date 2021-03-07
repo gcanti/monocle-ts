@@ -38,6 +38,7 @@ Added in v2.3.0
   - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
   - [id](#id)
+  - [iso](#iso)
   - [reverse](#reverse)
 - [converters](#converters)
   - [asLens](#aslens)
@@ -173,6 +174,16 @@ export declare const id: <S>() => Iso<S, S>
 
 Added in v2.3.0
 
+## iso
+
+**Signature**
+
+```ts
+export declare const iso: <S, A>(get: (s: S) => A, reverseGet: (a: A) => S) => Iso<S, A>
+```
+
+Added in v2.3.8
+
 ## reverse
 
 **Signature**
@@ -283,6 +294,7 @@ Added in v2.3.0
 
 ```ts
 export interface Iso<S, A> {
+  readonly _tag: 'Iso'
   readonly get: (s: S) => A
   readonly reverseGet: (a: A) => S
 }

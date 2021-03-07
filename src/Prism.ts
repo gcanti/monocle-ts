@@ -52,12 +52,16 @@ export interface Prism<S, A> {
 
 /**
  * @category constructors
+ * @since 2.3.8
+ */
+export const prism: <S, A>(getOption: Prism<S, A>['getOption'], reverseGet: Prism<S, A>['reverseGet']) => Prism<S, A> =
+  _.prism
+
+/**
+ * @category constructors
  * @since 2.3.0
  */
-export const id = <S>(): Prism<S, S> => ({
-  getOption: O.some,
-  reverseGet: identity
-})
+export const id = <S>(): Prism<S, S> => prism(O.some, identity)
 
 /**
  * @category constructors
@@ -355,10 +359,7 @@ export const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(sa: Prism<E, A>
 // instances
 // -------------------------------------------------------------------------------------
 
-const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => ({
-  getOption: flow(ea.getOption, O.map(ab)),
-  reverseGet: flow(ba, ea.reverseGet)
-})
+const imap_: Invariant2<URI>['imap'] = (ea, ab, ba) => prism(flow(ea.getOption, O.map(ab)), flow(ba, ea.reverseGet))
 
 /**
  * @category instances
