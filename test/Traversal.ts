@@ -130,18 +130,26 @@ describe('Traversal', () => {
   })
 
   it('findFirst', () => {
+    type S = ReadonlyArray<number>
     const sa = pipe(
-      _.id<ReadonlyArray<number>>(),
+      _.id<S>(),
       _.findFirst((n) => n > 0)
     )
     U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 2, 3])
   })
 
   it('findFirstNonEmpty', () => {
+    type S = ReadonlyNonEmptyArray<number>
     const sa = pipe(
-      _.id<ReadonlyNonEmptyArray<number>>(),
+      _.id<S>(),
       _.findFirstNonEmpty((n) => n > 0)
     )
     U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [2, 2, 3])
+  })
+
+  it('fromNullable', () => {
+    type S = ReadonlyNonEmptyArray<number | undefined>
+    const sa = pipe(_.id<S>(), _.traverse(A.readonlyArray), _.fromNullable)
+    U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, undefined, 3]), [2, undefined, 6])
   })
 })
