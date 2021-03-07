@@ -36,14 +36,19 @@ export interface At<S, I, A> {
 // -------------------------------------------------------------------------------------
 
 /**
+ * @category constructors
+ * @since 2.3.8
+ */
+export const at: <S, I, A>(at: At<S, I, A>['at']) => At<S, I, A> = _.at
+
+/**
  * Lift an instance of `At` using an `Iso`.
  *
  * @category constructors
  * @since 2.3.0
  */
-export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>): At<T, I, A> => ({
-  at: (i) => pipe(iso, _.isoAsLens, _.lensComposeLens(sia.at(i)))
-})
+export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>): At<T, I, A> =>
+  at((i) => pipe(iso, _.isoAsLens, _.lensComposeLens(sia.at(i))))
 
 /**
  * @category constructors
@@ -59,15 +64,16 @@ export const atReadonlyMap = <K>(E: Eq<K>): (<A = never>() => At<ReadonlyMap<K, 
   const lookupE = RM.lookup(E)
   const deleteAtE = RM.deleteAt(E)
   const insertAtE = RM.insertAt(E)
-  return () => ({
-    at: (key) => ({
-      get: (s) => lookupE(key, s),
-      set: O.fold(
-        () => deleteAtE(key),
-        (a) => insertAtE(key, a)
+  return () =>
+    at((key) =>
+      _.lens(
+        (s) => lookupE(key, s),
+        O.fold(
+          () => deleteAtE(key),
+          (a) => insertAtE(key, a)
+        )
       )
-    })
-  })
+    )
 }
 
 /**
@@ -78,16 +84,14 @@ export const atReadonlySet = <A>(E: Eq<A>): At<ReadonlySet<A>, A, boolean> => {
   const elemE = RS.elem(E)
   const insertE = RS.insert(E)
   const removeE = RS.remove(E)
-  return {
-    at: (a) => {
-      const insert = insertE(a)
-      const remove = removeE(a)
-      return {
-        get: (s) => elemE(a, s),
-        set: (b) => (s) => (b ? insert(s) : remove(s))
-      }
-    }
-  }
+  return at((a) => {
+    const insert = insertE(a)
+    const remove = removeE(a)
+    return _.lens(
+      (s) => elemE(a, s),
+      (b) => (s) => (b ? insert(s) : remove(s))
+    )
+  })
 }
 
 // -------------------------------------------------------------------------------------

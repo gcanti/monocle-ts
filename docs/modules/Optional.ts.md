@@ -60,6 +60,7 @@ Added in v2.3.0
   - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
   - [id](#id)
+  - [optional](#optional)
 - [converters](#converters)
   - [asTraversal](#astraversal)
 - [instances](#instances)
@@ -404,6 +405,16 @@ export declare const id: <S>() => Optional<S, S>
 
 Added in v2.3.0
 
+## optional
+
+**Signature**
+
+```ts
+export declare const optional: <S, A>(getOption: (s: S) => O.Option<A>, set: (a: A) => (s: S) => S) => Optional<S, A>
+```
+
+Added in v2.3.8
+
 # converters
 
 ## asTraversal
@@ -468,6 +479,7 @@ Added in v2.3.0
 
 ```ts
 export interface Optional<S, A> {
+  readonly _tag: 'Optional'
   readonly getOption: (s: S) => Option<A>
   readonly set: (a: A) => (s: S) => S
 }

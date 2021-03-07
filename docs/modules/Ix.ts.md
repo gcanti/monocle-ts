@@ -21,6 +21,7 @@ Added in v2.3.0
 - [constructors](#constructors)
   - [fromAt](#fromat)
   - [fromIso](#fromiso)
+  - [index](#index)
   - [indexReadonlyArray](#indexreadonlyarray)
   - [indexReadonlyMap](#indexreadonlymap)
   - [indexReadonlyNonEmptyArray](#indexreadonlynonemptyarray)
@@ -55,6 +56,16 @@ export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: Index<S, I, 
 ```
 
 Added in v2.3.0
+
+## index
+
+**Signature**
+
+```ts
+export declare const index: <S, I, A>(index: (i: I) => Optional<S, A>) => Index<S, I, A>
+```
+
+Added in v2.3.8
 
 ## indexReadonlyArray
 
@@ -128,6 +139,7 @@ Added in v2.3.2
 
 ```ts
 export interface Index<S, I, A> {
+  readonly _tag: 'Index'
   readonly index: (i: I) => Optional<S, A>
 }
 ```

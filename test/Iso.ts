@@ -9,15 +9,12 @@ import * as RA from 'fp-ts/lib/ReadonlyArray'
 import * as O from 'fp-ts/lib/Option'
 import * as U from './util'
 
-const numberFromString: _.Iso<number, string> = {
-  get: String,
-  reverseGet: parseFloat
-}
+const numberFromString: _.Iso<number, string> = _.iso(String, parseFloat)
 
-const double: _.Iso<number, number> = {
-  get: (n) => n * 2,
-  reverseGet: (n) => n / 2
-}
+const double: _.Iso<number, number> = _.iso(
+  (n) => n * 2,
+  (n) => n / 2
+)
 
 describe('Iso', () => {
   describe('pipeables', () => {

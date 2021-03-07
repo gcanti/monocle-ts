@@ -52,6 +52,7 @@ Added in v2.3.0
   - [fromTraversable](#fromtraversable)
 - [constructors](#constructors)
   - [id](#id)
+  - [traversal](#traversal)
 - [instances](#instances)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
@@ -366,6 +367,16 @@ export declare const id: <S>() => Traversal<S, S>
 
 Added in v2.3.0
 
+## traversal
+
+**Signature**
+
+```ts
+export declare const traversal: <S, A>(modifyF: ModifyF<S, A>) => Traversal<S, A>
+```
+
+Added in v2.3.8
+
 # instances
 
 ## URI
@@ -422,6 +433,7 @@ Added in v2.3.0
 
 ```ts
 export interface Traversal<S, A> {
+  readonly _tag: 'Traversal'
   readonly modifyF: ModifyF<S, A>
 }
 ```
