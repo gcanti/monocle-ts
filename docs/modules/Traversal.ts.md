@@ -29,6 +29,7 @@ Added in v2.3.0
   - [component](#component)
   - [filter](#filter)
   - [findFirst](#findfirst)
+  - [findFirstNonEmpty](#findfirstnonempty)
   - [fold](#fold)
   - [foldMap](#foldmap)
   - [getAll](#getall)
@@ -117,6 +118,23 @@ export declare function findFirst<A, B extends A>(
 export declare function findFirst<A>(
   predicate: Predicate<A>
 ): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, A>
+```
+
+Added in v2.3.8
+
+## findFirstNonEmpty
+
+Alias of `findFirst`.
+
+**Signature**
+
+```ts
+export declare function findFirstNonEmpty<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, B>
+export declare function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A>
 ```
 
 Added in v2.3.8
@@ -433,7 +451,6 @@ Added in v2.3.0
 
 ```ts
 export interface Traversal<S, A> {
-  readonly _tag: 'Traversal'
   readonly modifyF: ModifyF<S, A>
 }
 ```

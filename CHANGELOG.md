@@ -54,6 +54,7 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `composePrism` (@gcanti)
     - add `composeOptional` (@gcanti)
     - add `findFirst` (@gcanti)
+    - add `findFirstNonEmpty` (@gcanti)
 
 # 2.3.7
 

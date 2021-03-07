@@ -501,7 +501,6 @@ Added in v2.3.0
 
 ```ts
 export interface Prism<S, A> {
-  readonly _tag: 'Prism'
   readonly getOption: (s: S) => Option<A>
   readonly reverseGet: (a: A) => S
 }

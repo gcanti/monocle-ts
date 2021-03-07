@@ -104,7 +104,6 @@ Added in v2.3.2
 
 ```ts
 export interface At<S, I, A> {
-  readonly _tag: 'At'
   readonly at: (i: I) => Lens<S, A>
 }
 ```

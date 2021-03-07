@@ -294,7 +294,6 @@ Added in v2.3.0
 
 ```ts
 export interface Iso<S, A> {
-  readonly _tag: 'Iso'
   readonly get: (s: S) => A
   readonly reverseGet: (a: A) => S
 }

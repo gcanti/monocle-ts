@@ -467,7 +467,6 @@ Added in v2.3.0
 
 ```ts
 export interface Lens<S, A> {
-  readonly _tag: 'Lens'
   readonly get: (s: S) => A
   readonly set: (a: A) => (s: S) => S
 }
