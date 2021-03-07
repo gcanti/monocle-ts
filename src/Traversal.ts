@@ -201,7 +201,7 @@ export const props = <A, P extends keyof A>(
   compose(pipe(_.lensId<A>(), _.lensProps(...props), _.lensAsTraversal))
 
 /**
- * Return a `Traversal` from a `Traversal` and a component.
+ * Return a `Traversal` from a `Traversal` focused on a component of a tuple.
  *
  * @category combinators
  * @since 2.3.0
@@ -212,7 +212,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
   compose(pipe(_.lensId<A>(), _.lensComponent(prop), _.lensAsTraversal))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`.
+ * Return a `Traversal` from a `Traversal` focused on an index of a `ReadonlyArray`.
  *
  * @category combinators
  * @since 2.3.0
@@ -229,7 +229,7 @@ export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): 
 export const indexNonEmpty: (i: number) => <S, A>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A> = index
 
 /**
- * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key.
+ * Return a `Traversal` from a `Traversal` focused on a key of a `ReadonlyRecord`.
  *
  * @category combinators
  * @since 2.3.0
@@ -238,7 +238,7 @@ export const key = (key: string) => <S, A>(sa: Traversal<S, ReadonlyRecord<strin
   pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyRecord<A>().index(key))))
 
 /**
- * Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key.
+ * Return a `Traversal` from a `Traversal` focused on a required key of a `ReadonlyRecord`.
  *
  * @category combinators
  * @since 2.3.0

@@ -233,7 +233,7 @@ export const props = <A, P extends keyof A>(
   compose(pipe(_.lensId<A>(), _.lensProps(...props), _.lensAsOptional))
 
 /**
- * Return a `Optional` from a `Optional` and a component.
+ * Return a `Optional` from a `Optional` focused on a component of a tuple.
  *
  * @category combinators
  * @since 2.3.0
@@ -244,7 +244,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
   compose(pipe(_.lensId<A>(), _.lensComponent(prop), _.lensAsOptional))
 
 /**
- * Return a `Optional` from a `Optional` focused on a `ReadonlyArray`.
+ * Return a `Optional` from a `Optional` focused on an index of a `ReadonlyArray`.
  *
  * @category combinators
  * @since 2.3.0
@@ -252,7 +252,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
 export const index: (i: number) => <S, A>(sa: Optional<S, ReadonlyArray<A>>) => Optional<S, A> = _.optionalIndex
 
 /**
- * Return a `Optional` from a `Optional` focused on a `ReadonlyNonEmptyArray`.
+ * Return a `Optional` from a `Optional` focused on an index of a `ReadonlyNonEmptyArray`.
  *
  * @category combinators
  * @since 2.3.8
@@ -261,7 +261,7 @@ export const indexNonEmpty: (i: number) => <S, A>(sa: Optional<S, ReadonlyNonEmp
   _.optionalIndexNonEmpty
 
 /**
- * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key.
+ * Return a `Optional` from a `Optional` focused on a key of a `ReadonlyRecord`.
  *
  * @category combinators
  * @since 2.3.0
@@ -269,7 +269,7 @@ export const indexNonEmpty: (i: number) => <S, A>(sa: Optional<S, ReadonlyNonEmp
 export const key: (key: string) => <S, A>(sa: Optional<S, ReadonlyRecord<string, A>>) => Optional<S, A> = _.optionalKey
 
 /**
- * Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key.
+ * Return a `Optional` from a `Optional` focused on a required key of a `ReadonlyRecord`.
  *
  * @category combinators
  * @since 2.3.0

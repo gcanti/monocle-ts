@@ -90,7 +90,7 @@ Added in v2.3.0
 
 ## atKey
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a required key.
+Return a `Optional` from a `Optional` focused on a required key of a `ReadonlyRecord`.
 
 **Signature**
 
@@ -104,7 +104,7 @@ Added in v2.3.0
 
 ## component
 
-Return a `Optional` from a `Optional` and a component.
+Return a `Optional` from a `Optional` focused on a component of a tuple.
 
 **Signature**
 
@@ -169,7 +169,7 @@ Added in v2.3.3
 
 ## index
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyArray`.
+Return a `Optional` from a `Optional` focused on an index of a `ReadonlyArray`.
 
 **Signature**
 
@@ -181,7 +181,7 @@ Added in v2.3.0
 
 ## indexNonEmpty
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyNonEmptyArray`.
+Return a `Optional` from a `Optional` focused on an index of a `ReadonlyNonEmptyArray`.
 
 **Signature**
 
@@ -193,7 +193,7 @@ Added in v2.3.8
 
 ## key
 
-Return a `Optional` from a `Optional` focused on a `ReadonlyRecord` and a key.
+Return a `Optional` from a `Optional` focused on a key of a `ReadonlyRecord`.
 
 **Signature**
 

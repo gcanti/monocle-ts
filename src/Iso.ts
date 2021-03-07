@@ -226,7 +226,7 @@ export const props = <A, P extends keyof A>(
 ): (<S>(sa: Iso<S, A>) => Lens<S, { [K in P]: A[K] }>) => flow(asLens, _.lensProps(...props))
 
 /**
- * Return a `Lens` from a `Iso` and a component.
+ * Return a `Lens` from a `Iso` focused on a component of a tuple.
  *
  * @category combinators
  * @since 2.3.8
@@ -236,7 +236,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
 ): (<S>(sa: Iso<S, A>) => Lens<S, A[P]>) => flow(asLens, _.lensComponent(prop))
 
 /**
- * Return a `Optional` from a `Iso` focused on a `ReadonlyArray`.
+ * Return a `Optional` from a `Iso` focused on an index of a `ReadonlyArray`.
  *
  * @category combinators
  * @since 2.3.8
@@ -245,7 +245,7 @@ export const index = (i: number): (<S, A>(sa: Iso<S, ReadonlyArray<A>>) => Optio
   flow(asOptional, _.optionalIndex(i))
 
 /**
- * Return a `Optional` from a `Iso` focused on a `ReadonlyNonEmptyArray`.
+ * Return a `Optional` from a `Iso` focused on an index of a `ReadonlyNonEmptyArray`.
  *
  * @category combinators
  * @since 2.3.8
@@ -254,7 +254,7 @@ export const indexNonEmpty = (i: number): (<S, A>(sa: Iso<S, ReadonlyNonEmptyArr
   flow(asOptional, _.optionalIndexNonEmpty(i))
 
 /**
- * Return a `Optional` from a `Iso` focused on a `ReadonlyRecord` and a key.
+ * Return a `Optional` from a `Iso` focused on a key of a `ReadonlyRecord`.
  *
  * @category combinators
  * @since 2.3.8
@@ -263,7 +263,7 @@ export const key = (key: string): (<S, A>(sa: Iso<S, ReadonlyRecord<string, A>>)
   flow(asOptional, _.optionalKey(key))
 
 /**
- * Return a `Lens` from a `Iso` focused on a `ReadonlyRecord` and a required key.
+ * Return a `Lens` from a `Iso` focused on a required key of a `ReadonlyRecord`.
  *
  * @category combinators
  * @since 2.3.8

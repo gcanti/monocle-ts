@@ -71,7 +71,7 @@ Added in v2.3.0
 
 ## atKey
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key.
+Return a `Traversal` from a `Traversal` focused on a required key of a `ReadonlyRecord`.
 
 **Signature**
 
@@ -85,7 +85,7 @@ Added in v2.3.0
 
 ## component
 
-Return a `Traversal` from a `Traversal` and a component.
+Return a `Traversal` from a `Traversal` focused on a component of a tuple.
 
 **Signature**
 
@@ -192,7 +192,7 @@ Added in v2.3.0
 
 ## index
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`.
+Return a `Traversal` from a `Traversal` focused on an index of a `ReadonlyArray`.
 
 **Signature**
 
@@ -216,7 +216,7 @@ Added in v2.3.8
 
 ## key
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key.
+Return a `Traversal` from a `Traversal` focused on a key of a `ReadonlyRecord`.
 
 **Signature**
 

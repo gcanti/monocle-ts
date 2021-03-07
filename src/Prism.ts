@@ -239,7 +239,7 @@ export const props = <A, P extends keyof A>(
 ): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) => composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
 
 /**
- * Return a `Optional` from a `Prism` and a component.
+ * Return a `Optional` from a `Prism` focused on a component of a tuple.
  *
  * @category combinators
  * @since 2.3.0
@@ -249,7 +249,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
 ): (<S>(sa: Prism<S, A>) => Optional<S, A[P]>) => composeLens(pipe(_.lensId<A>(), _.lensComponent(prop)))
 
 /**
- * Return a `Optional` from a `Prism` focused on a `ReadonlyArray`.
+ * Return a `Optional` from a `Prism` focused on an index of a `ReadonlyArray`.
  *
  * @category combinators
  * @since 2.3.0
@@ -258,7 +258,7 @@ export const index = (i: number): (<S, A>(sa: Prism<S, ReadonlyArray<A>>) => Opt
   flow(asOptional, _.optionalIndex(i))
 
 /**
- * Return a `Optional` from a `Prism` focused on a `ReadonlyNonEmptyArray`.
+ * Return a `Optional` from a `Prism` focused on an index of a `ReadonlyNonEmptyArray`.
  *
  * @category combinators
  * @since 2.3.8
@@ -267,7 +267,7 @@ export const indexNonEmpty = (i: number): (<S, A>(sa: Prism<S, ReadonlyNonEmptyA
   flow(asOptional, _.optionalIndexNonEmpty(i))
 
 /**
- * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key.
+ * Return a `Optional` from a `Prism` focused on a key of a `ReadonlyRecord`.
  *
  * @category combinators
  * @since 2.3.0
@@ -276,7 +276,7 @@ export const key = (key: string): (<S, A>(sa: Prism<S, ReadonlyRecord<string, A>
   flow(asOptional, _.optionalKey(key))
 
 /**
- * Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key.
+ * Return a `Optional` from a `Prism` focused on a required key of a `ReadonlyRecord`.
  *
  * @category combinators
  * @since 2.3.0
