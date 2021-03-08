@@ -6,7 +6,7 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
-import { Optional } from '../src/Optional'
+import * as Op from '../src/Optional'
 import * as _ from '../src/Prism'
 import * as T from '../src/Traversal'
 import * as U from './util'
@@ -167,10 +167,10 @@ describe('Prism', () => {
   it('composeOptional', () => {
     type S = O.Option<string>
     const sa = pipe(_.id<S>(), _.some)
-    const ab: Optional<string, string> = {
-      getOption: (s) => (s.length > 0 ? O.some(s[0]) : O.none),
-      set: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
-    }
+    const ab: Op.Optional<string, string> = Op.optional(
+      (s) => (s.length > 0 ? O.some(s[0]) : O.none),
+      (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
+    )
     const sb = pipe(sa, _.composeOptional(ab))
     U.deepStrictEqual(sb.getOption(O.none), O.none)
     U.deepStrictEqual(sb.getOption(O.some('')), O.none)

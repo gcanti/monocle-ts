@@ -4,7 +4,7 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import * as O from 'fp-ts/lib/Option'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import * as T from '../src/Traversal'
-import { Optional } from '../src/Optional'
+import * as Op from '../src/Optional'
 import * as Id from 'fp-ts/lib/Identity'
 import * as U from './util'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
@@ -202,10 +202,10 @@ describe('Lens', () => {
       readonly a: string
     }
     const sa = pipe(_.id<S>(), _.prop('a'))
-    const ab: Optional<string, string> = {
-      getOption: (s) => (s.length > 0 ? O.some(s[0]) : O.none),
-      set: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
-    }
+    const ab: Op.Optional<string, string> = Op.optional(
+      (s) => (s.length > 0 ? O.some(s[0]) : O.none),
+      (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
+    )
     const sb = pipe(sa, _.composeOptional(ab))
     U.deepStrictEqual(sb.getOption({ a: '' }), O.none)
     U.deepStrictEqual(sb.getOption({ a: 'ab' }), O.some('a'))
