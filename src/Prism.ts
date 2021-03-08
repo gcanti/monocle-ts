@@ -391,7 +391,7 @@ declare module 'fp-ts/lib/HKT' {
  * @category instances
  * @since 2.3.0
  */
-export const invariantPrism: Invariant2<URI> = {
+export const Invariant: Invariant2<URI> = {
   URI,
   imap: imap_
 }
@@ -400,7 +400,7 @@ export const invariantPrism: Invariant2<URI> = {
  * @category instances
  * @since 2.3.0
  */
-export const categoryPrism: Category2<URI> = {
+export const Category: Category2<URI> = {
   URI,
   compose: (ab, ea) => compose(ab)(ea),
   id

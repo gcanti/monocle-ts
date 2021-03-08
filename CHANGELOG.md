@@ -43,6 +43,8 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `findFirst` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
     - add `composeIso` (@gcanti)
+    - (\*) rename `invariantIso` to `Invariant` (@gcanti)
+    - (\*) rename `categoryIso` to `Category` (@gcanti)
   - `Ix`
     - add `index` constructor (@gcanti)
     - add `indexReadonlyNonEmptyArray` (@gcanti)
@@ -53,6 +55,8 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
     - add `composeLens` (@gcanti)
+    - (\*) rename `invariantIso` to `Invariant` (@gcanti)
+    - (\*) rename `categoryIso` to `Category` (@gcanti)
   - `Prism`
     - add `prism` constructor (@gcanti)
     - add `composeIso` (@gcanti)
@@ -60,6 +64,8 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
     - add `composePrism` (@gcanti)
+    - (\*) rename `invariantIso` to `Invariant` (@gcanti)
+    - (\*) rename `categoryIso` to `Category` (@gcanti)
   - `Optional`
     - add `optional` constructor (@gcanti)
     - add `composeIso` (@gcanti)
@@ -67,6 +73,8 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
     - add `composeOptional` (@gcanti)
+    - (\*) rename `invariantIso` to `Invariant` (@gcanti)
+    - (\*) rename `categoryIso` to `Category` (@gcanti)
   - `Traversal`
     - add `traversal` constructor (@gcanti)
     - add `composeIso` (@gcanti)
@@ -78,6 +86,9 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `fromNullable` (@gcanti)
     - add `indexNonEmpty` (@gcanti)
     - add `composeTraversal` (@gcanti)
+    - (\*) rename `categoryIso` to `Category` (@gcanti)
+
+(\*) breaking change
 
 # 2.3.7
 

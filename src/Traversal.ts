@@ -366,7 +366,7 @@ declare module 'fp-ts/lib/HKT' {
  * @category instances
  * @since 2.3.0
  */
-export const categoryTraversal: Category2<URI> = {
+export const Category: Category2<URI> = {
   URI,
   compose: (ab, ea) => compose(ab)(ea),
   id

@@ -13,7 +13,7 @@ describe('Traversal', () => {
     it('compose', () => {
       const sa = _.fromTraversable(A.readonlyArray)<ReadonlyArray<number>>()
       const ab = _.fromTraversable(A.readonlyArray)<number>()
-      const sb = _.categoryTraversal.compose(ab, sa)
+      const sb = _.Category.compose(ab, sa)
       U.deepStrictEqual(sb.modifyF(Id.identity)((n) => n * 2)([[1], [2], [3]]), [[2], [4], [6]])
     })
   })

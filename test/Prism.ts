@@ -63,7 +63,7 @@ describe('Prism', () => {
       type S = O.Option<Tree>
       const sa = pipe(_.id<S>(), _.some)
       const ab = value
-      const sb = _.categoryPrism.compose(ab, sa)
+      const sb = _.Category.compose(ab, sa)
       U.deepStrictEqual(sb.getOption(O.none), O.none)
       U.deepStrictEqual(sb.getOption(O.some(leaf)), O.none)
       U.deepStrictEqual(sb.getOption(O.some(node(1, leaf, leaf))), O.some(1))
