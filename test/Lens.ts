@@ -118,7 +118,7 @@ describe('Lens', () => {
 
   it('component', () => {
     interface S {
-      readonly a: [string, number]
+      readonly a: readonly [string, number]
     }
     const sa = pipe(_.id<S>(), _.prop('a'), _.component(1))
     const s: S = { a: ['a', 1] }

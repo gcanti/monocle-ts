@@ -75,7 +75,7 @@ describe('Traversal', () => {
   })
 
   it('component', () => {
-    const sa = pipe(_.fromTraversable(A.readonlyArray)<[string, number]>(), _.component(1))
+    const sa = pipe(_.fromTraversable(A.readonlyArray)<readonly [string, number]>(), _.component(1))
     U.deepStrictEqual(
       sa.modifyF(Id.identity)((n) => n * 2)([
         ['a', 1],
