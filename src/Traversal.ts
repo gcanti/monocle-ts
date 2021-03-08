@@ -25,6 +25,7 @@ import { Option } from 'fp-ts/Option'
 import * as A from 'fp-ts/ReadonlyArray'
 import { ReadonlyNonEmptyArray } from 'fp-ts/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/ReadonlyRecord'
+import { Semigroupoid2 } from 'fp-ts/Semigroupoid'
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
@@ -345,28 +346,29 @@ export const getAll = <S>(s: S) => <A>(sa: Traversal<S, A>): ReadonlyArray<A> =>
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
-export const URI = 'monocle-ts/Traversal'
-
-/**
- * @category instances
- * @since 2.3.0
- */
-export type URI = typeof URI
+export type URI = 'monocle-ts/Traversal'
 
 declare module 'fp-ts/HKT' {
   interface URItoKind2<E, A> {
-    readonly [URI]: Traversal<E, A>
+    readonly 'monocle-ts/Traversal': Traversal<E, A>
   }
+}
+
+/**
+ * @category instances
+ * @since 3.0.0
+ */
+export const Semigroupoid: Semigroupoid2<URI> = {
+  compose
 }
 
 /**
  * @category instances
  * @since 2.3.0
  */
-export const categoryTraversal: Category2<URI> = {
-  URI,
+export const Category: Category2<URI> = {
   compose,
   id
 }

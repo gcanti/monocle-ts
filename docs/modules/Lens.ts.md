@@ -63,10 +63,10 @@ Added in v2.3.0
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
 - [instances](#instances)
-  - [URI](#uri)
+  - [Category](#category)
+  - [Invariant](#invariant-1)
+  - [Semigroupoid](#semigroupoid)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryLens](#categorylens)
-  - [invariantLens](#invariantlens)
 - [model](#model)
   - [Lens (interface)](#lens-interface)
 
@@ -432,45 +432,45 @@ Added in v2.3.0
 
 # instances
 
-## URI
+## Category
 
 **Signature**
 
 ```ts
-export declare const URI: 'monocle-ts/Lens'
+export declare const Category: Category2<'monocle-ts/Lens'>
 ```
 
 Added in v2.3.0
+
+## Invariant
+
+**Signature**
+
+```ts
+export declare const Invariant: Invariant2<'monocle-ts/Lens'>
+```
+
+Added in v2.3.0
+
+## Semigroupoid
+
+**Signature**
+
+```ts
+export declare const Semigroupoid: Semigroupoid2<'monocle-ts/Lens'>
+```
+
+Added in v3.0.0
 
 ## URI (type alias)
 
 **Signature**
 
 ```ts
-export type URI = typeof URI
+export type URI = 'monocle-ts/Lens'
 ```
 
-Added in v2.3.0
-
-## categoryLens
-
-**Signature**
-
-```ts
-export declare const categoryLens: Category2<'monocle-ts/Lens'>
-```
-
-Added in v2.3.0
-
-## invariantLens
-
-**Signature**
-
-```ts
-export declare const invariantLens: Invariant2<'monocle-ts/Lens'>
-```
-
-Added in v2.3.0
+Added in v3.0.0
 
 # model
 

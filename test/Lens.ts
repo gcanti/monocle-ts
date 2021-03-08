@@ -37,7 +37,7 @@ describe('Lens', () => {
     }
     const sa = pipe(_.id<S>(), _.prop('a'))
     const ab = pipe(_.id<A>(), _.prop('b'))
-    const sb = _.categoryLens.compose(ab)(sa)
+    const sb = _.Category.compose(ab)(sa)
     U.deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
     U.deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
   })

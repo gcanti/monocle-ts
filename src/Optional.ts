@@ -28,6 +28,7 @@ import { Invariant2 } from 'fp-ts/Invariant'
 import * as O from 'fp-ts/Option'
 import { ReadonlyNonEmptyArray } from 'fp-ts/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/ReadonlyRecord'
+import { Semigroupoid2 } from 'fp-ts/Semigroupoid'
 import { Traversable1 } from 'fp-ts/Traversable'
 import * as _ from './internal'
 import { Iso } from './Iso'
@@ -369,19 +370,13 @@ export const imap: Invariant2<URI>['imap'] = (f, g) => (ea) => ({
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
-export const URI = 'monocle-ts/Optional'
-
-/**
- * @category instances
- * @since 2.3.0
- */
-export type URI = typeof URI
+export type URI = 'monocle-ts/Optional'
 
 declare module 'fp-ts/HKT' {
   interface URItoKind2<E, A> {
-    readonly [URI]: Optional<E, A>
+    readonly 'monocle-ts/Optional': Optional<E, A>
   }
 }
 
@@ -389,17 +384,23 @@ declare module 'fp-ts/HKT' {
  * @category instances
  * @since 2.3.0
  */
-export const invariantOptional: Invariant2<URI> = {
-  URI,
+export const Invariant: Invariant2<URI> = {
   imap
+}
+
+/**
+ * @category instances
+ * @since 3.0.0
+ */
+export const Semigroupoid: Semigroupoid2<URI> = {
+  compose
 }
 
 /**
  * @category instances
  * @since 2.3.0
  */
-export const categoryOptional: Category2<URI> = {
-  URI,
+export const Category: Category2<URI> = {
   compose,
   id
 }

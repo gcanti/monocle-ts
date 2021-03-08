@@ -62,10 +62,10 @@ Added in v2.3.0
   - [asPrism](#asprism)
   - [asTraversal](#astraversal)
 - [instances](#instances)
-  - [URI](#uri)
+  - [Category](#category)
+  - [Invariant](#invariant-1)
+  - [Semigroupoid](#semigroupoid)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryIso](#categoryiso)
-  - [invariantIso](#invariantiso)
 - [model](#model)
   - [Iso (interface)](#iso-interface)
 
@@ -463,45 +463,45 @@ Added in v2.3.0
 
 # instances
 
-## URI
+## Category
 
 **Signature**
 
 ```ts
-export declare const URI: 'monocle-ts/Iso'
+export declare const Category: Category2<'monocle-ts/Iso'>
 ```
 
 Added in v2.3.0
+
+## Invariant
+
+**Signature**
+
+```ts
+export declare const Invariant: Invariant2<'monocle-ts/Iso'>
+```
+
+Added in v2.3.0
+
+## Semigroupoid
+
+**Signature**
+
+```ts
+export declare const Semigroupoid: Semigroupoid2<'monocle-ts/Iso'>
+```
+
+Added in v3.0.0
 
 ## URI (type alias)
 
 **Signature**
 
 ```ts
-export type URI = typeof URI
+export type URI = 'monocle-ts/Iso'
 ```
 
-Added in v2.3.0
-
-## categoryIso
-
-**Signature**
-
-```ts
-export declare const categoryIso: Category2<'monocle-ts/Iso'>
-```
-
-Added in v2.3.0
-
-## invariantIso
-
-**Signature**
-
-```ts
-export declare const invariantIso: Invariant2<'monocle-ts/Iso'>
-```
-
-Added in v2.3.0
+Added in v3.0.0
 
 # model
 

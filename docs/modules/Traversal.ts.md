@@ -58,9 +58,9 @@ Added in v2.3.0
   - [id](#id)
   - [traversal](#traversal)
 - [instances](#instances)
-  - [URI](#uri)
+  - [Category](#category)
+  - [Semigroupoid](#semigroupoid)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryTraversal](#categorytraversal)
 - [model](#model)
   - [ModifyF (interface)](#modifyf-interface)
   - [Traversal (interface)](#traversal-interface)
@@ -434,35 +434,35 @@ Added in v2.3.8
 
 # instances
 
-## URI
+## Category
 
 **Signature**
 
 ```ts
-export declare const URI: 'monocle-ts/Traversal'
+export declare const Category: Category2<'monocle-ts/Traversal'>
 ```
 
 Added in v2.3.0
+
+## Semigroupoid
+
+**Signature**
+
+```ts
+export declare const Semigroupoid: Semigroupoid2<'monocle-ts/Traversal'>
+```
+
+Added in v3.0.0
 
 ## URI (type alias)
 
 **Signature**
 
 ```ts
-export type URI = typeof URI
+export type URI = 'monocle-ts/Traversal'
 ```
 
-Added in v2.3.0
-
-## categoryTraversal
-
-**Signature**
-
-```ts
-export declare const categoryTraversal: Category2<'monocle-ts/Traversal'>
-```
-
-Added in v2.3.0
+Added in v3.0.0
 
 # model
 

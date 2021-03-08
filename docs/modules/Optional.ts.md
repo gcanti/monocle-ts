@@ -65,10 +65,10 @@ Added in v2.3.0
 - [converters](#converters)
   - [asTraversal](#astraversal)
 - [instances](#instances)
-  - [URI](#uri)
+  - [Category](#category)
+  - [Invariant](#invariant-1)
+  - [Semigroupoid](#semigroupoid)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryOptional](#categoryoptional)
-  - [invariantOptional](#invariantoptional)
 - [model](#model)
   - [Optional (interface)](#optional-interface)
 
@@ -444,45 +444,45 @@ Added in v2.3.0
 
 # instances
 
-## URI
+## Category
 
 **Signature**
 
 ```ts
-export declare const URI: 'monocle-ts/Optional'
+export declare const Category: Category2<'monocle-ts/Optional'>
 ```
 
 Added in v2.3.0
+
+## Invariant
+
+**Signature**
+
+```ts
+export declare const Invariant: Invariant2<'monocle-ts/Optional'>
+```
+
+Added in v2.3.0
+
+## Semigroupoid
+
+**Signature**
+
+```ts
+export declare const Semigroupoid: Semigroupoid2<'monocle-ts/Optional'>
+```
+
+Added in v3.0.0
 
 ## URI (type alias)
 
 **Signature**
 
 ```ts
-export type URI = typeof URI
+export type URI = 'monocle-ts/Optional'
 ```
 
-Added in v2.3.0
-
-## categoryOptional
-
-**Signature**
-
-```ts
-export declare const categoryOptional: Category2<'monocle-ts/Optional'>
-```
-
-Added in v2.3.0
-
-## invariantOptional
-
-**Signature**
-
-```ts
-export declare const invariantOptional: Invariant2<'monocle-ts/Optional'>
-```
-
-Added in v2.3.0
+Added in v3.0.0
 
 # model
 

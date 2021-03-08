@@ -36,7 +36,7 @@ describe('Iso', () => {
 
   describe('instances', () => {
     it('compose', () => {
-      const sb = _.categoryIso.compose(numberFromString)(double)
+      const sb = _.Category.compose(numberFromString)(double)
       U.deepStrictEqual(sb.get(1), '2')
       U.deepStrictEqual(sb.reverseGet('2'), 1)
     })
