@@ -93,16 +93,3 @@ export const atReadonlySet = <A>(E: Eq<A>): At<ReadonlySet<A>, A, boolean> => {
     }
   }
 }
-
-// -------------------------------------------------------------------------------------
-// deprecated
-// -------------------------------------------------------------------------------------
-
-/**
- * Use `atReadonlyRecord` instead.
- *
- * @category constructors
- * @since 2.3.2
- * @deprecated
- */
-export const atRecord: <A = never>() => At<ReadonlyRecord<string, A>, string, Option<A>> = _.atReadonlyRecord

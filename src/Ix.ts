@@ -99,25 +99,3 @@ export const indexReadonlyMap = <K>(E: Eq<K>): (<A = never>() => Index<ReadonlyM
       })
     )
 }
-
-// -------------------------------------------------------------------------------------
-// deprecated
-// -------------------------------------------------------------------------------------
-
-/**
- * Use `indexReadonlyArray` instead.
- *
- * @category constructors
- * @since 2.3.2
- * @deprecated
- */
-export const indexArray: <A = never>() => Index<ReadonlyArray<A>, number, A> = _.indexReadonlyArray
-
-/**
- * Use `indexReadonlyRecord` instead.
- *
- * @category constructors
- * @since 2.3.2
- * @deprecated
- */
-export const indexRecord: <A = never>() => Index<ReadonlyRecord<string, A>, string, A> = _.indexReadonlyRecord

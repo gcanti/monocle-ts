@@ -26,8 +26,6 @@ Added in v2.3.0
   - [indexReadonlyMap](#indexreadonlymap)
   - [indexReadonlyNonEmptyArray](#indexreadonlynonemptyarray)
   - [indexReadonlyRecord](#indexreadonlyrecord)
-  - [~~indexArray~~](#indexarray)
-  - [~~indexRecord~~](#indexrecord)
 - [model](#model)
   - [Index (interface)](#index-interface)
 
@@ -106,30 +104,6 @@ export declare const indexReadonlyRecord: <A = never>() => Index<Readonly<Record
 ```
 
 Added in v2.3.7
-
-## ~~indexArray~~
-
-Use `indexReadonlyArray` instead.
-
-**Signature**
-
-```ts
-export declare const indexArray: <A = never>() => Index<readonly A[], number, A>
-```
-
-Added in v2.3.2
-
-## ~~indexRecord~~
-
-Use `indexReadonlyRecord` instead.
-
-**Signature**
-
-```ts
-export declare const indexRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A>
-```
-
-Added in v2.3.2
 
 # model
 

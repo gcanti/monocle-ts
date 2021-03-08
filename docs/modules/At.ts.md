@@ -18,7 +18,6 @@ Added in v2.3.0
   - [atReadonlyRecord](#atreadonlyrecord)
   - [atReadonlySet](#atreadonlyset)
   - [fromIso](#fromiso)
-  - [~~atRecord~~](#atrecord)
 - [model](#model)
   - [At (interface)](#at-interface)
 
@@ -77,18 +76,6 @@ export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>)
 ```
 
 Added in v2.3.0
-
-## ~~atRecord~~
-
-Use `atReadonlyRecord` instead.
-
-**Signature**
-
-```ts
-export declare const atRecord: <A = never>() => At<Readonly<Record<string, A>>, string, O.Option<A>>
-```
-
-Added in v2.3.2
 
 # model
 
