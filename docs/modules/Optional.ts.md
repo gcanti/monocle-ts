@@ -65,10 +65,10 @@ Added in v2.3.0
 - [converters](#converters)
   - [asTraversal](#astraversal)
 - [instances](#instances)
+  - [Category](#category)
+  - [Invariant](#invariant-1)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryOptional](#categoryoptional)
-  - [invariantOptional](#invariantoptional)
 - [model](#model)
   - [Optional (interface)](#optional-interface)
 
@@ -444,6 +444,26 @@ Added in v2.3.0
 
 # instances
 
+## Category
+
+**Signature**
+
+```ts
+export declare const Category: Category2<'monocle-ts/Optional'>
+```
+
+Added in v2.3.0
+
+## Invariant
+
+**Signature**
+
+```ts
+export declare const Invariant: Invariant2<'monocle-ts/Optional'>
+```
+
+Added in v2.3.0
+
 ## URI
 
 **Signature**
@@ -460,26 +480,6 @@ Added in v2.3.0
 
 ```ts
 export type URI = typeof URI
-```
-
-Added in v2.3.0
-
-## categoryOptional
-
-**Signature**
-
-```ts
-export declare const categoryOptional: Category2<'monocle-ts/Optional'>
-```
-
-Added in v2.3.0
-
-## invariantOptional
-
-**Signature**
-
-```ts
-export declare const invariantOptional: Invariant2<'monocle-ts/Optional'>
 ```
 
 Added in v2.3.0

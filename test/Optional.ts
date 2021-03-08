@@ -37,7 +37,7 @@ describe('Optional', () => {
     type S = O.Option<O.Option<number>>
     const sa = pipe(_.id<S>(), _.some)
     const ab = pipe(_.id<O.Option<number>>(), _.some)
-    const sb = _.categoryOptional.compose(ab, sa)
+    const sb = _.Category.compose(ab, sa)
     U.deepStrictEqual(sb.getOption(O.none), O.none)
     U.deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
     U.deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))

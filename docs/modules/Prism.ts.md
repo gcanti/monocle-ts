@@ -62,10 +62,10 @@ Added in v2.3.0
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
 - [instances](#instances)
+  - [Category](#category)
+  - [Invariant](#invariant-1)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryPrism](#categoryprism)
-  - [invariantPrism](#invariantprism)
 - [model](#model)
   - [Prism (interface)](#prism-interface)
 
@@ -466,6 +466,26 @@ Added in v2.3.0
 
 # instances
 
+## Category
+
+**Signature**
+
+```ts
+export declare const Category: Category2<'monocle-ts/Prism'>
+```
+
+Added in v2.3.0
+
+## Invariant
+
+**Signature**
+
+```ts
+export declare const Invariant: Invariant2<'monocle-ts/Prism'>
+```
+
+Added in v2.3.0
+
 ## URI
 
 **Signature**
@@ -482,26 +502,6 @@ Added in v2.3.0
 
 ```ts
 export type URI = typeof URI
-```
-
-Added in v2.3.0
-
-## categoryPrism
-
-**Signature**
-
-```ts
-export declare const categoryPrism: Category2<'monocle-ts/Prism'>
-```
-
-Added in v2.3.0
-
-## invariantPrism
-
-**Signature**
-
-```ts
-export declare const invariantPrism: Invariant2<'monocle-ts/Prism'>
 ```
 
 Added in v2.3.0

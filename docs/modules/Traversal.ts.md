@@ -58,9 +58,9 @@ Added in v2.3.0
   - [id](#id)
   - [traversal](#traversal)
 - [instances](#instances)
+  - [Category](#category)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
-  - [categoryTraversal](#categorytraversal)
 - [model](#model)
   - [ModifyF (interface)](#modifyf-interface)
   - [Traversal (interface)](#traversal-interface)
@@ -434,6 +434,16 @@ Added in v2.3.8
 
 # instances
 
+## Category
+
+**Signature**
+
+```ts
+export declare const Category: Category2<'monocle-ts/Traversal'>
+```
+
+Added in v2.3.0
+
 ## URI
 
 **Signature**
@@ -450,16 +460,6 @@ Added in v2.3.0
 
 ```ts
 export type URI = typeof URI
-```
-
-Added in v2.3.0
-
-## categoryTraversal
-
-**Signature**
-
-```ts
-export declare const categoryTraversal: Category2<'monocle-ts/Traversal'>
 ```
 
 Added in v2.3.0
