@@ -1,12 +1,15 @@
-import { pipe } from 'fp-ts/function'
+import * as assert from 'assert'
 import * as Id from 'fp-ts/Identity'
 import * as O from 'fp-ts/Option'
+import { pipe } from 'fp-ts/function'
 import * as A from 'fp-ts/ReadonlyArray'
-import * as _ from '../src/Optional'
-import * as T from '../src/Traversal'
+import { ReadonlyNonEmptyArray } from 'fp-ts/ReadonlyNonEmptyArray'
+import { ReadonlyRecord } from 'fp-ts/ReadonlyRecord'
 import * as L from '../src/Lens'
+import * as _ from '../src/Optional'
 import * as P from '../src/Prism'
-import { deepStrictEqual } from './util'
+import * as T from '../src/Traversal'
+import * as U from './util'
 
 type S = O.Option<{
   readonly a: string
@@ -24,9 +27,9 @@ describe('Optional', () => {
           (s) => parseFloat(s)
         )
       )
-      deepStrictEqual(sa.getOption(O.none), O.none)
-      deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some('1'))
-      deepStrictEqual(sa.replace('2')(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 2, c: true }))
+      U.deepStrictEqual(sa.getOption(O.none), O.none)
+      U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some('1'))
+      U.deepStrictEqual(sa.replace('2')(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 2, c: true }))
     })
   })
 
@@ -34,10 +37,10 @@ describe('Optional', () => {
     type S = O.Option<O.Option<number>>
     const sa = pipe(_.id<S>(), _.some)
     const ab = pipe(_.id<O.Option<number>>(), _.some)
-    const sb = pipe(sa, _.compose(ab))
-    deepStrictEqual(sb.getOption(O.none), O.none)
-    deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
-    deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
+    const sb = _.categoryOptional.compose(ab)(sa)
+    U.deepStrictEqual(sb.getOption(O.none), O.none)
+    U.deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
+    U.deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
   })
 
   it('composeLens', () => {
@@ -46,10 +49,10 @@ describe('Optional', () => {
     const sa = pipe(_.id<S>(), _.some)
     const ab = pipe(L.id<Inner>(), L.prop('a'))
     const sb = pipe(sa, _.composeLens(ab))
-    deepStrictEqual(sb.getOption(O.none), O.none)
-    deepStrictEqual(sb.getOption(O.some({ a: 1 })), O.some(1))
-    deepStrictEqual(sb.replace(2)(O.some({ a: 1 })), O.some({ a: 2 }))
-    deepStrictEqual(sb.replace(2)(O.none), O.none)
+    U.deepStrictEqual(sb.getOption(O.none), O.none)
+    U.deepStrictEqual(sb.getOption(O.some({ a: 1 })), O.some(1))
+    U.deepStrictEqual(sb.replace(2)(O.some({ a: 1 })), O.some({ a: 2 }))
+    U.deepStrictEqual(sb.replace(2)(O.none), O.none)
   })
 
   it('composePrism', () => {
@@ -57,62 +60,94 @@ describe('Optional', () => {
     const sa = pipe(_.id<S>(), _.some)
     const ab = pipe(P.id<O.Option<number>>(), P.some)
     const sb = pipe(sa, _.composePrism(ab))
-    deepStrictEqual(sb.getOption(O.none), O.none)
-    deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
-    deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
-    deepStrictEqual(sb.replace(2)(O.none), O.none)
-    deepStrictEqual(sb.replace(2)(O.some(O.none)), O.some(O.none))
-    deepStrictEqual(sb.replace(2)(O.some(O.some(1))), O.some(O.some(2)))
+    U.deepStrictEqual(sb.getOption(O.none), O.none)
+    U.deepStrictEqual(sb.getOption(O.some(O.none)), O.none)
+    U.deepStrictEqual(sb.getOption(O.some(O.some(1))), O.some(1))
+    U.deepStrictEqual(sb.replace(2)(O.none), O.none)
+    U.deepStrictEqual(sb.replace(2)(O.some(O.none)), O.some(O.none))
+    U.deepStrictEqual(sb.replace(2)(O.some(O.some(1))), O.some(O.some(2)))
+  })
+
+  it('composeTraversal', () => {
+    type S = {
+      readonly a: O.Option<ReadonlyArray<number>>
+    }
+    const sa = pipe(L.id<S>(), L.prop('a'), L.some)
+    const ab = T.fromTraversable(A.Traversable)<number>()
+    const sb = pipe(sa, _.composeTraversal(ab))
+    U.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)({ a: O.none }), { a: O.none })
+    U.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)({ a: O.some([1, 2, 3]) }), { a: O.some([2, 4, 6]) })
   })
 
   it('id', () => {
     const ss = _.id<S>()
-    deepStrictEqual(ss.getOption(O.none), O.some(O.none))
-    deepStrictEqual(ss.getOption(O.some({ a: 'a', b: 1, c: true })), O.some(O.some({ a: 'a', b: 1, c: true })))
+    U.deepStrictEqual(ss.getOption(O.none), O.some(O.none))
+    U.deepStrictEqual(ss.getOption(O.some({ a: 'a', b: 1, c: true })), O.some(O.some({ a: 'a', b: 1, c: true })))
   })
 
   it('prop', () => {
     const sa = pipe(_.id<S>(), _.some, _.prop('a'))
-    deepStrictEqual(sa.getOption(O.none), O.none)
-    deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some('a'))
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some('a'))
   })
 
   it('props', () => {
     const sa = pipe(_.id<S>(), _.some, _.props('a', 'b'))
-    deepStrictEqual(sa.getOption(O.none), O.none)
-    deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
   })
 
   it('component', () => {
     type S = O.Option<readonly [string, number]>
     const sa = pipe(_.id<S>(), _.some, _.component(1))
-    deepStrictEqual(sa.getOption(O.none), O.none)
-    deepStrictEqual(sa.getOption(O.some(['a', 1])), O.some(1))
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some(['a', 1])), O.some(1))
   })
 
   it('index', () => {
-    const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
-    deepStrictEqual(sa.getOption([1, 2, 3]), O.some(1))
+    type S = ReadonlyArray<number>
+    const optional = pipe(_.id<S>(), _.index(0))
+    U.deepStrictEqual(optional.getOption([]), O.none)
+    U.deepStrictEqual(optional.getOption([1]), O.some(1))
+    U.deepStrictEqual(optional.replace(2)([]), [])
+    U.deepStrictEqual(optional.replace(2)([1]), [2])
+    // should return the same reference
+    const empty: S = []
+    const full: S = [1]
+    assert.strictEqual(optional.replace(1)(empty), empty)
+    assert.strictEqual(optional.replace(1)(full), full)
+  })
+
+  it('indexNonEmpty', () => {
+    type S = ReadonlyNonEmptyArray<number>
+    const optional = pipe(_.id<S>(), _.indexNonEmpty(1))
+    U.deepStrictEqual(optional.getOption([1]), O.none)
+    U.deepStrictEqual(optional.getOption([1, 2]), O.some(2))
+    U.deepStrictEqual(optional.replace(3)([1]), [1])
+    U.deepStrictEqual(optional.replace(3)([1, 2]), [1, 3])
+    // should return the same reference
+    const full: S = [1, 2]
+    assert.strictEqual(optional.replace(2)(full), full)
   })
 
   it('key', () => {
-    const sa = pipe(_.id<Readonly<Record<string, number>>>(), _.key('k'))
-    deepStrictEqual(sa.getOption({ k: 1, j: 2 }), O.some(1))
+    const sa = pipe(_.id<ReadonlyRecord<string, number>>(), _.key('k'))
+    U.deepStrictEqual(sa.getOption({ k: 1, j: 2 }), O.some(1))
   })
 
   it('atKey', () => {
-    type S = Readonly<Record<string, number>>
+    type S = ReadonlyRecord<string, number>
     const sa = pipe(_.id<S>(), _.atKey('a'))
-    deepStrictEqual(sa.getOption({ a: 1 }), O.some(O.some(1)))
-    deepStrictEqual(sa.replace(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
-    deepStrictEqual(sa.replace(O.some(1))({ b: 2 }), { a: 1, b: 2 })
-    deepStrictEqual(sa.replace(O.none)({ a: 1, b: 2 }), { b: 2 })
+    U.deepStrictEqual(sa.getOption({ a: 1 }), O.some(O.some(1)))
+    U.deepStrictEqual(sa.replace(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
+    U.deepStrictEqual(sa.replace(O.some(1))({ b: 2 }), { a: 1, b: 2 })
+    U.deepStrictEqual(sa.replace(O.none)({ a: 1, b: 2 }), { b: 2 })
   })
 
   it('asTraversal', () => {
     const sa = pipe(_.id<S>(), _.some, _.prop('b'), _.asTraversal)
-    deepStrictEqual(sa.modifyF(Id.Applicative)((n) => n - 1)(O.none), O.none)
-    deepStrictEqual(
+    U.deepStrictEqual(sa.modifyF(Id.Applicative)((n) => n - 1)(O.none), O.none)
+    U.deepStrictEqual(
       sa.modifyF(Id.Applicative)((n) => n - 1)(O.some({ a: 'a', b: 2, c: true })),
       O.some({
         a: 'a',
@@ -130,32 +165,49 @@ describe('Optional', () => {
       _.prop('a'),
       _.filter((n) => n > 0)
     )
-    deepStrictEqual(sa.getOption(O.some({ a: 1 })), O.some(1))
-    deepStrictEqual(sa.getOption(O.some({ a: -1 })), O.none)
-    deepStrictEqual(sa.getOption(O.none), O.none)
-    deepStrictEqual(sa.replace(2)(O.none), O.none)
-    deepStrictEqual(sa.replace(2)(O.some({ a: 1 })), O.some({ a: 2 }))
-    deepStrictEqual(sa.replace(-1)(O.some({ a: 1 })), O.some({ a: -1 }))
-    deepStrictEqual(sa.replace(-1)(O.some({ a: -2 })), O.some({ a: -2 }))
+    U.deepStrictEqual(sa.getOption(O.some({ a: 1 })), O.some(1))
+    U.deepStrictEqual(sa.getOption(O.some({ a: -1 })), O.none)
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.replace(2)(O.none), O.none)
+    U.deepStrictEqual(sa.replace(2)(O.some({ a: 1 })), O.some({ a: 2 }))
+    U.deepStrictEqual(sa.replace(-1)(O.some({ a: 1 })), O.some({ a: -1 }))
+    U.deepStrictEqual(sa.replace(-1)(O.some({ a: -2 })), O.some({ a: -2 }))
   })
 
   it('findFirst', () => {
     type S = O.Option<{ readonly a: ReadonlyArray<number> }>
-    const sa = pipe(
+    const optional = pipe(
       _.id<S>(),
       _.some,
       _.prop('a'),
       _.findFirst((n) => n > 0)
     )
-    deepStrictEqual(sa.getOption(O.none), O.none)
-    deepStrictEqual(sa.getOption(O.some({ a: [] })), O.none)
-    deepStrictEqual(sa.getOption(O.some({ a: [-1, -2, -3] })), O.none)
-    deepStrictEqual(sa.getOption(O.some({ a: [-1, 2, -3] })), O.some(2))
-    deepStrictEqual(sa.replace(3)(O.none), O.none)
-    deepStrictEqual(sa.replace(3)(O.some({ a: [] })), O.some({ a: [] }))
-    deepStrictEqual(sa.replace(3)(O.some({ a: [-1, -2, -3] })), O.some({ a: [-1, -2, -3] }))
-    deepStrictEqual(sa.replace(3)(O.some({ a: [-1, 2, -3] })), O.some({ a: [-1, 3, -3] }))
-    deepStrictEqual(sa.replace(4)(O.some({ a: [-1, -2, 3] })), O.some({ a: [-1, -2, 4] }))
+    U.deepStrictEqual(optional.getOption(O.none), O.none)
+    U.deepStrictEqual(optional.getOption(O.some({ a: [] })), O.none)
+    U.deepStrictEqual(optional.getOption(O.some({ a: [-1, -2, -3] })), O.none)
+    U.deepStrictEqual(optional.getOption(O.some({ a: [-1, 2, -3] })), O.some(2))
+    U.deepStrictEqual(optional.replace(3)(O.none), O.none)
+    U.deepStrictEqual(optional.replace(3)(O.some({ a: [] })), O.some({ a: [] }))
+    U.deepStrictEqual(optional.replace(3)(O.some({ a: [-1, -2, -3] })), O.some({ a: [-1, -2, -3] }))
+    U.deepStrictEqual(optional.replace(3)(O.some({ a: [-1, 2, -3] })), O.some({ a: [-1, 3, -3] }))
+    U.deepStrictEqual(optional.replace(4)(O.some({ a: [-1, -2, 3] })), O.some({ a: [-1, -2, 4] }))
+  })
+
+  it('findFirstNonEmpty', () => {
+    type S = O.Option<{ readonly a: ReadonlyNonEmptyArray<number> }>
+    const optional = pipe(
+      _.id<S>(),
+      _.some,
+      _.prop('a'),
+      _.findFirstNonEmpty((n) => n > 0)
+    )
+    U.deepStrictEqual(optional.getOption(O.none), O.none)
+    U.deepStrictEqual(optional.getOption(O.some({ a: [-1, -2, -3] })), O.none)
+    U.deepStrictEqual(optional.getOption(O.some({ a: [-1, 2, -3] })), O.some(2))
+    U.deepStrictEqual(optional.replace(3)(O.none), O.none)
+    U.deepStrictEqual(optional.replace(3)(O.some({ a: [-1, -2, -3] })), O.some({ a: [-1, -2, -3] as const }))
+    U.deepStrictEqual(optional.replace(3)(O.some({ a: [-1, 2, -3] })), O.some({ a: [-1, 3, -3] as const }))
+    U.deepStrictEqual(optional.replace(4)(O.some({ a: [-1, -2, 3] })), O.some({ a: [-1, -2, 4] as const }))
   })
 
   it('traverse', () => {
@@ -165,7 +217,7 @@ describe('Optional', () => {
       sa,
       T.modify((s) => s.toUpperCase())
     )
-    deepStrictEqual(modify(O.some({ a: ['a'] })), O.some({ a: ['A'] }))
+    U.deepStrictEqual(modify(O.some({ a: ['a'] })), O.some({ a: ['A'] }))
   })
 
   it('fromNullable', () => {
@@ -173,12 +225,12 @@ describe('Optional', () => {
       readonly a?: number
     }
     const sa = pipe(_.id<S>(), _.prop('a'), _.fromNullable)
-    deepStrictEqual(sa.getOption({}), O.none)
-    deepStrictEqual(sa.getOption({ a: undefined }), O.none)
-    deepStrictEqual(sa.getOption({ a: 1 }), O.some(1))
-    deepStrictEqual(sa.replace(2)({}), {})
-    deepStrictEqual(sa.replace(2)({ a: undefined }), { a: undefined })
-    deepStrictEqual(sa.replace(2)({ a: 1 }), { a: 2 })
+    U.deepStrictEqual(sa.getOption({}), O.none)
+    U.deepStrictEqual(sa.getOption({ a: undefined }), O.none)
+    U.deepStrictEqual(sa.getOption({ a: 1 }), O.some(1))
+    U.deepStrictEqual(sa.replace(2)({}), {})
+    U.deepStrictEqual(sa.replace(2)({ a: undefined }), { a: undefined })
+    U.deepStrictEqual(sa.replace(2)({ a: 1 }), { a: 2 })
   })
 
   it('modifyF', () => {
@@ -187,14 +239,14 @@ describe('Optional', () => {
       sa,
       _.modifyF(O.Applicative)((n) => (n > 0 ? O.some(n * 2) : O.none))
     )
-    deepStrictEqual(f([]), O.some([]))
-    deepStrictEqual(f([1, 2, 3]), O.some([2, 2, 3]))
-    deepStrictEqual(f([-1, 2, 3]), O.none)
+    U.deepStrictEqual(f([]), O.some([]))
+    U.deepStrictEqual(f([1, 2, 3]), O.some([2, 2, 3]))
+    U.deepStrictEqual(f([-1, 2, 3]), O.none)
   })
 
   it('replaceOption', () => {
     const sa = pipe(_.id<ReadonlyArray<number>>(), _.index(0))
-    deepStrictEqual(pipe(sa, _.replaceOption(2))([]), O.none)
-    deepStrictEqual(pipe(sa, _.replaceOption(2))([1, 3]), O.some([2, 3]))
+    U.deepStrictEqual(pipe(sa, _.replaceOption(2))([]), O.none)
+    U.deepStrictEqual(pipe(sa, _.replaceOption(2))([1, 3]), O.some([2, 3]))
   })
 })

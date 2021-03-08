@@ -6,23 +6,35 @@ parent: Modules
 
 ## At overview
 
-Added in v3.0.0
+Added in v2.3.0
 
 ---
 
 <h2 class="text-delta">Table of contents</h2>
 
 - [constructors](#constructors)
+  - [at](#at)
   - [atReadonlyMap](#atreadonlymap)
   - [atReadonlyRecord](#atreadonlyrecord)
   - [atReadonlySet](#atreadonlyset)
   - [fromIso](#fromiso)
+  - [~~atRecord~~](#atrecord)
 - [model](#model)
   - [At (interface)](#at-interface)
 
 ---
 
 # constructors
+
+## at
+
+**Signature**
+
+```ts
+export declare const at: <S, I, A>(at: (i: I) => Lens<S, A>) => At<S, I, A>
+```
+
+Added in v2.3.8
 
 ## atReadonlyMap
 
@@ -32,7 +44,7 @@ Added in v3.0.0
 export declare const atReadonlyMap: <K>(E: Eq<K>) => <A = never>() => At<ReadonlyMap<K, A>, K, O.Option<A>>
 ```
 
-Added in v3.0.0
+Added in v2.3.7
 
 ## atReadonlyRecord
 
@@ -42,7 +54,7 @@ Added in v3.0.0
 export declare const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, string, O.Option<A>>
 ```
 
-Added in v3.0.0
+Added in v2.3.7
 
 ## atReadonlySet
 
@@ -52,7 +64,7 @@ Added in v3.0.0
 export declare const atReadonlySet: <A>(E: Eq<A>) => At<ReadonlySet<A>, A, boolean>
 ```
 
-Added in v3.0.0
+Added in v2.3.7
 
 ## fromIso
 
@@ -64,7 +76,19 @@ Lift an instance of `At` using an `Iso`.
 export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>) => At<T, I, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## ~~atRecord~~
+
+Use `atReadonlyRecord` instead.
+
+**Signature**
+
+```ts
+export declare const atRecord: <A = never>() => At<Readonly<Record<string, A>>, string, O.Option<A>>
+```
+
+Added in v2.3.2
 
 # model
 
@@ -78,4 +102,4 @@ export interface At<S, I, A> {
 }
 ```
 
-Added in v3.0.0
+Added in v2.3.0

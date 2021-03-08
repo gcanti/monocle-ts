@@ -1,11 +1,14 @@
 import * as assert from 'assert'
+import * as _ from '../src/Lens'
 import { identity, pipe } from 'fp-ts/function'
 import * as O from 'fp-ts/Option'
 import * as A from 'fp-ts/ReadonlyArray'
-import * as _ from '../src/Lens'
-import { Optional } from '../src/Optional'
 import * as T from '../src/Traversal'
-import { deepStrictEqual } from './util'
+import * as Op from '../src/Optional'
+import * as Id from 'fp-ts/Identity'
+import * as U from './util'
+import { ReadonlyRecord } from 'fp-ts/ReadonlyRecord'
+import { ReadonlyNonEmptyArray } from 'fp-ts/ReadonlyNonEmptyArray'
 
 describe('Lens', () => {
   describe('pipeables', () => {
@@ -20,8 +23,8 @@ describe('Lens', () => {
           (a) => ({ a })
         )
       )
-      deepStrictEqual(sa.get({ a: 1 }), 1)
-      deepStrictEqual(sa.set(2)({ a: 1 }), { a: 2 })
+      U.deepStrictEqual(sa.get({ a: 1 }), 1)
+      U.deepStrictEqual(sa.set(2)({ a: 1 }), { a: 2 })
     })
   })
 
@@ -34,9 +37,19 @@ describe('Lens', () => {
     }
     const sa = pipe(_.id<S>(), _.prop('a'))
     const ab = pipe(_.id<A>(), _.prop('b'))
-    const sb = pipe(sa, _.compose(ab))
-    deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
-    deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
+    const sb = _.categoryLens.compose(ab)(sa)
+    U.deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
+    U.deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
+  })
+
+  it('composeTraversal', () => {
+    interface S {
+      readonly a: ReadonlyArray<number>
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'))
+    const ab = T.fromTraversable(A.Traversable)<number>()
+    const sb = pipe(sa, _.composeTraversal(ab))
+    U.deepStrictEqual(sb.modifyF(Id.Applicative)((n) => n * 2)({ a: [1, 2, 3] }), { a: [2, 4, 6] })
   })
 
   it('id', () => {
@@ -45,8 +58,8 @@ describe('Lens', () => {
     }
     const ss = _.id<S>()
     const s: S = { a: 1 }
-    deepStrictEqual(ss.get(s), s)
-    deepStrictEqual(ss.set(s)(s), s)
+    U.deepStrictEqual(ss.get(s), s)
+    U.deepStrictEqual(ss.set(s)(s), s)
   })
 
   it('fromNullable', () => {
@@ -55,8 +68,8 @@ describe('Lens', () => {
     }
     const sa = pipe(_.id<S>(), _.prop('a'), _.fromNullable)
     const s: S = { a: 1 }
-    deepStrictEqual(sa.getOption(s), O.some(1))
-    deepStrictEqual(sa.getOption({}), O.none)
+    U.deepStrictEqual(sa.getOption(s), O.some(1))
+    U.deepStrictEqual(sa.getOption({}), O.none)
     // should return the same reference
     assert.strictEqual(sa.replace(1)(s), s)
   })
@@ -66,14 +79,14 @@ describe('Lens', () => {
       readonly a: number
     }
     const sa = pipe(_.id<S>(), _.prop('a'))
-    deepStrictEqual(
+    U.deepStrictEqual(
       pipe(
         sa,
         _.modify((a) => a * 2)
       )({ a: 1 }),
       { a: 2 }
     )
-    deepStrictEqual(pipe(sa, _.modify(identity))({ a: 1 }), { a: 1 })
+    U.deepStrictEqual(pipe(sa, _.modify(identity))({ a: 1 }), { a: 1 })
   })
 
   it('prop', () => {
@@ -85,7 +98,7 @@ describe('Lens', () => {
     const sa = pipe(_.id<S>(), _.prop('a'), _.prop('b'))
     const s: S = { a: { b: 1 } }
     assert.strictEqual(sa.get(s), 1)
-    deepStrictEqual(sa.set(2)(s), { a: { b: 2 } })
+    U.deepStrictEqual(sa.set(2)(s), { a: { b: 2 } })
     // should return the same reference
     assert.strictEqual(sa.set(1)(s), s)
   })
@@ -100,8 +113,8 @@ describe('Lens', () => {
     }
     const sa = pipe(_.id<S>(), _.prop('a'), _.props('b', 'c'))
     const s: S = { a: { b: 'b', c: 1, d: true } }
-    deepStrictEqual(sa.get(s), { b: 'b', c: 1 })
-    deepStrictEqual(sa.set({ b: 'b', c: 2 })(s), { a: { b: 'b', c: 2, d: true } })
+    U.deepStrictEqual(sa.get(s), { b: 'b', c: 1 })
+    U.deepStrictEqual(sa.set({ b: 'b', c: 2 })(s), { a: { b: 'b', c: 2, d: true } })
     // should return the same reference
     assert.strictEqual(sa.set({ b: 'b', c: 1 })(s), s)
   })
@@ -113,7 +126,7 @@ describe('Lens', () => {
     const sa = pipe(_.id<S>(), _.prop('a'), _.component(1))
     const s: S = { a: ['a', 1] }
     assert.strictEqual(sa.get(s), 1)
-    deepStrictEqual(sa.set(2)(s), { a: ['a', 2] })
+    U.deepStrictEqual(sa.set(2)(s), { a: ['a', 2] })
     // should return the same reference
     assert.strictEqual(sa.set(1)(s), s)
   })
@@ -122,27 +135,42 @@ describe('Lens', () => {
     interface S {
       readonly a: ReadonlyArray<number>
     }
-    const sa = pipe(_.id<S>(), _.prop('a'), _.index(0))
-    const empty: S = { a: [] }
-    const full: S = { a: [1, 2] }
-    deepStrictEqual(sa.getOption(empty), O.none)
-    deepStrictEqual(sa.getOption(full), O.some(1))
-    deepStrictEqual(sa.replace(2)(full), { a: [2, 2] })
+    const optional = pipe(_.id<S>(), _.prop('a'), _.index(0))
+    U.deepStrictEqual(optional.getOption({ a: [] }), O.none)
+    U.deepStrictEqual(optional.getOption({ a: [1] }), O.some(1))
+    U.deepStrictEqual(optional.replace(2)({ a: [] }), { a: [] })
+    U.deepStrictEqual(optional.replace(2)({ a: [1] }), { a: [2] })
     // should return the same reference
-    assert.strictEqual(sa.replace(2)(empty), empty)
-    assert.strictEqual(sa.replace(1)(full), full)
+    const empty: S = { a: [] }
+    const full: S = { a: [1] }
+    assert.strictEqual(optional.replace(1)(empty), empty)
+    assert.strictEqual(optional.replace(1)(full), full)
+  })
+
+  it('indexNonEmpty', () => {
+    interface S {
+      readonly a: ReadonlyNonEmptyArray<number>
+    }
+    const optional = pipe(_.id<S>(), _.prop('a'), _.indexNonEmpty(1))
+    U.deepStrictEqual(optional.getOption({ a: [1] }), O.none)
+    U.deepStrictEqual(optional.getOption({ a: [1, 2] }), O.some(2))
+    U.deepStrictEqual(optional.replace(3)({ a: [1] }), { a: [1] })
+    U.deepStrictEqual(optional.replace(3)({ a: [1, 2] }), { a: [1, 3] })
+    // should return the same reference
+    const full: S = { a: [1, 2] }
+    assert.strictEqual(optional.replace(2)(full), full)
   })
 
   it('key', () => {
     interface S {
-      readonly a: Readonly<Record<string, number>>
+      readonly a: ReadonlyRecord<string, number>
     }
     const sa = pipe(_.id<S>(), _.prop('a'), _.key('k'))
     const empty: S = { a: {} }
     const full: S = { a: { k: 1, j: 2 } }
-    deepStrictEqual(sa.getOption(empty), O.none)
-    deepStrictEqual(sa.getOption(full), O.some(1))
-    deepStrictEqual(sa.replace(2)(full), { a: { k: 2, j: 2 } })
+    U.deepStrictEqual(sa.getOption(empty), O.none)
+    U.deepStrictEqual(sa.getOption(full), O.some(1))
+    U.deepStrictEqual(sa.replace(2)(full), { a: { k: 2, j: 2 } })
     // should return the same reference
     assert.strictEqual(sa.replace(2)(empty), empty)
     assert.strictEqual(sa.replace(1)(full), full)
@@ -155,7 +183,7 @@ describe('Lens', () => {
       sa,
       T.modify((s) => s.toUpperCase())
     )
-    deepStrictEqual(modify(['a']), ['A'])
+    U.deepStrictEqual(modify(['a']), ['A'])
   })
 
   it('compose', () => {
@@ -168,8 +196,8 @@ describe('Lens', () => {
     const sa = pipe(_.id<S>(), _.prop('a'))
     const ab = pipe(_.id<A>(), _.prop('b'))
     const sb = pipe(sa, _.compose(ab))
-    deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
-    deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
+    U.deepStrictEqual(sb.get({ a: { b: 1 } }), 1)
+    U.deepStrictEqual(sb.set(2)({ a: { b: 1 } }), { a: { b: 2 } })
   })
 
   it('composeOptional', () => {
@@ -177,24 +205,24 @@ describe('Lens', () => {
       readonly a: string
     }
     const sa = pipe(_.id<S>(), _.prop('a'))
-    const ab: Optional<string, string> = {
-      getOption: (s) => (s.length > 0 ? O.some(s[0]) : O.none),
-      replace: (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
-    }
+    const ab: Op.Optional<string, string> = Op.optional(
+      (s) => (s.length > 0 ? O.some(s[0]) : O.none),
+      (a) => (s) => (s.length > 0 ? a + s.substring(1) : s)
+    )
     const sb = pipe(sa, _.composeOptional(ab))
-    deepStrictEqual(sb.getOption({ a: '' }), O.none)
-    deepStrictEqual(sb.getOption({ a: 'ab' }), O.some('a'))
-    deepStrictEqual(sb.replace('c')({ a: '' }), { a: '' })
-    deepStrictEqual(sb.replace('c')({ a: 'ab' }), { a: 'cb' })
+    U.deepStrictEqual(sb.getOption({ a: '' }), O.none)
+    U.deepStrictEqual(sb.getOption({ a: 'ab' }), O.some('a'))
+    U.deepStrictEqual(sb.replace('c')({ a: '' }), { a: '' })
+    U.deepStrictEqual(sb.replace('c')({ a: 'ab' }), { a: 'cb' })
   })
 
   it('atKey', () => {
-    type S = Readonly<Record<string, number>>
+    type S = ReadonlyRecord<string, number>
     const sa = pipe(_.id<S>(), _.atKey('a'))
-    deepStrictEqual(sa.get({ a: 1 }), O.some(1))
-    deepStrictEqual(sa.set(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
-    deepStrictEqual(sa.set(O.some(1))({ b: 2 }), { a: 1, b: 2 })
-    deepStrictEqual(sa.set(O.none)({ a: 1, b: 2 }), { b: 2 })
+    U.deepStrictEqual(sa.get({ a: 1 }), O.some(1))
+    U.deepStrictEqual(sa.set(O.some(2))({ a: 1, b: 2 }), { a: 2, b: 2 })
+    U.deepStrictEqual(sa.set(O.some(1))({ b: 2 }), { a: 1, b: 2 })
+    U.deepStrictEqual(sa.set(O.none)({ a: 1, b: 2 }), { b: 2 })
   })
 
   it('filter', () => {
@@ -206,28 +234,38 @@ describe('Lens', () => {
       _.prop('a'),
       _.filter((n) => n > 0)
     )
-    deepStrictEqual(sa.getOption({ a: 1 }), O.some(1))
-    deepStrictEqual(sa.getOption({ a: -1 }), O.none)
-    deepStrictEqual(sa.replace(2)({ a: 1 }), { a: 2 })
-    deepStrictEqual(sa.replace(2)({ a: -1 }), { a: -1 })
+    U.deepStrictEqual(sa.getOption({ a: 1 }), O.some(1))
+    U.deepStrictEqual(sa.getOption({ a: -1 }), O.none)
+    U.deepStrictEqual(sa.replace(2)({ a: 1 }), { a: 2 })
+    U.deepStrictEqual(sa.replace(2)({ a: -1 }), { a: -1 })
   })
 
   it('findFirst', () => {
     type S = ReadonlyArray<number>
-    const sa = pipe(
+    const optional = pipe(
       _.id<S>(),
       _.findFirst((n) => n > 0)
     )
-    deepStrictEqual(sa.getOption([]), O.none)
-    deepStrictEqual(sa.getOption([-1, -2, -3]), O.none)
-    deepStrictEqual(sa.getOption([-1, 2, -3]), O.some(2))
-    deepStrictEqual(sa.replace(3)([]), [])
-    deepStrictEqual(sa.replace(3)([-1, -2, -3]), [-1, -2, -3])
-    deepStrictEqual(sa.replace(3)([-1, 2, -3]), [-1, 3, -3])
-    deepStrictEqual(sa.replace(4)([-1, -2, 3]), [-1, -2, 4])
-    // should return the same reference if nothing changed
-    const as: ReadonlyArray<number> = [-1, 2, -3]
-    assert.strictEqual(sa.replace(2)(as), as)
+    U.deepStrictEqual(optional.getOption([]), O.none)
+    U.deepStrictEqual(optional.getOption([-1, -2, -3]), O.none)
+    U.deepStrictEqual(optional.getOption([-1, 2, -3]), O.some(2))
+    U.deepStrictEqual(optional.replace(3)([]), [])
+    U.deepStrictEqual(optional.replace(3)([-1, -2, -3]), [-1, -2, -3])
+    U.deepStrictEqual(optional.replace(3)([-1, 2, -3]), [-1, 3, -3])
+    U.deepStrictEqual(optional.replace(4)([-1, -2, 3]), [-1, -2, 4])
+  })
+
+  it('findFirstNonEmpty', () => {
+    type S = ReadonlyNonEmptyArray<number>
+    const optional = pipe(
+      _.id<S>(),
+      _.findFirstNonEmpty((n) => n > 0)
+    )
+    U.deepStrictEqual(optional.getOption([-1, -2, -3]), O.none)
+    U.deepStrictEqual(optional.getOption([-1, 2, -3]), O.some(2))
+    U.deepStrictEqual(optional.replace(3)([-1, -2, -3]), [-1, -2, -3])
+    U.deepStrictEqual(optional.replace(3)([-1, 2, -3]), [-1, 3, -3])
+    U.deepStrictEqual(optional.replace(4)([-1, -2, 3]), [-1, -2, 4])
   })
 
   it('modifyF', () => {
@@ -237,9 +275,9 @@ describe('Lens', () => {
     const sa: _.Lens<S, number> = pipe(_.id<S>(), _.prop('a'))
     const f = pipe(
       sa,
-      _.modifyF(O.Functor)((n) => (n > 0 ? O.some(n * 2) : O.none))
+      _.modifyF(O.Applicative)((n) => (n > 0 ? O.some(n * 2) : O.none))
     )
-    deepStrictEqual(f({ a: 1 }), O.some({ a: 2 }))
-    deepStrictEqual(f({ a: -1 }), O.none)
+    U.deepStrictEqual(f({ a: 1 }), O.some({ a: 2 }))
+    U.deepStrictEqual(f({ a: -1 }), O.none)
   })
 })

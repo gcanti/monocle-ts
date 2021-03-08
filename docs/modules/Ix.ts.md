@@ -6,7 +6,13 @@ parent: Modules
 
 ## Ix overview
 
-Added in v3.0.0
+**This module is experimental**
+
+Experimental features are published in order to get early feedback from the community.
+
+A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
+
+Added in v2.3.0
 
 ---
 
@@ -15,9 +21,13 @@ Added in v3.0.0
 - [constructors](#constructors)
   - [fromAt](#fromat)
   - [fromIso](#fromiso)
+  - [index](#index)
   - [indexReadonlyArray](#indexreadonlyarray)
   - [indexReadonlyMap](#indexreadonlymap)
+  - [indexReadonlyNonEmptyArray](#indexreadonlynonemptyarray)
   - [indexReadonlyRecord](#indexreadonlyrecord)
+  - [~~indexArray~~](#indexarray)
+  - [~~indexRecord~~](#indexrecord)
 - [model](#model)
   - [Index (interface)](#index-interface)
 
@@ -33,7 +43,7 @@ Added in v3.0.0
 export declare const fromAt: <T, J, B>(at: At<T, J, O.Option<B>>) => Index<T, J, B>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## fromIso
 
@@ -45,7 +55,17 @@ Lift an instance of `Index` using an `Iso`.
 export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: Index<S, I, A>) => Index<T, I, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## index
+
+**Signature**
+
+```ts
+export declare const index: <S, I, A>(index: (i: I) => Optional<S, A>) => Index<S, I, A>
+```
+
+Added in v2.3.8
 
 ## indexReadonlyArray
 
@@ -55,7 +75,7 @@ Added in v3.0.0
 export declare const indexReadonlyArray: <A = never>() => Index<readonly A[], number, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.7
 
 ## indexReadonlyMap
 
@@ -65,7 +85,17 @@ Added in v3.0.0
 export declare const indexReadonlyMap: <K>(E: Eq<K>) => <A = never>() => Index<ReadonlyMap<K, A>, K, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.7
+
+## indexReadonlyNonEmptyArray
+
+**Signature**
+
+```ts
+export declare const indexReadonlyNonEmptyArray: <A = never>() => Index<ReadonlyNonEmptyArray<A>, number, A>
+```
+
+Added in v2.3.8
 
 ## indexReadonlyRecord
 
@@ -75,7 +105,31 @@ Added in v3.0.0
 export declare const indexReadonlyRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.7
+
+## ~~indexArray~~
+
+Use `indexReadonlyArray` instead.
+
+**Signature**
+
+```ts
+export declare const indexArray: <A = never>() => Index<readonly A[], number, A>
+```
+
+Added in v2.3.2
+
+## ~~indexRecord~~
+
+Use `indexReadonlyRecord` instead.
+
+**Signature**
+
+```ts
+export declare const indexRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A>
+```
+
+Added in v2.3.2
 
 # model
 
@@ -89,4 +143,4 @@ export interface Index<S, I, A> {
 }
 ```
 
-Added in v3.0.0
+Added in v2.3.0

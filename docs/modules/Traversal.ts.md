@@ -6,13 +6,19 @@ parent: Modules
 
 ## Traversal overview
 
+**This module is experimental**
+
+Experimental features are published in order to get early feedback from the community.
+
+A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
+
 A `Traversal` is the generalisation of an `Optional` to several targets. In other word, a `Traversal` allows to focus
 from a type `S` into `0` to `n` values of type `A`.
 
 The most common example of a `Traversal` would be to focus into all elements inside of a container (e.g.
 `ReadonlyArray`, `Option`). To do this we will use the relation between the typeclass `Traversable` and `Traversal`.
 
-Added in v3.0.0
+Added in v2.3.0
 
 ---
 
@@ -22,10 +28,14 @@ Added in v3.0.0
   - [atKey](#atkey)
   - [component](#component)
   - [filter](#filter)
+  - [findFirst](#findfirst)
+  - [findFirstNonEmpty](#findfirstnonempty)
   - [fold](#fold)
   - [foldMap](#foldmap)
+  - [fromNullable](#fromnullable)
   - [getAll](#getall)
   - [index](#index)
+  - [indexNonEmpty](#indexnonempty)
   - [key](#key)
   - [left](#left)
   - [modify](#modify)
@@ -37,13 +47,20 @@ Added in v3.0.0
   - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
+  - [composeIso](#composeiso)
+  - [composeLens](#composelens)
+  - [composeOptional](#composeoptional)
+  - [composePrism](#composeprism)
+  - [composeTraversal](#composetraversal)
 - [constructor](#constructor)
   - [fromTraversable](#fromtraversable)
 - [constructors](#constructors)
   - [id](#id)
+  - [traversal](#traversal)
 - [instances](#instances)
-  - [Category](#category)
+  - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
+  - [categoryTraversal](#categorytraversal)
 - [model](#model)
   - [ModifyF (interface)](#modifyf-interface)
   - [Traversal (interface)](#traversal-interface)
@@ -54,7 +71,7 @@ Added in v3.0.0
 
 ## atKey
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a required key.
+Return a `Traversal` from a `Traversal` focused on a required key of a `ReadonlyRecord`.
 
 **Signature**
 
@@ -64,11 +81,11 @@ export declare const atKey: (
 ) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>) => Traversal<S, Option<A>>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## component
 
-Return a `Traversal` from a `Traversal` and a component.
+Return a `Traversal` from a `Traversal` focused on a component of a tuple.
 
 **Signature**
 
@@ -78,7 +95,7 @@ export declare const component: <A extends readonly unknown[], P extends keyof A
 ) => <S>(sa: Traversal<S, A>) => Traversal<S, A[P]>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## filter
 
@@ -91,11 +108,43 @@ export declare function filter<A, B extends A>(
 export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, A>) => Traversal<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## findFirst
+
+**Signature**
+
+```ts
+export declare function findFirst<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, B>
+export declare function findFirst<A>(
+  predicate: Predicate<A>
+): <S>(sa: Traversal<S, ReadonlyArray<A>>) => Traversal<S, A>
+```
+
+Added in v2.3.8
+
+## findFirstNonEmpty
+
+Alias of `findFirst`.
+
+**Signature**
+
+```ts
+export declare function findFirstNonEmpty<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, B>
+export declare function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A>
+```
+
+Added in v2.3.8
 
 ## fold
 
-Combine all targets using a target's Monoid.
+Map each target to a `Monoid` and combine the results.
 
 **Signature**
 
@@ -103,7 +152,7 @@ Combine all targets using a target's Monoid.
 export declare const fold: <A>(M: Monoid<A>) => <S>(sa: Traversal<S, A>) => (s: S) => A
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## foldMap
 
@@ -115,7 +164,19 @@ Map each target to a `Monoid` and combine the results.
 export declare const foldMap: <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => <S>(sa: Traversal<S, A>) => (s: S) => M
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## fromNullable
+
+Return a `Traversal` from a `Traversal` focused on a nullable value.
+
+**Signature**
+
+```ts
+export declare const fromNullable: <S, A>(sa: Traversal<S, A>) => Traversal<S, NonNullable<A>>
+```
+
+Added in v2.3.0
 
 ## getAll
 
@@ -127,11 +188,11 @@ Get all the targets of a `Traversal`.
 export declare const getAll: <S>(s: S) => <A>(sa: Traversal<S, A>) => readonly A[]
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## index
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`.
+Return a `Traversal` from a `Traversal` focused on an index of a `ReadonlyArray`.
 
 **Signature**
 
@@ -139,11 +200,23 @@ Return a `Traversal` from a `Traversal` focused on a `ReadonlyArray`.
 export declare const index: (i: number) => <S, A>(sa: Traversal<S, readonly A[]>) => Traversal<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## indexNonEmpty
+
+Alias of `index`.
+
+**Signature**
+
+```ts
+export declare const indexNonEmpty: (i: number) => <S, A>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A>
+```
+
+Added in v2.3.8
 
 ## key
 
-Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key.
+Return a `Traversal` from a `Traversal` focused on a key of a `ReadonlyRecord`.
 
 **Signature**
 
@@ -151,7 +224,7 @@ Return a `Traversal` from a `Traversal` focused on a `ReadonlyRecord` and a key.
 export declare const key: (key: string) => <S, A>(sa: Traversal<S, Readonly<Record<string, A>>>) => Traversal<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## left
 
@@ -163,7 +236,7 @@ Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type
 export declare const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## modify
 
@@ -173,7 +246,7 @@ Added in v3.0.0
 export declare const modify: <A>(f: (a: A) => A) => <S>(sa: Traversal<S, A>) => (s: S) => S
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## prop
 
@@ -185,7 +258,7 @@ Return a `Traversal` from a `Traversal` and a prop.
 export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Traversal<S, A>) => Traversal<S, A[P]>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## props
 
@@ -201,7 +274,7 @@ export declare const props: <A, P extends keyof A>(
 ) => <S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## right
 
@@ -213,7 +286,7 @@ Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` typ
 export declare const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## set
 
@@ -223,7 +296,7 @@ Added in v3.0.0
 export declare const set: <A>(a: A) => <S>(sa: Traversal<S, A>) => (s: S) => S
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## some
 
@@ -235,7 +308,7 @@ Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type
 export declare const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## traverse
 
@@ -244,12 +317,10 @@ Return a `Traversal` from a `Traversal` focused on a `Traversable`.
 **Signature**
 
 ```ts
-export declare function traverse<T extends URIS>(
-  T: Traversable1<T>
-): <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A>
+export declare const traverse: typeof _.traversalTraverse
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 # compositions
 
@@ -263,7 +334,67 @@ Compose a `Traversal` with a `Traversal`.
 export declare const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## composeIso
+
+Compose a `Traversal` with a `Iso`.
+
+**Signature**
+
+```ts
+export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
+
+## composeLens
+
+Compose a `Traversal` with a `Lens`.
+
+**Signature**
+
+```ts
+export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
+
+## composeOptional
+
+Compose a `Traversal` with a `Optional`.
+
+**Signature**
+
+```ts
+export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
+
+## composePrism
+
+Compose a `Traversal` with a `Prism`.
+
+**Signature**
+
+```ts
+export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
+
+## composeTraversal
+
+Alias of `compose`.
+
+**Signature**
+
+```ts
+export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
 
 # constructor
 
@@ -277,7 +408,7 @@ Create a `Traversal` from a `Traversable`.
 export declare const fromTraversable: typeof _.fromTraversable
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 # constructors
 
@@ -289,29 +420,49 @@ Added in v3.0.0
 export declare const id: <S>() => Traversal<S, S>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
-# instances
-
-## Category
+## traversal
 
 **Signature**
 
 ```ts
-export declare const Category: Category2<'monocle-ts/Traversal'>
+export declare const traversal: <S, A>(modifyF: ModifyF<S, A>) => Traversal<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.8
+
+# instances
+
+## URI
+
+**Signature**
+
+```ts
+export declare const URI: 'monocle-ts/Traversal'
+```
+
+Added in v2.3.0
 
 ## URI (type alias)
 
 **Signature**
 
 ```ts
-export type URI = 'monocle-ts/Traversal'
+export type URI = typeof URI
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## categoryTraversal
+
+**Signature**
+
+```ts
+export declare const categoryTraversal: Category2<'monocle-ts/Traversal'>
+```
+
+Added in v2.3.0
 
 # model
 
@@ -329,7 +480,7 @@ export interface ModifyF<S, A> {
 }
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## Traversal (interface)
 
@@ -341,4 +492,4 @@ export interface Traversal<S, A> {
 }
 ```
 
-Added in v3.0.0
+Added in v2.3.0

@@ -6,14 +6,20 @@ parent: Modules
 
 ## Prism overview
 
+**This module is experimental**
+
+Experimental features are published in order to get early feedback from the community.
+
+A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
+
 A `Prism` is an optic used to select part of a sum type.
 
 Laws:
 
-1. `pipe(getOption(s), match(() => s, reverseGet)) = s`
+1. `pipe(getOption(s), fold(() => s, reverseGet)) = s`
 2. `getOption(reverseGet(a)) = some(a)`
 
-Added in v3.0.0
+Added in v2.3.0
 
 ---
 
@@ -26,8 +32,10 @@ Added in v3.0.0
   - [component](#component)
   - [filter](#filter)
   - [findFirst](#findfirst)
+  - [findFirstNonEmpty](#findfirstnonempty)
   - [fromNullable](#fromnullable)
   - [index](#index)
+  - [indexNonEmpty](#indexnonempty)
   - [key](#key)
   - [left](#left)
   - [modify](#modify)
@@ -41,18 +49,23 @@ Added in v3.0.0
   - [traverse](#traverse)
 - [compositions](#compositions)
   - [compose](#compose)
+  - [composeIso](#composeiso)
   - [composeLens](#composelens)
   - [composeOptional](#composeoptional)
+  - [composePrism](#composeprism)
+  - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
   - [fromPredicate](#frompredicate)
   - [id](#id)
+  - [prism](#prism)
 - [converters](#converters)
   - [asOptional](#asoptional)
   - [asTraversal](#astraversal)
 - [instances](#instances)
-  - [Category](#category)
-  - [Invariant](#invariant-1)
+  - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
+  - [categoryPrism](#categoryprism)
+  - [invariantPrism](#invariantprism)
 - [model](#model)
   - [Prism (interface)](#prism-interface)
 
@@ -68,13 +81,13 @@ Added in v3.0.0
 export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Prism<E, A>) => Prism<E, B>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 # combinators
 
 ## atKey
 
-Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a required key.
+Return a `Optional` from a `Prism` focused on a required key of a `ReadonlyRecord`.
 
 **Signature**
 
@@ -84,11 +97,11 @@ export declare const atKey: (
 ) => <S, A>(sa: Prism<S, Readonly<Record<string, A>>>) => Optional<S, O.Option<A>>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## component
 
-Return a `Optional` from a `Prism` and a component.
+Return a `Optional` from a `Prism` focused on a component of a tuple.
 
 **Signature**
 
@@ -98,7 +111,7 @@ export declare const component: <A extends readonly unknown[], P extends keyof A
 ) => <S>(sa: Prism<S, A>) => Optional<S, A[P]>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## filter
 
@@ -109,7 +122,7 @@ export declare function filter<A, B extends A>(refinement: Refinement<A, B>): <S
 export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Prism<S, A>) => Prism<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## findFirst
 
@@ -122,7 +135,22 @@ export declare function findFirst<A, B extends A>(
 export declare function findFirst<A>(predicate: Predicate<A>): <S>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.2
+
+## findFirstNonEmpty
+
+**Signature**
+
+```ts
+export declare function findFirstNonEmpty<A, B extends A>(
+  refinement: Refinement<A, B>
+): <S>(sa: Prism<S, ReadonlyNonEmptyArray<A>>) => Optional<S, B>
+export declare function findFirstNonEmpty<A>(
+  predicate: Predicate<A>
+): <S>(sa: Prism<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
+```
+
+Added in v2.3.8
 
 ## fromNullable
 
@@ -134,11 +162,11 @@ Return a `Prism` from a `Prism` focused on a nullable value.
 export declare const fromNullable: <S, A>(sa: Prism<S, A>) => Prism<S, NonNullable<A>>
 ```
 
-Added in v3.0.0
+Added in v2.3.3
 
 ## index
 
-Return a `Optional` from a `Prism` focused on a `ReadonlyArray`.
+Return a `Optional` from a `Prism` focused on an index of a `ReadonlyArray`.
 
 **Signature**
 
@@ -146,11 +174,23 @@ Return a `Optional` from a `Prism` focused on a `ReadonlyArray`.
 export declare const index: (i: number) => <S, A>(sa: Prism<S, readonly A[]>) => Optional<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## indexNonEmpty
+
+Return a `Optional` from a `Prism` focused on an index of a `ReadonlyNonEmptyArray`.
+
+**Signature**
+
+```ts
+export declare const indexNonEmpty: (i: number) => <S, A>(sa: Prism<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
+```
+
+Added in v2.3.8
 
 ## key
 
-Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key.
+Return a `Optional` from a `Prism` focused on a key of a `ReadonlyRecord`.
 
 **Signature**
 
@@ -158,7 +198,7 @@ Return a `Optional` from a `Prism` focused on a `ReadonlyRecord` and a key.
 export declare const key: (key: string) => <S, A>(sa: Prism<S, Readonly<Record<string, A>>>) => Optional<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## left
 
@@ -170,7 +210,7 @@ Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type.
 export declare const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## modify
 
@@ -180,7 +220,7 @@ Added in v3.0.0
 export declare const modify: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => S
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## modifyF
 
@@ -201,7 +241,7 @@ export declare function modifyF<F>(
 ): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Prism<S, A>) => (s: S) => HKT<F, S>
 ```
 
-Added in v3.0.0
+Added in v2.3.5
 
 ## modifyOption
 
@@ -211,7 +251,7 @@ Added in v3.0.0
 export declare const modifyOption: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => O.Option<S>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## prop
 
@@ -223,7 +263,7 @@ Return a `Optional` from a `Prism` and a prop.
 export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Prism<S, A>) => Optional<S, A[P]>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## props
 
@@ -239,7 +279,7 @@ export declare const props: <A, P extends keyof A>(
 ) => <S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## right
 
@@ -251,7 +291,7 @@ Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type.
 export declare const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## set
 
@@ -261,7 +301,7 @@ Added in v3.0.0
 export declare const set: <A>(a: A) => <S>(sa: Prism<S, A>) => (s: S) => S
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## some
 
@@ -273,7 +313,7 @@ Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type.
 export declare const some: <S, A>(soa: Prism<S, O.Option<A>>) => Prism<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## traverse
 
@@ -287,7 +327,7 @@ export declare function traverse<T extends URIS>(
 ): <S, A>(sta: Prism<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 # compositions
 
@@ -301,7 +341,19 @@ Compose a `Prism` with a `Prism`.
 export declare const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## composeIso
+
+Compose a `Prism` with a `Iso`.
+
+**Signature**
+
+```ts
+export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
+```
+
+Added in v2.3.8
 
 ## composeLens
 
@@ -313,7 +365,7 @@ Compose a `Prism` with a `Lens`.
 export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## composeOptional
 
@@ -325,7 +377,31 @@ Compose a `Prism` with an `Optional`.
 export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## composePrism
+
+Alias of `compose`.
+
+**Signature**
+
+```ts
+export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B>
+```
+
+Added in v2.3.8
+
+## composeTraversal
+
+Compose a `Prism` with an `Traversal`.
+
+**Signature**
+
+```ts
+export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Prism<S, A>) => Traversal<S, B>
+```
+
+Added in v2.3.8
 
 # constructors
 
@@ -340,7 +416,7 @@ export declare const fromPredicate: {
 }
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## id
 
@@ -350,7 +426,17 @@ Added in v3.0.0
 export declare const id: <S>() => Prism<S, S>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## prism
+
+**Signature**
+
+```ts
+export declare const prism: <S, A>(getOption: (s: S) => O.Option<A>, reverseGet: (a: A) => S) => Prism<S, A>
+```
+
+Added in v2.3.8
 
 # converters
 
@@ -364,7 +450,7 @@ View a `Prism` as a `Optional`.
 export declare const asOptional: <S, A>(sa: Prism<S, A>) => Optional<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 ## asTraversal
 
@@ -376,39 +462,49 @@ View a `Prism` as a `Traversal`.
 export declare const asTraversal: <S, A>(sa: Prism<S, A>) => Traversal<S, A>
 ```
 
-Added in v3.0.0
+Added in v2.3.0
 
 # instances
 
-## Category
+## URI
 
 **Signature**
 
 ```ts
-export declare const Category: Category2<'monocle-ts/Prism'>
+export declare const URI: 'monocle-ts/Prism'
 ```
 
-Added in v3.0.0
-
-## Invariant
-
-**Signature**
-
-```ts
-export declare const Invariant: Invariant2<'monocle-ts/Prism'>
-```
-
-Added in v3.0.0
+Added in v2.3.0
 
 ## URI (type alias)
 
 **Signature**
 
 ```ts
-export type URI = 'monocle-ts/Prism'
+export type URI = typeof URI
 ```
 
-Added in v3.0.0
+Added in v2.3.0
+
+## categoryPrism
+
+**Signature**
+
+```ts
+export declare const categoryPrism: Category2<'monocle-ts/Prism'>
+```
+
+Added in v2.3.0
+
+## invariantPrism
+
+**Signature**
+
+```ts
+export declare const invariantPrism: Invariant2<'monocle-ts/Prism'>
+```
+
+Added in v2.3.0
 
 # model
 
@@ -423,4 +519,4 @@ export interface Prism<S, A> {
 }
 ```
 
-Added in v3.0.0
+Added in v2.3.0
