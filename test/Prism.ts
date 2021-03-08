@@ -117,7 +117,7 @@ describe('Prism', () => {
   })
 
   it('component', () => {
-    type S = O.Option<[string, number]>
+    type S = O.Option<readonly [string, number]>
     const sa = pipe(_.id<S>(), _.some, _.component(1))
     U.deepStrictEqual(sa.getOption(O.none), O.none)
     U.deepStrictEqual(sa.getOption(O.some(['a', 1])), O.some(1))

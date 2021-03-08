@@ -116,22 +116,22 @@ describe('Iso', () => {
 
   it('fromNullable', () => {
     type S = { readonly a: number } | null
-    type A = [number] | null
+    type A = readonly [number] | null
     const sa: _.Iso<S, A> = _.iso(
-      (s) => (s === null ? null : [s.a]),
+      (s) => (s === null ? null : ([s.a] as const)),
       (a) => (a === null ? null : { a: a[0] })
     )
     const prism = _.fromNullable(sa)
     U.deepStrictEqual(prism.getOption(null), O.none)
-    U.deepStrictEqual(prism.getOption({ a: 1 }), O.some([1]))
+    U.deepStrictEqual(prism.getOption({ a: 1 }), O.some([1] as const))
     U.deepStrictEqual(prism.reverseGet([1]), { a: 1 })
   })
 
   it('filter', () => {
     type S = { readonly a: number }
-    type A = [number]
+    type A = readonly [number]
     const sa: _.Iso<S, A> = _.iso(
-      (s) => [s.a],
+      (s) => [s.a] as const,
       (a) => ({ a: a[0] })
     )
     const prism = pipe(
@@ -139,13 +139,13 @@ describe('Iso', () => {
       _.filter((a) => a[0] > 0)
     )
     U.deepStrictEqual(prism.getOption({ a: -1 }), O.none)
-    U.deepStrictEqual(prism.getOption({ a: 1 }), O.some([1]))
+    U.deepStrictEqual(prism.getOption({ a: 1 }), O.some([1] as const))
     U.deepStrictEqual(prism.reverseGet([1]), { a: 1 })
     U.deepStrictEqual(prism.reverseGet([-1]), { a: -1 })
   })
 
   it('prop', () => {
-    type S = [number]
+    type S = readonly [number]
     type A = { readonly a: number }
     const sa: _.Iso<S, A> = _.iso(
       (s) => ({ a: s[0] }),
@@ -157,7 +157,7 @@ describe('Iso', () => {
   })
 
   it('props', () => {
-    type S = [number, string]
+    type S = readonly [number, string]
     type A = { readonly a: number; readonly b: string }
     const sa: _.Iso<S, A> = _.iso(
       (s) => ({ a: s[0], b: s[1] }),
@@ -170,9 +170,9 @@ describe('Iso', () => {
 
   it('component', () => {
     type S = { readonly a: number; readonly b: string }
-    type A = [number, string]
+    type A = readonly [number, string]
     const sa: _.Iso<S, A> = _.iso(
-      (s) => [s.a, s.b],
+      (s) => [s.a, s.b] as const,
       (a) => ({ a: a[0], b: a[1] })
     )
     const lens = pipe(sa, _.component(1))
