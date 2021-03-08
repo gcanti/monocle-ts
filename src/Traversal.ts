@@ -11,7 +11,7 @@
  * The most common example of a `Traversal` would be to focus into all elements inside of a container (e.g.
  * `ReadonlyArray`, `Option`). To do this we will use the relation between the typeclass `Traversable` and `Traversal`.
  *
- * @since 2.3.0
+ * @since 3.0.0
  */
 import { Applicative, Applicative1, Applicative2, Applicative2C, Applicative3 } from 'fp-ts/Applicative'
 import { Category2 } from 'fp-ts/Category'
@@ -38,7 +38,7 @@ import { Prism } from './Prism'
 
 /**
  * @category model
- * @since 2.3.0
+ * @since 3.0.0
  */
 export interface ModifyF<S, A> {
   <F extends URIS3>(F: Applicative3<F>): <R, E>(f: (a: A) => Kind3<F, R, E, A>) => (s: S) => Kind3<F, R, E, S>
@@ -50,7 +50,7 @@ export interface ModifyF<S, A> {
 
 /**
  * @category model
- * @since 2.3.0
+ * @since 3.0.0
  */
 export interface Traversal<S, A> {
   readonly modifyF: ModifyF<S, A>
@@ -62,13 +62,13 @@ export interface Traversal<S, A> {
 
 /**
  * @category constructors
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const traversal: <S, A>(modifyF: Traversal<S, A>['modifyF']) => Traversal<S, A> = _.traversal
 
 /**
  * @category constructors
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const id = <S>(): Traversal<S, S> => traversal(<F>(_: Applicative<F>) => (f: (s: S) => HKT<F, S>) => f)
 
@@ -76,7 +76,7 @@ export const id = <S>(): Traversal<S, S> => traversal(<F>(_: Applicative<F>) => 
  * Create a `Traversal` from a `Traversable`.
  *
  * @category constructor
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const fromTraversable = _.fromTraversable
 
@@ -88,7 +88,7 @@ export const fromTraversable = _.fromTraversable
  * Compose a `Traversal` with a `Traversal`.
  *
  * @category compositions
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
   _.traversalComposeTraversal
@@ -97,7 +97,7 @@ export const compose: <A, B>(ab: Traversal<A, B>) => <S>(sa: Traversal<S, A>) =>
  * Alias of `compose`.
  *
  * @category compositions
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const composeTraversal = compose
 
@@ -105,7 +105,7 @@ export const composeTraversal = compose
  * Compose a `Traversal` with a `Iso`.
  *
  * @category compositions
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
   /*#__PURE__*/
@@ -115,7 +115,7 @@ export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Traversal<S, A>) => Tr
  * Compose a `Traversal` with a `Lens`.
  *
  * @category compositions
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
   /*#__PURE__*/
@@ -125,7 +125,7 @@ export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Traversal<S, A>) => 
  * Compose a `Traversal` with a `Prism`.
  *
  * @category compositions
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
   /*#__PURE__*/
@@ -135,7 +135,7 @@ export const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Traversal<S, A>) =
  * Compose a `Traversal` with a `Optional`.
  *
  * @category compositions
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S, A>) => Traversal<S, B> =
   /*#__PURE__*/
@@ -147,7 +147,7 @@ export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S,
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const modify = <A>(f: (a: A) => A) => <S>(sa: Traversal<S, A>): ((s: S) => S) => {
   return sa.modifyF(I.Applicative)(f)
@@ -155,7 +155,7 @@ export const modify = <A>(f: (a: A) => A) => <S>(sa: Traversal<S, A>): ((s: S) =
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const set = <A>(a: A): (<S>(sa: Traversal<S, A>) => (s: S) => S) => {
   return modify(() => a)
@@ -165,14 +165,14 @@ export const set = <A>(a: A): (<S>(sa: Traversal<S, A>) => (s: S) => S) => {
  * Return a `Traversal` from a `Traversal` focused on a nullable value.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const fromNullable = <S, A>(sa: Traversal<S, A>): Traversal<S, NonNullable<A>> =>
   composePrism(_.prismFromNullable<A>())(sa)
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B>
 export function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, A>) => Traversal<S, A>
@@ -184,7 +184,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, A>) => 
  * Return a `Traversal` from a `Traversal` and a prop.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Traversal<S, A>) => Traversal<S, A[P]>) =>
   compose(pipe(_.lensId<A>(), _.lensProp(prop), _.lensAsTraversal))
@@ -193,7 +193,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Traversal<S, A>) =
  * Return a `Traversal` from a `Traversal` and a list of props.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const props = <A, P extends keyof A>(
   ...props: readonly [P, P, ...ReadonlyArray<P>]
@@ -204,7 +204,7 @@ export const props = <A, P extends keyof A>(
  * Return a `Traversal` from a `Traversal` focused on a component of a tuple.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
   prop: P
@@ -215,7 +215,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * Return a `Traversal` from a `Traversal` focused on an index of a `ReadonlyArray`.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): Traversal<S, A> =>
   pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyArray<A>().index(i))))
@@ -224,7 +224,7 @@ export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): 
  * Alias of `index`.
  *
  * @category combinators
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const indexNonEmpty: (i: number) => <S, A>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A> = index
 
@@ -232,7 +232,7 @@ export const indexNonEmpty: (i: number) => <S, A>(sa: Traversal<S, ReadonlyNonEm
  * Return a `Traversal` from a `Traversal` focused on a key of a `ReadonlyRecord`.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const key = (key: string) => <S, A>(sa: Traversal<S, ReadonlyRecord<string, A>>): Traversal<S, A> =>
   pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyRecord<A>().index(key))))
@@ -241,7 +241,7 @@ export const key = (key: string) => <S, A>(sa: Traversal<S, ReadonlyRecord<strin
  * Return a `Traversal` from a `Traversal` focused on a required key of a `ReadonlyRecord`.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const atKey = (key: string) => <S, A>(sa: Traversal<S, ReadonlyRecord<string, A>>): Traversal<S, Option<A>> =>
   pipe(sa, compose(_.lensAsTraversal(_.atReadonlyRecord<A>().at(key))))
@@ -250,7 +250,7 @@ export const atKey = (key: string) => <S, A>(sa: Traversal<S, ReadonlyRecord<str
  * Return a `Traversal` from a `Traversal` focused on the `Some` of a `Option` type.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> =
   /*#__PURE__*/
@@ -260,7 +260,7 @@ export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> =
  * Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A> =
   /*#__PURE__*/
@@ -270,7 +270,7 @@ export const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A
  * Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E> =
   /*#__PURE__*/
@@ -280,13 +280,13 @@ export const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E>
  * Return a `Traversal` from a `Traversal` focused on a `Traversable`.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const traverse = _.traversalTraverse
 
 /**
  * @category combinators
- * @since 2.3.8
+ * @since 3.0.0
  */
 export function findFirst<A, B extends A>(
   refinement: Refinement<A, B>
@@ -300,7 +300,7 @@ export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, Read
  * Alias of `findFirst`.
  *
  * @category combinators
- * @since 2.3.8
+ * @since 3.0.0
  */
 export function findFirstNonEmpty<A, B extends A>(
   refinement: Refinement<A, B>
@@ -318,7 +318,7 @@ export function findFirstNonEmpty<A>(
  * Map each target to a `Monoid` and combine the results.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const foldMap = <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => <S>(sa: Traversal<S, A>): ((s: S) => M) =>
   sa.modifyF(C.getApplicative(M))((a) => C.make(f(a)))
@@ -327,7 +327,7 @@ export const foldMap = <M>(M: Monoid<M>) => <A>(f: (a: A) => M) => <S>(sa: Trave
  * Map each target to a `Monoid` and combine the results.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const fold = <A>(M: Monoid<A>): (<S>(sa: Traversal<S, A>) => (s: S) => A) => foldMap(M)(identity)
 
@@ -335,7 +335,7 @@ export const fold = <A>(M: Monoid<A>): (<S>(sa: Traversal<S, A>) => (s: S) => A)
  * Get all the targets of a `Traversal`.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const getAll = <S>(s: S) => <A>(sa: Traversal<S, A>): ReadonlyArray<A> =>
   foldMap(A.getMonoid<A>())((a: A) => [a])(sa)(s)
@@ -366,7 +366,7 @@ export const Semigroupoid: Semigroupoid2<URI> = {
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const Category: Category2<URI> = {
   compose,

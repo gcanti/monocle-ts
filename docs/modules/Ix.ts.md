@@ -12,7 +12,7 @@ Experimental features are published in order to get early feedback from the comm
 
 A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
 
-Added in v2.3.0
+Added in v3.0.0
 
 ---
 
@@ -41,7 +41,7 @@ Added in v2.3.0
 export declare const fromAt: <T, J, B>(at: At<T, J, O.Option<B>>) => Index<T, J, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## fromIso
 
@@ -53,7 +53,7 @@ Lift an instance of `Index` using an `Iso`.
 export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: Index<S, I, A>) => Index<T, I, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## index
 
@@ -63,7 +63,7 @@ Added in v2.3.0
 export declare const index: <S, I, A>(index: (i: I) => Optional<S, A>) => Index<S, I, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## indexReadonlyArray
 
@@ -73,7 +73,7 @@ Added in v2.3.8
 export declare const indexReadonlyArray: <A = never>() => Index<readonly A[], number, A>
 ```
 
-Added in v2.3.7
+Added in v3.0.0
 
 ## indexReadonlyMap
 
@@ -83,7 +83,7 @@ Added in v2.3.7
 export declare const indexReadonlyMap: <K>(E: Eq<K>) => <A = never>() => Index<ReadonlyMap<K, A>, K, A>
 ```
 
-Added in v2.3.7
+Added in v3.0.0
 
 ## indexReadonlyNonEmptyArray
 
@@ -93,7 +93,7 @@ Added in v2.3.7
 export declare const indexReadonlyNonEmptyArray: <A = never>() => Index<ReadonlyNonEmptyArray<A>, number, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## indexReadonlyRecord
 
@@ -103,7 +103,7 @@ Added in v2.3.8
 export declare const indexReadonlyRecord: <A = never>() => Index<Readonly<Record<string, A>>, string, A>
 ```
 
-Added in v2.3.7
+Added in v3.0.0
 
 # model
 
@@ -117,4 +117,4 @@ export interface Index<S, I, A> {
 }
 ```
 
-Added in v2.3.0
+Added in v3.0.0

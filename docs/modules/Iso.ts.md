@@ -19,7 +19,7 @@ Laws:
 1. `reverseGet(get(s)) = s`
 2. `get(reversetGet(a)) = a`
 
-Added in v2.3.0
+Added in v3.0.0
 
 ---
 
@@ -81,7 +81,7 @@ Added in v2.3.0
 export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Iso<E, A>) => Iso<E, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # combinators
 
@@ -95,7 +95,7 @@ Return a `Lens` from a `Iso` focused on a required key of a `ReadonlyRecord`.
 export declare const atKey: (key: string) => <S, A>(sa: Iso<S, Readonly<Record<string, A>>>) => Lens<S, Option<A>>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## component
 
@@ -109,7 +109,7 @@ export declare const component: <A extends readonly unknown[], P extends keyof A
 ) => <S>(sa: Iso<S, A>) => Lens<S, A[P]>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## filter
 
@@ -120,7 +120,7 @@ export declare function filter<A, B extends A>(refinement: Refinement<A, B>): <S
 export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Iso<S, A>) => Prism<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## findFirst
 
@@ -133,7 +133,7 @@ export declare function findFirst<A, B extends A>(
 export declare function findFirst<A>(predicate: Predicate<A>): <S>(sa: Iso<S, ReadonlyArray<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## findFirstNonEmpty
 
@@ -148,7 +148,7 @@ export declare function findFirstNonEmpty<A>(
 ): <S>(sa: Iso<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## fromNullable
 
@@ -160,7 +160,7 @@ Return a `Prism` from a `Iso` focused on a nullable value.
 export declare const fromNullable: <S, A>(sa: Iso<S, A>) => Prism<S, NonNullable<A>>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## index
 
@@ -172,7 +172,7 @@ Return a `Optional` from a `Iso` focused on an index of a `ReadonlyArray`.
 export declare const index: (i: number) => <S, A>(sa: Iso<S, readonly A[]>) => Optional<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## indexNonEmpty
 
@@ -184,7 +184,7 @@ Return a `Optional` from a `Iso` focused on an index of a `ReadonlyNonEmptyArray
 export declare const indexNonEmpty: (i: number) => <S, A>(sa: Iso<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## key
 
@@ -196,7 +196,7 @@ Return a `Optional` from a `Iso` focused on a key of a `ReadonlyRecord`.
 export declare const key: (key: string) => <S, A>(sa: Iso<S, Readonly<Record<string, A>>>) => Optional<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## left
 
@@ -208,7 +208,7 @@ Return a `Prism` from a `Iso` focused on the `Left` of a `Either` type.
 export declare const left: <S, E, A>(sea: Iso<S, Either<E, A>>) => Prism<S, E>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## modify
 
@@ -218,7 +218,7 @@ Added in v2.3.8
 export declare const modify: <A>(f: (a: A) => A) => <S>(sa: Iso<S, A>) => (s: S) => S
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## modifyF
 
@@ -239,7 +239,7 @@ export declare function modifyF<F>(
 ): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Iso<S, A>) => (s: S) => HKT<F, S>
 ```
 
-Added in v2.3.5
+Added in v3.0.0
 
 ## prop
 
@@ -251,7 +251,7 @@ Return a `Lens` from a `Iso` and a prop.
 export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Iso<S, A>) => Lens<S, A[P]>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## props
 
@@ -267,7 +267,7 @@ export declare const props: <A, P extends keyof A>(
 ) => <S>(sa: Iso<S, A>) => Lens<S, { [K in P]: A[K] }>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## right
 
@@ -279,7 +279,7 @@ Return a `Prism` from a `Iso` focused on the `Right` of a `Either` type.
 export declare const right: <S, E, A>(sea: Iso<S, Either<E, A>>) => Prism<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## some
 
@@ -291,7 +291,7 @@ Return a `Prism` from a `Iso` focused on the `Some` of a `Option` type.
 export declare const some: <S, A>(soa: Iso<S, Option<A>>) => Prism<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## traverse
 
@@ -303,7 +303,7 @@ Return a `Traversal` from a `Iso` focused on a `Traversable`.
 export declare function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Iso<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 # compositions
 
@@ -317,7 +317,7 @@ Compose an `Iso` with an `Iso`.
 export declare const compose: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## composeIso
 
@@ -329,7 +329,7 @@ Alias of `compose`.
 export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Iso<S, A>) => Iso<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## composeLens
 
@@ -341,7 +341,7 @@ Compose an `Iso` with a `Lens`.
 export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Iso<S, A>) => Lens<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## composeOptional
 
@@ -353,7 +353,7 @@ Compose an `Iso` with a `Optional`.
 export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Iso<S, A>) => Optional<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## composePrism
 
@@ -365,7 +365,7 @@ Compose an `Iso` with a `Prism`.
 export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Iso<S, A>) => Prism<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## composeTraversal
 
@@ -377,7 +377,7 @@ Compose an `Iso` with a `Traversal`.
 export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Iso<S, A>) => Traversal<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 # constructors
 
@@ -389,7 +389,7 @@ Added in v2.3.8
 export declare const id: <S>() => Iso<S, S>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## iso
 
@@ -399,7 +399,7 @@ Added in v2.3.0
 export declare const iso: <S, A>(get: (s: S) => A, reverseGet: (a: A) => S) => Iso<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## reverse
 
@@ -409,7 +409,7 @@ Added in v2.3.8
 export declare const reverse: <S, A>(sa: Iso<S, A>) => Iso<A, S>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # converters
 
@@ -423,7 +423,7 @@ View an `Iso` as a `Lens`.
 export declare const asLens: <S, A>(sa: Iso<S, A>) => Lens<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## asOptional
 
@@ -435,7 +435,7 @@ View an `Iso` as a `Optional`.
 export declare const asOptional: <S, A>(sa: Iso<S, A>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## asPrism
 
@@ -447,7 +447,7 @@ View an `Iso` as a `Prism`.
 export declare const asPrism: <S, A>(sa: Iso<S, A>) => Prism<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## asTraversal
 
@@ -459,7 +459,7 @@ View an `Iso` as a `Traversal`.
 export declare const asTraversal: <S, A>(sa: Iso<S, A>) => Traversal<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # instances
 
@@ -471,7 +471,7 @@ Added in v2.3.0
 export declare const Category: Category2<'monocle-ts/Iso'>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## Invariant
 
@@ -481,7 +481,7 @@ Added in v2.3.0
 export declare const Invariant: Invariant2<'monocle-ts/Iso'>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## Semigroupoid
 
@@ -516,4 +516,4 @@ export interface Iso<S, A> {
 }
 ```
 
-Added in v2.3.0
+Added in v3.0.0

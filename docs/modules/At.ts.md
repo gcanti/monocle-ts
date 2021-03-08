@@ -6,7 +6,7 @@ parent: Modules
 
 ## At overview
 
-Added in v2.3.0
+Added in v3.0.0
 
 ---
 
@@ -33,7 +33,7 @@ Added in v2.3.0
 export declare const at: <S, I, A>(at: (i: I) => Lens<S, A>) => At<S, I, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## atReadonlyMap
 
@@ -43,7 +43,7 @@ Added in v2.3.8
 export declare const atReadonlyMap: <K>(E: Eq<K>) => <A = never>() => At<ReadonlyMap<K, A>, K, O.Option<A>>
 ```
 
-Added in v2.3.7
+Added in v3.0.0
 
 ## atReadonlyRecord
 
@@ -53,7 +53,7 @@ Added in v2.3.7
 export declare const atReadonlyRecord: <A = never>() => At<Readonly<Record<string, A>>, string, O.Option<A>>
 ```
 
-Added in v2.3.7
+Added in v3.0.0
 
 ## atReadonlySet
 
@@ -63,7 +63,7 @@ Added in v2.3.7
 export declare const atReadonlySet: <A>(E: Eq<A>) => At<ReadonlySet<A>, A, boolean>
 ```
 
-Added in v2.3.7
+Added in v3.0.0
 
 ## fromIso
 
@@ -75,7 +75,7 @@ Lift an instance of `At` using an `Iso`.
 export declare const fromIso: <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>) => At<T, I, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # model
 
@@ -89,4 +89,4 @@ export interface At<S, I, A> {
 }
 ```
 
-Added in v2.3.0
+Added in v3.0.0

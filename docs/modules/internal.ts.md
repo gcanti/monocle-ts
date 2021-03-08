@@ -12,7 +12,7 @@ Experimental features are published in order to get early feedback from the comm
 
 A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
 
-Added in v2.3.0
+Added in v3.0.0
 
 ---
 

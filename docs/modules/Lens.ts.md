@@ -23,7 +23,7 @@ Laws:
 2. `set(get(s))(s) = s`
 3. `set(a)(set(a)(s)) = set(a)(s)`
 
-Added in v2.3.0
+Added in v3.0.0
 
 ---
 
@@ -82,7 +82,7 @@ Added in v2.3.0
 export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Lens<E, A>) => Lens<E, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # combinators
 
@@ -96,7 +96,7 @@ Return a `Lens` from a `Lens` focused on a required key of a `ReadonlyRecord`.
 export declare const atKey: (key: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A>>>) => Lens<S, Option<A>>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## component
 
@@ -110,7 +110,7 @@ export declare const component: <A extends readonly unknown[], P extends keyof A
 ) => <S>(sa: Lens<S, A>) => Lens<S, A[P]>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## filter
 
@@ -121,7 +121,7 @@ export declare function filter<A, B extends A>(refinement: Refinement<A, B>): <S
 export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Lens<S, A>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## findFirst
 
@@ -134,7 +134,7 @@ export declare function findFirst<A, B extends A>(
 export declare function findFirst<A>(predicate: Predicate<A>): <S>(sa: Lens<S, ReadonlyArray<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.2
+Added in v3.0.0
 
 ## findFirstNonEmpty
 
@@ -149,7 +149,7 @@ export declare function findFirstNonEmpty<A>(
 ): <S>(sa: Lens<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## fromNullable
 
@@ -161,7 +161,7 @@ Return a `Optional` from a `Lens` focused on a nullable value.
 export declare const fromNullable: <S, A>(sa: Lens<S, A>) => Optional<S, NonNullable<A>>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## index
 
@@ -173,7 +173,7 @@ Return a `Optional` from a `Lens` focused on an index of a `ReadonlyArray`.
 export declare const index: (i: number) => <S, A>(sa: Lens<S, readonly A[]>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## indexNonEmpty
 
@@ -185,7 +185,7 @@ Return a `Optional` from a `Lens` focused on an index of a `ReadonlyNonEmptyArra
 export declare const indexNonEmpty: (i: number) => <S, A>(sa: Lens<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## key
 
@@ -197,7 +197,7 @@ Return a `Optional` from a `Lens` focused on a key of a `ReadonlyRecord`.
 export declare const key: (key: string) => <S, A>(sa: Lens<S, Readonly<Record<string, A>>>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## left
 
@@ -209,7 +209,7 @@ Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type.
 export declare const left: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, E>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## modify
 
@@ -219,7 +219,7 @@ Added in v2.3.0
 export declare const modify: <A>(f: (a: A) => A) => <S>(sa: Lens<S, A>) => (s: S) => S
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## modifyF
 
@@ -240,7 +240,7 @@ export declare function modifyF<F>(
 ): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Lens<S, A>) => (s: S) => HKT<F, S>
 ```
 
-Added in v2.3.5
+Added in v3.0.0
 
 ## prop
 
@@ -252,7 +252,7 @@ Return a `Lens` from a `Lens` and a prop.
 export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Lens<S, A>) => Lens<S, A[P]>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## props
 
@@ -268,7 +268,7 @@ export declare const props: <A, P extends keyof A>(
 ) => <S>(sa: Lens<S, A>) => Lens<S, { [K in P]: A[K] }>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## right
 
@@ -280,7 +280,7 @@ Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type.
 export declare const right: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## some
 
@@ -292,7 +292,7 @@ Return a `Optional` from a `Lens` focused on the `Some` of a `Option` type.
 export declare const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## traverse
 
@@ -306,7 +306,7 @@ export declare function traverse<T extends URIS>(
 ): <S, A>(sta: Lens<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # compositions
 
@@ -320,7 +320,7 @@ Compose a `Lens` with a `Lens`.
 export declare const compose: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## composeIso
 
@@ -332,7 +332,7 @@ Compose a `Lens` with a `Iso`.
 export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## composeLens
 
@@ -344,7 +344,7 @@ Alias of `compose`.
 export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Lens<S, A>) => Lens<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## composeOptional
 
@@ -356,7 +356,7 @@ Compose a `Lens` with an `Optional`.
 export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Lens<S, A>) => Optional<S, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## composePrism
 
@@ -368,7 +368,7 @@ Compose a `Lens` with a `Prism`.
 export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Lens<S, A>) => Optional<S, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## composeTraversal
 
@@ -380,7 +380,7 @@ Compose a `Lens` with an `Traversal`.
 export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Lens<S, A>) => Traversal<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 # constructors
 
@@ -392,7 +392,7 @@ Added in v2.3.8
 export declare const id: <S>() => Lens<S, S>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## lens
 
@@ -402,7 +402,7 @@ Added in v2.3.0
 export declare const lens: <S, A>(get: (s: S) => A, set: (a: A) => (s: S) => S) => Lens<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 # converters
 
@@ -416,7 +416,7 @@ View a `Lens` as a `Optional`.
 export declare const asOptional: <S, A>(sa: Lens<S, A>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## asTraversal
 
@@ -428,7 +428,7 @@ View a `Lens` as a `Traversal`.
 export declare const asTraversal: <S, A>(sa: Lens<S, A>) => Traversal<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # instances
 
@@ -440,7 +440,7 @@ Added in v2.3.0
 export declare const Category: Category2<'monocle-ts/Lens'>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## Invariant
 
@@ -450,7 +450,7 @@ Added in v2.3.0
 export declare const Invariant: Invariant2<'monocle-ts/Lens'>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## Semigroupoid
 
@@ -485,4 +485,4 @@ export interface Lens<S, A> {
 }
 ```
 
-Added in v2.3.0
+Added in v3.0.0

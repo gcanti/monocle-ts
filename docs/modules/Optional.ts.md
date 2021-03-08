@@ -24,7 +24,7 @@ Laws:
 2. `getOption(replace(a)(s)) = pipe(getOption(s), map(_ => a))`
 3. `replace(a)(replace(a)(s)) = replace(a)(s)`
 
-Added in v2.3.0
+Added in v3.0.0
 
 ---
 
@@ -84,7 +84,7 @@ Added in v2.3.0
 export declare const imap: <A, B>(f: (a: A) => B, g: (b: B) => A) => <E>(fa: Optional<E, A>) => Optional<E, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # combinators
 
@@ -100,7 +100,7 @@ export declare const atKey: (
 ) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>) => Optional<S, O.Option<A>>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## component
 
@@ -114,7 +114,7 @@ export declare const component: <A extends readonly unknown[], P extends keyof A
 ) => <S>(sa: Optional<S, A>) => Optional<S, A[P]>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## filter
 
@@ -125,7 +125,7 @@ export declare function filter<A, B extends A>(refinement: Refinement<A, B>): <S
 export declare function filter<A>(predicate: Predicate<A>): <S>(sa: Optional<S, A>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## findFirst
 
@@ -138,7 +138,7 @@ export declare function findFirst<A, B extends A>(
 export declare function findFirst<A>(predicate: Predicate<A>): <S>(sa: Optional<S, ReadonlyArray<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.2
+Added in v3.0.0
 
 ## findFirstNonEmpty
 
@@ -153,7 +153,7 @@ export declare function findFirstNonEmpty<A>(
 ): <S>(sa: Optional<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## fromNullable
 
@@ -165,7 +165,7 @@ Return an `Optional` from a `Optional` focused on a nullable value.
 export declare const fromNullable: <S, A>(sa: Optional<S, A>) => Optional<S, NonNullable<A>>
 ```
 
-Added in v2.3.3
+Added in v3.0.0
 
 ## index
 
@@ -177,7 +177,7 @@ Return a `Optional` from a `Optional` focused on an index of a `ReadonlyArray`.
 export declare const index: (i: number) => <S, A>(sa: Optional<S, readonly A[]>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## indexNonEmpty
 
@@ -189,7 +189,7 @@ Return a `Optional` from a `Optional` focused on an index of a `ReadonlyNonEmpty
 export declare const indexNonEmpty: (i: number) => <S, A>(sa: Optional<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## key
 
@@ -201,7 +201,7 @@ Return a `Optional` from a `Optional` focused on a key of a `ReadonlyRecord`.
 export declare const key: (key: string) => <S, A>(sa: Optional<S, Readonly<Record<string, A>>>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## left
 
@@ -213,7 +213,7 @@ Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type.
 export declare const left: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, E>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## modify
 
@@ -223,7 +223,7 @@ Added in v2.3.0
 export declare const modify: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => S
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## modifyF
 
@@ -244,7 +244,7 @@ export declare function modifyF<F>(
 ): <A>(f: (a: A) => HKT<F, A>) => <S>(sa: Optional<S, A>) => (s: S) => HKT<F, S>
 ```
 
-Added in v2.3.5
+Added in v3.0.0
 
 ## modifyOption
 
@@ -254,7 +254,7 @@ Added in v2.3.5
 export declare const modifyOption: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => O.Option<S>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## prop
 
@@ -266,7 +266,7 @@ Return a `Optional` from a `Optional` and a prop.
 export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Optional<S, A>) => Optional<S, A[P]>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## props
 
@@ -282,7 +282,7 @@ export declare const props: <A, P extends keyof A>(
 ) => <S>(sa: Optional<S, A>) => Optional<S, { [K in P]: A[K] }>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## replaceOption
 
@@ -292,7 +292,7 @@ Added in v2.3.0
 export declare const replaceOption: <A>(a: A) => <S>(optional: Optional<S, A>) => (s: S) => O.Option<S>
 ```
 
-Added in v2.3.7
+Added in v3.0.0
 
 ## right
 
@@ -304,7 +304,7 @@ Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type.
 export declare const right: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## some
 
@@ -316,7 +316,7 @@ Return a `Optional` from a `Optional` focused on the `Some` of a `Option` type.
 export declare const some: <S, A>(soa: Optional<S, O.Option<A>>) => Optional<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## traverse
 
@@ -330,7 +330,7 @@ export declare function traverse<T extends URIS>(
 ): <S, A>(sta: Optional<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # compositions
 
@@ -344,7 +344,7 @@ Compose a `Optional` with a `Optional`.
 export declare const compose: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## composeIso
 
@@ -356,7 +356,7 @@ Compose a `Optional` with a `Iso`.
 export declare const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## composeLens
 
@@ -368,7 +368,7 @@ Compose a `Optional` with a `Lens`.
 export declare const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
 ```
 
-Added in v2.3.7
+Added in v3.0.0
 
 ## composeOptional
 
@@ -380,7 +380,7 @@ Alias of `compose`.
 export declare const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 ## composePrism
 
@@ -392,7 +392,7 @@ Compose a `Optional` with a `Prism`.
 export declare const composePrism: <A, B>(ab: Prism<A, B>) => <S>(sa: Optional<S, A>) => Optional<S, B>
 ```
 
-Added in v2.3.7
+Added in v3.0.0
 
 ## composeTraversal
 
@@ -404,7 +404,7 @@ Compose a `Optional` with an `Traversal`.
 export declare const composeTraversal: <A, B>(ab: Traversal<A, B>) => <S>(sa: Optional<S, A>) => Traversal<S, B>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 # constructors
 
@@ -416,7 +416,7 @@ Added in v2.3.8
 export declare const id: <S>() => Optional<S, S>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## optional
 
@@ -426,7 +426,7 @@ Added in v2.3.0
 export declare const optional: <S, A>(getOption: (s: S) => O.Option<A>, set: (a: A) => (s: S) => S) => Optional<S, A>
 ```
 
-Added in v2.3.8
+Added in v3.0.0
 
 # converters
 
@@ -440,7 +440,7 @@ View a `Optional` as a `Traversal`.
 export declare const asTraversal: <S, A>(sa: Optional<S, A>) => Traversal<S, A>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 # instances
 
@@ -452,7 +452,7 @@ Added in v2.3.0
 export declare const Category: Category2<'monocle-ts/Optional'>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## Invariant
 
@@ -462,7 +462,7 @@ Added in v2.3.0
 export declare const Invariant: Invariant2<'monocle-ts/Optional'>
 ```
 
-Added in v2.3.0
+Added in v3.0.0
 
 ## Semigroupoid
 
@@ -497,4 +497,4 @@ export interface Optional<S, A> {
 }
 ```
 
-Added in v2.3.0
+Added in v3.0.0

@@ -12,7 +12,7 @@
  * 1. `pipe(getOption(s), fold(() => s, reverseGet)) = s`
  * 2. `getOption(reverseGet(a)) = some(a)`
  *
- * @since 2.3.0
+ * @since 3.0.0
  */
 import { Applicative, Applicative1, Applicative2, Applicative3 } from 'fp-ts/Applicative'
 import { Category2 } from 'fp-ts/Category'
@@ -39,7 +39,7 @@ import Option = O.Option
 
 /**
  * @category model
- * @since 2.3.0
+ * @since 3.0.0
  */
 export interface Prism<S, A> {
   readonly getOption: (s: S) => Option<A>
@@ -52,20 +52,20 @@ export interface Prism<S, A> {
 
 /**
  * @category constructors
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const prism: <S, A>(getOption: Prism<S, A>['getOption'], reverseGet: Prism<S, A>['reverseGet']) => Prism<S, A> =
   _.prism
 
 /**
  * @category constructors
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const id = <S>(): Prism<S, S> => prism(O.some, identity)
 
 /**
  * @category constructors
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const fromPredicate: {
   <S, A extends S>(refinement: Refinement<S, A>): Prism<S, A>
@@ -80,7 +80,7 @@ export const fromPredicate: {
  * View a `Prism` as a `Optional`.
  *
  * @category converters
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const asOptional: <S, A>(sa: Prism<S, A>) => Optional<S, A> = _.prismAsOptional
 
@@ -88,7 +88,7 @@ export const asOptional: <S, A>(sa: Prism<S, A>) => Optional<S, A> = _.prismAsOp
  * View a `Prism` as a `Traversal`.
  *
  * @category converters
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const asTraversal: <S, A>(sa: Prism<S, A>) => Traversal<S, A> = _.prismAsTraversal
 
@@ -100,7 +100,7 @@ export const asTraversal: <S, A>(sa: Prism<S, A>) => Traversal<S, A> = _.prismAs
  * Compose a `Prism` with a `Prism`.
  *
  * @category compositions
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B> = _.prismComposePrism
 
@@ -108,7 +108,7 @@ export const compose: <A, B>(ab: Prism<A, B>) => <S>(sa: Prism<S, A>) => Prism<S
  * Alias of `compose`.
  *
  * @category compositions
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const composePrism = compose
 
@@ -116,7 +116,7 @@ export const composePrism = compose
  * Compose a `Prism` with a `Iso`.
  *
  * @category compositions
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Prism<S, A>) => Prism<S, B> =
   /*#__PURE__*/
@@ -126,7 +126,7 @@ export const composeIso: <A, B>(ab: Iso<A, B>) => <S>(sa: Prism<S, A>) => Prism<
  * Compose a `Prism` with a `Lens`.
  *
  * @category compositions
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>) => Optional<S, B> = _.prismComposeLens
 
@@ -134,7 +134,7 @@ export const composeLens: <A, B>(ab: Lens<A, B>) => <S>(sa: Prism<S, A>) => Opti
  * Compose a `Prism` with an `Optional`.
  *
  * @category compositions
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const composeOptional = <A, B>(ab: Optional<A, B>): (<S>(sa: Prism<S, A>) => Optional<S, B>) =>
   flow(asOptional, _.optionalComposeOptional(ab))
@@ -143,7 +143,7 @@ export const composeOptional = <A, B>(ab: Optional<A, B>): (<S>(sa: Prism<S, A>)
  * Compose a `Prism` with an `Traversal`.
  *
  * @category compositions
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const composeTraversal = <A, B>(ab: Traversal<A, B>): (<S>(sa: Prism<S, A>) => Traversal<S, B>) =>
   flow(asTraversal, _.traversalComposeTraversal(ab))
@@ -154,25 +154,25 @@ export const composeTraversal = <A, B>(ab: Traversal<A, B>): (<S>(sa: Prism<S, A
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const set: <A>(a: A) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismSet
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const modifyOption: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => Option<S> = _.prismModifyOption
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const modify: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismModify
 
 /**
  * @category combinators
- * @since 2.3.5
+ * @since 3.0.0
  */
 export function modifyF<F extends URIS3>(
   F: Applicative3<F>
@@ -203,7 +203,7 @@ export function modifyF<F>(
  * Return a `Prism` from a `Prism` focused on a nullable value.
  *
  * @category combinators
- * @since 2.3.3
+ * @since 3.0.0
  */
 export const fromNullable: <S, A>(sa: Prism<S, A>) => Prism<S, NonNullable<A>> =
   /*#__PURE__*/
@@ -211,7 +211,7 @@ export const fromNullable: <S, A>(sa: Prism<S, A>) => Prism<S, NonNullable<A>> =
 
 /**
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export function filter<A, B extends A>(refinement: Refinement<A, B>): <S>(sa: Prism<S, A>) => Prism<S, B>
 export function filter<A>(predicate: Predicate<A>): <S>(sa: Prism<S, A>) => Prism<S, A>
@@ -223,7 +223,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Prism<S, A>) => Pris
  * Return a `Optional` from a `Prism` and a prop.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Prism<S, A>) => Optional<S, A[P]>) =>
   composeLens(pipe(_.lensId<A>(), _.lensProp(prop))) // TODO: simplify?
@@ -232,7 +232,7 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Prism<S, A>) => Op
  * Return a `Optional` from a `Prism` and a list of props.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const props = <A, P extends keyof A>(
   ...props: readonly [P, P, ...ReadonlyArray<P>]
@@ -242,7 +242,7 @@ export const props = <A, P extends keyof A>(
  * Return a `Optional` from a `Prism` focused on a component of a tuple.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
   prop: P
@@ -252,7 +252,7 @@ export const component = <A extends ReadonlyArray<unknown>, P extends keyof A>(
  * Return a `Optional` from a `Prism` focused on an index of a `ReadonlyArray`.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const index = (i: number): (<S, A>(sa: Prism<S, ReadonlyArray<A>>) => Optional<S, A>) =>
   flow(asOptional, _.optionalIndex(i))
@@ -261,7 +261,7 @@ export const index = (i: number): (<S, A>(sa: Prism<S, ReadonlyArray<A>>) => Opt
  * Return a `Optional` from a `Prism` focused on an index of a `ReadonlyNonEmptyArray`.
  *
  * @category combinators
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const indexNonEmpty = (i: number): (<S, A>(sa: Prism<S, ReadonlyNonEmptyArray<A>>) => Optional<S, A>) =>
   flow(asOptional, _.optionalIndexNonEmpty(i))
@@ -270,7 +270,7 @@ export const indexNonEmpty = (i: number): (<S, A>(sa: Prism<S, ReadonlyNonEmptyA
  * Return a `Optional` from a `Prism` focused on a key of a `ReadonlyRecord`.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const key = (key: string): (<S, A>(sa: Prism<S, ReadonlyRecord<string, A>>) => Optional<S, A>) =>
   flow(asOptional, _.optionalKey(key))
@@ -279,7 +279,7 @@ export const key = (key: string): (<S, A>(sa: Prism<S, ReadonlyRecord<string, A>
  * Return a `Optional` from a `Prism` focused on a required key of a `ReadonlyRecord`.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const atKey = (key: string) => <S, A>(sa: Prism<S, ReadonlyRecord<string, A>>): Optional<S, Option<A>> =>
   _.prismComposeLens(_.atReadonlyRecord<A>().at(key))(sa)
@@ -288,7 +288,7 @@ export const atKey = (key: string) => <S, A>(sa: Prism<S, ReadonlyRecord<string,
  * Return a `Prism` from a `Prism` focused on the `Some` of a `Option` type.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> =
   /*#__PURE__*/
@@ -298,7 +298,7 @@ export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> =
  * Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> =
   /*#__PURE__*/
@@ -308,7 +308,7 @@ export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> =
  * Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E> =
   /*#__PURE__*/
@@ -318,7 +318,7 @@ export const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E> =
  * Return a `Traversal` from a `Prism` focused on a `Traversable`.
  *
  * @category combinators
- * @since 2.3.0
+ * @since 3.0.0
  */
 export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Prism<S, Kind<T, A>>) => Traversal<S, A> {
   return flow(asTraversal, _.traversalTraverse(T))
@@ -326,7 +326,7 @@ export function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Prism<
 
 /**
  * @category combinators
- * @since 2.3.2
+ * @since 3.0.0
  */
 export function findFirst<A, B extends A>(
   refinement: Refinement<A, B>
@@ -338,7 +338,7 @@ export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Prism<S, Readonly
 
 /**
  * @category combinators
- * @since 2.3.8
+ * @since 3.0.0
  */
 export function findFirstNonEmpty<A, B extends A>(
   refinement: Refinement<A, B>
@@ -358,7 +358,7 @@ export function findFirstNonEmpty<A>(
 
 /**
  * @category Invariant
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const imap: Invariant2<URI>['imap'] = (f, g) => (ea) => ({
   getOption: flow(ea.getOption, O.map(f)),
@@ -383,7 +383,7 @@ declare module 'fp-ts/HKT' {
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const Invariant: Invariant2<URI> = {
   imap
@@ -399,7 +399,7 @@ export const Semigroupoid: Semigroupoid2<URI> = {
 
 /**
  * @category instances
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const Category: Category2<URI> = {
   compose,

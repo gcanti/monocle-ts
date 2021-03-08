@@ -1,5 +1,5 @@
 /**
- * @since 2.3.0
+ * @since 3.0.0
  */
 import { Eq } from 'fp-ts/Eq'
 import * as O from 'fp-ts/Option'
@@ -19,7 +19,7 @@ import Option = O.Option
 
 /**
  * @category model
- * @since 2.3.0
+ * @since 3.0.0
  */
 export interface At<S, I, A> {
   readonly at: (i: I) => Lens<S, A>
@@ -31,7 +31,7 @@ export interface At<S, I, A> {
 
 /**
  * @category constructors
- * @since 2.3.8
+ * @since 3.0.0
  */
 export const at: <S, I, A>(at: At<S, I, A>['at']) => At<S, I, A> = _.at
 
@@ -39,20 +39,20 @@ export const at: <S, I, A>(at: At<S, I, A>['at']) => At<S, I, A> = _.at
  * Lift an instance of `At` using an `Iso`.
  *
  * @category constructors
- * @since 2.3.0
+ * @since 3.0.0
  */
 export const fromIso = <T, S>(iso: Iso<T, S>) => <I, A>(sia: At<S, I, A>): At<T, I, A> =>
   at((i) => pipe(iso, _.isoAsLens, _.lensComposeLens(sia.at(i))))
 
 /**
  * @category constructors
- * @since 2.3.7
+ * @since 3.0.0
  */
 export const atReadonlyRecord: <A = never>() => At<ReadonlyRecord<string, A>, string, Option<A>> = _.atReadonlyRecord
 
 /**
  * @category constructors
- * @since 2.3.7
+ * @since 3.0.0
  */
 export const atReadonlyMap = <K>(E: Eq<K>): (<A = never>() => At<ReadonlyMap<K, A>, K, Option<A>>) => () => {
   const lookupE = RM.lookup(E)
@@ -76,7 +76,7 @@ export const atReadonlyMap = <K>(E: Eq<K>): (<A = never>() => At<ReadonlyMap<K, 
 
 /**
  * @category constructors
- * @since 2.3.7
+ * @since 3.0.0
  */
 export const atReadonlySet = <A>(E: Eq<A>): At<ReadonlySet<A>, A, boolean> => {
   const elemE = RS.elem(E)
