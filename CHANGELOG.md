@@ -43,6 +43,7 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `findFirst` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
     - add `composeIso` (@gcanti)
+    - add `Semigroupoid` (@gcanti)
     - (\*) rename `invariantIso` to `Invariant` (@gcanti)
     - (\*) rename `categoryIso` to `Category` (@gcanti)
   - `Ix`
@@ -55,6 +56,7 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
     - add `composeLens` (@gcanti)
+    - add `Semigroupoid` (@gcanti)
     - (\*) rename `invariantIso` to `Invariant` (@gcanti)
     - (\*) rename `categoryIso` to `Category` (@gcanti)
   - `Prism`
@@ -64,6 +66,7 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
     - add `composePrism` (@gcanti)
+    - add `Semigroupoid` (@gcanti)
     - (\*) rename `invariantIso` to `Invariant` (@gcanti)
     - (\*) rename `categoryIso` to `Category` (@gcanti)
   - `Optional`
@@ -73,6 +76,7 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `indexNonEmpty` (@gcanti)
     - add `findFirstNonEmpty` (@gcanti)
     - add `composeOptional` (@gcanti)
+    - add `Semigroupoid` (@gcanti)
     - (\*) rename `invariantIso` to `Invariant` (@gcanti)
     - (\*) rename `categoryIso` to `Category` (@gcanti)
   - `Traversal`
@@ -86,6 +90,7 @@ Experimental modules require `fp-ts@^2.5.0`.
     - add `fromNullable` (@gcanti)
     - add `indexNonEmpty` (@gcanti)
     - add `composeTraversal` (@gcanti)
+    - add `Semigroupoid` (@gcanti)
     - (\*) rename `categoryIso` to `Category` (@gcanti)
 
 (\*) breaking change

@@ -26,6 +26,7 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import * as A from 'fp-ts/lib/ReadonlyArray'
 import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
+import { Semigroupoid2 } from 'fp-ts/lib/Semigroupoid'
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
@@ -364,10 +365,19 @@ declare module 'fp-ts/lib/HKT' {
 
 /**
  * @category instances
+ * @since 2.3.8
+ */
+export const Semigroupoid: Semigroupoid2<URI> = {
+  URI,
+  compose: (ab, ea) => compose(ab)(ea)
+}
+
+/**
+ * @category instances
  * @since 2.3.0
  */
 export const Category: Category2<URI> = {
   URI,
-  compose: (ab, ea) => compose(ab)(ea),
+  compose: Semigroupoid.compose,
   id
 }
