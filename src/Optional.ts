@@ -29,6 +29,7 @@ import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
+import { Semigroupoid2 } from 'fp-ts/lib/Semigroupoid'
 import { Traversable1 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Iso } from './Iso'
@@ -392,10 +393,19 @@ export const Invariant: Invariant2<URI> = {
 
 /**
  * @category instances
+ * @since 2.3.8
+ */
+export const Semigroupoid: Semigroupoid2<URI> = {
+  URI,
+  compose: (ab, ea) => compose(ab)(ea)
+}
+
+/**
+ * @category instances
  * @since 2.3.0
  */
 export const Category: Category2<URI> = {
   URI,
-  compose: (ab, ea) => compose(ab)(ea),
+  compose: Semigroupoid.compose,
   id
 }

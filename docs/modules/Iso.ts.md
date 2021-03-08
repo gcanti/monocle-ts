@@ -64,6 +64,7 @@ Added in v2.3.0
 - [instances](#instances)
   - [Category](#category)
   - [Invariant](#invariant-1)
+  - [Semigroupoid](#semigroupoid)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
 - [model](#model)
@@ -482,6 +483,16 @@ export declare const Invariant: Invariant2<'monocle-ts/Iso'>
 ```
 
 Added in v2.3.0
+
+## Semigroupoid
+
+**Signature**
+
+```ts
+export declare const Semigroupoid: Semigroupoid2<'monocle-ts/Iso'>
+```
+
+Added in v2.3.8
 
 ## URI
 

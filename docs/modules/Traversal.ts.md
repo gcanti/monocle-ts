@@ -59,6 +59,7 @@ Added in v2.3.0
   - [traversal](#traversal)
 - [instances](#instances)
   - [Category](#category)
+  - [Semigroupoid](#semigroupoid)
   - [URI](#uri)
   - [URI (type alias)](#uri-type-alias)
 - [model](#model)
@@ -443,6 +444,16 @@ export declare const Category: Category2<'monocle-ts/Traversal'>
 ```
 
 Added in v2.3.0
+
+## Semigroupoid
+
+**Signature**
+
+```ts
+export declare const Semigroupoid: Semigroupoid2<'monocle-ts/Traversal'>
+```
+
+Added in v2.3.8
 
 ## URI
 
