@@ -317,7 +317,11 @@ Return a `Traversal` from a `Traversal` focused on a `Traversable`.
 **Signature**
 
 ```ts
-export declare const traverse: typeof _.traversalTraverse
+export declare const traverse: <
+  T extends 'Ord' | 'Eq' | 'Option' | 'ReadonlyRecord' | 'ReadonlyNonEmptyArray' | 'ReadonlyArray' | 'Identity'
+>(
+  T: Traversable1<T>
+) => <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A>
 ```
 
 Added in v3.0.0
@@ -405,7 +409,27 @@ Create a `Traversal` from a `Traversable`.
 **Signature**
 
 ```ts
-export declare const fromTraversable: typeof _.fromTraversable
+export declare const fromTraversable: {
+  <T extends never>(T: Traversable3<T>): <R, E, A>() => Traversal<Kind3<T, R, E, A>, A>
+  <
+    T extends
+      | 'monocle-ts/Iso'
+      | 'Separated'
+      | 'Either'
+      | 'ReadonlyMap'
+      | 'Const'
+      | 'monocle-ts/Traversal'
+      | 'monocle-ts/Prism'
+      | 'monocle-ts/Optional'
+      | 'monocle-ts/Lens'
+  >(
+    T: Traversable2<T>
+  ): <E, A>() => Traversal<Kind2<T, E, A>, A>
+  <T extends 'Ord' | 'Eq' | 'Option' | 'ReadonlyRecord' | 'ReadonlyNonEmptyArray' | 'ReadonlyArray' | 'Identity'>(
+    T: Traversable1<T>
+  ): <A>() => Traversal<Kind<T, A>, A>
+  <T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
+}
 ```
 
 Added in v3.0.0
