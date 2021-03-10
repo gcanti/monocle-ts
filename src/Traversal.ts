@@ -27,6 +27,7 @@ import * as A from 'fp-ts/lib/ReadonlyArray'
 import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 import { Semigroupoid2 } from 'fp-ts/lib/Semigroupoid'
+import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Iso } from './Iso'
 import { Lens } from './Lens'
@@ -79,7 +80,12 @@ export const id = <S>(): Traversal<S, S> => traversal(<F>(_: Applicative<F>) => 
  * @category constructor
  * @since 2.3.0
  */
-export const fromTraversable = _.fromTraversable
+export const fromTraversable: {
+  <T extends URIS3>(T: Traversable3<T>): <R, E, A>() => Traversal<Kind3<T, R, E, A>, A>
+  <T extends URIS2>(T: Traversable2<T>): <E, A>() => Traversal<Kind2<T, E, A>, A>
+  <T extends URIS>(T: Traversable1<T>): <A>() => Traversal<Kind<T, A>, A>
+  <T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A>
+} = _.fromTraversable
 
 // -------------------------------------------------------------------------------------
 // compositions
@@ -283,7 +289,9 @@ export const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E>
  * @category combinators
  * @since 2.3.0
  */
-export const traverse = _.traversalTraverse
+export const traverse: <T extends URIS>(
+  T: Traversable1<T>
+) => <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A> = _.traversalTraverse
 
 /**
  * @category combinators

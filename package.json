@@ -1,6 +1,6 @@
 {
   "name": "monocle-ts",
-  "version": "2.3.8",
+  "version": "2.3.9",
   "description": "A porting of scala monocle library to TypeScript",
   "main": "lib/index.js",
   "module": "es6/index.js",
@@ -24,6 +24,7 @@
     "docs": "docs-ts",
     "prerelease": "npm run build",
     "release": "ts-node scripts/release",
+    "release-as-next": "ts-node scripts/release-as-next",
     "import-path-rewrite": "import-path-rewrite"
   },
   "repository": {
