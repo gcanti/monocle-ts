@@ -13,7 +13,7 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
-# 2.3.8
+# 2.3.9
 
 Experimental modules require `fp-ts@^2.5.0`.
 
