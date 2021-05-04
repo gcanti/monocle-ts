@@ -107,7 +107,7 @@ optional as a `string` can be empty. So we need another abstraction that would b
 
 ```ts
 import { Optional } from 'monocle-ts'
-import { some, none } from 'fp-ts/lib/Option'
+import { some, none } from 'fp-ts/Option'
 
 const firstLetterOptional = new Optional<string, string>(
   (s) => (s.length > 0 ? some(s[0]) : none),
@@ -205,8 +205,8 @@ const employeeCapitalized = {
 }
 
 import * as assert from 'assert'
-import * as L from 'monocle-ts/lib/Lens'
-import { pipe } from 'fp-ts/lib/function'
+import * as L from 'monocle-ts/Lens'
+import { pipe } from 'fp-ts/function'
 
 const capitalizeName = pipe(
   L.id<Employee>(),
@@ -219,8 +219,8 @@ const capitalizeName = pipe(
 
 assert.deepStrictEqual(capitalizeName(employee), employeeCapitalized)
 
-import * as O from 'monocle-ts/lib/Optional'
-import { some, none } from 'fp-ts/lib/Option'
+import * as O from 'monocle-ts/Optional'
+import { some, none } from 'fp-ts/Option'
 
 const firstLetterOptional: O.Optional<string, string> = {
   getOption: (s) => (s.length > 0 ? some(s[0]) : none),
