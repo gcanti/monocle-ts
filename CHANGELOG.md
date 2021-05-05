@@ -15,6 +15,9 @@ high state of flux, you're at risk of it changing without notice.
 
 # 2.3.10
 
+- **Internal**
+  - optimize `fromTraversable`, closes #119 (@gcanti)
+
 # 2.3.9
 
 Experimental modules require `fp-ts@^2.5.0`.

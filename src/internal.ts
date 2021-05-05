@@ -332,6 +332,8 @@ export const ApplicativeIdentity: Applicative1<IURI> = {
     (fab, fa) => fab(fa)
 }
 
+const isIdentity = (F: Applicative<any>): boolean => F.URI === 'Identity'
+
 /** @internal */
 export function fromTraversable<T extends URIS3>(T: Traversable3<T>): <R, E, A>() => Traversal<Kind3<T, R, E, A>, A>
 /** @internal */
@@ -343,7 +345,10 @@ export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T,
 export function fromTraversable<T>(T: Traversable<T>): <A>() => Traversal<HKT<T, A>, A> {
   return <A>() =>
     traversal(<F>(F: Applicative<F>) => {
-      const traverseF = T.traverse(F)
+      // if `F` is `Identity` then `traverseF = map`
+      const traverseF: <A, B>(ta: HKT<T, A>, f: (a: A) => HKT<F, B>) => HKT<F, HKT<T, B>> = isIdentity(F)
+        ? (T.map as any)
+        : T.traverse(F)
       return (f: (a: A) => HKT<F, A>) => (s: HKT<T, A>) => traverseF(s, f)
     })
 }
