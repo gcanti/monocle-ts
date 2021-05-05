@@ -44,4 +44,9 @@ describe('Traversal', () => {
     U.deepStrictEqual(traversal2.set(some(2) as Some<number>)([]), [])
     U.deepStrictEqual(traversal2.set(some(4) as Some<number>)([some(1), some(2), some(3)]), [some(1), some(2), some(4)])
   })
+
+  it('asFold', () => {
+    const fold = fromTraversable(array)<number>().asFold()
+    U.deepStrictEqual(fold.getAll([1, 2, 3]), [1, 2, 3])
+  })
 })
