@@ -653,9 +653,9 @@ export class Prism<S, A> {
    * @since 1.0.0
    */
   asFold(): Fold<S, A> {
-    return new Fold((M) => (f) => (s) => {
+    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S): M => {
       const oa = this.getOption(s)
-      return isNone(oa) ? (M.empty as any) : f(oa.value)
+      return isNone(oa) ? M.empty : f(oa.value)
     })
   }
 
@@ -927,9 +927,9 @@ export class Optional<S, A> {
    * @since 1.0.0
    */
   asFold(): Fold<S, A> {
-    return new Fold((M) => (f) => (s) => {
+    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S): M => {
       const oa = this.getOption(s)
-      return isNone(oa) ? (M.empty as any) : f(oa.value)
+      return isNone(oa) ? M.empty : f(oa.value)
     })
   }
 
@@ -1092,7 +1092,9 @@ export class Traversal<S, A> {
    * @since 1.0.0
    */
   asFold(): Fold<S, A> {
-    return new Fold((M) => (f) => this.modifyF(getApplicative(M))((a) => make(f(a) as any)) as any)
+    return new Fold(<M>(M: Monoid<M>) => (f: (a: A) => M): ((s: S) => M) =>
+      this.modifyF(getApplicative(M))((a) => make(f(a)))
+    )
   }
 
   /**
