@@ -7,12 +7,12 @@ import { pipe } from 'fp-ts/function'
 const PL = require('partial.lenses')
 
 /*
-prism into array (monocle-ts, stable APIs) x 1,175 ops/sec ±0.47% (87 runs sampled)
-prism into array (monocle-ts, experimental APIs) x 993 ops/sec ±3.09% (87 runs sampled)
-prism into array (partial.lenses) x 455,961 ops/sec ±3.38% (89 runs sampled)
-prism modify array (monocle-ts, stable APIs) x 32.04 ops/sec ±0.28% (54 runs sampled)
-prism modify array (monocle-ts, experimental APIs) x 31.86 ops/sec ±1.03% (54 runs sampled)
-prism modify array (partial.lenses) x 2,315 ops/sec ±1.06% (89 runs sampled)
+prism into array (monocle-ts, stable APIs) x 1,140 ops/sec ±0.49% (87 runs sampled)
+prism into array (monocle-ts, experimental APIs) x 958 ops/sec ±3.06% (86 runs sampled)
+prism into array (partial.lenses) x 460,357 ops/sec ±0.46% (89 runs sampled)
+prism modify array (monocle-ts, stable APIs) x 1,320 ops/sec ±0.64% (86 runs sampled)
+prism modify array (monocle-ts, experimental APIs) x 1,423 ops/sec ±3.40% (84 runs sampled)
+prism modify array (partial.lenses) x 2,329 ops/sec ±0.49% (87 runs sampled)
 */
 
 const suite = new Benchmark.Suite()
