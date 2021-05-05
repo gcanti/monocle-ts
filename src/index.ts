@@ -1,7 +1,7 @@
 /**
  * @since 1.0.0
  */
-import { getMonoid } from 'fp-ts/lib/Array'
+import * as A from 'fp-ts/lib/Array'
 import { getApplicative, make } from 'fp-ts/lib/Const'
 import { Foldable, Foldable1, Foldable2, Foldable3 } from 'fp-ts/lib/Foldable'
 import { constant, identity, Predicate, Refinement } from 'fp-ts/lib/function'
@@ -1359,7 +1359,7 @@ export class Fold<S, A> {
   readonly all: (p: Predicate<A>) => Predicate<S>
   private readonly foldMapFirst: (f: (a: A) => Option<A>) => (s: S) => Option<A>
   constructor(readonly foldMap: <M>(M: Monoid<M>) => (f: (a: A) => M) => (s: S) => M) {
-    this.getAll = foldMap(getMonoid<A>())((a) => [a])
+    this.getAll = foldMap(A.getMonoid<A>())(A.of)
     this.exist = foldMap(monoidAny)
     this.all = foldMap(monoidAll)
     this.foldMapFirst = foldMap(getFirstMonoid())
