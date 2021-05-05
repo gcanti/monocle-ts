@@ -22,7 +22,7 @@ import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { Monoid } from 'fp-ts/lib/Monoid'
 import { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
-import * as A from 'fp-ts/lib/ReadonlyArray'
+import * as RA from 'fp-ts/lib/ReadonlyArray'
 import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 import { Semigroupoid2 } from 'fp-ts/lib/Semigroupoid'
@@ -343,7 +343,7 @@ export const fold = <A>(M: Monoid<A>): (<S>(sa: Traversal<S, A>) => (s: S) => A)
  * @since 2.3.0
  */
 export const getAll = <S>(s: S) => <A>(sa: Traversal<S, A>): ReadonlyArray<A> =>
-  foldMap(A.getMonoid<A>())<A>(A.of)(sa)(s)
+  foldMap(RA.getMonoid<A>())<A>(RA.of)(sa)(s)
 
 // -------------------------------------------------------------------------------------
 // instances
