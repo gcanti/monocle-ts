@@ -343,7 +343,7 @@ export const fold = <A>(M: Monoid<A>): (<S>(sa: Traversal<S, A>) => (s: S) => A)
  * @since 2.3.0
  */
 export const getAll = <S>(s: S) => <A>(sa: Traversal<S, A>): ReadonlyArray<A> =>
-  foldMap(A.getMonoid<A>())((a: A) => [a])(sa)(s)
+  foldMap(A.getMonoid<A>())<A>(A.of)(sa)(s)
 
 // -------------------------------------------------------------------------------------
 // instances
