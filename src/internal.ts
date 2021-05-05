@@ -7,7 +7,7 @@
  *
  * @since 2.3.0
  */
-import { Applicative } from 'fp-ts/lib/Applicative'
+import { Applicative, Applicative1 } from 'fp-ts/lib/Applicative'
 import * as RA from 'fp-ts/lib/ReadonlyArray'
 import * as RNEA from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import * as RR from 'fp-ts/lib/ReadonlyRecord'
@@ -25,6 +25,7 @@ import { Prism } from './Prism'
 import { Traversal } from './Traversal'
 import { At } from './At'
 import { NonEmptyArray } from 'fp-ts/lib/NonEmptyArray'
+import { URI as IURI } from 'fp-ts/lib/Identity'
 
 // -------------------------------------------------------------------------------------
 // Iso
@@ -319,6 +320,16 @@ export const traversal = <S, A>(modifyF: Traversal<S, A>['modifyF']): Traversal<
 /** @internal */
 export function traversalComposeTraversal<A, B>(ab: Traversal<A, B>): <S>(sa: Traversal<S, A>) => Traversal<S, B> {
   return (sa) => traversal(<F>(F: Applicative<F>) => (f: (a: B) => HKT<F, B>) => sa.modifyF(F)(ab.modifyF(F)(f)))
+}
+
+/** @internal */
+export const ApplicativeIdentity: Applicative1<IURI> = {
+  URI: 'Identity',
+  map: (fa, f) => f(fa),
+  of: identity,
+  ap:
+    /* istanbul ignore next */
+    (fab, fa) => fab(fa)
 }
 
 /** @internal */

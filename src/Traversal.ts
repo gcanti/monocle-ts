@@ -19,7 +19,6 @@ import * as C from 'fp-ts/lib/Const'
 import { Either } from 'fp-ts/lib/Either'
 import { flow, identity, Predicate, Refinement } from 'fp-ts/lib/function'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
-import * as I from 'fp-ts/lib/Identity'
 import { Monoid } from 'fp-ts/lib/Monoid'
 import { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
@@ -156,17 +155,14 @@ export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S,
  * @category combinators
  * @since 2.3.0
  */
-export const modify = <A>(f: (a: A) => A) => <S>(sa: Traversal<S, A>): ((s: S) => S) => {
-  return sa.modifyF(I.identity)(f)
-}
+export const modify = <A>(f: (a: A) => A) => <S>(sa: Traversal<S, A>): ((s: S) => S) =>
+  sa.modifyF(_.ApplicativeIdentity)(f)
 
 /**
  * @category combinators
  * @since 2.3.0
  */
-export const set = <A>(a: A): (<S>(sa: Traversal<S, A>) => (s: S) => S) => {
-  return modify(() => a)
-}
+export const set = <A>(a: A): (<S>(sa: Traversal<S, A>) => (s: S) => S) => modify(() => a)
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a nullable value.
