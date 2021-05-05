@@ -52,6 +52,7 @@
     "import-path-rewrite": "github:gcanti/import-path-rewrite",
     "jest": "^24.3.0",
     "mocha": "^5.2.0",
+    "optics-ts": "^2.1.0",
     "partial.lenses": "^14.17.0",
     "prettier": "^2.0.2",
     "rimraf": "^2.6.3",
