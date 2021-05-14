@@ -140,9 +140,15 @@ You can use [unknown-ts](https://github.com/gcanti/unknown-ts) as a polyfill.
 
 - [API Reference](https://gcanti.github.io/monocle-ts/)
 
-# Experimental modules
+## Experimental modules (version `2.3+`)
 
-From `monocle@2.3+` you can use the following experimental modules
+Experimental modules (\*) are published in order to get early feedback from the community.
+
+The experimental modules are **independent and backward-incompatible** with stable ones.
+
+(\*) A feature tagged as _Experimental_ is in a high state of flux, you're at risk of it changing without notice.
+
+From `monocle@2.3+` you can use the following experimental modules:
 
 - `Iso`
 - `Lens`
