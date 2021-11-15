@@ -16,11 +16,12 @@
  */
 import { Category2 } from 'fp-ts/lib/Category'
 import { Either } from 'fp-ts/lib/Either'
-import { flow, identity, Predicate, Refinement } from 'fp-ts/lib/function'
+import { Eq } from 'fp-ts/lib/Eq'
+import { flow, identity, not, Predicate, Refinement } from 'fp-ts/lib/function'
 import { Functor, Functor1, Functor2, Functor3 } from 'fp-ts/lib/Functor'
 import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import { Invariant2 } from 'fp-ts/lib/Invariant'
-import { Option } from 'fp-ts/lib/Option'
+import { fromPredicate, getOrElse, Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
 import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
@@ -60,6 +61,65 @@ export const iso: <S, A>(get: Iso<S, A>['get'], reverseGet: Iso<S, A>['reverseGe
  * @since 2.3.0
  */
 export const id = <S>(): Iso<S, S> => iso(identity, identity)
+
+/**
+ * Create an `Iso<Option<A>, A>` given an `Eq<A>` and some value to correspond
+ * to `none`.
+ *
+ * @example
+ * import { eqNumber } from 'fp-ts/Eq'
+ * import { pipe } from 'fp-ts/function'
+ * import { non } from 'monocle-ts/Iso'
+ * import { atKey, composeIso, id } from 'monocle-ts/Lens'
+ *
+ * // Can be used to have "defaults"
+ * const a = pipe(
+ *   id<Record<string, number>>(),
+ *   atKey('a'),
+ *   composeIso(non(eqNumber)(0))
+ * )
+ * assert.deepStrictEqual(a.get({}), 0)
+ * assert.deepStrictEqual(a.get({ a: 1 }), 1)
+ * assert.deepStrictEqual(a.set(0)({ a: 1 }), {})
+ * assert.deepStrictEqual(a.set(1)({}), { a: 1 })
+ *
+ *
+ * @example
+ * import { eqString } from 'fp-ts/Eq'
+ * import { pipe } from 'fp-ts/function'
+ * import { none } from 'fp-ts/Option'
+ * import { getEq } from 'fp-ts/ReadonlyRecord'
+ * import { non } from 'monocle-ts/Iso'
+ * import { atKey, composeIso, id } from 'monocle-ts/Lens'
+ *
+ * // Or delete surrounding structure when a nested value becomes empty
+ * const b = pipe(
+ *   id<Record<string, Record<string, string>>>(),
+ *   atKey('hello'),
+ *   composeIso(non(getEq(eqString))({})),
+ *   atKey('world'),
+ * )
+ * assert.deepStrictEqual(b.set(none)({ hello: { world: '!' } }), {})
+ *
+ * @category constructors
+ * @since 2.4.0
+ */
+export const non = <A>(eq: Eq<A>) => (a: A): Iso<Option<A>, A> => ({
+  get: getOrElse(() => a),
+  reverseGet: fromPredicate((b) => !eq.equals(a, b))
+})
+
+/**
+ * Create an `Iso<Option<A>, A>` given a `Predicate<A>` and some value to
+ * correspond to `none`.
+ *
+ * @category constructors
+ * @since 2.4.0
+ */
+export const anon = <A>(a: A) => (pred: Predicate<A>): Iso<Option<A>, A> => ({
+  get: getOrElse(() => a),
+  reverseGet: fromPredicate(not(pred))
+})
 
 // -------------------------------------------------------------------------------------
 // converters
