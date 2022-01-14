@@ -208,7 +208,7 @@ export function modifyF<F>(
  */
 export const fromNullable: <S, A>(sa: Prism<S, A>) => Prism<S, NonNullable<A>> =
   /*#__PURE__*/
-  compose(_.prismFromNullable())
+  compose(/*#__PURE__*/ _.prismFromNullable())
 
 /**
  * @category combinators
@@ -293,7 +293,7 @@ export const atKey = (key: string) => <S, A>(sa: Prism<S, ReadonlyRecord<string,
  */
 export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> =
   /*#__PURE__*/
-  compose(_.prismSome())
+  compose(/*#__PURE__*/ _.prismSome())
 
 /**
  * Return a `Prism` from a `Prism` focused on the `Right` of a `Either` type.
@@ -303,7 +303,7 @@ export const some: <S, A>(soa: Prism<S, Option<A>>) => Prism<S, A> =
  */
 export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> =
   /*#__PURE__*/
-  compose(_.prismRight())
+  compose(/*#__PURE__*/ _.prismRight())
 
 /**
  * Return a `Prism` from a `Prism` focused on the `Left` of a `Either` type.
@@ -313,7 +313,7 @@ export const right: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, A> =
  */
 export const left: <S, E, A>(sea: Prism<S, Either<E, A>>) => Prism<S, E> =
   /*#__PURE__*/
-  compose(_.prismLeft())
+  compose(/*#__PURE__*/ _.prismLeft())
 
 /**
  * Return a `Traversal` from a `Prism` focused on a `Traversable`.

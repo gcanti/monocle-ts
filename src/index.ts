@@ -741,7 +741,9 @@ export class Prism<S, A> {
   }
 }
 
-const somePrism = new Prism<Option<any>, any>(identity, some)
+const somePrism =
+  /*#__PURE__*/
+  new Prism<Option<any>, any>(identity, some)
 
 type OptionPropertyNames<S> = { [K in keyof S]-?: S[K] extends Option<any> ? K : never }[keyof S]
 type OptionPropertyType<S, K extends OptionPropertyNames<S>> = S[K] extends Option<infer A> ? A : never
