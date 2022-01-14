@@ -263,7 +263,7 @@ export const atKey: (key: string) => <S, A>(sa: Lens<S, ReadonlyRecord<string, A
  */
 export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> =
   /*#__PURE__*/
-  composePrism(_.prismSome())
+  composePrism(/*#__PURE__*/ _.prismSome())
 
 /**
  * Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type.
@@ -273,7 +273,7 @@ export const some: <S, A>(soa: Lens<S, Option<A>>) => Optional<S, A> =
  */
 export const right: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, A> =
   /*#__PURE__*/
-  composePrism(_.prismRight())
+  composePrism(/*#__PURE__*/ _.prismRight())
 
 /**
  * Return a `Optional` from a `Lens` focused on the `Left` of a `Either` type.
@@ -283,7 +283,7 @@ export const right: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, A> =
  */
 export const left: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, E> =
   /*#__PURE__*/
-  composePrism(_.prismLeft())
+  composePrism(/*#__PURE__*/ _.prismLeft())
 
 /**
  * Return a `Traversal` from a `Lens` focused on a `Traversable`.

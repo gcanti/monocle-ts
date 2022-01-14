@@ -280,7 +280,7 @@ export const atKey = (key: string): (<S, A>(sa: Iso<S, ReadonlyRecord<string, A>
  */
 export const some: <S, A>(soa: Iso<S, Option<A>>) => Prism<S, A> =
   /*#__PURE__*/
-  composePrism(_.prismSome())
+  composePrism(/*#__PURE__*/ _.prismSome())
 
 /**
  * Return a `Prism` from a `Iso` focused on the `Right` of a `Either` type.
@@ -290,7 +290,7 @@ export const some: <S, A>(soa: Iso<S, Option<A>>) => Prism<S, A> =
  */
 export const right: <S, E, A>(sea: Iso<S, Either<E, A>>) => Prism<S, A> =
   /*#__PURE__*/
-  composePrism(_.prismRight())
+  composePrism(/*#__PURE__*/ _.prismRight())
 
 /**
  * Return a `Prism` from a `Iso` focused on the `Left` of a `Either` type.
@@ -300,7 +300,7 @@ export const right: <S, E, A>(sea: Iso<S, Either<E, A>>) => Prism<S, A> =
  */
 export const left: <S, E, A>(sea: Iso<S, Either<E, A>>) => Prism<S, E> =
   /*#__PURE__*/
-  composePrism(_.prismLeft())
+  composePrism(/*#__PURE__*/ _.prismLeft())
 
 /**
  * Return a `Traversal` from a `Iso` focused on a `Traversable`.

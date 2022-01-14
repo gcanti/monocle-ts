@@ -201,7 +201,7 @@ export function modifyF<F>(
  */
 export const fromNullable: <S, A>(sa: Optional<S, A>) => Optional<S, NonNullable<A>> =
   /*#__PURE__*/
-  compose(_.prismAsOptional(_.prismFromNullable()))
+  compose(/*#__PURE__*/ _.prismAsOptional(/*#__PURE__*/ _.prismFromNullable()))
 
 /**
  * @category combinators
@@ -286,7 +286,7 @@ export const atKey = (key: string) => <S, A>(sa: Optional<S, ReadonlyRecord<stri
  */
 export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> =
   /*#__PURE__*/
-  compose(_.prismAsOptional(_.prismSome()))
+  compose(/*#__PURE__*/ _.prismAsOptional(/*#__PURE__*/ _.prismSome()))
 
 /**
  * Return a `Optional` from a `Optional` focused on the `Right` of a `Either` type.
@@ -296,7 +296,7 @@ export const some: <S, A>(soa: Optional<S, Option<A>>) => Optional<S, A> =
  */
 export const right: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, A> =
   /*#__PURE__*/
-  compose(_.prismAsOptional(_.prismRight()))
+  compose(/*#__PURE__*/ _.prismAsOptional(/*#__PURE__*/ _.prismRight()))
 
 /**
  * Return a `Optional` from a `Optional` focused on the `Left` of a `Either` type.
@@ -306,7 +306,7 @@ export const right: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, A> 
  */
 export const left: <S, E, A>(sea: Optional<S, Either<E, A>>) => Optional<S, E> =
   /*#__PURE__*/
-  compose(_.prismAsOptional(_.prismLeft()))
+  compose(/*#__PURE__*/ _.prismAsOptional(/*#__PURE__*/ _.prismLeft()))
 
 /**
  * Return a `Traversal` from a `Optional` focused on a `Traversable`.

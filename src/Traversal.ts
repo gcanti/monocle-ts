@@ -257,7 +257,7 @@ export const atKey = (key: string) => <S, A>(sa: Traversal<S, ReadonlyRecord<str
  */
 export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> =
   /*#__PURE__*/
-  compose(_.prismAsTraversal(_.prismSome()))
+  compose(/*#__PURE__*/ _.prismAsTraversal(/*#__PURE__*/ _.prismSome()))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on the `Right` of a `Either` type.
@@ -267,7 +267,7 @@ export const some: <S, A>(soa: Traversal<S, Option<A>>) => Traversal<S, A> =
  */
 export const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A> =
   /*#__PURE__*/
-  compose(_.prismAsTraversal(_.prismRight()))
+  compose(/*#__PURE__*/ _.prismAsTraversal(/*#__PURE__*/ _.prismRight()))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on the `Left` of a `Either` type.
@@ -277,7 +277,7 @@ export const right: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, A
  */
 export const left: <S, E, A>(sea: Traversal<S, Either<E, A>>) => Traversal<S, E> =
   /*#__PURE__*/
-  compose(_.prismAsTraversal(_.prismLeft()))
+  compose(/*#__PURE__*/ _.prismAsTraversal(/*#__PURE__*/ _.prismLeft()))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a `Traversable`.
