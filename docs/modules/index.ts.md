@@ -2161,7 +2161,7 @@ export interface OptionalFromPath<S> {
     K2 extends keyof NonNullable<S[K1]>,
     K3 extends keyof NonNullable<NonNullable<S[K1]>[K2]>,
     K4 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>,
-    K5 extends keyof NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]
+    K5 extends keyof NonNullable<NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>
   >(
     path: [K1, K2, K3, K4, K5]
   ): Optional<S, NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<S[K1]>[K2]>[K3]>[K4]>[K5]>>

@@ -325,8 +325,8 @@ export declare const traverse: <T extends
   | 'Eq'
   | 'ReadonlyNonEmptyArray'
   | 'ReadonlyArray'
-  | 'Identity'
   | 'NonEmptyArray'
+  | 'Identity'
   | 'Array'
   | 'Record'>(
   T: Traversable1<T>
@@ -441,8 +441,8 @@ export declare const fromTraversable: {
       | 'Eq'
       | 'ReadonlyNonEmptyArray'
       | 'ReadonlyArray'
-      | 'Identity'
       | 'NonEmptyArray'
+      | 'Identity'
       | 'Array'
       | 'Record'
   >(

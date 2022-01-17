@@ -13,6 +13,11 @@
 **Note**: Gaps between patch versions are faulty/broken releases. **Note**: A feature tagged as Experimental is in a
 high state of flux, you're at risk of it changing without notice.
 
+# 2.3.12
+
+- **Polish**
+  - Add missing pure annotations, #175 (@OliverJAsh)
+
 # 2.3.11
 
 - **Bug Fix**
