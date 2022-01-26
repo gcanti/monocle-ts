@@ -1292,7 +1292,7 @@ static fromOptionProp<S>(): <P extends OptionPropertyNames<S>>(prop: P) => Optio
 
 ```ts
 import { Optional } from 'monocle-ts'
-import * as O from 'fp-ts/lib/Option'
+import * as O from 'fp-ts/Option'
 
 interface S {
   a: O.Option<number>
@@ -1883,14 +1883,14 @@ filter(predicate: Predicate<A>): Traversal<S, A>
 
 ```ts
 import { fromTraversable, Lens } from 'monocle-ts'
-import { array } from 'fp-ts/lib/Array'
+import { Traversable } from 'fp-ts/Array'
 
 interface Person {
   name: string
   cool: boolean
 }
 
-const peopleTraversal = fromTraversable(array)<Person>()
+const peopleTraversal = fromTraversable(Traversable)<Person>()
 const coolLens = Lens.fromProp<Person>()('cool')
 const people = [
   { name: 'bill', cool: false },
@@ -2086,7 +2086,7 @@ export declare function fromTraversable<T>(T: Traversable<T>): <A>() => Traversa
 
 ```ts
 import { Lens, fromTraversable } from 'monocle-ts'
-import { array } from 'fp-ts/lib/Array'
+import { Traversable } from 'fp-ts/Array'
 
 interface Tweet {
   text: string
@@ -2098,7 +2098,7 @@ interface Tweets {
 
 const tweetsLens = Lens.fromProp<Tweets>()('tweets')
 const tweetTextLens = Lens.fromProp<Tweet>()('text')
-const tweetTraversal = fromTraversable(array)<Tweet>()
+const tweetTraversal = fromTraversable(Traversable)<Tweet>()
 const composedTraversal = tweetsLens.composeTraversal(tweetTraversal).composeLens(tweetTextLens)
 
 const tweet1: Tweet = { text: 'hello world' }
