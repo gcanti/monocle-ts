@@ -99,7 +99,7 @@ export const lensProp = <A, P extends keyof A>(prop: P) => <S>(sa: Lens<S, A>): 
   )
 
 /** @internal */
-export const lensProps = <A, P extends keyof A>(...props: readonly [P, P, ...ReadonlyArray<P>]) => <S>(
+export const lensPick = <A, P extends keyof A>(...props: readonly [P, P, ...ReadonlyArray<P>]) => <S>(
   sa: Lens<S, A>
 ): Lens<S, { [K in P]: A[K] }> =>
   lens(
@@ -114,6 +114,34 @@ export const lensProps = <A, P extends keyof A>(...props: readonly [P, P, ...Rea
     (a) => (s) => {
       const oa = sa.get(s)
       for (const k of props) {
+        if (a[k] !== oa[k]) {
+          return sa.set(Object.assign({}, oa, a))(s)
+        }
+      }
+      return s
+    }
+  )
+
+/** @internal */
+export const lensOmit = <A, P extends keyof A>(...props: readonly [P, ...ReadonlyArray<P>]) => <S>(
+  sa: Lens<S, A>
+): Lens<S, { [K in Exclude<keyof A, P>]: A[K] }> =>
+  lens(
+    (s) => {
+      const a = sa.get(s)
+      const r: { [K in Exclude<keyof A, P>]?: A[K] } = {}
+      for (const k of (Object.keys(a) as Array<keyof A>).filter(
+        (k): k is Exclude<keyof A, P> => !props.includes(k as P)
+      )) {
+        r[k] = a[k]
+      }
+      return r as any
+    },
+    (a) => (s) => {
+      const oa = sa.get(s)
+      for (const k of (Object.keys(a) as Array<keyof A>).filter(
+        (k): k is Exclude<keyof A, P> => !props.includes(k as P)
+      )) {
         if (a[k] !== oa[k]) {
           return sa.set(Object.assign({}, oa, a))(s)
         }

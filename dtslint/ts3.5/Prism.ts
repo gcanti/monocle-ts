@@ -8,8 +8,8 @@ interface A {
 }
 
 // $ExpectError
-pipe(P.id<A>(), P.props())
+pipe(P.id<A>(), P.pick())
 // $ExpectError
-pipe(P.id<A>(), P.props('a'))
+pipe(P.id<A>(), P.pick('a'))
 
-pipe(P.id<A>(), P.props('a', 'b')) // $ExpectType Optional<A, { a: string; b: number; }>
+pipe(P.id<A>(), P.pick('a', 'b')) // $ExpectType Optional<A, { a: string; b: number; }>

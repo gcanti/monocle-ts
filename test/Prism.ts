@@ -105,13 +105,24 @@ describe('Prism', () => {
     U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1 })), O.some('a'))
   })
 
-  it('props', () => {
+  it('pick', () => {
     type S = O.Option<{
       readonly a: string
       readonly b: number
       readonly c: boolean
     }>
-    const sa = pipe(_.id<S>(), _.some, _.props('a', 'b'))
+    const sa = pipe(_.id<S>(), _.some, _.pick('a', 'b'))
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
+  })
+
+  it('omit', () => {
+    type S = O.Option<{
+      readonly a: string
+      readonly b: number
+      readonly c: boolean
+    }>
+    const sa = pipe(_.id<S>(), _.some, _.omit('c'))
     U.deepStrictEqual(sa.getOption(O.none), O.none)
     U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
   })

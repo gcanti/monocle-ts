@@ -19,11 +19,11 @@ pipe(L.id<A>(), L.prop('d'))
 //
 
 // $ExpectError
-pipe(L.id<A>(), L.props())
+pipe(L.id<A>(), L.pick())
 // $ExpectError
-pipe(L.id<A>(), L.props('a'))
+pipe(L.id<A>(), L.pick('a'))
 
-pipe(L.id<A>(), L.props('a', 'b')) // $ExpectType Lens<A, { a: string; b: number; }>
+pipe(L.id<A>(), L.pick('a', 'b')) // $ExpectType Lens<A, { a: string; b: number; }>
 
 //
 // component

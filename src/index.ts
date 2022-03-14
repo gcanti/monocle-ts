@@ -374,7 +374,7 @@ export class Lens<S, A> {
    */
   static fromProps<S>(): <P extends keyof S>(props: Array<P>) => Lens<S, { [K in P]: S[K] }>
   static fromProps<S>(): <P extends keyof S>(props: [P, P, ...Array<P>]) => Lens<S, { [K in P]: S[K] }> {
-    return (props) => fromLens(pipe(lens.id<S>(), lens.props(...props)))
+    return (props) => fromLens(pipe(lens.id<S>(), lens.pick(...props)))
   }
 
   /**
