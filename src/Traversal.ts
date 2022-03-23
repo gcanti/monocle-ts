@@ -224,12 +224,11 @@ export const index = (i: number) => <S, A>(sa: Traversal<S, ReadonlyArray<A>>): 
   pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyArray<A>().index(i))))
 
 /**
- * Alias of `index`.
- *
  * @category combinators
  * @since 2.3.8
  */
-export const indexNonEmpty: (i: number) => <S, A>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A> = index
+export const indexNonEmpty = (i: number) => <S, A>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>): Traversal<S, A> =>
+  pipe(sa, compose(_.optionalAsTraversal(_.indexReadonlyNonEmptyArray<A>().index(i))))
 
 /**
  * Return a `Traversal` from a `Traversal` focused on a key of a `ReadonlyRecord`.
@@ -302,8 +301,6 @@ export function findFirst<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, Read
 }
 
 /**
- * Alias of `findFirst`.
- *
  * @category combinators
  * @since 2.3.8
  */
@@ -316,7 +313,7 @@ export function findFirstNonEmpty<A>(
 export function findFirstNonEmpty<A>(
   predicate: Predicate<A>
 ): <S>(sa: Traversal<S, ReadonlyNonEmptyArray<A>>) => Traversal<S, A> {
-  return findFirst(predicate)
+  return composeOptional(_.optionalFindFirstNonEmpty(predicate))
 }
 
 /**

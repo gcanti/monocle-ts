@@ -128,8 +128,6 @@ Added in v2.3.8
 
 ## findFirstNonEmpty
 
-Alias of `findFirst`.
-
 **Signature**
 
 ```ts
@@ -204,8 +202,6 @@ export declare const index: (i: number) => <S, A>(sa: Traversal<S, readonly A[]>
 Added in v2.3.0
 
 ## indexNonEmpty
-
-Alias of `index`.
 
 **Signature**
 

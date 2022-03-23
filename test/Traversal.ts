@@ -6,7 +6,7 @@ import { pipe } from 'fp-ts/lib/pipeable'
 import { monoidSum } from 'fp-ts/lib/Monoid'
 import * as U from './util'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
-import { ReadonlyNonEmptyArray } from 'fp-ts/lib/ReadonlyNonEmptyArray'
+import * as RNEA from 'fp-ts/lib/ReadonlyNonEmptyArray'
 
 describe('Traversal', () => {
   describe('instances', () => {
@@ -97,7 +97,7 @@ describe('Traversal', () => {
   })
 
   it('indexNonEmpty', () => {
-    const sa = pipe(_.id<ReadonlyNonEmptyArray<number>>(), _.indexNonEmpty(1))
+    const sa = pipe(_.id<RNEA.ReadonlyNonEmptyArray<number>>(), _.indexNonEmpty(1))
     U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1]), [1])
     U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, 2, 3]), [1, 4, 3])
   })
@@ -132,8 +132,9 @@ describe('Traversal', () => {
   })
 
   it('getAll', () => {
+    const as: ReadonlyArray<number> = [1, 2, 3]
     const sa = pipe(_.id<ReadonlyArray<number>>(), _.traverse(A.readonlyArray))
-    U.deepStrictEqual(pipe(sa, _.getAll([1, 2, 3])), [1, 2, 3])
+    U.deepStrictEqual(pipe(sa, _.getAll(as)), [1, 2, 3])
   })
 
   it('findFirst', () => {
@@ -146,7 +147,7 @@ describe('Traversal', () => {
   })
 
   it('findFirstNonEmpty', () => {
-    type S = ReadonlyNonEmptyArray<number>
+    type S = RNEA.ReadonlyNonEmptyArray<number>
     const optional = pipe(
       _.id<S>(),
       _.findFirstNonEmpty((n) => n > 0)
@@ -155,8 +156,8 @@ describe('Traversal', () => {
   })
 
   it('fromNullable', () => {
-    type S = ReadonlyNonEmptyArray<number | undefined>
-    const sa = pipe(_.id<S>(), _.traverse(A.readonlyArray), _.fromNullable)
+    type S = RNEA.ReadonlyNonEmptyArray<number | undefined>
+    const sa = pipe(_.id<S>(), _.traverse(RNEA.Traversable), _.fromNullable)
     U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, undefined, 3]), [2, undefined, 6])
   })
 })
