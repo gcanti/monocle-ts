@@ -4,8 +4,20 @@ import { pipe } from 'fp-ts/lib/pipeable'
 interface A {
   a: string
   b: number
-  c: boolean
+  c: string | boolean
 }
+
+//
+// modify
+//
+
+// $ExpectType (s: A) => A
+pipe(L.id<A>(), L.prop('c'), L.modify((
+  a // $ExpectType string | boolean
+) => a))
+
+// $ExpectType (s: A) => A
+pipe(L.id<A>(), L.prop('c'), L.modify(() => 'foo'))
 
 //
 // prop
