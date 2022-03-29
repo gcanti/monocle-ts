@@ -149,7 +149,7 @@ export const composeTraversal = <A, B>(ab: Traversal<A, B>): (<S>(sa: Lens<S, A>
  * @category combinators
  * @since 2.3.0
  */
-export const modify = <A>(f: (a: A) => A) => <S>(sa: Lens<S, A>) => (s: S): S => {
+export const modify = <A, B extends A>(f: (a: A) => B) => <S>(sa: Lens<S, A>) => (s: S): S => {
   const o = sa.get(s)
   const n = f(o)
   return o === n ? s : sa.set(n)(s)
