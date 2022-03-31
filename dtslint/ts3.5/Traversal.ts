@@ -4,8 +4,25 @@ import { pipe } from 'fp-ts/lib/pipeable'
 interface A {
   a: string
   b: number
-  c: boolean
+  c: string | boolean
 }
+
+declare const traversalC: T.Traversal<A, A['c']>
+
+//
+// modify
+//
+
+// $ExpectType (s: A) => A
+pipe(traversalC, T.modify((
+  a // $ExpectType string | boolean
+) => a))
+
+// $ExpectType (s: A) => A
+pipe(traversalC, T.modify<string | boolean>(() => 'foo'))
+
+// $ExpectType (s: A) => A
+pipe(traversalC, T.modify(() => 'foo'))
 
 // $ExpectError
 pipe(T.id<A>(), T.props())

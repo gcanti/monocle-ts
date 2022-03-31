@@ -168,7 +168,8 @@ export const reverse = <S, A>(sa: Iso<S, A>): Iso<A, S> => iso(sa.reverseGet, sa
  * @category combinators
  * @since 2.3.0
  */
-export const modify = <A>(f: (a: A) => A) => <S>(sa: Iso<S, A>) => (s: S): S => sa.reverseGet(f(sa.get(s)))
+export const modify = <A, B extends A = A>(f: (a: A) => B) => <S>(sa: Iso<S, A>) => (s: S): S =>
+  sa.reverseGet(f(sa.get(s)))
 
 /**
  * @category combinators

@@ -218,7 +218,7 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const modify: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => S
+export declare const modify: <A, B extends A = A>(f: (a: A) => B) => <S>(sa: Prism<S, A>) => (s: S) => S
 ```
 
 Added in v2.3.0
@@ -249,7 +249,7 @@ Added in v2.3.5
 **Signature**
 
 ```ts
-export declare const modifyOption: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => O.Option<S>
+export declare const modifyOption: <A, B extends A = A>(f: (a: A) => B) => <S>(sa: Prism<S, A>) => (s: S) => O.Option<S>
 ```
 
 Added in v2.3.0
