@@ -17,6 +17,9 @@ pipe(L.id<A>(), L.prop('c'), L.modify((
 ) => a))
 
 // $ExpectType (s: A) => A
+pipe(L.id<A>(), L.prop('c'), L.modify<string | boolean>(() => 'foo'))
+
+// $ExpectType (s: A) => A
 pipe(L.id<A>(), L.prop('c'), L.modify(() => 'foo'))
 
 //
