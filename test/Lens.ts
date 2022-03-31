@@ -74,6 +74,15 @@ describe('Lens', () => {
     assert.strictEqual(sa.set(1)(s), s)
   })
 
+  it('set', () => {
+    interface S {
+      readonly a: number
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'))
+    const f = pipe(sa, _.set(2))
+    U.deepStrictEqual(f({ a: 1 }), { a: 2 })
+  })
+
   it('modify', () => {
     interface S {
       readonly a: number

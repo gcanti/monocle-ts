@@ -47,6 +47,7 @@ Added in v2.3.0
   - [prop](#prop)
   - [props](#props)
   - [right](#right)
+  - [set](#set)
   - [some](#some)
   - [traverse](#traverse)
 - [compositions](#compositions)
@@ -279,6 +280,16 @@ Return a `Optional` from a `Lens` focused on the `Right` of a `Either` type.
 
 ```ts
 export declare const right: <S, E, A>(sea: Lens<S, Either<E, A>>) => Optional<S, A>
+```
+
+Added in v2.3.0
+
+## set
+
+**Signature**
+
+```ts
+export declare const set: <A, B extends A = A>(b: B) => <S>(sa: Lens<S, A>) => (s: S) => S
 ```
 
 Added in v2.3.0
