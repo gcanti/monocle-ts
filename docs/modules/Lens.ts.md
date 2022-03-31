@@ -217,7 +217,7 @@ Added in v2.3.0
 **Signature**
 
 ```ts
-export declare const modify: <A, B extends A>(f: (a: A) => B) => <S>(sa: Lens<S, A>) => (s: S) => S
+export declare const modify: <A, B extends A = A>(f: (a: A) => B) => <S>(sa: Lens<S, A>) => (s: S) => S
 ```
 
 Added in v2.3.0
