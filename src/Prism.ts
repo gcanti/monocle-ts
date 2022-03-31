@@ -163,13 +163,14 @@ export const set: <A>(a: A) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismSet
  * @category combinators
  * @since 2.3.0
  */
-export const modifyOption: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => Option<S> = _.prismModifyOption
+export const modifyOption: <A, B extends A = A>(f: (a: A) => B) => <S>(sa: Prism<S, A>) => (s: S) => Option<S> =
+  _.prismModifyOption
 
 /**
  * @category combinators
  * @since 2.3.0
  */
-export const modify: <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismModify
+export const modify: <A, B extends A = A>(f: (a: A) => B) => <S>(sa: Prism<S, A>) => (s: S) => S = _.prismModify
 
 /**
  * @category combinators
