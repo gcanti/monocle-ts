@@ -24,6 +24,21 @@ pipe(lensC, L.set<string | boolean>('foo'))
 pipe(lensC, L.set('foo'))
 
 //
+// modify
+//
+
+// $ExpectType (s: A) => A
+pipe(lensC, L.modify((
+  a // $ExpectType string | boolean
+) => a))
+
+// $ExpectType (s: A) => A
+pipe(lensC, L.modify<string | boolean>(() => 'foo'))
+
+// $ExpectType (s: A) => A
+pipe(lensC, L.modify(() => 'foo'))
+
+//
 // prop
 //
 

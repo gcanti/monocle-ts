@@ -149,8 +149,9 @@ export const composeTraversal = <A, B>(ab: Traversal<A, B>): (<S>(sa: Optional<S
  * @category combinators
  * @since 2.3.0
  */
-export const modifyOption: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => Option<S> =
-  _.optionalModifyOption
+export const modifyOption: <A, B extends A = A>(
+  f: (a: A) => B
+) => <S>(optional: Optional<S, A>) => (s: S) => Option<S> = _.optionalModifyOption
 
 /**
  * @category combinators
@@ -162,7 +163,8 @@ export const setOption = <A>(a: A): (<S>(optional: Optional<S, A>) => (s: S) => 
  * @category combinators
  * @since 2.3.0
  */
-export const modify: <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S) => S = _.optionalModify
+export const modify: <A, B extends A = A>(f: (a: A) => B) => <S>(optional: Optional<S, A>) => (s: S) => S =
+  _.optionalModify
 
 /**
  * @category combinators

@@ -155,7 +155,7 @@ export const composeOptional: <A, B>(ab: Optional<A, B>) => <S>(sa: Traversal<S,
  * @category combinators
  * @since 2.3.0
  */
-export const modify = <A>(f: (a: A) => A) => <S>(sa: Traversal<S, A>): ((s: S) => S) =>
+export const modify = <A, B extends A = A>(f: (a: A) => B) => <S>(sa: Traversal<S, A>): ((s: S) => S) =>
   sa.modifyF(_.ApplicativeIdentity)(f)
 
 /**

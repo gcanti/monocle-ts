@@ -169,7 +169,7 @@ export const prismAsTraversal = <S, A>(sa: Prism<S, A>): Traversal<S, A> =>
   )
 
 /** @internal */
-export const prismModifyOption = <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => (s: S): O.Option<S> =>
+export const prismModifyOption = <A, B extends A>(f: (a: A) => B) => <S>(sa: Prism<S, A>) => (s: S): O.Option<S> =>
   pipe(
     sa.getOption(s),
     O.map((o) => {
@@ -179,7 +179,7 @@ export const prismModifyOption = <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>) => 
   )
 
 /** @internal */
-export const prismModify = <A>(f: (a: A) => A) => <S>(sa: Prism<S, A>): ((s: S) => S) => {
+export const prismModify = <A, B extends A>(f: (a: A) => B) => <S>(sa: Prism<S, A>): ((s: S) => S) => {
   const g = prismModifyOption(f)(sa)
   return (s) =>
     pipe(
@@ -238,7 +238,9 @@ export const optionalAsTraversal = <S, A>(sa: Optional<S, A>): Traversal<S, A> =
   )
 
 /** @internal */
-export const optionalModifyOption = <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>) => (s: S): O.Option<S> =>
+export const optionalModifyOption = <A, B extends A>(f: (a: A) => B) => <S>(optional: Optional<S, A>) => (
+  s: S
+): O.Option<S> =>
   pipe(
     optional.getOption(s),
     O.map((a) => {
@@ -248,7 +250,7 @@ export const optionalModifyOption = <A>(f: (a: A) => A) => <S>(optional: Optiona
   )
 
 /** @internal */
-export const optionalModify = <A>(f: (a: A) => A) => <S>(optional: Optional<S, A>): ((s: S) => S) => {
+export const optionalModify = <A, B extends A>(f: (a: A) => B) => <S>(optional: Optional<S, A>): ((s: S) => S) => {
   const g = optionalModifyOption(f)(optional)
   return (s) =>
     pipe(
