@@ -7,7 +7,21 @@ interface A {
   c: string | boolean
 }
 
+declare const c: A['c']
 declare const lensC: L.Lens<A, A['c']>
+
+//
+// set
+//
+
+// $ExpectType (s: A) => A
+pipe(lensC, L.set(c))
+
+// $ExpectType (s: A) => A
+pipe(lensC, L.set<string | boolean>('foo'))
+
+// $ExpectType (s: A) => A
+pipe(lensC, L.set('foo'))
 
 //
 // modify
