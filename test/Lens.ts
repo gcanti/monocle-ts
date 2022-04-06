@@ -100,7 +100,7 @@ describe('Lens', () => {
     assert.strictEqual(sa.set(1)(s), s)
   })
 
-  it('props', () => {
+  it('pick', () => {
     interface S {
       readonly a: {
         readonly b: string
@@ -108,7 +108,23 @@ describe('Lens', () => {
         readonly d: boolean
       }
     }
-    const sa = pipe(_.id<S>(), _.prop('a'), _.props('b', 'c'))
+    const sa = pipe(_.id<S>(), _.prop('a'), _.pick('b', 'c'))
+    const s: S = { a: { b: 'b', c: 1, d: true } }
+    U.deepStrictEqual(sa.get(s), { b: 'b', c: 1 })
+    U.deepStrictEqual(sa.set({ b: 'b', c: 2 })(s), { a: { b: 'b', c: 2, d: true } })
+    // should return the same reference
+    assert.strictEqual(sa.set({ b: 'b', c: 1 })(s), s)
+  })
+
+  it('omit', () => {
+    interface S {
+      readonly a: {
+        readonly b: string
+        readonly c: number
+        readonly d: boolean
+      }
+    }
+    const sa = pipe(_.id<S>(), _.prop('a'), _.omit('d'))
     const s: S = { a: { b: 'b', c: 1, d: true } }
     U.deepStrictEqual(sa.get(s), { b: 'b', c: 1 })
     U.deepStrictEqual(sa.set({ b: 'b', c: 2 })(s), { a: { b: 'b', c: 2, d: true } })

@@ -202,13 +202,34 @@ export const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Lens<S, A>) => Len
 
 /**
  * Return a `Lens` from a `Lens` and a list of props.
+ * A value-level 'Pick' (typescript utility type)
+ *
+ * @category combinators
+ * @since 2.3.13
+ */
+export const pick: <A, P extends keyof A>(
+  ...props: readonly [P, P, ...ReadonlyArray<P>]
+) => <S>(sa: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> = _.lensPick
+
+/**
+ * Return a `Lens` from a `Lens` and a list of props to remove.
+ * A value-level 'Omit' (typescript utility type)
+ *
+ * @category combinators
+ * @since 2.3.13
+ */
+export const omit: <A, P extends keyof A>(
+  ...props: readonly [P, ...ReadonlyArray<P>]
+) => <S>(sa: Lens<S, A>) => Lens<S, { [K in Exclude<keyof A, P>]: A[K] }> = _.lensOmit
+
+/**
+ * Use `fromStruct` instead.
  *
  * @category combinators
  * @since 2.3.0
+ * @deprecated
  */
-export const props: <A, P extends keyof A>(
-  ...props: readonly [P, P, ...ReadonlyArray<P>]
-) => <S>(sa: Lens<S, A>) => Lens<S, { [K in P]: A[K] }> = _.lensProps
+export const props = pick
 
 /**
  * Return a `Lens` from a `Lens` focused on a component of a tuple.

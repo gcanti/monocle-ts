@@ -91,8 +91,14 @@ describe('Optional', () => {
     U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some('a'))
   })
 
-  it('props', () => {
-    const sa = pipe(_.id<S>(), _.some, _.props('a', 'b'))
+  it('pick', () => {
+    const sa = pipe(_.id<S>(), _.some, _.pick('a', 'b'))
+    U.deepStrictEqual(sa.getOption(O.none), O.none)
+    U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
+  })
+
+  it('omit', () => {
+    const sa = pipe(_.id<S>(), _.some, _.omit('c'))
     U.deepStrictEqual(sa.getOption(O.none), O.none)
     U.deepStrictEqual(sa.getOption(O.some({ a: 'a', b: 1, c: true })), O.some({ a: 'a', b: 1 }))
   })

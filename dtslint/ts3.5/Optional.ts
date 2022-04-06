@@ -40,8 +40,8 @@ pipe(optionalC, O.modify<string | boolean>(() => 'foo'))
 pipe(optionalC, O.modify(() => 'foo'))
 
 // $ExpectError
-pipe(O.id<A>(), O.props())
+pipe(O.id<A>(), O.pick())
 // $ExpectError
-pipe(O.id<A>(), O.props('a'))
+pipe(O.id<A>(), O.pick('a'))
 
-pipe(O.id<A>(), O.props('a', 'b')) // $ExpectType Optional<A, { a: string; b: number; }>
+pipe(O.id<A>(), O.pick('a', 'b')) // $ExpectType Optional<A, { a: string; b: number; }>

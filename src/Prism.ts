@@ -232,13 +232,35 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Prism<S, A>) => Op
 
 /**
  * Return a `Optional` from a `Prism` and a list of props.
+ * A value-level 'Pick' (typescript utility type)
+ *
+ * @category combinators
+ * @since 2.3.13
+ */
+export const pick = <A, P extends keyof A>(
+  ...props: readonly [P, P, ...ReadonlyArray<P>]
+): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) => composeLens(pipe(_.lensId<A>(), _.lensPick(...props)))
+
+/**
+ * Return a `Optional` from a `Prism` and a list of props to remove.
+ * A value-level 'Omit' (typescript utility type)
+ *
+ * @category combinators
+ * @since 2.3.13
+ */
+export const omit = <A, P extends keyof A>(
+  ...props: readonly [P, ...ReadonlyArray<P>]
+): (<S>(sa: Prism<S, A>) => Optional<S, { [K in Exclude<keyof A, P>]: A[K] }>) =>
+  composeLens(pipe(_.lensId<A>(), _.lensOmit(...props)))
+
+/**
+ * Use `fromStruct` instead.
  *
  * @category combinators
  * @since 2.3.0
+ * @deprecated
  */
-export const props = <A, P extends keyof A>(
-  ...props: readonly [P, P, ...ReadonlyArray<P>]
-): (<S>(sa: Prism<S, A>) => Optional<S, { [K in P]: A[K] }>) => composeLens(pipe(_.lensId<A>(), _.lensProps(...props)))
+export const props = pick
 
 /**
  * Return a `Optional` from a `Prism` focused on a component of a tuple.

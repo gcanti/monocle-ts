@@ -40,11 +40,13 @@ Added in v2.3.0
   - [left](#left)
   - [modify](#modify)
   - [modifyF](#modifyf)
+  - [omit](#omit)
+  - [pick](#pick)
   - [prop](#prop)
-  - [props](#props)
   - [right](#right)
   - [some](#some)
   - [traverse](#traverse)
+  - [~~props~~](#props)
 - [compositions](#compositions)
   - [compose](#compose)
   - [composeIso](#composeiso)
@@ -242,6 +244,39 @@ export declare function modifyF<F>(
 
 Added in v2.3.5
 
+## omit
+
+Return a `Lens` from a `Iso` and a list of props to remove.
+A value-level 'Omit' (typescript utility type)
+
+**Signature**
+
+```ts
+export declare const omit: <A, P extends keyof A>(
+  props_0: P,
+  ...props_1: P[]
+) => <S>(sa: Iso<S, A>) => Lens<S, { [K in Exclude<keyof A, P>]: A[K] }>
+```
+
+Added in v2.3.13
+
+## pick
+
+Return a `Lens` from a `Iso` and a list of props.
+A value-level 'Pick' (typescript utility type)
+
+**Signature**
+
+```ts
+export declare const pick: <A, P extends keyof A>(
+  props_0: P,
+  props_1: P,
+  ...props_2: P[]
+) => <S>(sa: Iso<S, A>) => Lens<S, { [K in P]: A[K] }>
+```
+
+Added in v2.3.13
+
 ## prop
 
 Return a `Lens` from a `Iso` and a prop.
@@ -250,22 +285,6 @@ Return a `Lens` from a `Iso` and a prop.
 
 ```ts
 export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Iso<S, A>) => Lens<S, A[P]>
-```
-
-Added in v2.3.8
-
-## props
-
-Return a `Lens` from a `Iso` and a list of props.
-
-**Signature**
-
-```ts
-export declare const props: <A, P extends keyof A>(
-  props_0: P,
-  props_1: P,
-  ...props_2: P[]
-) => <S>(sa: Iso<S, A>) => Lens<S, { [K in P]: A[K] }>
 ```
 
 Added in v2.3.8
@@ -302,6 +321,22 @@ Return a `Traversal` from a `Iso` focused on a `Traversable`.
 
 ```ts
 export declare function traverse<T extends URIS>(T: Traversable1<T>): <S, A>(sta: Iso<S, Kind<T, A>>) => Traversal<S, A>
+```
+
+Added in v2.3.8
+
+## ~~props~~
+
+Use `fromStruct` instead.
+
+**Signature**
+
+```ts
+export declare const props: <A, P extends keyof A>(
+  props_0: P,
+  props_1: P,
+  ...props_2: P[]
+) => <S>(sa: Iso<S, A>) => Lens<S, { [K in P]: A[K] }>
 ```
 
 Added in v2.3.8

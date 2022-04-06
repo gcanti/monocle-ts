@@ -25,8 +25,8 @@ pipe(traversalC, T.modify<string | boolean>(() => 'foo'))
 pipe(traversalC, T.modify(() => 'foo'))
 
 // $ExpectError
-pipe(T.id<A>(), T.props())
+pipe(T.id<A>(), T.pick())
 // $ExpectError
-pipe(T.id<A>(), T.props('a'))
+pipe(T.id<A>(), T.pick('a'))
 
-pipe(T.id<A>(), T.props('a', 'b')) // $ExpectType Traversal<A, { a: string; b: number; }>
+pipe(T.id<A>(), T.pick('a', 'b')) // $ExpectType Traversal<A, { a: string; b: number; }>

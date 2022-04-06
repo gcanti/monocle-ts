@@ -39,12 +39,14 @@ Added in v2.3.0
   - [key](#key)
   - [left](#left)
   - [modify](#modify)
+  - [omit](#omit)
+  - [pick](#pick)
   - [prop](#prop)
-  - [props](#props)
   - [right](#right)
   - [set](#set)
   - [some](#some)
   - [traverse](#traverse)
+  - [~~props~~](#props)
 - [compositions](#compositions)
   - [compose](#compose)
   - [composeIso](#composeiso)
@@ -245,6 +247,39 @@ export declare const modify: <A, B extends A = A>(f: (a: A) => B) => <S>(sa: Tra
 
 Added in v2.3.0
 
+## omit
+
+Return a `Traversal` from a `Traversal` and a list of props to remove.
+A value-level 'Omit' (typescript utility type)
+
+**Signature**
+
+```ts
+export declare const omit: <A, P extends keyof A>(
+  props_0: P,
+  ...props_1: P[]
+) => <S>(sa: Traversal<S, A>) => Traversal<S, { [K in Exclude<keyof A, P>]: A[K] }>
+```
+
+Added in v2.3.13
+
+## pick
+
+Return a `Traversal` from a `Traversal` and a list of props.
+A value-level 'Pick' (typescript utility type)
+
+**Signature**
+
+```ts
+export declare const pick: <A, P extends keyof A>(
+  props_0: P,
+  props_1: P,
+  ...props_2: P[]
+) => <S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }>
+```
+
+Added in v2.3.13
+
 ## prop
 
 Return a `Traversal` from a `Traversal` and a prop.
@@ -253,22 +288,6 @@ Return a `Traversal` from a `Traversal` and a prop.
 
 ```ts
 export declare const prop: <A, P extends keyof A>(prop: P) => <S>(sa: Traversal<S, A>) => Traversal<S, A[P]>
-```
-
-Added in v2.3.0
-
-## props
-
-Return a `Traversal` from a `Traversal` and a list of props.
-
-**Signature**
-
-```ts
-export declare const props: <A, P extends keyof A>(
-  props_0: P,
-  props_1: P,
-  ...props_2: P[]
-) => <S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }>
 ```
 
 Added in v2.3.0
@@ -327,6 +346,22 @@ export declare const traverse: <T extends
   | 'Record'>(
   T: Traversable1<T>
 ) => <S, A>(sta: Traversal<S, Kind<T, A>>) => Traversal<S, A>
+```
+
+Added in v2.3.0
+
+## ~~props~~
+
+Use `fromStruct` instead.
+
+**Signature**
+
+```ts
+export declare const props: <A, P extends keyof A>(
+  props_0: P,
+  props_1: P,
+  ...props_2: P[]
+) => <S>(sa: Traversal<S, A>) => Traversal<S, { [K in P]: A[K] }>
 ```
 
 Added in v2.3.0

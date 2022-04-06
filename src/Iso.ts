@@ -219,13 +219,34 @@ export const prop = <A, P extends keyof A>(prop: P): (<S>(sa: Iso<S, A>) => Lens
 
 /**
  * Return a `Lens` from a `Iso` and a list of props.
+ * A value-level 'Pick' (typescript utility type)
+ *
+ * @category combinators
+ * @since 2.3.13
+ */
+export const pick = <A, P extends keyof A>(
+  ...props: readonly [P, P, ...ReadonlyArray<P>]
+): (<S>(sa: Iso<S, A>) => Lens<S, { [K in P]: A[K] }>) => flow(asLens, _.lensPick(...props))
+
+/**
+ * Return a `Lens` from a `Iso` and a list of props to remove.
+ * A value-level 'Omit' (typescript utility type)
+ *
+ * @category combinators
+ * @since 2.3.13
+ */
+export const omit = <A, P extends keyof A>(
+  ...props: readonly [P, ...ReadonlyArray<P>]
+): (<S>(sa: Iso<S, A>) => Lens<S, { [K in Exclude<keyof A, P>]: A[K] }>) => flow(asLens, _.lensOmit(...props))
+
+/**
+ * Use `fromStruct` instead.
  *
  * @category combinators
  * @since 2.3.8
+ * @deprecated
  */
-export const props = <A, P extends keyof A>(
-  ...props: readonly [P, P, ...ReadonlyArray<P>]
-): (<S>(sa: Iso<S, A>) => Lens<S, { [K in P]: A[K] }>) => flow(asLens, _.lensProps(...props))
+export const props = pick
 
 /**
  * Return a `Lens` from a `Iso` focused on a component of a tuple.
