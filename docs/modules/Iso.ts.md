@@ -53,8 +53,10 @@ Added in v2.3.0
   - [composePrism](#composeprism)
   - [composeTraversal](#composetraversal)
 - [constructors](#constructors)
+  - [anon](#anon)
   - [id](#id)
   - [iso](#iso)
+  - [non](#non)
   - [reverse](#reverse)
 - [converters](#converters)
   - [asLens](#aslens)
@@ -382,6 +384,19 @@ Added in v2.3.8
 
 # constructors
 
+## anon
+
+Create an `Iso<Option<A>, A>` given a `Predicate<A>` and some value to
+correspond to `none`.
+
+**Signature**
+
+```ts
+export declare const anon: <A>(a: A) => (pred: Predicate<A>) => Iso<Option<A>, A>
+```
+
+Added in v2.4.0
+
 ## id
 
 **Signature**
@@ -401,6 +416,55 @@ export declare const iso: <S, A>(get: (s: S) => A, reverseGet: (a: A) => S) => I
 ```
 
 Added in v2.3.8
+
+## non
+
+Create an `Iso<Option<A>, A>` given an `Eq<A>` and some value to correspond
+to `none`.
+
+**Signature**
+
+```ts
+export declare const non: <A>(eq: Eq<A>) => (a: A) => Iso<Option<A>, A>
+```
+
+**Example**
+
+```ts
+import { eqNumber } from 'fp-ts/Eq'
+import { pipe } from 'fp-ts/function'
+import { non } from 'monocle-ts/Iso'
+import { atKey, composeIso, id } from 'monocle-ts/Lens'
+
+// Can be used to have "defaults"
+const a = pipe(id<Record<string, number>>(), atKey('a'), composeIso(non(eqNumber)(0)))
+assert.deepStrictEqual(a.get({}), 0)
+assert.deepStrictEqual(a.get({ a: 1 }), 1)
+assert.deepStrictEqual(a.set(0)({ a: 1 }), {})
+assert.deepStrictEqual(a.set(1)({}), { a: 1 })
+```
+
+**Example**
+
+```ts
+import { eqString } from 'fp-ts/Eq'
+import { pipe } from 'fp-ts/function'
+import { none } from 'fp-ts/Option'
+import { getEq } from 'fp-ts/ReadonlyRecord'
+import { non } from 'monocle-ts/Iso'
+import { atKey, composeIso, id } from 'monocle-ts/Lens'
+
+// Or delete surrounding structure when a nested value becomes empty
+const b = pipe(
+  id<Record<string, Record<string, string>>>(),
+  atKey('hello'),
+  composeIso(non(getEq(eqString))({})),
+  atKey('world')
+)
+assert.deepStrictEqual(b.set(none)({ hello: { world: '!' } }), {})
+```
+
+Added in v2.4.0
 
 ## reverse
 

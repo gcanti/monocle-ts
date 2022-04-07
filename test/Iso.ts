@@ -1,4 +1,5 @@
 import * as assert from 'assert'
+import * as Eq from 'fp-ts/lib/Eq'
 import * as Id from 'fp-ts/lib/Identity'
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
@@ -291,5 +292,21 @@ describe('Iso', () => {
     U.deepStrictEqual(optional.getOption({ a: [-1, 2] }), O.some(2))
     U.deepStrictEqual(optional.set(1)({ a: [-1] }), { a: [-1] })
     U.deepStrictEqual(optional.set(3)({ a: [-1, 2] }), { a: [-1, 3] })
+  })
+
+  it('non', () => {
+    const sa = _.non(Eq.eqNumber)(0)
+    U.deepStrictEqual(sa.get(O.some(1)), 1)
+    U.deepStrictEqual(sa.get(O.none), 0)
+    U.deepStrictEqual(sa.reverseGet(0), O.none)
+    U.deepStrictEqual(sa.reverseGet(1), O.some(1))
+  })
+
+  it('anon', () => {
+    const sa = _.anon(0)((a) => a === 0)
+    U.deepStrictEqual(sa.get(O.some(1)), 1)
+    U.deepStrictEqual(sa.get(O.none), 0)
+    U.deepStrictEqual(sa.reverseGet(0), O.none)
+    U.deepStrictEqual(sa.reverseGet(1), O.some(1))
   })
 })
