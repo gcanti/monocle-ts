@@ -100,6 +100,30 @@ describe('Lens', () => {
     assert.strictEqual(sa.set(1)(s), s)
   })
 
+  describe('product', () => {
+    interface S {
+      readonly a: string
+      readonly b: number
+    }
+
+    it('joins two disjoint lenses together', () => {
+      const s: S = { a: 'a', b: 1 }
+      const sProduct = _.product(pipe(_.id<S>(), _.prop('a')), pipe(_.id<S>(), _.prop('b')))
+
+      U.deepStrictEqual(sProduct.get(s), ['a', 1])
+      U.deepStrictEqual(sProduct.set(['b', 2])(s), { a: 'b', b: 2 })
+    })
+
+    it('violates the lens laws when the lenses are not focusing disjoint parts of the structure', () => {
+      const s: S = { a: 'unused', b: 1 }
+      const sProduct = _.product(pipe(_.id<S>(), _.prop('b')), pipe(_.id<S>(), _.prop('b')))
+
+      U.deepStrictEqual(sProduct.get(s), [1, 1])
+      // setting [8, 9] doesn't give us back [8, 9], violating the 'you get back what you put in' lens law
+      U.deepStrictEqual(sProduct.get(sProduct.set([8, 9])(s)), [9, 9])
+    })
+  })
+
   it('props', () => {
     interface S {
       readonly a: {
