@@ -16,7 +16,7 @@ import { HKT, Kind, Kind2, Kind3, URIS, URIS2, URIS3 } from 'fp-ts/lib/HKT'
 import * as O from 'fp-ts/lib/Option'
 import * as E from 'fp-ts/lib/Either'
 import { pipe } from 'fp-ts/lib/pipeable'
-import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
+import { Traversable, Traversable1, Traversable2, Traversable3, Traverse1 } from 'fp-ts/lib/Traversable'
 import { Iso } from './Iso'
 import { Index } from './Ix'
 import { Lens } from './Lens'
@@ -433,4 +433,45 @@ export function atReadonlyRecord<A = never>(): At<RR.ReadonlyRecord<string, A>, 
       )
     )
   )
+}
+
+// -------------------------------------------------------------------------------------
+// Homogeneous Tuple
+// -------------------------------------------------------------------------------------
+
+/**
+ * A tuple where both elements have the same type.
+ */
+type HomogeneousTuple<T> = readonly [T, T]
+
+const URI_HOMOGENEOUS_TUPLE = 'HomogeneousTuple'
+type URI_HOMOGENEOUS_TUPLE = typeof URI_HOMOGENEOUS_TUPLE
+declare module 'fp-ts/HKT' {
+  interface URItoKind<A> {
+    readonly [URI_HOMOGENEOUS_TUPLE]: HomogeneousTuple<A>
+  }
+}
+const traverse: Traverse1<URI_HOMOGENEOUS_TUPLE> = <F>(Ap: Applicative<F>) => <A, B>(
+  [a1, a2]: HomogeneousTuple<A>,
+  f: (a: A) => HKT<F, B>
+): HKT<F, HomogeneousTuple<B>> =>
+  pipe(
+    Ap.of((b1: B) => (b2: B) => [b1, b2] as const),
+    (fb) => Ap.ap(fb, f(a1)),
+    (fb) => Ap.ap(fb, f(a2))
+  )
+
+const sequence: Traversable1<URI_HOMOGENEOUS_TUPLE>['sequence'] = <F>(Ap: Applicative<F>) => <A>(
+  tuple: HomogeneousTuple<HKT<F, A>>
+): HKT<F, HomogeneousTuple<A>> => traverse(Ap)(tuple, identity)
+
+/** @internal */
+export const TraversableHomogeneousTuple: Traversable1<URI_HOMOGENEOUS_TUPLE> = {
+  URI: URI_HOMOGENEOUS_TUPLE,
+  map: ([a1, a2], f) => [f(a1), f(a2)],
+  reduce: RA.Traversable.reduce,
+  foldMap: RA.Traversable.foldMap,
+  reduceRight: RA.Traversable.reduceRight,
+  traverse,
+  sequence
 }

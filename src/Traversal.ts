@@ -29,8 +29,7 @@ import { Semigroupoid2 } from 'fp-ts/lib/Semigroupoid'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Iso } from './Iso'
-import * as L from './Lens'
-import { Lens } from './Lens'
+import { lens, Lens, product as lensProduct, traverse as lensTraverse } from './Lens'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
 
@@ -204,7 +203,7 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, A>) => 
  * @since 2.3.14
  */
 export const partsOf = <S, A>(t: Traversal<S, A>): Lens<S, ReadonlyArray<A>> =>
-  L.lens<S, ReadonlyArray<A>>(
+  lens<S, ReadonlyArray<A>>(
     (s) => getAll(s)(t),
     (as) => (s) => {
       const asOld = getAll(s)(t)
@@ -372,6 +371,20 @@ export const fold = <A>(M: Monoid<A>): (<S>(sa: Traversal<S, A>) => (s: S) => A)
  */
 export const getAll = <S>(s: S) => <A>(sa: Traversal<S, A>): ReadonlyArray<A> =>
   foldMap(RA.getMonoid<A>())<A>(RA.of)(sa)(s)
+
+/**
+ * Combines two traversals into one.
+ * This is only a valid traversal when both argument traversals focus on disjoint parts of the original structure.
+ *
+ * @category combinators
+ * @since 2.3.14
+ */
+export const adjoin = <S, A>(traversalA1: Traversal<S, A>, traversalA2: Traversal<S, A>): Traversal<S, A> =>
+  pipe(
+    lensProduct(partsOf(traversalA1), partsOf(traversalA2)),
+    lensTraverse(_.TraversableHomogeneousTuple),
+    traverse(RA.Traversable)
+  )
 
 // -------------------------------------------------------------------------------------
 // instances

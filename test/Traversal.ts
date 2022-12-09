@@ -192,4 +192,50 @@ describe('Traversal', () => {
     const sa = pipe(_.id<S>(), _.traverse(RNEA.Traversable), _.fromNullable)
     U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, undefined, 3]), [2, undefined, 6])
   })
+
+  describe('adjoin', () => {
+    it('joining non-overlapping traversals', () => {
+      const s = {
+        prop1: 1,
+        prop2: 8
+      }
+      const adjoined = _.adjoin(pipe(_.id<typeof s>(), _.prop('prop1')), pipe(_.id<typeof s>(), _.prop('prop2')))
+      const modified = pipe(
+        adjoined,
+        _.modify((a) => a + 1)
+      )(s)
+
+      expect(_.getAll(s)(adjoined)).toEqual([1, 8])
+      expect(modified).toEqual({
+        prop1: 2,
+        prop2: 9
+      })
+    })
+
+    describe('joining overlapping traversals', () => {
+      const s = {
+        prop1: 1,
+        prop2: 8
+      }
+      const adjoinedOverlapping = _.adjoin(
+        pipe(_.id<typeof s>(), _.prop('prop1')),
+        pipe(_.id<typeof s>(), _.prop('prop1'))
+      )
+
+      it('only modifies the overlapping property once', () => {
+        const modified = pipe(
+          adjoinedOverlapping,
+          _.modify((a) => a + 1)
+        )(s)
+
+        expect(modified).toEqual({
+          prop1: 2,
+          prop2: 8
+        })
+      })
+      it('returns the overlapping element multiple times', () => {
+        expect(_.getAll(s)(adjoinedOverlapping)).toEqual([1, 1])
+      })
+    })
+  })
 })

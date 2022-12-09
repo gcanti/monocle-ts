@@ -25,6 +25,7 @@ Added in v2.3.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [combinators](#combinators)
+  - [adjoin](#adjoin)
   - [atKey](#atkey)
   - [component](#component)
   - [filter](#filter)
@@ -70,6 +71,19 @@ Added in v2.3.0
 ---
 
 # combinators
+
+## adjoin
+
+Combines two traversals into one.
+This is only a valid traversal when both argument traversals focus on disjoint parts of the original structure.
+
+**Signature**
+
+```ts
+export declare const adjoin: <S, A>(traversalA1: Traversal<S, A>, traversalA2: Traversal<S, A>) => Traversal<S, A>
+```
+
+Added in v2.3.14
 
 ## atKey
 
@@ -353,6 +367,7 @@ export declare const traverse: <T extends
   | 'ReadonlyArray'
   | 'NonEmptyArray'
   | 'Identity'
+  | 'HomogeneousTuple'
   | 'Array'
   | 'Record'>(
   T: Traversable1<T>
@@ -469,6 +484,7 @@ export declare const fromTraversable: {
       | 'ReadonlyArray'
       | 'NonEmptyArray'
       | 'Identity'
+      | 'HomogeneousTuple'
       | 'Array'
       | 'Record'
   >(
