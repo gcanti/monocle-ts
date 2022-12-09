@@ -193,6 +193,19 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Lens<S, A>) => Optio
 }
 
 /**
+ * Combines two `Lenses` into a `Lens` focusing on a tuple (product) of both `Lenses`.
+ * This is only a valid `Lens` when both argument `Lenses` focus on disjoint parts
+ * of the original structure, otherwise the 'you get back what you put in' law is violated.
+ * @category combinators
+ * @since 2.3.14
+ */
+export const product = <S, A, B>(lensA: Lens<S, A>, lensB: Lens<S, B>): Lens<S, readonly [A, B]> =>
+  lens<S, readonly [A, B]>(
+    (s) => [lensA.get(s), lensB.get(s)] as const,
+    ([a, b]) => flow(lensA.set(a), lensB.set(b))
+  )
+
+/**
  * Return a `Lens` from a `Lens` and a prop.
  *
  * @category combinators

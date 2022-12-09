@@ -25,6 +25,7 @@ Added in v2.3.0
 <h2 class="text-delta">Table of contents</h2>
 
 - [combinators](#combinators)
+  - [adjoin](#adjoin)
   - [atKey](#atkey)
   - [component](#component)
   - [filter](#filter)
@@ -39,6 +40,7 @@ Added in v2.3.0
   - [key](#key)
   - [left](#left)
   - [modify](#modify)
+  - [partsOf](#partsof)
   - [prop](#prop)
   - [props](#props)
   - [right](#right)
@@ -69,6 +71,19 @@ Added in v2.3.0
 ---
 
 # combinators
+
+## adjoin
+
+Combines two traversals into one.
+This is only a valid traversal when both argument traversals focus on disjoint parts of the original structure.
+
+**Signature**
+
+```ts
+export declare const adjoin: <S, A>(traversalA1: Traversal<S, A>, traversalA2: Traversal<S, A>) => Traversal<S, A>
+```
+
+Added in v2.3.14
 
 ## atKey
 
@@ -245,6 +260,35 @@ export declare const modify: <A, B extends A = A>(f: (a: A) => B) => <S>(sa: Tra
 
 Added in v2.3.0
 
+## partsOf
+
+Turns a `Traversal` into a `Lens` that focuses on all elements in the traversal
+collected into an array.
+When changing the amount of elements in the array extras will be taken from the
+original array, while any supplied extras will be lost.
+This can violate the 'you get back what you put in law' if you change the number
+of elements in the list.
+
+**Signature**
+
+```ts
+export declare const partsOf: <S, A>(t: Traversal<S, A>) => Lens<S, readonly A[]>
+```
+
+**Example**
+
+```ts
+import * as A from 'fp-ts/Array'
+import { pipe } from 'fp-ts/function'
+import { id, traverse, partsOf } from 'monocle-ts/Traversal'
+
+const s: Array<number> = [1, 2, 3]
+const lens = pipe(id<typeof s>(), traverse(A.Traversable), partsOf)
+assert.deepStrictEqual(lens.get(lens.set([9])(s)), [9, 2, 3])
+```
+
+Added in v2.3.14
+
 ## prop
 
 Return a `Traversal` from a `Traversal` and a prop.
@@ -323,6 +367,7 @@ export declare const traverse: <T extends
   | 'ReadonlyArray'
   | 'NonEmptyArray'
   | 'Identity'
+  | 'HomogeneousTuple'
   | 'Array'
   | 'Record'>(
   T: Traversable1<T>
@@ -439,6 +484,7 @@ export declare const fromTraversable: {
       | 'ReadonlyArray'
       | 'NonEmptyArray'
       | 'Identity'
+      | 'HomogeneousTuple'
       | 'Array'
       | 'Record'
   >(

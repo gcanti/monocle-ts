@@ -7,6 +7,7 @@ import { monoidSum } from 'fp-ts/lib/Monoid'
 import * as U from './util'
 import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord'
 import * as RNEA from 'fp-ts/lib/ReadonlyNonEmptyArray'
+import * as L from '../src/Lens'
 
 describe('Traversal', () => {
   describe('instances', () => {
@@ -26,6 +27,37 @@ describe('Traversal', () => {
   it('id', () => {
     const ss = _.id<ReadonlyArray<number>>()
     U.deepStrictEqual(ss.modifyF(Id.identity)((ns) => ns.map((n) => n * 2))([1, 2, 3]), [2, 4, 6])
+  })
+
+  describe('partsOf', () => {
+    const s: ReadonlyArray<number> = [1, 8, 11]
+    const partsOfLens = pipe(_.id<typeof s>(), _.traverse(A.Traversable), _.partsOf)
+
+    it('modifies the focused elements', () => {
+      const modified = pipe(partsOfLens, L.modify(A.map((a) => a + 1)))(s)
+
+      U.deepStrictEqual(partsOfLens.get(s), [1, 8, 11])
+      U.deepStrictEqual(partsOfLens.get(modified), [2, 9, 12])
+      U.deepStrictEqual(modified, [2, 9, 12])
+    })
+
+    it('takes remaining elements from the original array when setting to a lower number of elements', () => {
+      const modified = partsOfLens.set([99])(s)
+
+      expect(partsOfLens.get(s)).toEqual([1, 8, 11])
+      // elements 8 and 11 are taken from the original array
+      expect(partsOfLens.get(modified)).toEqual([99, 8, 11])
+      expect(modified).toEqual([99, 8, 11])
+    })
+
+    it('ignores all extra elements when setting to a higher number of elements', () => {
+      const modified = partsOfLens.set([99, 98, 97, 96, 95])(s)
+
+      expect(partsOfLens.get(s)).toEqual([1, 8, 11])
+      // elements 96 and 95 are ignored
+      expect(partsOfLens.get(modified)).toEqual([99, 98, 97])
+      expect(modified).toEqual([99, 98, 97])
+    })
   })
 
   it('prop', () => {
@@ -159,5 +191,51 @@ describe('Traversal', () => {
     type S = RNEA.ReadonlyNonEmptyArray<number | undefined>
     const sa = pipe(_.id<S>(), _.traverse(RNEA.Traversable), _.fromNullable)
     U.deepStrictEqual(sa.modifyF(Id.identity)((n) => n * 2)([1, undefined, 3]), [2, undefined, 6])
+  })
+
+  describe('adjoin', () => {
+    it('joining non-overlapping traversals', () => {
+      const s = {
+        prop1: 1,
+        prop2: 8
+      }
+      const adjoined = _.adjoin(pipe(_.id<typeof s>(), _.prop('prop1')), pipe(_.id<typeof s>(), _.prop('prop2')))
+      const modified = pipe(
+        adjoined,
+        _.modify((a) => a + 1)
+      )(s)
+
+      expect(_.getAll(s)(adjoined)).toEqual([1, 8])
+      expect(modified).toEqual({
+        prop1: 2,
+        prop2: 9
+      })
+    })
+
+    describe('joining overlapping traversals', () => {
+      const s = {
+        prop1: 1,
+        prop2: 8
+      }
+      const adjoinedOverlapping = _.adjoin(
+        pipe(_.id<typeof s>(), _.prop('prop1')),
+        pipe(_.id<typeof s>(), _.prop('prop1'))
+      )
+
+      it('only modifies the overlapping property once', () => {
+        const modified = pipe(
+          adjoinedOverlapping,
+          _.modify((a) => a + 1)
+        )(s)
+
+        expect(modified).toEqual({
+          prop1: 2,
+          prop2: 8
+        })
+      })
+      it('returns the overlapping element multiple times', () => {
+        expect(_.getAll(s)(adjoinedOverlapping)).toEqual([1, 1])
+      })
+    })
   })
 })

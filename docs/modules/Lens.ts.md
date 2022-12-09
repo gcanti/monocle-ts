@@ -44,6 +44,7 @@ Added in v2.3.0
   - [left](#left)
   - [modify](#modify)
   - [modifyF](#modifyf)
+  - [product](#product)
   - [prop](#prop)
   - [props](#props)
   - [right](#right)
@@ -242,6 +243,20 @@ export declare function modifyF<F>(
 ```
 
 Added in v2.3.5
+
+## product
+
+Combines two `Lenses` into a `Lens` focusing on a tuple (product) of both `Lenses`.
+This is only a valid `Lens` when both argument `Lenses` focus on disjoint parts
+of the original structure, otherwise the 'you get back what you put in' law is violated.
+
+**Signature**
+
+```ts
+export declare const product: <S, A, B>(lensA: Lens<S, A>, lensB: Lens<S, B>) => Lens<S, readonly [A, B]>
+```
+
+Added in v2.3.14
 
 ## prop
 
