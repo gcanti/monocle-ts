@@ -29,6 +29,7 @@ import { Semigroupoid2 } from 'fp-ts/lib/Semigroupoid'
 import { Traversable, Traversable1, Traversable2, Traversable3 } from 'fp-ts/lib/Traversable'
 import * as _ from './internal'
 import { Iso } from './Iso'
+import * as L from './Lens'
 import { Lens } from './Lens'
 import { Optional } from './Optional'
 import { Prism } from './Prism'
@@ -182,6 +183,36 @@ export function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, A>) => 
 export function filter<A>(predicate: Predicate<A>): <S>(sa: Traversal<S, A>) => Traversal<S, A> {
   return compose(_.prismAsTraversal(_.prismFromPredicate(predicate)))
 }
+
+/**
+ * Turns a `Traversal` into a `Lens` that focuses on all elements in the traversal
+ * collected into an array.
+ * When changing the amount of elements in the array extras will be taken from the
+ * original array, while any supplied extras will be lost.
+ * This can violate the 'you get back what you put in law' if you change the number
+ * of elements in the list.
+ * @example
+ * import * as A from 'fp-ts/Array'
+ * import { pipe } from 'fp-ts/function'
+ * import { id, traverse, partsOf} from 'monocle-ts/Traversal'
+ *
+ * const s: Array<number> = [1, 2, 3]
+ * const lens = pipe(id<typeof s>(), traverse(A.Traversable), partsOf)
+ * assert.deepStrictEqual(lens.get(lens.set([9])(s)), [9, 2, 3])
+ *
+ * @category combinators
+ * @since 2.3.14
+ */
+export const partsOf = <S, A>(t: Traversal<S, A>): Lens<S, ReadonlyArray<A>> =>
+  L.lens<S, ReadonlyArray<A>>(
+    (s) => getAll(s)(t),
+    (as) => (s) => {
+      const asOld = getAll(s)(t)
+      const asNew = RA.makeBy(asOld.length, (i) => (as[i] !== undefined ? as[i] : asOld[i]))
+      let i = 0
+      return modify<A, A>(() => asNew[i++])(t)(s)
+    }
+  )
 
 /**
  * Return a `Traversal` from a `Traversal` and a prop.
